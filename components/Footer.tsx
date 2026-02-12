@@ -1,0 +1,44 @@
+
+import React from 'react';
+
+const Footer: React.FC = () => {
+  return (
+    <footer className="bg-black pt-32 pb-16 px-6 text-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 font-sans">
+          <div>
+            <h5 className="text-[10px] font-bold mb-6 uppercase tracking-widest opacity-40">Headquarters</h5>
+            <p className="text-sm font-light opacity-80 leading-relaxed uppercase tracking-widest">
+              London / NYC / São Paulo<br />
+              Central Office<br />
+              TEL +44 20 7946 0000
+            </p>
+          </div>
+          <div>
+            <h5 className="text-[10px] font-bold mb-6 uppercase tracking-widest opacity-40">Network</h5>
+            <ul className="text-sm font-light opacity-80 space-y-2 uppercase tracking-widest">
+              <li><a className="hover:underline" href="#">Instagram</a></li>
+              <li><a className="hover:underline" href="#">LinkedIn</a></li>
+              <li><a className="hover:underline" href="#">Behance</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5 className="text-[10px] font-bold mb-6 uppercase tracking-widest opacity-40">Legal</h5>
+            <ul className="text-sm font-light opacity-80 space-y-2 uppercase tracking-widest">
+              <li><a className="hover:underline" href="#">Privacy Policy</a></li>
+              <li><a className="hover:underline" href="#">Compliance</a></li>
+            </ul>
+          </div>
+          <div className="md:text-right flex flex-col justify-between">
+            <span className="text-[10px] opacity-40 uppercase tracking-widest">© 2024 Branding Studio. All rights reserved.</span>
+          </div>
+        </div>
+        <div className="text-[12vw] md:text-[18vw] font-bold text-white leading-none tracking-tighter select-none uppercase font-sans">
+          Studio.
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
