@@ -1,6 +1,15 @@
 
 import React, { useState } from 'react';
-import dallaLogo from '@/assets/dalla-logo.svg';
+
+const DallaLogo = ({ className = "" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 1278 294.92" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,294.79V.04h144.37c89.92,4.49,149.73,54.5,138.29,149.53s-101.1,135.61-187.03,143.72c-31.72,2.99-63.78.85-95.62,1.5ZM99,212.29c36.12,7.13,74.47-10.69,85.12-47.25,8.99-30.88-1.15-68.57-33.19-80.81-2.99-1.14-11.29-3.94-14.06-3.94h-37.88v132Z" fill="currentColor"/>
+    <path d="M1278,.04v294.75h-97.5v-73.5h-63l-19.5,73.5h-101.25l70.49-232.14c14.91-40.21,33.41-60.47,78.35-62.65l132.41.04ZM1181.25,72.04h-10.88c-6.7,0-12.25,6.91-14.24,12.76l-18.39,65.24h42.38l1.12-1.12v-76.88Z" fill="currentColor"/>
+    <path d="M546,.04v294.75h-96.75v-72.38l-1.12-1.12h-62.62l-19.5,73.5h-101.25l70.3-231.58C349.99,22.74,368.26,2.2,413.59,0l132.41.04ZM449.25,72.04h-10.88c-6.7,0-12.25,6.91-14.24,12.76l-18.39,65.24h42.38l1.12-1.12v-76.88Z" fill="currentColor"/>
+    <path d="M887.25.04v214.12l1.12,1.12h97.88v79.5h-154.88c-3.21,0-13.28-3-16.64-4.36-21.05-8.53-25.23-29.39-26.53-49.97l.04-240.41h99Z" fill="currentColor"/>
+    <path d="M670.5.04v215.25h98.25v79.5h-154.12c-3.21,0-13.28-3-16.64-4.36-20.92-8.48-25.08-28.76-26.53-49.22l.04-241.16h99Z" fill="currentColor"/>
+  </svg>
+);
 
 interface NavbarProps {
   onNavigate: (page: string) => void;
@@ -32,7 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
             onClick={() => handleNavigate('home')}
             className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity"
           >
-            <img src={dallaLogo} alt="DALLA" className="h-6 w-auto object-contain" />
+            <DallaLogo className="h-5 w-auto" />
           </button>
           <div className="flex gap-8 text-[11px] font-bold uppercase tracking-[0.15em] font-sans text-neutral-800">
             {links.map((link) => (
@@ -53,7 +62,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
             onClick={() => handleNavigate('home')}
             className="text-[14px] font-black tracking-tighter font-sans"
           >
-            <img src={dallaLogo} alt="DALLA" className="h-5" />
+            <DallaLogo className="h-5 w-auto" />
           </button>
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -70,7 +79,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
       <div className={`fixed inset-0 z-[60] bg-white transition-transform duration-500 ease-in-out md:hidden ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-center px-12 py-8">
-            <img src={dallaLogo} alt="DALLA" className="h-6" />
+            <DallaLogo className="h-6 w-auto" />
             <button 
               onClick={() => setIsMenuOpen(false)}
               className="w-10 h-10 flex items-center justify-center rounded-full border border-neutral-100"
