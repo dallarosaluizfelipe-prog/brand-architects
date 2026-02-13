@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-const logo = '/logo.png';
+import dallaLogo from '@/assets/dalla-logo.png';
 
 interface NavbarProps {
   onNavigate: (page: string) => void;
@@ -32,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
             onClick={() => handleNavigate('home')}
             className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity"
           >
-            <img src={logo} alt="DALLA" className="h-5" />
+            <img src={dallaLogo} alt="DALLA" className="h-6 w-auto object-contain" />
           </button>
           <div className="flex gap-8 text-[11px] font-bold uppercase tracking-[0.15em] font-sans text-neutral-800">
             {links.map((link) => (
@@ -53,7 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
             onClick={() => handleNavigate('home')}
             className="text-[14px] font-black tracking-tighter font-sans"
           >
-            <img src={logo} alt="DALLA" className="h-5" />
+            <img src={dallaLogo} alt="DALLA" className="h-5" />
           </button>
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -70,7 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
       <div className={`fixed inset-0 z-[60] bg-white transition-transform duration-500 ease-in-out md:hidden ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-center px-12 py-8">
-            <img src={logo} alt="DALLA" className="h-6" />
+            <img src={dallaLogo} alt="DALLA" className="h-6" />
             <button 
               onClick={() => setIsMenuOpen(false)}
               className="w-10 h-10 flex items-center justify-center rounded-full border border-neutral-100"
