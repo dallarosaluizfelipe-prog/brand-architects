@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import dallaLogo from '@/assets/dalla-logo.png';
+import dallaLogo from '@/assets/dalla-logo.svg';
 
 interface NavbarProps {
   onNavigate: (page: string) => void;
