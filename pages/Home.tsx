@@ -27,7 +27,7 @@ impulsiona os negócios
             </p>
             <button onClick={() => onNavigate('methodology')} className="bg-white text-black px-12 py-5 rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition-all font-sans">
 
-              Explore our methodology
+              Conheça o Dalla design brand     
             </button>
           </div>
         </div>
