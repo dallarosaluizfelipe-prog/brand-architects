@@ -43,7 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
           >
             <DallaLogo className="h-5 w-auto" />
           </button>
-          <div className="flex gap-8 text-[13px] font-bold font-sans text-black">
+          <div className="flex gap-8 text-[15px] font-normal font-sans text-black">
             {links.map((link) => (
               <button
                 key={link.path}
