@@ -20,10 +20,10 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const links = [
-    { label: 'ESTUDIO', path: 'about' },
-    { label: 'METODOLOGÍA', path: 'methodology' },
-    { label: 'CASES', path: 'portfolio' },
-    { label: 'CONTATOS', path: 'contact' },
+    { label: 'Estúdio', path: 'about' },
+    { label: 'Metodologia', path: 'methodology' },
+    { label: 'Cases', path: 'portfolio' },
+    { label: 'Contatos', path: 'contact' },
   ];
 
   const handleNavigate = (path: string) => {
@@ -43,12 +43,12 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
           >
             <DallaLogo className="h-5 w-auto" />
           </button>
-          <div className="flex gap-8 text-[11px] font-bold uppercase tracking-[0.15em] font-sans text-neutral-800">
+          <div className="flex gap-8 text-[11px] font-bold tracking-[0.15em] font-sans text-black">
             {links.map((link) => (
               <button
                 key={link.path}
                 onClick={() => handleNavigate(link.path)}
-                className={`hover:text-black transition-colors ${currentPage === link.path ? 'text-black' : 'text-neutral-500'}`}
+                className={`hover:opacity-70 transition-opacity text-black`}
               >
                 {link.label}
               </button>
