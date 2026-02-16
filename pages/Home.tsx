@@ -16,16 +16,16 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
         </div>
         <div className="relative z-10 max-w-6xl w-full text-center px-6">
-          <h1 className="text-white text-7xl md:text-9xl leading-[0.9] mb-12 tracking-tight font-display">
-            Poder criativo que impulsiona os negócios
+          <h1 className="text-white text-7xl leading-[0.9] mb-12 tracking-tight font-display md:text-8xl text-center">Poder criativo que 
+impulsiona os negócios
+
           </h1>
           <div className="flex flex-col items-center gap-10">
             <p className="max-w-2xl mx-auto text-lg md:text-2xl text-white/70 font-light font-sans leading-relaxed">Identidades visuais pensadas para posicionar marcas no mercado.
 
 
             </p>
-            <button onClick={() => onNavigate('methodology')}
-            className="bg-white text-black px-12 py-5 rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition-all font-sans">
+            <button onClick={() => onNavigate('methodology')} className="bg-white text-black px-12 py-5 rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition-all font-sans">
 
               Explore our methodology
             </button>
