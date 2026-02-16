@@ -2,31 +2,31 @@
 import React from 'react';
 import ContactSection from '../components/ContactSection';
 
-const Home: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) => {
+const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) => {
   return (
     <div className="animate-in fade-in duration-700">
       {/* Hero Section */}
       <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden bg-black text-white rounded-b-[4rem] md:rounded-b-[6rem]">
         <div className="absolute inset-0 z-0 opacity-40 grayscale">
-          <img 
-            alt="Hero background" 
-            className="w-full h-full object-cover" 
-            src="https://picsum.photos/id/42/1920/1080?grayscale" 
-          />
+          <img
+            alt="Hero background"
+            className="w-full h-full object-cover"
+            src="https://picsum.photos/id/42/1920/1080?grayscale" />
+
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
         </div>
         <div className="relative z-10 max-w-6xl w-full text-center px-6">
           <h1 className="text-white text-7xl md:text-9xl leading-[0.9] mb-12 tracking-tight font-display">
-            Creative power that moves business.
+            Poder criativo que impulsiona os negócios
           </h1>
           <div className="flex flex-col items-center gap-10">
-            <p className="max-w-2xl mx-auto text-lg md:text-2xl text-white/70 font-light font-sans leading-relaxed">
-              High-end visual identity and branding design. We unite strategy, communication, and craft to generate growth and relevance.
+            <p className="max-w-2xl mx-auto text-lg md:text-2xl text-white/70 font-light font-sans leading-relaxed">Identidades visuais pensadas para posicionar marcas no mercado.
+
+
             </p>
-            <button 
-              onClick={() => onNavigate('methodology')}
-              className="bg-white text-black px-12 py-5 rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition-all font-sans"
-            >
+            <button onClick={() => onNavigate('methodology')}
+            className="bg-white text-black px-12 py-5 rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition-all font-sans">
+
               Explore our methodology
             </button>
           </div>
@@ -49,11 +49,11 @@ const Home: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) 
             </button>
           </div>
           <div className="rounded-3xl overflow-hidden aspect-video bg-neutral-100 relative group cursor-pointer">
-            <img 
-              alt="Studio work video placeholder" 
-              className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-110" 
-              src="https://picsum.photos/id/10/1200/800?grayscale" 
-            />
+            <img
+              alt="Studio work video placeholder"
+              className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-110"
+              src="https://picsum.photos/id/10/1200/800?grayscale" />
+
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-24 h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-all">
                 <span className="material-symbols-outlined text-white text-5xl">play_arrow</span>
@@ -75,11 +75,11 @@ const Home: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) 
           <div className="grid md:grid-cols-12 gap-12">
             <div className="md:col-span-8 group cursor-pointer" onClick={() => onNavigate('casestudy')}>
               <div className="rounded-3xl overflow-hidden aspect-[16/9] mb-8 relative shadow-lg">
-                <img 
-                  alt="Artisanal Spirits" 
-                  className="w-full h-full object-cover image-bw" 
-                  src="https://picsum.photos/id/20/1200/800?grayscale" 
-                />
+                <img
+                  alt="Artisanal Spirits"
+                  className="w-full h-full object-cover image-bw"
+                  src="https://picsum.photos/id/20/1200/800?grayscale" />
+
                 <div className="absolute top-8 right-8 bg-black text-white px-5 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold font-sans">Featured Case</div>
               </div>
               <div className="flex flex-col md:flex-row justify-between items-start md:items-end">
@@ -92,11 +92,11 @@ const Home: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) 
             </div>
             <div className="md:col-span-4 group cursor-pointer flex flex-col">
               <div className="rounded-3xl overflow-hidden aspect-square mb-8 shadow-lg flex-grow">
-                <img 
-                  alt="Conceptual Living" 
-                  className="w-full h-full object-cover image-bw" 
-                  src="https://picsum.photos/id/30/800/800?grayscale" 
-                />
+                <img
+                  alt="Conceptual Living"
+                  className="w-full h-full object-cover image-bw"
+                  src="https://picsum.photos/id/30/800/800?grayscale" />
+
               </div>
               <div>
                 <h3 className="text-3xl md:text-4xl mb-4">Conceptual Living</h3>
@@ -105,10 +105,10 @@ const Home: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) 
             </div>
           </div>
           <div className="mt-24 text-center">
-            <button 
+            <button
               onClick={() => onNavigate('portfolio')}
-              className="border border-black px-16 py-6 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans"
-            >
+              className="border border-black px-16 py-6 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans">
+
               View full portfolio
             </button>
           </div>
@@ -138,8 +138,8 @@ const Home: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) 
       </section>
 
       <ContactSection />
-    </div>
-  );
+    </div>);
+
 };
 
 export default Home;
