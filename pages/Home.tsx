@@ -16,7 +16,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
         </div>
         <div className="relative z-10 max-w-6xl w-full text-center px-6">
-          <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">Poder criativo que 
+          <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">Poder criativo que 
 impulsiona os negócios
 
           </h1>
@@ -40,14 +40,14 @@ impulsiona os negócios
       <section className="py-40 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-20 items-center">
           <div>
-            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter md:text-6xl">Aqui, toda identidade tem uma forma, 
+            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter md:text-6xl px-0 mx-0">Aqui, toda identidade tem uma forma, 
 & toda forma nasce de uma intenção .
             </h2>
             <p className="text-xl md:text-2xl mb-12 text-neutral-500 font-light leading-relaxed">
               Our work is recognized for its clarity, precision, and impact. We transform business objectives into iconic visual legacies.
             </p>
             <button className="bg-black text-white px-10 py-5 rounded-full text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">
-              Communicate with impact
+              Quero uma identidade visual   
             </button>
           </div>
         </div>
