@@ -21,7 +21,7 @@ impulsiona os negócios
 
           </h1>
           <div className="flex flex-col items-center gap-10">
-            <p className="max-w-2xl mx-auto text-lg md:text-2xl text-white/70 font-light font-sans leading-relaxed">Identidades visuais pensadas para posicionar marcas no mercado.
+            <p className="max-w-2xl mx-auto text-lg text-white/70 font-light font-sans leading-relaxed md:text-xl">Identidades visuais pensadas para posicionar marcas no mercado.
 
 
             </p>
