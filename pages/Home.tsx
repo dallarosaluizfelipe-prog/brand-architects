@@ -19,7 +19,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">
             Poder criativo que
           </h1>
-          <h1> 
+          <h1 className="text-8xl"> 
             impulsiona os negócios
           </h1>
           <div className="flex flex-col items-center gap-10">
