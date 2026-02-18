@@ -40,8 +40,9 @@ impulsiona os negócios
       <section className="py-40 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-20 items-center">
           <div>
-            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter md:text-6xl px-0 mx-0">Aqui, toda identidade tem uma forma, 
-& toda forma nasce de uma intenção .
+            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 md:text-7xl">Aqui, toda identidade tem uma forma, 
+& toda forma nasce de uma intenção.
+
             </h2>
             <p className="text-xl md:text-2xl mb-12 text-neutral-500 font-light leading-relaxed">
               Our work is recognized for its clarity, precision, and impact. We transform business objectives into iconic visual legacies.
@@ -65,10 +66,9 @@ impulsiona os negócios
           <div className="grid md:grid-cols-12 gap-12">
             <div className="md:col-span-8 group cursor-pointer" onClick={() => onNavigate('casestudy')}>
               <div className="rounded-3xl overflow-hidden aspect-[16/9] mb-8 relative shadow-lg">
-                <img
-                  alt="Artisanal Spirits"
-                  className="w-full h-full object-cover image-bw"
-                  src="https://picsum.photos/id/20/1200/800?grayscale" />
+                <img alt="Artisanal Spirits"
+                className="w-full h-full object-cover image-bw"
+                src="https://picsum.photos/id/20/1200/800?grayscale" />
 
                 <div className="absolute top-8 right-8 bg-black text-white px-5 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold font-sans">Featured Case</div>
               </div>
