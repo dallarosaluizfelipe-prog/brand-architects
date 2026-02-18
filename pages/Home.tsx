@@ -50,11 +50,6 @@ impulsiona os negócios
               Communicate with impact
             </button>
           </div>
-          <div className="rounded-3xl overflow-hidden aspect-video bg-neutral-100 relative group cursor-pointer">
-            <img alt="Studio work video placeholder" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-110"
-            src="https://picsum.photos/id/10/1200/800?grayscale" />
-
-          </div>
         </div>
       </section>
 
