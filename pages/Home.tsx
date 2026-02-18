@@ -49,7 +49,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
             <p className="text-xl md:text-2xl mb-12 text-neutral-500 font-light leading-relaxed">
               Our work is recognized for its clarity, precision, and impact. We transform business objectives into iconic visual legacies.
             </p>
-            <button className="bg-black text-white px-10 py-5 rounded-full text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">
+            <button className="bg-black text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest hover:opacity-80 transition-opacity text-sm">
               Quero uma identidade visual   
             </button>
           </div>
