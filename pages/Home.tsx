@@ -16,7 +16,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
         </div>
         <div className="relative z-10 max-w-6xl w-full text-center px-6">
-          <h1 className="text-white text-7xl leading-[0.9] mb-12 tracking-tight font-display md:text-8xl text-center">Poder criativo que 
+          <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">Poder criativo que 
 impulsiona os negócios
 
           </h1>
