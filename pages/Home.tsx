@@ -54,11 +54,6 @@ impulsiona os negócios
             <img alt="Studio work video placeholder" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-110"
             src="https://picsum.photos/id/10/1200/800?grayscale" />
 
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-24 h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-all">
-                <span className="material-symbols-outlined text-white text-5xl">play_arrow</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
