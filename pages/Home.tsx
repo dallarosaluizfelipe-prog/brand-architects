@@ -16,8 +16,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
         </div>
         <div className="relative z-10 max-w-6xl w-full text-center px-6">
-          <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">Poder criativo que 
-impulsiona os negócios
+          <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">Poder criativo que 
+<impulsiona os negócios
 
           </h1>
           <div className="flex flex-col items-center gap-10">
@@ -38,9 +38,9 @@ impulsiona os negócios
 
       {/* Global Excellence Section */}
       <section className="py-40 px-6 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-20 items-center">
+        <div className="flex items-center justify-center">
           <div>
-            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 md:text-7xl">Aqui, toda identidade tem uma forma, 
+            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 md:text-7xl text-left">Aqui, toda identidade tem uma forma, 
 & toda forma nasce de uma intenção.
 
             </h2>
