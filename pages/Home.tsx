@@ -69,7 +69,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
             <div className="md:col-span-8 group cursor-pointer" onClick={() => onNavigate('casestudy')}>
               <div className="rounded-3xl overflow-hidden aspect-[16/9] mb-8 relative shadow-lg">
                 <img alt="Artisanal Spirits"
-                className="w-full h-full object-cover image-bw shadow-none" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
+                className="w-full h-full object-cover shadow-none" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
 
 
                 <div className="absolute top-8 right-8 bg-black text-white px-5 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold font-sans">Featured Case</div>
@@ -86,7 +86,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
               <div className="rounded-3xl overflow-hidden aspect-square mb-8 shadow-lg flex-grow">
                 <img
                   alt="Conceptual Living"
-                  className="w-full h-full object-cover image-bw" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
+                  className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
 
 
               </div>
