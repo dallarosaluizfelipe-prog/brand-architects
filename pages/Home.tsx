@@ -40,7 +40,9 @@ impulsiona os negócios
       <section className="py-40 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-20 items-center">
           <div>
-            <h2 className="text-6xl md:text-7xl mb-8 leading-[0.9] tracking-tighter">Global Excellence in Design.</h2>
+            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter md:text-6xl">Aqui, toda identidade tem uma forma, 
+& toda forma nasce de uma intenção .
+            </h2>
             <p className="text-xl md:text-2xl mb-12 text-neutral-500 font-light leading-relaxed">
               Our work is recognized for its clarity, precision, and impact. We transform business objectives into iconic visual legacies.
             </p>
@@ -49,10 +51,8 @@ impulsiona os negócios
             </button>
           </div>
           <div className="rounded-3xl overflow-hidden aspect-video bg-neutral-100 relative group cursor-pointer">
-            <img
-              alt="Studio work video placeholder"
-              className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-110"
-              src="https://picsum.photos/id/10/1200/800?grayscale" />
+            <img alt="Studio work video placeholder" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-110"
+            src="https://picsum.photos/id/10/1200/800?grayscale" />
 
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-24 h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-all">
