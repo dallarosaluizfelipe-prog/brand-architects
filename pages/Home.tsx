@@ -17,7 +17,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
         </div>
         <div className="relative z-10 max-w-6xl w-full text-center px-6">
           <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">Poder criativo que 
-<impulsiona os negócios
+impulsiona os negócios
 
           </h1>
           <div className="flex flex-col items-center gap-10">
