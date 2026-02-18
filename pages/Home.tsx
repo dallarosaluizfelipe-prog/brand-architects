@@ -46,8 +46,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
 & toda forma nasce de uma intenção.
 
             </h2>
-            <p className="text-xl md:text-2xl mb-12 text-neutral-500 font-light leading-relaxed">
-              Our work is recognized for its clarity, precision, and impact. We transform business objectives into iconic visual legacies.
+            <p className="text-xl md:text-2xl mb-12 text-neutral-500 font-light leading-relaxed">Acreditamos que toda marca nasce de um posicionamento estratégico, e a identidade é sua expressão visual.
+
             </p>
             <button className="bg-black text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest hover:opacity-80 transition-opacity text-sm">
               Quero uma identidade visual   
@@ -57,20 +57,20 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       </section>
 
       {/* Selected Portfolio */}
-      <section className="py-40 px-6 bg-neutral-50" id="work">
+      <section className="py-40 px-6 bg-[#efeff0]" id="work">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
-            <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Selected Portfolio.</h2>
+            <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Conheça Nossos Cases     </h2>
             <p className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed">
-              Visual identities that transform purpose into performance. Pure design, strictly executed.
+              Marcas que carregam estratégia na essência, e validaram o nosso método no mundo real.          
             </p>
           </div>
           <div className="grid md:grid-cols-12 gap-12">
             <div className="md:col-span-8 group cursor-pointer" onClick={() => onNavigate('casestudy')}>
               <div className="rounded-3xl overflow-hidden aspect-[16/9] mb-8 relative shadow-lg">
                 <img alt="Artisanal Spirits"
-                className="w-full h-full object-cover image-bw"
-                src="https://picsum.photos/id/20/1200/800?grayscale" />
+                className="w-full h-full object-cover image-bw shadow-none" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
+
 
                 <div className="absolute top-8 right-8 bg-black text-white px-5 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold font-sans">Featured Case</div>
               </div>
@@ -86,8 +86,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
               <div className="rounded-3xl overflow-hidden aspect-square mb-8 shadow-lg flex-grow">
                 <img
                   alt="Conceptual Living"
-                  className="w-full h-full object-cover image-bw"
-                  src="https://picsum.photos/id/30/800/800?grayscale" />
+                  className="w-full h-full object-cover image-bw" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
+
 
               </div>
               <div>
