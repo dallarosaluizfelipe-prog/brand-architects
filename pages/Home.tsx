@@ -22,7 +22,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <h1 className="text-8xl"> 
             impulsiona os negócios
           </h1>
-          <div className="flex flex-col items-center gap-10">
+          <div className="flex flex-col items-center gap-10 mt-10">
             <p className="max-w-2xl mx-auto text-lg text-white/70 font-light font-sans leading-relaxed md:text-xl">Identidades visuais pensadas para posicionar marcas no mercado.
 
 
