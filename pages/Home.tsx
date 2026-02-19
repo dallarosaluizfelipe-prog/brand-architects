@@ -96,7 +96,13 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
               <div>
                 <h3 className="text-3xl md:text-5xl mb-4">Nuts O'Clock
                 </h3>
-                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual</p>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem  
+   
+
+ 
+  
+
+                </p>
               </div>
             </div>
             <div className="group cursor-pointer">
