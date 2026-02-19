@@ -33,8 +33,8 @@ const Footer: React.FC = () => {
             <span className="text-[10px] opacity-40 uppercase tracking-widest">© 2024 Branding Studio. All rights reserved.</span>
           </div>
         </div>
-        <div className="text-[12vw] md:text-[18vw] font-bold text-white leading-none tracking-tighter select-none uppercase font-sans">
-          Studio.
+        <div className="select-none">
+          <img src="/lovable-uploads/dalla-logo-footer.png" alt="Dalla" className="w-full" />
         </div>
       </div>
     </footer>
