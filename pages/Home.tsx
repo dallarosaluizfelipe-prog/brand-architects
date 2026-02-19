@@ -129,8 +129,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       <section className="py-40 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
-            <h2 className="text-6xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">World-class partners.</h2>
-            <p className="text-neutral-400 max-w-xs md:text-right font-light text-lg">Strategic partners who put branding into action through integrated communication.</p>
+            <h2 className="text-6xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">Nossos Parceiros </h2>
+            <p className="text-neutral-400 max-w-xs md:text-right font-light text-lg">Parceiros estratégicos que colocam a marca em ação por meio do design. </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-16 items-center opacity-30 grayscale hover:opacity-100 transition-all duration-1000">
             <div className="flex justify-center text-4xl font-black tracking-tighter">VIGOR</div>
