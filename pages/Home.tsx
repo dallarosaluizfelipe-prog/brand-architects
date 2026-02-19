@@ -71,7 +71,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
             <div className="md:col-span-8 group cursor-pointer" onClick={() => onNavigate('casestudy')}>
               <div className="rounded-3xl overflow-hidden aspect-[16/9] mb-8 relative shadow-lg">
                 <img alt="Artisanal Spirits" className="w-full h-full object-cover shadow-none" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
-                <div className="absolute top-8 right-8 bg-black text-white px-5 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold font-sans">Featured Case</div>
+                
               </div>
               <div>
                 <h3 className="text-4xl md:text-5xl mb-4">Yerbal</h3>
@@ -118,8 +118,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
             </div>
           </div>
           <div className="mt-16 text-center">
-            <button onClick={() => onNavigate('portfolio')} className="border border-black px-16 py-6 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans">
-              View full portfolio
+            <button onClick={() => onNavigate('portfolio')} className="border border-black px-16 py-6 rounded-full font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans text-sm">
+              ver todo os cases    
             </button>
           </div>
         </div>
