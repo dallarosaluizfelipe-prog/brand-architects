@@ -45,8 +45,10 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
             <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 md:text-7xl text-left">Aqui, toda identidade tem uma forma, 
 & toda forma nasce de uma intenção.
 
+
+
             </h2>
-            <p className="text-xl md:text-2xl mb-12 text-neutral-500 font-light leading-relaxed">Acreditamos que toda marca nasce de um posicionamento estratégico, e a identidade é sua expressão visual.
+            <p className="text-xl mb-12 text-neutral-500 font-light leading-relaxed md:text-xl">Acreditamos que toda marca nasce de um posicionamento, e a identidade é sua expressão visual.
 
             </p>
             <button className="bg-black text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest hover:opacity-80 transition-opacity text-sm">
@@ -61,8 +63,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Conheça Nossos Cases</h2>
-            <p className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed">
-              Marcas que carregam estratégia na essência, e validaram o nosso método no mundo real.
+            <p className="text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed md:text-xl">Marcas que carregam estratégia na essência, e validaram o nosso método.
+
             </p>
           </div>
           <div className="grid md:grid-cols-12 gap-12">
@@ -134,7 +136,5 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       </section>
 
       <ContactSection />
-    </div>);
-};
-
+    </div>);};
 export default Home;
