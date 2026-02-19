@@ -57,51 +57,54 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       </section>
 
       {/* Selected Portfolio */}
-      <section className="py-40 px-6 bg-[#efeff0]" id="work">
+      <section className="py-16 px-6 bg-[#efeff0]" id="work">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Conheça Nossos Cases     </h2>
+          <div className="text-center mb-16">
+            <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Conheça Nossos Cases</h2>
             <p className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed">
-              Marcas que carregam estratégia na essência, e validaram o nosso método no mundo real.          
+              Marcas que carregam estratégia na essência, e validaram o nosso método no mundo real.
             </p>
           </div>
           <div className="grid md:grid-cols-12 gap-12">
             <div className="md:col-span-8 group cursor-pointer" onClick={() => onNavigate('casestudy')}>
               <div className="rounded-3xl overflow-hidden aspect-[16/9] mb-8 relative shadow-lg">
-                <img alt="Artisanal Spirits"
-                className="w-full h-full object-cover shadow-none" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
-
-
+                <img alt="Artisanal Spirits" className="w-full h-full object-cover shadow-none" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
                 <div className="absolute top-8 right-8 bg-black text-white px-5 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold font-sans">Featured Case</div>
               </div>
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-end">
-                <div>
-                  <h3 className="text-4xl md:text-5xl mb-4">Yerbal</h3>
-                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem
-                  </p>
-                </div>
-                <div className="text-black font-bold text-4xl tabular-nums mt-6 md:mt-0">+700% Impact</div>
+              <div>
+                <h3 className="text-4xl md:text-5xl mb-4">Yerbal</h3>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
               </div>
             </div>
             <div className="md:col-span-4 group cursor-pointer flex flex-col">
               <div className="rounded-3xl overflow-hidden aspect-square mb-8 shadow-lg flex-grow">
-                <img alt="Conceptual Living"
-                className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
-
-
+                <img alt="Conceptual Living" className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
               </div>
               <div>
-                <h3 className="text-3xl mb-4 md:text-5xl">Clave
-
-
-                </h3>
+                <h3 className="text-3xl mb-4 md:text-5xl">Clave</h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Digital Experience & Strategy</p>
               </div>
             </div>
           </div>
-          <div className="mt-24 text-center">
+          {/* Second row - two equal cases */}
+          <div className="grid md:grid-cols-2 gap-12 mt-12">
+            <div className="group cursor-pointer">
+              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg bg-neutral-300"></div>
+              <div>
+                <h3 className="text-3xl md:text-5xl mb-4">Projeto 03</h3>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual</p>
+              </div>
+            </div>
+            <div className="group cursor-pointer">
+              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg bg-neutral-300"></div>
+              <div>
+                <h3 className="text-3xl md:text-5xl mb-4">Projeto 04</h3>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Estratégia</p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-16 text-center">
             <button onClick={() => onNavigate('portfolio')} className="border border-black px-16 py-6 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans">
-
               View full portfolio
             </button>
           </div>
