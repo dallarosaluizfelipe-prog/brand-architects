@@ -51,9 +51,9 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
             <p className="text-xl mb-12 text-neutral-500 font-light leading-relaxed md:text-xl text-center">Acreditamos que toda marca nasce de um posicionamento, e a identidade é sua expressão visual.
 
             </p>
-            <button className="bg-black text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest hover:opacity-80 transition-opacity text-sm">
-              Quero uma identidade visual   
-            </button>
+            
+
+
           </div>
         </div>
       </section>
