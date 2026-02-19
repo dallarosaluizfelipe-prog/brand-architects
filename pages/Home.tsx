@@ -84,7 +84,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
               </div>
               <div>
                 <h3 className="text-3xl mb-4 md:text-5xl">Clave</h3>
-                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Digital Experience & Strategy</p>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Identidade  -   Tipografia
+                </p>
               </div>
             </div>
           </div>
@@ -136,5 +137,4 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       </section>
 
       <ContactSection />
-    </div>);};
-export default Home;
+    </div>);};export default Home;
