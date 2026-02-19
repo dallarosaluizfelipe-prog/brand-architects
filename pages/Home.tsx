@@ -76,30 +76,31 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
               </div>
               <div className="flex flex-col md:flex-row justify-between items-start md:items-end">
                 <div>
-                  <h3 className="text-4xl md:text-5xl mb-4">Artisanal Spirits — Rebranding</h3>
-                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding, Identity, Packaging</p>
+                  <h3 className="text-4xl md:text-5xl mb-4">Yerbal</h3>
+                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem
+                  </p>
                 </div>
                 <div className="text-black font-bold text-4xl tabular-nums mt-6 md:mt-0">+700% Impact</div>
               </div>
             </div>
             <div className="md:col-span-4 group cursor-pointer flex flex-col">
               <div className="rounded-3xl overflow-hidden aspect-square mb-8 shadow-lg flex-grow">
-                <img
-                  alt="Conceptual Living"
-                  className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
+                <img alt="Conceptual Living"
+                className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
 
 
               </div>
               <div>
-                <h3 className="text-3xl md:text-4xl mb-4">Conceptual Living</h3>
+                <h3 className="text-3xl mb-4 md:text-5xl">Clave
+
+
+                </h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Digital Experience & Strategy</p>
               </div>
             </div>
           </div>
           <div className="mt-24 text-center">
-            <button
-              onClick={() => onNavigate('portfolio')}
-              className="border border-black px-16 py-6 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans">
+            <button onClick={() => onNavigate('portfolio')} className="border border-black px-16 py-6 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans">
 
               View full portfolio
             </button>
@@ -131,7 +132,6 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
 
       <ContactSection />
     </div>);
-
 };
 
 export default Home;
