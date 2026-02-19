@@ -42,13 +42,13 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-center">
           <div>
-            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 md:text-7xl text-left">Aqui, toda identidade tem uma forma, 
+            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 md:text-7xl text-center">Aqui, toda identidade tem uma forma, 
 & toda forma nasce de uma intenção.
 
 
 
             </h2>
-            <p className="text-xl mb-12 text-neutral-500 font-light leading-relaxed md:text-xl">Acreditamos que toda marca nasce de um posicionamento, e a identidade é sua expressão visual.
+            <p className="text-xl mb-12 text-neutral-500 font-light leading-relaxed md:text-xl text-center">Acreditamos que toda marca nasce de um posicionamento, e a identidade é sua expressão visual.
 
             </p>
             <button className="bg-black text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest hover:opacity-80 transition-opacity text-sm">
