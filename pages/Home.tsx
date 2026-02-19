@@ -108,7 +108,9 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
               </div>
             </div>
             <div className="group cursor-pointer">
-              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg bg-neutral-300"></div>
+              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
+                <img alt="Lummina" className="w-full h-full object-cover" src="/lovable-uploads/lummina-cover.png" />
+              </div>
               <div>
                 <h3 className="text-3xl md:text-5xl mb-4">Lummina
 
