@@ -92,7 +92,9 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           {/* Second row - two equal cases */}
           <div className="grid md:grid-cols-2 gap-12 mt-12">
             <div className="group cursor-pointer">
-              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg bg-neutral-300"></div>
+              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
+                <img alt="Nuts O'Clock" className="w-full h-full object-cover" src="/lovable-uploads/nuts-oclock-cover.png" />
+              </div>
               <div>
                 <h3 className="text-3xl md:text-5xl mb-4">Nuts O'Clock
                 </h3>
