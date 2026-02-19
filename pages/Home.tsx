@@ -112,7 +112,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
 
 
                 </h3>
-                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Estratégia</p>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem
+                </p>
               </div>
             </div>
           </div>
