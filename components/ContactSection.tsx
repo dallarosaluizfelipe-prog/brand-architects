@@ -6,7 +6,7 @@ const ContactSection: React.FC = () => {
     <section className="py-32 px-6 bg-black text-white rounded-t-[3rem] md:rounded-t-[5rem]" id="contact">
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20">
         <div>
-          <h2 className="text-6xl md:text-8xl leading-none mb-10 font-display">Ready to transform your brand?</h2>
+          <h2 className="text-6xl md:text-8xl leading-none mb-10 font-display">Pronto para transformar sua marca?</h2>
           <div className="flex gap-6 mt-12">
             {/* Social Icons Placeholders */}
             <div className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
@@ -23,31 +23,31 @@ const ContactSection: React.FC = () => {
         <div className="bg-white p-8 md:p-12 rounded-3xl text-black shadow-2xl">
           <form className="space-y-6 font-sans">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input 
-                className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" 
-                placeholder="Name *" 
-                type="text" 
-                required
-              />
-              <input 
-                className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" 
-                placeholder="Email *" 
-                type="email" 
-                required
-              />
+              <input
+                className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light"
+                placeholder="Name *"
+                type="text"
+                required />
+
+              <input
+                className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light"
+                placeholder="Email *"
+                type="email"
+                required />
+
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input 
-                className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" 
-                placeholder="Telephone" 
-                type="tel" 
-              />
-              <input 
-                className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" 
-                placeholder="Company *" 
-                type="text" 
-                required
-              />
+              <input
+                className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light"
+                placeholder="Telephone"
+                type="tel" />
+
+              <input
+                className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light"
+                placeholder="Company *"
+                type="text"
+                required />
+
             </div>
             <select className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 text-neutral-400 font-light appearance-none bg-transparent">
               <option value="">Main Challenge?</option>
@@ -55,11 +55,11 @@ const ContactSection: React.FC = () => {
               <option>Integrated Strategy</option>
               <option>Performance Design</option>
             </select>
-            <textarea 
-              className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light min-h-[100px]" 
-              placeholder="Briefly describe your project..." 
-              rows={3}
-            ></textarea>
+            <textarea
+              className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light min-h-[100px]"
+              placeholder="Briefly describe your project..."
+              rows={3}>
+            </textarea>
             <button className="w-full bg-black text-white py-6 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] hover:bg-neutral-800 transition-all hover:scale-[1.02]">
               Send Inquiry
             </button>
@@ -69,8 +69,8 @@ const ContactSection: React.FC = () => {
           </form>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default ContactSection;
