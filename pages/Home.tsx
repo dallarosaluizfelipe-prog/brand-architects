@@ -16,10 +16,10 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
         </div>
         <div className="relative z-10 max-w-6xl w-full text-center px-6 -mt-16">
-          <h1 className="text-white leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center text-5xl py-0">
+          <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">
             Poder criativo que
           </h1>
-          <h1 className="text-5xl py-0"> 
+          <h1 className="text-8xl"> 
             impulsiona os negócios
           </h1>
           <div className="flex flex-col items-center gap-10 mt-10">
@@ -27,7 +27,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
 
 
             </p>
-            <button onClick={() => onNavigate('methodology')} className="bg-white text-black px-12 py-5 rounded-full font-bold uppercase tracking-wider hover:scale-105 transition-all font-sans text-xs">
+            <button onClick={() => onNavigate('methodology')} className="bg-white text-black px-12 py-5 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all font-sans">
 
               Conheça o Dalla design brand     
             </button>
@@ -48,7 +48,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
 
 
             </h2>
-            <p className="mb-12 text-neutral-500 font-light leading-relaxed md:text-xl text-center text-lg">Acreditamos que toda marca nasce de um posicionamento, e a identidade é sua expressão visual.
+            <p className="text-xl mb-12 text-neutral-500 font-light leading-relaxed md:text-xl text-center">Acreditamos que toda marca nasce de um posicionamento, e a identidade é sua expressão visual.
 
             </p>
             
@@ -63,7 +63,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Conheça Nossos Cases</h2>
-            <p className="text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed md:text-xl text-lg">Marcas que carregam estratégia na essência, e validaram o nosso método.
+            <p className="text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed md:text-xl">Marcas que carregam estratégia na essência, e validaram o nosso método.
 
             </p>
           </div>
