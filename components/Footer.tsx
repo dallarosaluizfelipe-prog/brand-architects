@@ -7,16 +7,16 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 font-sans">
           <div>
-            <h5 className="text-[10px] font-bold mb-6 uppercase tracking-widest opacity-40">Headquarters</h5>
-            <p className="text-sm font-light opacity-80 leading-relaxed uppercase tracking-widest">CURITIBA / PARANA / BR
-CENTRAL OFFICE
-TEL +42 9 99153814<br />
+            <h5 className="text-[10px] font-bold mb-6 uppercase tracking-widest opacity-40">CONTATOS</h5>
+            <p className="text-sm font-light opacity-80 leading-relaxed uppercase tracking-widest">CURITIBA / PARANA / BR 
+TEL +55 42 9 99153814
+              <br />
               Central Office<br />
               TEL +44 20 7946 0000
             </p>
           </div>
           <div>
-            <h5 className="text-[10px] font-bold mb-6 uppercase tracking-widest opacity-40">Network</h5>
+            <h5 className="text-[10px] font-bold mb-6 uppercase tracking-widest opacity-40">REDES</h5>
             <ul className="text-sm font-light opacity-80 space-y-2 uppercase tracking-widest">
               <li><a className="hover:underline" href="#">Instagram</a></li>
               <li><a className="hover:underline" href="#">LinkedIn</a></li>
