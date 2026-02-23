@@ -49,10 +49,12 @@ const About: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-16">
           <div className="space-y-6">
             <div className="text-4xl font-display italic">01. Estratégia</div>
-            <p className="text-neutral-500 font-light font-sans leading-relaxed">Toda decisão parte do posicionamento e do mercado.</p>
+            <p className="text-neutral-500 font-light font-sans leading-relaxed">Tudo começa pela clareza de mercado.
+Analisamos cenário, concorrência e negócio para transformar decisões de design em vantagem competitiva.</p>
           </div>
           <div className="space-y-6">
-            <div className="text-4xl font-display italic">02. Identidade</div>
+            <div className="text-4xl font-display italic">Identidade é a materialização.
+Criamos sistemas visuais proprietários que tornam a marca reconhecível, consistente e memorável.</div>
             <p className="text-neutral-500 font-light font-sans leading-relaxed">Construção de sistemas visuais proprietários, não apenas estética.
 
 
@@ -60,7 +62,7 @@ const About: React.FC = () => {
             </p>
           </div>
           <div className="space-y-6">
-            <div className="text-4xl font-display italic">03. Performance</div>
+            <div className="text-4xl font-display italic">03. Posicionamento</div>
             <p className="text-neutral-500 font-light font-sans leading-relaxed">Design is a business tool. Our success is measured by the growth and clarity we provide to our clients.</p>
           </div>
         </div>
@@ -75,7 +77,5 @@ const About: React.FC = () => {
       </section>
 
       <ContactSection />
-    </div>);
-};
-
+    </div>);};
 export default About;
