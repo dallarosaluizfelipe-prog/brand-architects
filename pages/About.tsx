@@ -8,7 +8,8 @@ const About: React.FC = () => {
       {/* Hero Section */}
       <header className="pt-48 pb-20 px-6 max-w-7xl mx-auto">
         <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-8 opacity-40">Nossa identidade </p>
-        <h1 className="text-8xl md:text-[12rem] leading-[0.8] tracking-tighter font-display mb-10">This is Dalla</h1>
+        <h1 className="text-8xl md:text-[12rem] leading-[0.8] tracking-tighter font-display mb-10">Isto é Dalla.
+        </h1>
         <p className="text-xl text-neutral-400 max-w-3xl font-light leading-relaxed md:text-2xl">
           Somos um estúdio de design, estrategista e pensador, dedicado à busca da excelência visual e da clareza estratégica.
         </p>
@@ -30,10 +31,9 @@ const About: React.FC = () => {
           </div>
           <div className="md:col-span-5">
             <div className="rounded-[2.5rem] overflow-hidden aspect-[3/4] shadow-2xl">
-              <img
-                alt="Studio Atmosphere"
-                className="w-full h-full object-cover grayscale"
-                src="https://picsum.photos/id/111/800/1000?grayscale" />
+              <img alt="Studio Atmosphere"
+              className="w-full h-full object-cover grayscale"
+              src="https://picsum.photos/id/111/800/1000?grayscale" />
 
             </div>
           </div>
@@ -48,12 +48,16 @@ const About: React.FC = () => {
         </div>
         <div className="grid md:grid-cols-3 gap-16">
           <div className="space-y-6">
-            <div className="text-4xl font-display italic">01. Precision</div>
-            <p className="text-neutral-500 font-light font-sans leading-relaxed">Every pixel has a purpose. We don't guess; we calculate. Our design systems are built with mathematical rigor.</p>
+            <div className="text-4xl font-display italic">01. Estratégia</div>
+            <p className="text-neutral-500 font-light font-sans leading-relaxed">Toda decisão parte do posicionamento e do mercado.</p>
           </div>
           <div className="space-y-6">
-            <div className="text-4xl font-display italic">02. Timelessness</div>
-            <p className="text-neutral-500 font-light font-sans leading-relaxed">Trends fade, but legacy remains. We build identities meant to resonate for decades, not seasons.</p>
+            <div className="text-4xl font-display italic">02. Identidade</div>
+            <p className="text-neutral-500 font-light font-sans leading-relaxed">Construção de sistemas visuais proprietários, não apenas estética.
+
+
+
+            </p>
           </div>
           <div className="space-y-6">
             <div className="text-4xl font-display italic">03. Performance</div>
@@ -65,17 +69,13 @@ const About: React.FC = () => {
       {/* Wide Image */}
       <section className="px-6 mb-40">
         <div className="max-w-[1440px] mx-auto rounded-[3rem] overflow-hidden aspect-[21/9] shadow-2xl bg-neutral-100">
-          <img
-            alt="Wide studio view"
-            className="w-full h-full object-cover grayscale opacity-80"
-            src="https://picsum.photos/id/115/1920/800?grayscale" />
+          <img alt="Wide studio view" className="w-full h-full object-cover grayscale opacity-80" src="https://picsum.photos/id/115/1920/800?grayscale" />
 
         </div>
       </section>
 
       <ContactSection />
     </div>);
-
 };
 
 export default About;
