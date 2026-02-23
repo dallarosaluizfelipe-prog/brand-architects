@@ -53,8 +53,8 @@ const About: React.FC = () => {
 Analisamos cenário, concorrência e negócio para transformar decisões de design em vantagem competitiva.</p>
           </div>
           <div className="space-y-6">
-            <div className="text-4xl font-display italic">Identidade é a materialização.
-Criamos sistemas visuais proprietários que tornam a marca reconhecível, consistente e memorável.</div>
+            <div className="text-4xl font-display italic">02. Identidade 
+            </div>
             <p className="text-neutral-500 font-light font-sans leading-relaxed">Construção de sistemas visuais proprietários, não apenas estética.
 
 
@@ -63,7 +63,8 @@ Criamos sistemas visuais proprietários que tornam a marca reconhecível, consis
           </div>
           <div className="space-y-6">
             <div className="text-4xl font-display italic">03. Posicionamento</div>
-            <p className="text-neutral-500 font-light font-sans leading-relaxed">Design is a business tool. Our success is measured by the growth and clarity we provide to our clients.</p>
+            <p className="text-neutral-500 font-light font-sans leading-relaxed">Posicionamento é o território que a marca ocupa.
+Definimos espaços estratégicos que geram diferenciação real e valor percebido.</p>
           </div>
         </div>
       </section>
@@ -77,5 +78,4 @@ Criamos sistemas visuais proprietários que tornam a marca reconhecível, consis
       </section>
 
       <ContactSection />
-    </div>);};
-export default About;
+    </div>);};export default About;
