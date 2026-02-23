@@ -8,7 +8,7 @@ const About: React.FC = () => {
       {/* Hero Section */}
       <header className="pt-48 pb-20 px-6 max-w-7xl mx-auto">
         <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-8 opacity-40">Nossa identidade </p>
-        <h1 className="text-8xl md:text-[12rem] leading-[0.8] tracking-tighter font-display mb-10">Isto é Dalla.
+        <h1 className="text-8xl md:text-[12rem] leading-[0.8] tracking-tighter font-display mb-10">This is Dalla.
         </h1>
         <p className="text-xl text-neutral-400 max-w-3xl font-light leading-relaxed md:text-2xl">
           Somos um estúdio de design, estrategista e pensador, dedicado à busca da excelência visual e da clareza estratégica.
