@@ -8,8 +8,9 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 font-sans">
           <div>
             <h5 className="text-[10px] font-bold mb-6 uppercase tracking-widest opacity-40">Headquarters</h5>
-            <p className="text-sm font-light opacity-80 leading-relaxed uppercase tracking-widest">
-              London / NYC / São Paulo<br />
+            <p className="text-sm font-light opacity-80 leading-relaxed uppercase tracking-widest">CURITIBA / PARANA / BR
+CENTRAL OFFICE
+TEL +42 9 99153814<br />
               Central Office<br />
               TEL +44 20 7946 0000
             </p>
@@ -37,8 +38,7 @@ const Footer: React.FC = () => {
           <img src="/lovable-uploads/dalla-logo-footer.png" alt="Dalla" className="w-full" />
         </div>
       </div>
-    </footer>
-  );
+    </footer>);
 };
 
 export default Footer;
