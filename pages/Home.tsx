@@ -71,7 +71,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <div className="grid md:grid-cols-2 gap-12">
             <div className="group cursor-pointer" onClick={() => onNavigate('casestudy')}>
               <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
-                <img alt="Yerbal" className="w-full h-full object-cover" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
+                <img alt="Yerbal" className="w-full h-full object-cover" src="/lovable-uploads/yerbal-cover.gif" />
               </div>
               <div>
                 <h3 className="text-3xl md:text-5xl mb-4">Yerbal</h3>
