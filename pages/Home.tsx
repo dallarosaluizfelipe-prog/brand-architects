@@ -92,7 +92,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           <div className="mt-12">
             <div className="group cursor-pointer">
               <div className="rounded-3xl overflow-hidden aspect-[21/9] mb-8 shadow-lg">
-                <img alt="Nuts O'Clock" className="w-full h-full object-cover" src="/lovable-uploads/nuts-oclock-cover.png" />
+                <img alt="Nuts O'Clock" className="w-full h-full object-cover" src="/lovable-uploads/nuts-oclock-cover.gif" />
               </div>
               <div>
                 <h3 className="text-3xl md:text-5xl mb-4">Nuts O'Clock</h3>
