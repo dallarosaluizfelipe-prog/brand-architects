@@ -31,9 +31,14 @@ const About: React.FC = () => {
           </div>
           <div className="md:col-span-5">
             <div className="rounded-[2.5rem] overflow-hidden aspect-[3/4] shadow-2xl">
-              <img alt="Studio Atmosphere"
-              className="w-full h-full object-cover grayscale"
-              src="https://picsum.photos/id/111/800/1000?grayscale" />
+              <video
+                className="w-full h-full object-cover grayscale"
+                src="/lovable-uploads/dalla-teaser.mov"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
 
             </div>
           </div>
