@@ -137,16 +137,16 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
             <p className="text-neutral-400 max-w-xs md:text-right font-light text-lg">Parceiros estratégicos que colocam a marca em ação por meio do design. </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-16 items-center opacity-30 grayscale hover:opacity-100 transition-all duration-1000">
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-1.png" alt="Parceiro 1" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-2.png" alt="Parceiro 2" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-3.png" alt="Parceiro 3" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-4.png" alt="Parceiro 4" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-5.png" alt="Parceiro 5" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-6.png" alt="Parceiro 6" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-7.png" alt="Parceiro 7" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-8.png" alt="Parceiro 8" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-9.png" alt="Parceiro 9" className="h-16 md:h-20 object-contain" /></div>
-            <div className="flex justify-center"><img src="/lovable-uploads/partner-10.png" alt="Parceiro 10" className="h-16 md:h-20 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-1.png" alt="Parceiro 1" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-2.png" alt="Parceiro 2" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-3.png" alt="Parceiro 3" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-4.png" alt="Parceiro 4" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-5.png" alt="Parceiro 5" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-6.png" alt="Parceiro 6" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-7.png" alt="Parceiro 7" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-8.png" alt="Parceiro 8" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-9.png" alt="Parceiro 9" className="h-24 md:h-32 object-contain" /></div>
+            <div className="flex justify-center"><img src="/lovable-uploads/partner-10.png" alt="Parceiro 10" className="h-24 md:h-32 object-contain" /></div>
           </div>
         </div>
       </section>
