@@ -67,57 +67,57 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
 
             </p>
           </div>
-          <div className="grid md:grid-cols-12 gap-12">
-            <div className="md:col-span-8 group cursor-pointer" onClick={() => onNavigate('casestudy')}>
-              <div className="rounded-3xl overflow-hidden aspect-[16/9] mb-8 relative shadow-lg">
-                <img alt="Artisanal Spirits" className="w-full h-full object-cover shadow-none" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
-                
+          {/* Row 1 - 2 cases */}
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="group cursor-pointer" onClick={() => onNavigate('casestudy')}>
+              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
+                <img alt="Yerbal" className="w-full h-full object-cover" src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png" />
               </div>
               <div>
-                <h3 className="text-4xl md:text-5xl mb-4">Yerbal</h3>
+                <h3 className="text-3xl md:text-5xl mb-4">Yerbal</h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
               </div>
             </div>
-            <div className="md:col-span-4 group cursor-pointer flex flex-col">
-              <div className="rounded-3xl overflow-hidden aspect-square mb-8 shadow-lg flex-grow">
-                <img alt="Conceptual Living" className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
+            <div className="group cursor-pointer">
+              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
+                <img alt="Clave" className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
               </div>
               <div>
-                <h3 className="text-3xl mb-4 md:text-5xl">Clave</h3>
-                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Identidade  -   Tipografia
-                </p>
+                <h3 className="text-3xl md:text-5xl mb-4">Clave</h3>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Identidade  -   Tipografia</p>
               </div>
             </div>
           </div>
-          {/* Second row - two equal cases */}
-          <div className="grid md:grid-cols-2 gap-12 mt-12">
+          {/* Row 2 - 1 case full width */}
+          <div className="mt-12">
             <div className="group cursor-pointer">
-              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
+              <div className="rounded-3xl overflow-hidden aspect-[21/9] mb-8 shadow-lg">
                 <img alt="Nuts O'Clock" className="w-full h-full object-cover" src="/lovable-uploads/nuts-oclock-cover.png" />
               </div>
               <div>
-                <h3 className="text-3xl md:text-5xl mb-4">Nuts O'Clock
-                </h3>
-                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem  
-   
-
- 
-  
-
-                </p>
+                <h3 className="text-3xl md:text-5xl mb-4">Nuts O'Clock</h3>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
               </div>
             </div>
+          </div>
+          {/* Row 3 - 2 cases */}
+          <div className="grid md:grid-cols-2 gap-12 mt-12">
             <div className="group cursor-pointer">
               <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
                 <img alt="Lummina" className="w-full h-full object-cover" src="/lovable-uploads/lummina-cover.png" />
               </div>
               <div>
-                <h3 className="text-3xl md:text-5xl mb-4">Lummina
-
-
-                </h3>
-                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem
-                </p>
+                <h3 className="text-3xl md:text-5xl mb-4">Lummina</h3>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
+              </div>
+            </div>
+            <div className="group cursor-pointer">
+              <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
+                <img alt="Case 5" className="w-full h-full object-cover bg-neutral-200" src="" />
+              </div>
+              <div>
+                <h3 className="text-3xl md:text-5xl mb-4">Case 5</h3>
+                <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual</p>
               </div>
             </div>
           </div>
