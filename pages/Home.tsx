@@ -6,36 +6,15 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
   return (
     <div className="animate-in fade-in duration-700">
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden bg-black text-white rounded-b-[4rem] md:rounded-b-[6rem] pt-16 md:pt-20">
-        <div className="absolute inset-0 z-0 opacity-40 grayscale">
-          <img
-            alt="Hero background"
-            className="w-full h-full object-cover"
-            src="https://picsum.photos/id/42/1920/1080?grayscale" />
-
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
-        </div>
-        <div className="relative z-10 max-w-6xl w-full text-center px-6 -mt-16">
-          <h1 className="text-white text-7xl leading-[0.9] mb-5 tracking-tight font-display md:text-8xl text-center">
-            Poder criativo que
-          </h1>
-          <h1 className="text-8xl"> 
-            impulsiona os negócios
-          </h1>
-          <div className="flex flex-col items-center gap-10 mt-10">
-            <p className="max-w-2xl mx-auto text-lg text-white/70 font-light font-sans leading-relaxed md:text-xl">Identidades visuais pensadas para posicionar marcas no mercado.
-
-
-            </p>
-            <button onClick={() => onNavigate('methodology')} className="bg-white text-black px-12 py-5 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all font-sans">
-
-              Conheça o Dalla design brand     
-            </button>
-          </div>
-        </div>
-        <div className="absolute bottom-12 animate-bounce">
-          <span className="material-symbols-outlined text-4xl opacity-50">expand_more</span>
-        </div>
+      <section className="relative h-screen overflow-hidden bg-black rounded-b-[4rem] md:rounded-b-[6rem]">
+        <video
+          src="/lovable-uploads/abertura-site.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        />
       </section>
 
       {/* Global Excellence Section */}
