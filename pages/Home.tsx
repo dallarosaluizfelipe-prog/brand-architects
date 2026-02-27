@@ -50,7 +50,7 @@ impulsiona os negócios
 
 
             </h2>
-            <p className="text-xl mb-12 text-neutral-500 font-light leading-relaxed md:text-xl text-center">Acreditamos que toda marca nasce de um posicionamento, e a identidade é sua expressão visual.
+            <p className="text-xl mb-12 text-neutral-500 font-light leading-relaxed md:text-xl text-center">Identidades visuais pensadas para posicionar marcas no mercado.
 
             </p>
             
