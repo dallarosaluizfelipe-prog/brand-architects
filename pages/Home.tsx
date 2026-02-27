@@ -40,23 +40,19 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
 
       {/* Global Excellence Section */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="flex items-center justify-center">
-          <div>
-            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 text-center md:text-8xl">Poder criativo que 
-impulsiona os negócios
-
-
-
-
-
-            </h2>
-            <p className="text-xl mb-12 text-neutral-500 font-light leading-relaxed md:text-xl text-center">Identidades visuais pensadas para posicionar marcas no mercado.
-
-            </p>
-            
-
-
-          </div>
+        <div className="flex flex-col items-center justify-center text-center">
+          <h2 className="text-7xl md:text-8xl leading-[0.9] tracking-tight mb-5">
+            Poder criativo que
+          </h2>
+          <h2 className="text-8xl leading-[0.9] tracking-tight mb-10">
+            impulsiona os negócios
+          </h2>
+          <p className="max-w-2xl text-lg md:text-xl text-neutral-500 font-light leading-relaxed mb-10">
+            Identidades visuais pensadas para posicionar marcas no mercado.
+          </p>
+          <button onClick={() => onNavigate('methodology')} className="bg-black text-white px-12 py-5 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all font-sans">
+            Conheça o Dalla design brand
+          </button>
         </div>
       </section>
 
