@@ -42,8 +42,10 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-center">
           <div>
-            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 md:text-7xl text-center">Aqui, toda identidade tem uma forma, 
-& toda forma nasce de uma intenção.
+            <h2 className="text-6xl mb-8 leading-[0.9] tracking-tighter px-0 mx-0 text-center md:text-8xl">Poder criativo que 
+impulsiona os negócios
+
+
 
 
 
