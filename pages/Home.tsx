@@ -15,7 +15,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="absolute inset-0 bg-black/0"></div>
       </section>
 
       {/* Global Excellence Section */}
