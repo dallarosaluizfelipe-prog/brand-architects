@@ -36,14 +36,14 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
       {/* Desktop & Mobile Navbar Container */}
       <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-fit px-6 py-4 md:p-0">
         {/* Desktop Version (Pill) - Hidden on mobile */}
-        <div className="hidden md:flex nav-blur px-8 py-3 rounded-full items-center shadow-lg gap-8">
+        <div className="hidden md:flex nav-blur px-10 py-4 rounded-full items-center shadow-lg gap-10">
           <button 
             onClick={() => handleNavigate('home')}
             className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity"
           >
-            <DallaLogo className="h-4 w-auto" />
+            <DallaLogo className="h-5 w-auto" />
           </button>
-          <div className="flex gap-8 text-[15px] font-normal font-sans text-black">
+          <div className="flex gap-10 text-[16px] font-normal font-sans text-black">
             {links.map((link) => (
               <button
                 key={link.path}
