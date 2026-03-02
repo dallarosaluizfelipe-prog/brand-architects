@@ -16,7 +16,7 @@ const Portfolio: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate
       <header className="pt-48 pb-20 px-6 max-w-7xl mx-auto">
         <h1 className="text-8xl leading-[0.8] tracking-tighter font-display mb-10 md:text-8xl">Nossos Cases</h1>
         <p className="text-xl text-neutral-400 max-w-2xl font-light leading-relaxed md:text-xl">
-          Visual identities that transform purpose into performance. Pure design, strictly executed.
+          Identidades visuais que transformam propósito em desempenho. Design puro, executado com rigor.
         </p>
       </header>
 
