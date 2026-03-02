@@ -94,7 +94,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
                 <img alt="Case 5" className="w-full h-full object-cover bg-neutral-200" src="" />
               </div>
               <div>
-                <h3 className="text-3xl md:text-5xl mb-4">Case 5</h3>
+                <h3 className="text-3xl md:text-5xl mb-4">Dalla</h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual</p>
               </div>
             </div>
