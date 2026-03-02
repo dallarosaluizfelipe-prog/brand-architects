@@ -26,17 +26,17 @@ TEL +55 42 9 9915 3014
             <section>
               <h5 className="text-[10px] font-bold mb-8 uppercase tracking-[0.4em] opacity-40">Email</h5>
               <p className="font-light uppercase tracking-widest text-neutral-800 text-lg">
-                <a className="hover:opacity-60 transition-opacity" href="mailto:hello@brandingstudio.com">hello@brandingstudio.com</a><br />
+                <a className="hover:opacity-60 transition-opacity" href="mailto:dallarosaluizfelipe@gmail.com">DALLAROSALUIZFELIPE@GMAIL.COM</a><br />
                 <a className="hover:opacity-60 transition-opacity" href="mailto:press@brandingstudio.com">press@brandingstudio.com</a>
               </p>
             </section>
             <section>
-              <h5 className="text-[10px] font-bold mb-8 uppercase tracking-[0.4em] opacity-40">Social Network</h5>
+              <h5 className="text-[10px] font-bold mb-8 uppercase tracking-[0.4em] opacity-40">REDES</h5>
               <ul className="font-light space-y-4 uppercase tracking-widest text-neutral-800 text-lg">
                 <li className="text-lg"><a className="hover:underline" href="#">Instagram</a></li>
                 <li className="text-lg"><a className="hover:underline" href="#">LinkedIn</a></li>
                 <li><a className="hover:underline" href="#">Behance</a></li>
-                <li><a className="hover:underline" href="#">Vimeo</a></li>
+                
               </ul>
             </section>
           </div>
