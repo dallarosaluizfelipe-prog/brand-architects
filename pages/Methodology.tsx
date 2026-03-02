@@ -38,7 +38,7 @@ const Methodology: React.FC = () => {
 
   return (
     <div className="animate-in fade-in duration-700">
-      <header className="relative h-[80vh] flex flex-col justify-center items-center overflow-hidden bg-black text-white rounded-b-[4rem] md:rounded-b-[6rem]">
+      <header className="relative h-[90vh] flex flex-col justify-center items-center overflow-hidden bg-black text-white rounded-b-[4rem] md:rounded-b-[6rem] pt-32 md:pt-40">
         <div className="absolute inset-0 z-0 opacity-30">
           <img alt="Hero" className="w-full h-full object-cover" src="https://picsum.photos/id/60/1920/1080?grayscale" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/20 to-black/80"></div>
