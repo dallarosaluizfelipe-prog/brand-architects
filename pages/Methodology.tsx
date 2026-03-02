@@ -41,7 +41,7 @@ const Methodology: React.FC = () => {
       <header className="relative h-[95vh] flex flex-col justify-start items-center overflow-hidden bg-black text-white rounded-b-[4rem] md:rounded-b-[6rem] pt-[140px] md:pt-[180px]">
         <div className="absolute inset-0 z-0 bg-black"></div>
         <div className="relative z-10 max-w-5xl w-full text-center px-6">
-          <span className="font-bold uppercase tracking-[0.5em] text-white/40 mb-8 block font-sans text-sm">Dalla Design Brand</span>
+          <span className="uppercase tracking-[0.5em] text-white/40 mb-8 block font-sans text-sm font-normal">Dalla Design Brand</span>
           <h1 className="text-white text-5xl md:text-8xl leading-[0.9] mb-8 font-display tracking-tight">
             Estética é consequência. Posicionamento é decisão.
           </h1>
