@@ -63,7 +63,7 @@ const Methodology: React.FC = () => {
                 <span className="text-[11px] uppercase tracking-[0.4em] text-neutral-400 font-bold font-sans">{phase.label}</span>
               </div>
               <div>
-                <h2 className="text-4xl md:text-7xl mb-8 leading-[0.85] tracking-tighter font-display">{phase.title}</h2>
+                <h2 className="text-5xl md:text-9xl mb-8 leading-[0.85] tracking-tighter font-display">{phase.title}</h2>
                 <p className="text-xl md:text-2xl text-neutral-500 font-light font-sans leading-relaxed max-w-2xl">
                   {phase.desc}
                 </p>
