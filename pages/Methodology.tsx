@@ -44,11 +44,11 @@ const Methodology: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/20 to-black/80"></div>
         </div>
         <div className="relative z-10 max-w-5xl w-full text-center px-6">
-          <span className="text-[11px] font-bold uppercase tracking-[0.5em] text-white/40 mb-8 block font-sans">Dalla Design Brand</span>
+          <span className="font-bold uppercase tracking-[0.5em] text-white/40 mb-8 block font-sans text-sm">Dalla Design Brand</span>
           <h1 className="text-white text-5xl md:text-8xl leading-[0.9] mb-8 font-display tracking-tight">
             Estética é consequência. Posicionamento é decisão.
           </h1>
-          <p className="max-w-2xl mx-auto text-lg md:text-2xl text-white/50 font-light font-sans leading-relaxed">
+          <p className="max-w-2xl mx-auto text-lg text-white/50 font-light font-sans leading-relaxed md:text-lg">
             Um método proprietário que une visão de mercado e design autoral para criar marcas com posicionamento incontestável.
           </p>
         </div>
