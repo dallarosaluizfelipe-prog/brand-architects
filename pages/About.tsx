@@ -77,7 +77,7 @@ Definimos espaços estratégicos que geram diferenciação real e valor percebid
       {/* Wide Image */}
       <section className="px-6 mb-40">
         <div className="max-w-[1440px] mx-auto rounded-[3rem] overflow-hidden aspect-[21/9] shadow-2xl bg-neutral-100">
-          <img alt="Wide studio view" className="w-full h-full object-cover grayscale opacity-80" src="https://picsum.photos/id/115/1920/800?grayscale" />
+          <img alt="Wide studio view" className="w-full h-full object-cover grayscale opacity-80" src="/lovable-uploads/logo-giratoria-2.gif" />
 
         </div>
       </section>
