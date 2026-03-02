@@ -57,10 +57,10 @@ const Methodology: React.FC = () => {
       <section className="py-40 px-6 max-w-6xl mx-auto">
         <div className="space-y-32 md:space-y-48">
           {phases.map((phase, idx) => (
-            <div key={idx} className="grid md:grid-cols-[140px_1fr] gap-8 md:gap-16 items-start">
-              <div className="flex flex-col gap-1">
-                <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-neutral-400 font-sans">{phase.id}</span>
-                <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-300 font-sans">{phase.label}</span>
+            <div key={idx} className="grid md:grid-cols-[180px_1fr] gap-8 md:gap-16 items-start">
+              <div className="flex flex-col gap-2 pt-2">
+                <span className="text-3xl md:text-5xl font-display tracking-tight leading-none">{phase.id}</span>
+                <span className="text-[11px] uppercase tracking-[0.4em] text-neutral-400 font-bold font-sans">{phase.label}</span>
               </div>
               <div>
                 <h2 className="text-4xl md:text-7xl mb-8 leading-[0.85] tracking-tighter font-display">{phase.title}</h2>
