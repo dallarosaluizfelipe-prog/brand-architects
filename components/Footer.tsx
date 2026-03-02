@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           <div className="md:text-right flex flex-col justify-between">
-            <span className="text-[10px] opacity-40 uppercase tracking-widest">© 2024 Branding Studio. All rights reserved.</span>
+            <span className="text-[10px] opacity-40 uppercase tracking-widest">© 2023 ESTÚDIO DALLA</span>
           </div>
         </div>
         <div className="select-none">
