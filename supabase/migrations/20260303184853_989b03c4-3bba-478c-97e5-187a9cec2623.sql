@@ -1,0 +1,1 @@
+UPDATE public.admin_settings SET pin_hash = encode(digest('1234', 'sha256'), 'hex');
