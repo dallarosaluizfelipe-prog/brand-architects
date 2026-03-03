@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const DallaLogo = ({ className = "" }: { className?: string }) => (
@@ -10,6 +10,27 @@ const DallaLogo = ({ className = "" }: { className?: string }) => (
     <path d="M670.5.04v215.25h98.25v79.5h-154.12c-3.21,0-13.28-3-16.64-4.36-20.92-8.48-25.08-28.76-26.53-49.22l.04-241.16h99Z" fill="currentColor" />
   </svg>
 );
+
+const NavLinks: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
+  const { pathname } = useLocation();
+  const links = [
+    { label: "Estudio", path: "/estudio" },
+    { label: "Metodologia", path: "/metodologia" },
+    { label: "Cases", path: "/cases" },
+    { label: "Contatos", path: "/contato" },
+  ];
+  const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
+
+  return (
+    <>
+      {links.map((link) => (
+        <Link key={link.path} to={link.path} className={`transition-opacity ${isActive(link.path) ? "opacity-100" : "opacity-70 hover:opacity-100"}`} onClick={onClick}>
+          {link.label}
+        </Link>
+      ))}
+    </>
+  );
+};
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,39 +46,49 @@ const Navbar: React.FC = () => {
   const closeMenu = () => setIsMenuOpen(false);
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
   return (
     <>
       <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-fit px-6 py-4 md:p-0">
-        <div className="hidden md:flex nav-blur px-10 py-4 rounded-full items-center shadow-lg gap-10">
-          <Link to="/" className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity">
-            <DallaLogo className="h-5 w-auto" />
-          </Link>
-          <div className="flex gap-10 text-[16px] font-normal font-sans text-black">
-            {links.map((link) => (
-              <Link key={link.path} to={link.path} className={`transition-opacity ${isActive(link.path) ? "opacity-100" : "opacity-70 hover:opacity-100"}`}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="md:hidden flex justify-between items-center w-full nav-blur px-8 py-3 rounded-full shadow-lg border border-neutral-100">
+        {/* Mobile and base navigation bar */}
+        <div className="flex justify-between items-center w-full nav-blur px-8 py-3 rounded-full shadow-lg border border-neutral-100 md:hidden">
           <Link to="/" className="text-[14px] font-black tracking-tighter font-sans" onClick={closeMenu}>
             <DallaLogo className="h-5 w-auto" />
           </Link>
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex flex-col gap-1.5 p-1">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex flex-col gap-1.5 p-1" aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}>
             <span className={`block w-6 h-0.5 bg-black transition-transform duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
             <span className={`block w-6 h-0.5 bg-black transition-opacity duration-300 ${isMenuOpen ? "opacity-0" : ""}`}></span>
             <span className={`block w-6 h-0.5 bg-black transition-transform duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
           </button>
         </div>
+
+        {/* Desktop navigation bar */}
+        <div className="hidden md:flex nav-blur px-10 py-4 rounded-full items-center shadow-lg gap-10">
+          <Link to="/" className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity">
+            <DallaLogo className="h-5 w-auto" />
+          </Link>
+          <div className="flex gap-10 text-[16px] font-normal font-sans text-black">
+            <NavLinks />
+          </div>
+        </div>
       </nav>
 
+      {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 z-[60] bg-white transition-transform duration-500 ease-in-out md:hidden ${isMenuOpen ? "translate-y-0" : "-translate-y-full"}`}>
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-center px-12 py-8">
             <DallaLogo className="h-6 w-auto" />
-            <button onClick={closeMenu} className="w-10 h-10 flex items-center justify-center rounded-full border border-neutral-100">
+            <button onClick={closeMenu} className="w-10 h-10 flex items-center justify-center rounded-full border border-neutral-100" aria-label="Fechar menu">
               <span className="material-symbols-outlined">close</span>
             </button>
           </div>
