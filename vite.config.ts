@@ -4,8 +4,9 @@ import react from '@vitejs/plugin-react';
 import { componentTagger } from 'lovable-tagger';
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
+    const env = loadEnv(mode, process.cwd(), '');
     return {
+      envDir: '.',
       server: {
         port: 8080,
         host: '0.0.0.0',
