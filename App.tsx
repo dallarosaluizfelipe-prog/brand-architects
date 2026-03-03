@@ -8,14 +8,28 @@ import Portfolio from './pages/Portfolio';
 import Contact from './pages/Contact';
 import CaseStudy from './pages/CaseStudy';
 import About from './pages/About';
+import Admin from './pages/Admin';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string>('home');
+
+  // Check if URL has /admin hash
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'admin') {
+      setCurrentPage('admin');
+    }
+  }, []);
 
   // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
+
+  // Admin page renders without navbar/footer
+  if (currentPage === 'admin') {
+    return <Admin />;
+  }
 
   const renderPage = () => {
     switch (currentPage) {
