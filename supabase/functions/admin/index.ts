@@ -5,6 +5,14 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+async function hashPin(pin: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pin);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -18,7 +26,6 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action, pin, data } = body;
 
-    // Verify PIN for all actions except 'verify'
     if (action === "verify") {
       const { data: settings } = await supabase
         .from("admin_settings")
@@ -32,13 +39,7 @@ Deno.serve(async (req) => {
         });
       }
 
-      // MD5 hash comparison
-      const encoder = new TextEncoder();
-      const dataBytes = encoder.encode(pin);
-      const hashBuffer = await crypto.subtle.digest("MD5", dataBytes);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-
+      const hashHex = await hashPin(pin);
       const valid = hashHex === settings.pin_hash;
       return new Response(JSON.stringify({ valid }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -51,11 +52,7 @@ Deno.serve(async (req) => {
       .select("pin_hash")
       .single();
 
-    const encoder = new TextEncoder();
-    const dataBytes = encoder.encode(pin);
-    const hashBuffer = await crypto.subtle.digest("MD5", dataBytes);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+    const hashHex = await hashPin(pin);
 
     if (!settings || hashHex !== settings.pin_hash) {
       return new Response(JSON.stringify({ error: "Invalid PIN" }), {
@@ -64,7 +61,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // CRUD operations
     switch (action) {
       case "list_cases": {
         const { data: cases } = await supabase
@@ -121,12 +117,7 @@ Deno.serve(async (req) => {
       }
 
       case "change_pin": {
-        const newEncoder = new TextEncoder();
-        const newBytes = newEncoder.encode(data.new_pin);
-        const newHashBuffer = await crypto.subtle.digest("MD5", newBytes);
-        const newHashArray = Array.from(new Uint8Array(newHashBuffer));
-        const newHashHex = newHashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-
+        const newHashHex = await hashPin(data.new_pin);
         const { error } = await supabase
           .from("admin_settings")
           .update({ pin_hash: newHashHex, updated_at: new Date().toISOString() })
