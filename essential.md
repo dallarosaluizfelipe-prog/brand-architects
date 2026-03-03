@@ -108,3 +108,48 @@ This document captures details of components, pages, functions, and any code add
 - Added media asset: `public/lovable-uploads/kuma-cover.gif`.
 
 *End of documentation.*
+
+## 2026-03-03 Update
+
+### Routing
+- `react-router-dom` adicionado como dependencia.
+- `App.tsx` migrado para rotas reais com `BrowserRouter`:
+  - `/`
+  - `/estudio`
+  - `/metodologia`
+  - `/cases`
+  - `/cases/:slug`
+  - `/contato`
+  - `/admin`
+- Rotas legadas (`/about`, `/methodology`, `/portfolio`, `/contact`) redirecionam para as novas.
+
+### New Page
+- `pages/CaseDetails.tsx` criada para case individual por slug.
+- Renderiza dados do case: `title`, `description`, `author`, `case_date`, `external_url`, `cover_url`, `gallery_urls`, `cta_text`, `cta_url`.
+
+### Data Layer
+- `src/data/siteCases.ts` reestruturado.
+- Novo contrato `SiteCase` enriquecido com campos de detalhe de case.
+- Inclui `getSiteCases(limit?)` e `getSiteCaseBySlug(slug)`.
+
+### Admin
+- `pages/AdminPanel.tsx` atualizado para editar os novos campos de case:
+  - `slug`
+  - `author`
+  - `case_date`
+  - `external_url`
+  - `cta_text`
+  - `cta_url`
+  - `gallery_urls`
+- Mantida gestao de midia no bucket `media`.
+
+### Database / Migrations
+- Nova migration: `supabase/migrations/20260303224000_extend_cases_and_seed_details.sql`
+  - Adiciona colunas em `site_cases`: `slug`, `author`, `case_date`, `external_url`, `cta_text`, `cta_url`, `gallery_urls`.
+  - Cria indice unico por `slug`.
+  - Faz upsert idempotente dos 6 cases com descricoes preenchidas e metadados.
+
+### Public UI
+- `components/Navbar.tsx` agora usa links reais de rota.
+- `pages/Home.tsx` preserva layout base, mas links de case agora apontam para `/cases/:slug`.
+- `pages/Portfolio.tsx` consome `site_cases` e navega para case individual por slug.

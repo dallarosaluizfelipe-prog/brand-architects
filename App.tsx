@@ -1,64 +1,96 @@
+import React, { useEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Methodology from "./pages/Methodology";
+import Portfolio from "./pages/Portfolio";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
+import Admin from "./pages/Admin";
+import CaseDetails from "./pages/CaseDetails";
 
-import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Methodology from './pages/Methodology';
-import Portfolio from './pages/Portfolio';
-import Contact from './pages/Contact';
-import CaseStudy from './pages/CaseStudy';
-import About from './pages/About';
-import Admin from './pages/Admin';
+const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="min-h-screen bg-white">
+    <Navbar />
+    <main>{children}</main>
+    <Footer />
+  </div>
+);
 
-const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<string>('home');
-
-  // Check if URL has /admin hash
+const AppRoutes: React.FC = () => {
   useEffect(() => {
-    const hash = window.location.hash.replace('#', '');
-    if (hash === 'admin') {
-      setCurrentPage('admin');
+    if (window.location.hash === "#admin" && window.location.pathname === "/") {
+      window.history.replaceState(null, "", "/admin");
     }
   }, []);
 
-  // Scroll to top on page change
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentPage]);
-
-  // Admin page renders without navbar/footer
-  if (currentPage === 'admin') {
-    return <Admin />;
-  }
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <Home onNavigate={setCurrentPage} />;
-      case 'about':
-        return <About />;
-      case 'methodology':
-        return <Methodology />;
-      case 'portfolio':
-        return <Portfolio onNavigate={setCurrentPage} />;
-      case 'contact':
-        return <Contact />;
-      case 'casestudy':
-        return <CaseStudy />;
-      default:
-        return <Home onNavigate={setCurrentPage} />;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar onNavigate={setCurrentPage} currentPage={currentPage} />
-      <main>
-        {renderPage()}
-      </main>
-      <Footer />
-    </div>
+    <Routes>
+      <Route path="/admin" element={<Admin />} />
+
+      <Route
+        path="/"
+        element={
+          <PublicLayout>
+            <Home />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/estudio"
+        element={
+          <PublicLayout>
+            <About />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/metodologia"
+        element={
+          <PublicLayout>
+            <Methodology />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/cases"
+        element={
+          <PublicLayout>
+            <Portfolio />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/cases/:slug"
+        element={
+          <PublicLayout>
+            <CaseDetails />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/contato"
+        element={
+          <PublicLayout>
+            <Contact />
+          </PublicLayout>
+        }
+      />
+
+      <Route path="/about" element={<Navigate to="/estudio" replace />} />
+      <Route path="/methodology" element={<Navigate to="/metodologia" replace />} />
+      <Route path="/portfolio" element={<Navigate to="/cases" replace />} />
+      <Route path="/contact" element={<Navigate to="/contato" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
+
+const App: React.FC = () => (
+  <BrowserRouter>
+    <AppRoutes />
+  </BrowserRouter>
+);
 
 export default App;

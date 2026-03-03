@@ -25,3 +25,12 @@ This file records a chronological history of changes, requests, and reasoning fo
   - `pages/Home.tsx` revertida para o conteudo original (layout/textos originais), sem alteracoes estruturais.
   - Integracao dinamica de cases mantida em `pages/Portfolio.tsx` para validacao de fluxo via Admin sem comprometer a Home.
   - Build validado com sucesso (`npm run build`).
+- **2026-03-03 16:33** - Evolucao completa de cases e roteamento:
+  - Router migrado para `react-router-dom` com rotas reais: `/`, `/estudio`, `/metodologia`, `/cases`, `/cases/:slug`, `/contato`, `/admin` (+ redirects de rotas legadas).
+  - Criada pagina dinamica `pages/CaseDetails.tsx` consumindo dados por slug com: titulo, descricao, autor, data, link externo, galeria e CTA.
+  - `site_cases` evoluida com campos novos via migration `20260303224000_extend_cases_and_seed_details.sql`: `slug`, `author`, `case_date`, `external_url`, `cta_text`, `cta_url`, `gallery_urls`.
+  - Importacao dos 6 cases revisada com descricoes preenchidas e upsert idempotente por `slug`.
+  - `pages/AdminPanel.tsx` atualizado para gerenciar os novos campos de case, incluindo galeria (multiplas URLs).
+  - Camada de dados `src/data/siteCases.ts` atualizada com `getSiteCaseBySlug` e fallback enriquecido.
+  - `components/Navbar.tsx`, `pages/Home.tsx` e `pages/Portfolio.tsx` adaptados para navegacao por rotas reais e acesso a cases individuais.
+  - Build validado com sucesso (`npm run build`).

@@ -37,38 +37,59 @@ export type Database = {
       }
       site_cases: {
         Row: {
+          author: string
+          case_date: string | null
           category: string
           cover_url: string | null
           created_at: string
+          cta_text: string
+          cta_url: string
           description: string | null
           display_order: number
+          external_url: string
+          gallery_urls: Json
           id: string
           is_featured: boolean
           is_visible: boolean
+          slug: string | null
           title: string
           updated_at: string
         }
         Insert: {
+          author?: string
+          case_date?: string | null
           category?: string
           cover_url?: string | null
           created_at?: string
+          cta_text?: string
+          cta_url?: string
           description?: string | null
           display_order?: number
+          external_url?: string
+          gallery_urls?: Json
           id?: string
           is_featured?: boolean
           is_visible?: boolean
+          slug?: string | null
           title: string
           updated_at?: string
         }
         Update: {
+          author?: string
+          case_date?: string | null
           category?: string
           cover_url?: string | null
           created_at?: string
+          cta_text?: string
+          cta_url?: string
           description?: string | null
           display_order?: number
+          external_url?: string
+          gallery_urls?: Json
           id?: string
           is_featured?: boolean
           is_visible?: boolean
+          slug?: string | null
           title?: string
           updated_at?: string
         }

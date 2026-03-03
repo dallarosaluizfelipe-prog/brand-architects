@@ -1,11 +1,10 @@
-
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ContactSection from '../components/ContactSection';
 
-const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) => {
+const Home: React.FC = () => {
   return (
     <div className="animate-in fade-in duration-700">
-      {/* Hero Section */}
       <section className="relative h-screen overflow-hidden bg-black rounded-b-[4rem] md:rounded-b-[6rem]">
         <video
           src="/lovable-uploads/abertura-site.mp4"
@@ -18,36 +17,30 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
         <div className="absolute inset-0 bg-black/0"></div>
       </section>
 
-      {/* Global Excellence Section */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col items-center justify-center text-center">
-          <h2 className="text-7xl md:text-8xl leading-[0.9] tracking-tight mb-5">
-            Poder criativo que
-          </h2>
-          <h2 className="text-8xl leading-[0.9] tracking-tight mb-10">
-            impulsiona os negócios
-          </h2>
+          <h2 className="text-7xl md:text-8xl leading-[0.9] tracking-tight mb-5">Poder criativo que</h2>
+          <h2 className="text-8xl leading-[0.9] tracking-tight mb-10">impulsiona os negocios</h2>
           <p className="max-w-2xl text-lg md:text-xl text-neutral-500 font-light leading-relaxed mb-10">
             Identidades visuais pensadas para posicionar marcas no mercado.
           </p>
-          <button onClick={() => onNavigate('methodology')} className="bg-black text-white px-12 py-5 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all font-sans">
-            Conheça o Dalla design brand
-          </button>
+          <Link to="/metodologia" className="bg-black text-white px-12 py-5 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all font-sans">
+            Conheca o Dalla design brand
+          </Link>
         </div>
       </section>
 
-      {/* Selected Portfolio */}
       <section className="py-16 px-6 bg-[#efeff0]" id="work">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Conheça Nossos Cases</h2>
-            <p className="text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed md:text-xl">Marcas que carregam estratégia na essência, e validaram o nosso método.
-
+            <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Conheca Nossos Cases</h2>
+            <p className="text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed md:text-xl">
+              Marcas que carregam estrategia na essencia, e validaram o nosso metodo.
             </p>
           </div>
-          {/* Row 1 - 2 cases */}
+
           <div className="grid md:grid-cols-2 gap-12">
-            <div className="group cursor-pointer" onClick={() => onNavigate('casestudy')}>
+            <Link to="/cases/yerbal" className="group cursor-pointer">
               <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
                 <img alt="Yerbal" className="w-full h-full object-cover" src="/lovable-uploads/yerbal-cover.gif" />
               </div>
@@ -55,8 +48,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
                 <h3 className="text-3xl md:text-5xl mb-4">Yerbal</h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
               </div>
-            </div>
-            <div className="group cursor-pointer">
+            </Link>
+            <Link to="/cases/clave" className="group cursor-pointer">
               <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
                 <img alt="Clave" className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" />
               </div>
@@ -64,11 +57,11 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
                 <h3 className="text-3xl md:text-5xl mb-4">Clave</h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Identidade  -   Tipografia</p>
               </div>
-            </div>
+            </Link>
           </div>
-          {/* Row 2 - 1 case full width */}
+
           <div className="mt-12">
-            <div className="group cursor-pointer">
+            <Link to="/cases/nuts-oclock" className="group cursor-pointer">
               <div className="rounded-3xl overflow-hidden aspect-[21/9] mb-8 shadow-lg">
                 <img alt="Nuts O'Clock" className="w-full h-full object-cover" src="/lovable-uploads/nuts-oclock-cover.gif" />
               </div>
@@ -76,11 +69,11 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
                 <h3 className="text-3xl md:text-5xl mb-4">Nuts O'Clock</h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
               </div>
-            </div>
+            </Link>
           </div>
-          {/* Row 3 - 2 cases */}
+
           <div className="grid md:grid-cols-2 gap-12 mt-12">
-            <div className="group cursor-pointer">
+            <Link to="/cases/lummina" className="group cursor-pointer">
               <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
                 <img alt="Lummina" className="w-full h-full object-cover" src="/lovable-uploads/lummina-cover.png" />
               </div>
@@ -88,8 +81,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
                 <h3 className="text-3xl md:text-5xl mb-4">Lummina</h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
               </div>
-            </div>
-            <div className="group cursor-pointer">
+            </Link>
+            <Link to="/cases/dalla" className="group cursor-pointer">
               <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
                 <img alt="Dalla" className="w-full h-full object-cover" src="/lovable-uploads/dalla-cover.gif" />
               </div>
@@ -97,22 +90,22 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
                 <h3 className="text-3xl md:text-5xl mb-4">Dalla</h3>
                 <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual</p>
               </div>
-            </div>
+            </Link>
           </div>
+
           <div className="mt-16 text-center">
-            <button onClick={() => onNavigate('portfolio')} className="border border-black px-16 py-6 rounded-full font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans text-sm">
-              ver todo os cases    
-            </button>
+            <Link to="/cases" className="inline-block border border-black px-16 py-6 rounded-full font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all font-sans text-sm">
+              ver todo os cases
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Partners Logos */}
       <section className="py-40 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
             <h2 className="text-6xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">Nossos Parceiros </h2>
-            <p className="text-neutral-400 max-w-xs md:text-right font-light text-lg">Parceiros estratégicos que colocam a marca em ação por meio do design. </p>
+            <p className="text-neutral-400 max-w-xs md:text-right font-light text-lg">Parceiros estrategicos que colocam a marca em acao por meio do design. </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-16 items-center opacity-30 grayscale hover:opacity-100 transition-all duration-1000">
             <div className="flex justify-center"><img src="/lovable-uploads/partner-1.png" alt="Parceiro 1" className="h-24 md:h-32 object-contain" /></div>
@@ -130,4 +123,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       </section>
 
       <ContactSection />
-    </div>);};export default Home;
+    </div>
+  );
+};
+
+export default Home;
