@@ -11,20 +11,20 @@ const Methodology: React.FC = () => {
     desc: 'Revisão e aprofundamento do cenário atual da marca, análise de percepção, concorrência, território e oportunidades estratégicas.'
   },
   {
-    id: 'II + III',
+    id: 'II',
     label: 'ESSENCE + TERRITORY',
     title: 'Reposicionamento.',
     desc: 'Definição clara do território exclusivo da marca. Refinamento da essência, diferenciação competitiva e construção do posicionamento.'
   },
   {
-    id: 'IV',
+    id: 'III',
     label: 'EXPRESSION',
     title: 'Sistema de Identidade Visual.',
     desc: 'Desenvolvimento de um sistema visual proprietário, com códigos exclusivos, elementos gráficos autorais e estrutura que sustente reconhecimento e diferenciação.'
   },
   {
-    id: 'III',
-    label: 'EXPRESSION',
+    id: 'IV',
+    label: 'TERRITORY',
     title: 'Direcionamento e Consolidação.',
     desc: 'Estruturação das diretrizes de comunicação, aplicação da marca em canais físicos e digitais e orientação estratégica para expansão e fortalecimento.'
   },
