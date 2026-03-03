@@ -14,3 +14,14 @@ This file records a chronological history of changes, requests, and reasoning fo
   - **Acesso:** Via `#admin` na URL. PIN padrão: `1234`. Sessão expira em 30 minutos.
   - **App.tsx** atualizado para renderizar Admin sem Navbar/Footer quando `currentPage === 'admin'`.
   - **tsconfig.json** atualizado para excluir `supabase/functions/**` do type checking.
+
+- **2026-03-03 16:05** - Importacao de cases para fluxo natural via Admin:
+  - Criada migration idempotente `supabase/migrations/20260303201000_import_initial_cases.sql` com seed inicial dos 6 cases (Yerbal, Clave, Nuts O'Clock, Lummina, Dalla, Kuma) em `site_cases`, sem duplicar por titulo.
+  - Adicionado asset local `public/lovable-uploads/kuma-cover.gif` para o case Kuma.
+  - Criado `src/data/siteCases.ts` com leitura de `site_cases` (`is_visible=true`, ordenacao por `display_order`) e fallback local para manter estabilidade.
+  - `pages/Home.tsx` e `pages/Portfolio.tsx` migrados de hardcoded para consumo dinamico de `site_cases`, mantendo o fluxo de edicao via Admin e reflexo no site.
+  - Build validado com sucesso (`npm run build`).
+- **2026-03-03 16:19** - Ajuste solicitado pelo usuario: Home restaurada ao estado original visual.
+  - `pages/Home.tsx` revertida para o conteudo original (layout/textos originais), sem alteracoes estruturais.
+  - Integracao dinamica de cases mantida em `pages/Portfolio.tsx` para validacao de fluxo via Admin sem comprometer a Home.
+  - Build validado com sucesso (`npm run build`).

@@ -29,6 +29,7 @@ This document captures details of components, pages, functions, and any code add
 ### `Home.tsx`
 - Landing page with hero video, global excellence section, selected portfolio, partners logos, and `ContactSection`.
 - Accepts `onNavigate` callback to change pages.
+- Currently kept in original visual/content format from the base project (no dynamic case binding).
 
 ### `About.tsx`
 - About page describing the studio's identity, narrative, values grid, and wide image.
@@ -41,6 +42,13 @@ This document captures details of components, pages, functions, and any code add
 ### `Portfolio.tsx`
 - Portfolio listing of projects; clicking navigates to case study.
 - Accepts `onNavigate` callback.
+- Projects are loaded dynamically from Supabase (`site_cases`) via `getSiteCases()`.
+- Visibility/order now follows admin-managed fields (`is_visible`, `display_order`).
+
+### `src/data/siteCases.ts`
+- Central data access for cases consumed by public pages.
+- Exposes `getSiteCases(limit?)` and `SiteCase` interface.
+- Reads from `site_cases` (visible items ordered by `display_order`) and falls back to six local seed cases.
 
 ### `CaseStudy.tsx`
 - Detailed case study template with header, image galleries, impact metrics, and next project link.
@@ -81,6 +89,8 @@ This document captures details of components, pages, functions, and any code add
 ### `site_cases`
 - Portfolio cases with title, category, description, cover_url, display_order, is_featured, is_visible. RLS: public read only.
 - Realtime enabled.
+- One-time idempotent import migration created: `supabase/migrations/20260303201000_import_initial_cases.sql`.
+- Seed includes: Yerbal, Clave, Nuts O'Clock, Lummina, Dalla, Kuma.
 
 ### `site_content`
 - Editable site sections identified by `section_key` (unique). Fields: title, subtitle, body, image_url, video_url. RLS: public read only.
@@ -95,5 +105,6 @@ This document captures details of components, pages, functions, and any code add
 
 - `index.tsx` and `index.html` bootstrap the React app via Vite.
 - `package.json` declares React, TypeScript, Vite, and related dependencies.
+- Added media asset: `public/lovable-uploads/kuma-cover.gif`.
 
 *End of documentation.*

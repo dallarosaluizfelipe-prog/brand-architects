@@ -25,13 +25,13 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
             Poder criativo que
           </h2>
           <h2 className="text-8xl leading-[0.9] tracking-tight mb-10">
-            impulsiona os negÃ³cios
+            impulsiona os negócios
           </h2>
           <p className="max-w-2xl text-lg md:text-xl text-neutral-500 font-light leading-relaxed mb-10">
             Identidades visuais pensadas para posicionar marcas no mercado.
           </p>
           <button onClick={() => onNavigate('methodology')} className="bg-black text-white px-12 py-5 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all font-sans">
-            ConheÃ§a o Dalla design brand
+            Conheça o Dalla design brand
           </button>
         </div>
       </section>
@@ -40,8 +40,8 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
       <section className="py-16 px-6 bg-[#efeff0]" id="work">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">ConheÃ§a Nossos Cases</h2>
-            <p className="text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed md:text-xl">Marcas que carregam estratÃ©gia na essÃªncia, e validaram o nosso mÃ©todo.
+            <h2 className="text-6xl md:text-8xl mb-8 tracking-tighter">Conheça Nossos Cases</h2>
+            <p className="text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed md:text-xl">Marcas que carregam estratégia na essência, e validaram o nosso método.
 
             </p>
           </div>
@@ -112,7 +112,7 @@ const Home: React.FC<{onNavigate: (page: string) => void;}> = ({ onNavigate }) =
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
             <h2 className="text-6xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">Nossos Parceiros </h2>
-            <p className="text-neutral-400 max-w-xs md:text-right font-light text-lg">Parceiros estratÃ©gicos que colocam a marca em aÃ§Ã£o por meio do design. </p>
+            <p className="text-neutral-400 max-w-xs md:text-right font-light text-lg">Parceiros estratégicos que colocam a marca em ação por meio do design. </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-16 items-center opacity-30 grayscale hover:opacity-100 transition-all duration-1000">
             <div className="flex justify-center"><img src="/lovable-uploads/partner-1.png" alt="Parceiro 1" className="h-24 md:h-32 object-contain" /></div>
