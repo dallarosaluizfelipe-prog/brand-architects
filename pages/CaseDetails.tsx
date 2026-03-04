@@ -73,17 +73,17 @@ const CaseDetails: React.FC = () => {
         {project.description && (
           <p className="text-xl md:text-2xl text-neutral-600 leading-relaxed max-w-4xl mb-16">{project.description}</p>
         )}
-
-        {project.gallery_urls.length > 0 && (
-          <div className="grid md:grid-cols-2 gap-8">
-            {project.gallery_urls.map((url, index) => (
-              <div key={`${url}-${index}`} className="rounded-3xl overflow-hidden bg-neutral-100 shadow-sm">
-                <img src={url} alt={`${project.title} ${index + 1}`} className="w-full h-full object-cover" />
-              </div>
-            ))}
-          </div>
-        )}
       </section>
+
+      {project.gallery_urls.length > 0 && (
+        <section className="space-y-0">
+          {project.gallery_urls.map((url, index) => (
+            <div key={`${url}-${index}`} className="w-full">
+              <img src={url} alt={`${project.title} ${index + 1}`} className="w-full h-auto block" />
+            </div>
+          ))}
+        </section>
+      )}
 
       <section className="py-20 px-6 bg-neutral-50 border-y border-neutral-200">
         <div className="max-w-4xl mx-auto text-center">
