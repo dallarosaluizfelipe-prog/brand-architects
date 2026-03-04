@@ -13,7 +13,7 @@ import CaseDetails from "./pages/CaseDetails";
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white">
     <Navbar />
-    <main>{children}</main>
+    <main className="pb-28 md:pb-0">{children}</main>
     <Footer />
   </div>
 );

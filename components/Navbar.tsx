@@ -59,13 +59,16 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-fit px-6 py-4 md:p-0">
-        {/* Mobile and base navigation bar */}
-        <div className="flex justify-between items-center w-full nav-blur px-8 py-3 rounded-full shadow-lg border border-neutral-100 md:hidden">
-          <Link to="/" className="text-[14px] font-black tracking-tighter font-sans" onClick={closeMenu}>
+      <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-fit px-4 pt-4 pb-2 md:p-0">
+        <div className="flex justify-between items-center w-full nav-blur px-5 py-3 rounded-[1.4rem] shadow-lg border border-neutral-100 md:hidden">
+          <Link to="/" className="font-black tracking-tighter font-sans" onClick={closeMenu}>
             <DallaLogo className="h-5 w-auto" />
           </Link>
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex flex-col gap-1.5 p-1" aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex flex-col gap-1.5 p-3 -m-2 rounded-xl"
+            aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+          >
             <span className={`block w-6 h-0.5 bg-black transition-transform duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
             <span className={`block w-6 h-0.5 bg-black transition-opacity duration-300 ${isMenuOpen ? "opacity-0" : ""}`}></span>
             <span className={`block w-6 h-0.5 bg-black transition-transform duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
@@ -83,34 +86,51 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 z-[60] bg-white transition-transform duration-500 ease-in-out md:hidden ${isMenuOpen ? "translate-y-0" : "-translate-y-full"}`}>
-        <div className="flex flex-col h-full">
-          <div className="flex justify-between items-center px-12 py-8">
+        <div className="flex flex-col h-full pt-safe">
+          <div className="flex justify-between items-center px-6 py-8">
             <DallaLogo className="h-6 w-auto" />
-            <button onClick={closeMenu} className="w-10 h-10 flex items-center justify-center rounded-full border border-neutral-100" aria-label="Fechar menu">
+            <button onClick={closeMenu} className="w-11 h-11 flex items-center justify-center rounded-full border border-neutral-100" aria-label="Fechar menu">
               <span className="material-symbols-outlined">close</span>
             </button>
           </div>
 
-          <div className="flex-grow flex flex-col justify-center px-12 space-y-8">
+          <div className="flex-grow flex flex-col justify-center px-6 space-y-7">
             {links.map((link, index) => (
               <Link key={link.path} to={link.path} onClick={closeMenu} className="text-left">
                 <span className={`block text-[10px] uppercase tracking-widest font-bold font-sans mb-2 ${isActive(link.path) ? "text-black" : "text-neutral-300"}`}>
                   0{index + 1}
                 </span>
-                <span className={`text-6xl font-display tracking-tighter ${isActive(link.path) ? "text-black" : "text-neutral-400 hover:text-black"} transition-colors`}>
+                <span className={`text-5xl sm:text-6xl font-display tracking-tighter ${isActive(link.path) ? "text-black" : "text-neutral-400 hover:text-black"} transition-colors`}>
                   {link.label}
                 </span>
               </Link>
             ))}
           </div>
 
-          <div className="px-12 py-12 border-t border-neutral-100">
+          <div className="px-6 py-10 border-t border-neutral-100">
             <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
               <a href="https://www.instagram.com/estudiodalla/" target="_blank" rel="noreferrer">Instagram</a>
               <a href="https://www.behance.net/luizfedalla-r/projects" target="_blank" rel="noreferrer">Behance</a>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-md md:hidden">
+        <div className="nav-blur rounded-[1.35rem] px-2 py-2 shadow-xl border border-neutral-200">
+          <div className="grid grid-cols-4 gap-1">
+            {links.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`rounded-xl py-2.5 text-center text-[11px] font-sans tracking-wide transition-all ${
+                  isActive(link.path) ? "bg-black text-white" : "text-neutral-500"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

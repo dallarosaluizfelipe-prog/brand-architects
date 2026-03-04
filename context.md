@@ -47,3 +47,31 @@ This file records a chronological history of changes, requests, and reasoning fo
  
  -- inteação humana: por Kauan Iasin ->
  a alteração anterior realizada pelo gemini não realizou nenhuma alteração de layout visivel a proposta era oferecer uma UX melhorada, garantindo um uso melhorado em dispositivos melhorados, porém, nenhuma alteração visual foi notada, para a próxima ação, peço que o agente responsável gere alterações de impacto.
+
+- **2026-03-03 21:10** – SEO improvements executed:
+  - Added reusable `Seo` component to manage `<title>` and meta tags dynamically.
+  - Updated all public-facing pages to include descriptive titles, meta descriptions, keywords and Open Graph data.
+  - Enhanced `index.html` with default description, keywords, OG tags, canonical link and robots directive.
+  - Created `robots.txt` and a static `sitemap.xml` under `public/` listing core pages and cases.
+  - Documented changes in `essential.md` and ensured context logging.
+
+- **2026-03-04 08:55** - Refatoracao UI/UX mobile-first com foco em impacto visual e experiencia app-like (solicitacao aprovada pelo usuario):
+  - **App Shell Mobile:**
+    - `components/Navbar.tsx` atualizado com topo mobile mais compacto e toque ampliado.
+    - Adicionada barra inferior fixa de navegacao no mobile (tabs para Estudio, Metodologia, Cases e Contatos) para comportamento mais proximo de app.
+    - Menu overlay mobile refinado com melhor hierarquia visual e tipografia responsiva.
+  - **Viewport/Safe area:**
+    - `index.html` atualizado com utilitario `.pt-safe` para respeitar safe area.
+    - `App.tsx` ajustado para reservar espaco inferior no mobile (`pb-28`) e evitar conflito com barra inferior.
+  - **Home com hero imersivo e responsivo:**
+    - `pages/Home.tsx` reestruturada com hero em `min-h-[100svh]` (correcao de quebra do banner em mobile).
+    - Incluidos overlay gradiente, mensagem de valor no primeiro fold e CTAs de alta intencao.
+    - Escalas tipograficas e espacamentos revisados para mobile-first.
+  - **Consistencia mobile nas paginas publicas:**
+    - `pages/About.tsx`, `pages/Methodology.tsx`, `pages/Portfolio.tsx`, `pages/Contact.tsx`, `pages/CaseDetails.tsx`, `components/ContactSection.tsx`, `components/Footer.tsx` ajustados para reduzir excesso de tamanho/espacamento em telas pequenas.
+    - Removidos usos de itaalico em titulos de destaque da About para aderencia ao guideline.
+  - **Performance/percepcao:**
+    - Adicionado `loading="lazy"` em imagens nao-criticas nas paginas refatoradas.
+    - Hero principal com `poster` para melhorar percepcao de carregamento inicial.
+  - **Validacao:**
+    - Build validado com sucesso (`npm run build`).

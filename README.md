@@ -1,4 +1,4 @@
-# Studio Dalla — Google AI Studio Project
+# Studio Dalla
 
 ## 🚀 Overview
 

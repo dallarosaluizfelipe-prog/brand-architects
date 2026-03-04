@@ -18,6 +18,12 @@ This document captures details of components, pages, functions, and any code add
 - Site footer with contact information, social links, legal links, and copyright.
 - Displays `dalla-logo-footer.png` from public uploads.
 
+### `Seo.tsx` 📈
+- New utility component added for SEO metadata management.
+- Accepts props: `title`, `description`, `keywords`, `image`, `url`.
+- On render it updates `document.title`, creates/updates `<meta>` tags for description, keywords and Open Graph properties, and maintains a canonical `<link>`.
+- Designed to be included early in page components; ensures mobile‑first, keyword‑rich metadata.
+
 ## Pages
 
 ### `App.tsx`
@@ -30,20 +36,24 @@ This document captures details of components, pages, functions, and any code add
 - Landing page with hero video, global excellence section, selected portfolio, partners logos, and `ContactSection`.
 - Accepts `onNavigate` callback to change pages.
 - Currently kept in original visual/content format from the base project (no dynamic case binding).
+- Now uses `Seo` component to set page-specific title, description, and keywords for improved indexability.
 
 ### `About.tsx`
 - About page describing the studio's identity, narrative, values grid, and wide image.
 - Ends with `ContactSection`.
+- Includes `Seo` metadata for "Sobre o Estúdio Dalla" with descriptive keywords.
 
 ### `Methodology.tsx`
 - Methodology page illustrating phases of the Dalla design process.
 - Renders list of phases and `ContactSection`.
+- Now sets specialized SEO tags via `Seo` component to capture searches for methodology and process.
 
 ### `Portfolio.tsx`
 - Portfolio listing of projects; clicking navigates to case study.
 - Accepts `onNavigate` callback.
 - Projects are loaded dynamically from Supabase (`site_cases`) via `getSiteCases()`.
 - Visibility/order now follows admin-managed fields (`is_visible`, `display_order`).
+- Includes SEO metadata that summarizes the portfolio content for search engines.
 
 ### `src/data/siteCases.ts`
 - Central data access for cases consumed by public pages.
@@ -53,10 +63,12 @@ This document captures details of components, pages, functions, and any code add
 ### `CaseStudy.tsx`
 - Detailed case study template with header, image galleries, impact metrics, and next project link.
 - Includes `ContactSection`.
+- Later replaced by `CaseDetails.tsx` with dynamic slug-based routing and SEO compatibility.
 
 ### `Contact.tsx`
 - Contact information page with form and details.
 - Includes `ContactSection`.
+- Metadata added via `Seo` component with contact-focused description to capture lead inquiries.
 
 ### `Admin.tsx`
 - Admin entry point. Manages session state (PIN stored in sessionStorage with 30min expiry).
@@ -153,3 +165,53 @@ This document captures details of components, pages, functions, and any code add
 - `components/Navbar.tsx` agora usa links reais de rota.
 - `pages/Home.tsx` preserva layout base, mas links de case agora apontam para `/cases/:slug`.
 - `pages/Portfolio.tsx` consome `site_cases` e navega para case individual por slug.
+
+## 2026-03-04 Mobile UX Impact Update
+
+### Objetivo
+- Tornar a experiencia mobile mais imersiva, intuitiva e responsiva.
+- Corrigir quebra do hero/banner na Home.
+- Evoluir navegacao para padrao com cara de app.
+
+### Arquivos atualizados
+- `App.tsx`
+- `index.html`
+- `components/Navbar.tsx`
+- `components/ContactSection.tsx`
+- `components/Footer.tsx`
+- `pages/Home.tsx`
+- `pages/About.tsx`
+- `pages/Methodology.tsx`
+- `pages/Portfolio.tsx`
+- `pages/Contact.tsx`
+- `pages/CaseDetails.tsx`
+
+### Mudancas implementadas
+1. App shell mobile
+- Navbar mobile reformulada com top bar mais compacta e areas de toque maiores.
+- Nova bottom navigation fixa no mobile, com estado ativo por rota.
+- Overlay menu mobile refinado para leitura e toque.
+
+2. Hero Home corrigido (quebra em mobile)
+- `h-screen` substituido por `min-h-[100svh]`/`md:min-h-screen`.
+- Overlay gradiente e bloco de conteudo no primeiro fold.
+- CTAs principais no hero para orientacao imediata.
+
+3. Escala tipografica e espacamento mobile-first
+- Tamanhos de titulo e paragrafos ajustados para evitar overflow/stack ruim em telas pequenas.
+- Reducao de `py`, `gap` e margens excessivas no mobile em todas as paginas publicas.
+
+4. Aderencia a guideline tipografica
+- Remocao de estilos em italico na About onde havia destaque com Instrument Serif.
+
+5. Performance percebida
+- `loading="lazy"` em imagens nao prioritarias.
+- Poster no video de abertura da Home para reduzir tela preta inicial e melhorar primeira percepcao.
+
+### Resultado esperado
+- Navegacao mobile mais natural e previsivel.
+- Home com impacto visual imediato sem quebra no hero.
+- Fluxo geral mais proximo de app (hierarquia, toque e persistencia de navegacao).
+
+### Validacao tecnica
+- Build de producao executado com sucesso: `npm run build`.
