@@ -12,7 +12,15 @@ const Home: React.FC = () => {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover hidden md:block"
+        />
+        <video
+          src="/lovable-uploads/abertura-site-mobile.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover md:hidden"
         />
         <div className="absolute inset-0 bg-black/0"></div>
       </section>
