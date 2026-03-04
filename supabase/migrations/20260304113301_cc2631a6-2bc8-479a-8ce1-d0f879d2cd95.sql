@@ -1,0 +1,9 @@
+UPDATE public.site_cases 
+SET 
+  category = 'Branding  -   Identidade Visual   -   Embalagem',
+  description = 'A Clave Cafés Especiais nasceu da união entre duas paixões herdadas de gerações: o café e a música. Mais do que uma marca, é um convite a transformar o simples ato de tomar café em um ritual sensorial, que envolve aroma, sabor e melodia. Cada detalhe da produção é cuidadosamente conduzido — do cultivo à torra — para entregar cafés de alta qualidade, que carregam em si história, tradição e afeto. A Clave surge para criar uma comunidade que valoriza pausas significativas, encontros genuínos e a inspiração que só a arte e o café podem proporcionar.
+
+A identidade visual traduz esse universo de forma autêntica e envolvente. O design se apoia em elementos musicais e em composições gráficas que evocam ritmo, harmonia e pausa, conectando diretamente com o nome e o propósito da marca. A paleta de cores, a tipografia e o símbolo reforçam a sensação de sofisticação acessível, aconchego e modernidade — atributos fundamentais para se destacar no mercado de cafés especiais. Essa construção visual não apenas diferencia a Clave de seus concorrentes, como também materializa sua essência: arte em forma de café.',
+  gallery_urls = '["/lovable-uploads/clave-1.png","/lovable-uploads/clave-2.png","/lovable-uploads/clave-3.png","/lovable-uploads/clave-4.png","/lovable-uploads/clave-5.gif","/lovable-uploads/clave-6.png","/lovable-uploads/clave-7.png","/lovable-uploads/clave-8.png","/lovable-uploads/clave-9.gif","/lovable-uploads/clave-10.png"]'::jsonb,
+  updated_at = now()
+WHERE slug = 'clave';
