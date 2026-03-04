@@ -40,6 +40,7 @@ const fallbackCases: SiteCase[] = [
       "/lovable-uploads/yerbal-11.png",
       "/lovable-uploads/yerbal-12.png",
       "/lovable-uploads/yerbal-13.png",
+      "/lovable-uploads/yerbal-14.gif",
     ],
     author: "Studio Dalla",
     case_date: "2025-01-01",
