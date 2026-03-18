@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.98.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "claude": "^0.1.1",
     "lovable-tagger": "^1.1.13",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
