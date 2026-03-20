@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/src/integrations/supabase/client';
+import { SiteProposal, slugify } from '../src/data/siteProposals';
 
 interface AdminPanelProps {
   pin: string;
@@ -31,7 +32,7 @@ interface HeroSettings {
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'cases' | 'media' | 'hero'>('cases');
+  const [tab, setTab] = useState<'cases' | 'media' | 'hero' | 'proposals'>('cases');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -44,6 +45,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     posterUrl: '',
   });
   const [heroLoading, setHeroLoading] = useState(false);
+  const [proposals, setProposals] = useState<SiteProposal[]>([]);
+  const [editingProposal, setEditingProposal] = useState<SiteProposal | null>(null);
+  const [proposalsLoading, setProposalsLoading] = useState(false);
 
   const apiCall = async (action: string, data?: any) => {
     const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin`, {
@@ -117,10 +121,108 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setHeroLoading(false);
   };
 
+  const normalizeProposal = (item: any): SiteProposal => ({
+    id: item.id,
+    slug: item.slug ?? '',
+    title: item.title ?? '',
+    subtitle: item.subtitle ?? '',
+    banner_url: item.banner_url ?? '',
+    client_name: item.client_name ?? '',
+    client_contact: item.client_contact ?? '',
+    scope: item.scope ?? '',
+    timeline: item.timeline ?? '',
+    about: item.about ?? '',
+    footer_links: Array.isArray(item.footer_links) ? item.footer_links : [],
+    is_public: item.is_public !== false,
+    created_at: item.created_at,
+    updated_at: item.updated_at,
+  });
+
+  const loadProposals = async () => {
+    setProposalsLoading(true);
+    const result = await apiCall('list_proposals');
+    const mapped = (result.proposals || []).map(normalizeProposal);
+    setProposals(mapped);
+    setProposalsLoading(false);
+  };
+
+  const saveProposal = async () => {
+    if (!editingProposal) return;
+    setProposalsLoading(true);
+    await apiCall('upsert_proposal', editingProposal);
+    setEditingProposal(null);
+    await loadProposals();
+    showMessage('Proposta salva!');
+    setProposalsLoading(false);
+  };
+
+  const deleteProposal = async (id: string) => {
+    if (!confirm('Excluir esta proposta?')) return;
+    setProposalsLoading(true);
+    await apiCall('delete_proposal', { id });
+    await loadProposals();
+    showMessage('Proposta excluida!');
+    setProposalsLoading(false);
+  };
+
+  const newProposal = (): SiteProposal => ({
+    slug: '',
+    title: '',
+    subtitle: '',
+    banner_url: '',
+    client_name: '',
+    client_contact: '',
+    scope: '',
+    timeline: '',
+    about: '',
+    footer_links: [],
+    is_public: true,
+  });
+
+  const updateProposalField = (field: keyof SiteProposal, value: any) => {
+    if (!editingProposal) return;
+    const updated = { ...editingProposal, [field]: value };
+    if (field === 'title' || field === 'client_name') {
+      updated.slug = slugify(
+        field === 'client_name' ? value : updated.client_name,
+        field === 'title' ? value : updated.title
+      );
+    }
+    setEditingProposal(updated);
+  };
+
+  const addFooterLink = () => {
+    if (!editingProposal) return;
+    setEditingProposal({
+      ...editingProposal,
+      footer_links: [...editingProposal.footer_links, { label: '', url: '' }],
+    });
+  };
+
+  const updateFooterLink = (index: number, field: 'label' | 'url', value: string) => {
+    if (!editingProposal) return;
+    const links = [...editingProposal.footer_links];
+    links[index] = { ...links[index], [field]: value };
+    setEditingProposal({ ...editingProposal, footer_links: links });
+  };
+
+  const removeFooterLink = (index: number) => {
+    if (!editingProposal) return;
+    const links = editingProposal.footer_links.filter((_, i) => i !== index);
+    setEditingProposal({ ...editingProposal, footer_links: links });
+  };
+
+  const copyProposalUrl = (slug: string) => {
+    const base = window.location.origin;
+    navigator.clipboard.writeText(`${base}/proposta/${slug}`);
+    showMessage('Link copiado!');
+  };
+
   useEffect(() => {
     loadCases();
     loadMedia();
     loadHero();
+    loadProposals();
   }, []);
 
   const showMessage = (msg: string) => {
@@ -214,8 +316,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
         </div>
       )}
 
-      <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto">
-        {(['cases', 'media', 'hero'] as const).map((t) => (
+      <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
+        {(['cases', 'media', 'hero', 'proposals'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -223,7 +325,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : 'Hero'}
+            {t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : 'Propostas'}
           </button>
         ))}
       </div>
@@ -526,6 +628,204 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   );
                 })}
               </div>
+            )}
+          </div>
+        )}
+
+        {tab === 'proposals' && (
+          <div>
+            {editingProposal ? (
+              <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                <h2 className="text-lg font-display mb-6">{editingProposal.id ? 'Editar Proposta' : 'Nova Proposta'}</h2>
+                <div className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Titulo</label>
+                      <input
+                        value={editingProposal.title}
+                        onChange={(e) => updateProposalField('title', e.target.value)}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                        placeholder="Titulo da proposta"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Cliente</label>
+                      <input
+                        value={editingProposal.client_name}
+                        onChange={(e) => updateProposalField('client_name', e.target.value)}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                        placeholder="Nome do cliente"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Slug (gerado automaticamente)</label>
+                    <input
+                      value={editingProposal.slug}
+                      onChange={(e) => setEditingProposal({ ...editingProposal, slug: e.target.value.trim().toLowerCase() })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans text-neutral-500"
+                      placeholder="proposta-cliente-titulo"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Subtitulo</label>
+                    <input
+                      value={editingProposal.subtitle}
+                      onChange={(e) => setEditingProposal({ ...editingProposal, subtitle: e.target.value })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                      placeholder="Breve descricao da proposta"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Banner URL</label>
+                    <input
+                      value={editingProposal.banner_url}
+                      onChange={(e) => setEditingProposal({ ...editingProposal, banner_url: e.target.value })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                      placeholder="URL da imagem de banner"
+                    />
+                    {editingProposal.banner_url && <img src={editingProposal.banner_url} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Contato do cliente</label>
+                    <input
+                      value={editingProposal.client_contact}
+                      onChange={(e) => setEditingProposal({ ...editingProposal, client_contact: e.target.value })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                      placeholder="Email ou telefone"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Escopo</label>
+                    <textarea
+                      value={editingProposal.scope}
+                      onChange={(e) => setEditingProposal({ ...editingProposal, scope: e.target.value })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans min-h-[120px]"
+                      placeholder="Descreva o escopo do projeto"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Cronograma</label>
+                    <textarea
+                      value={editingProposal.timeline}
+                      onChange={(e) => setEditingProposal({ ...editingProposal, timeline: e.target.value })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans min-h-[120px]"
+                      placeholder="Descreva o cronograma"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Sobre</label>
+                    <textarea
+                      value={editingProposal.about}
+                      onChange={(e) => setEditingProposal({ ...editingProposal, about: e.target.value })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans min-h-[120px]"
+                      placeholder="Texto sobre o studio ou contexto da proposta"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Links do rodape</label>
+                    <div className="space-y-2">
+                      {editingProposal.footer_links.map((link, i) => (
+                        <div key={i} className="flex gap-2 items-center">
+                          <input
+                            value={link.label}
+                            onChange={(e) => updateFooterLink(i, 'label', e.target.value)}
+                            className="flex-1 border border-neutral-200 rounded-xl px-4 py-2 text-sm font-sans"
+                            placeholder="Label"
+                          />
+                          <input
+                            value={link.url}
+                            onChange={(e) => updateFooterLink(i, 'url', e.target.value)}
+                            className="flex-1 border border-neutral-200 rounded-xl px-4 py-2 text-sm font-sans"
+                            placeholder="https://..."
+                          />
+                          <button onClick={() => removeFooterLink(i)} className="text-red-400 hover:text-red-600 text-xs px-2 py-2">
+                            X
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        onClick={addFooterLink}
+                        className="text-xs font-sans text-neutral-500 hover:text-black border border-dashed border-neutral-300 rounded-xl px-4 py-2 hover:bg-neutral-50"
+                      >
+                        + Adicionar link
+                      </button>
+                    </div>
+                  </div>
+
+                  <label className="flex items-center gap-2 font-sans text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editingProposal.is_public}
+                      onChange={(e) => setEditingProposal({ ...editingProposal, is_public: e.target.checked })}
+                      className="w-4 h-4"
+                    />
+                    Publica (acessivel via link)
+                  </label>
+                </div>
+
+                <div className="flex gap-3 mt-8">
+                  <button
+                    onClick={saveProposal}
+                    disabled={proposalsLoading || !editingProposal.title || !editingProposal.slug || !editingProposal.client_name}
+                    className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
+                  >
+                    {proposalsLoading ? 'Salvando...' : 'Salvar'}
+                  </button>
+                  <button
+                    onClick={() => setEditingProposal(null)}
+                    className="border border-neutral-200 px-8 py-3 rounded-full text-sm font-sans text-neutral-600 hover:bg-neutral-50"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => setEditingProposal(newProposal())}
+                  className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider mb-6"
+                >
+                  + Nova Proposta
+                </button>
+
+                {proposalsLoading ? (
+                  <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+                ) : proposals.length === 0 ? (
+                  <p className="text-neutral-400 font-sans text-sm">Nenhuma proposta cadastrada ainda.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {proposals.map((p) => (
+                      <div key={p.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
+                        <div className="flex-grow min-w-0">
+                          <h3 className="font-display text-lg truncate">{p.title}</h3>
+                          <p className="text-xs text-neutral-400 font-sans truncate">{p.client_name} — /{p.slug}</p>
+                        </div>
+                        <div className="flex gap-2 flex-shrink-0 flex-wrap justify-end">
+                          {!p.is_public && <span className="text-[10px] bg-neutral-100 text-neutral-400 px-2 py-1 rounded-full font-sans">Oculta</span>}
+                          <button onClick={() => copyProposalUrl(p.slug)} className="text-[10px] font-sans bg-neutral-100 hover:bg-neutral-200 px-3 py-1.5 rounded-lg">
+                            Copiar link
+                          </button>
+                          <button onClick={() => setEditingProposal(p)} className="text-xs font-sans text-neutral-500 hover:text-black px-3 py-2 rounded-lg hover:bg-neutral-50">
+                            Editar
+                          </button>
+                          <button onClick={() => p.id && deleteProposal(p.id)} className="text-xs font-sans text-red-400 hover:text-red-600 px-3 py-2 rounded-lg hover:bg-red-50">
+                            Excluir
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

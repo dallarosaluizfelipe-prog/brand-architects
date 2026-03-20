@@ -112,3 +112,18 @@ This file records a chronological history of changes, requests, and reasoning fo
   - **Alteração em `pages/Home.tsx`:** Seção inteira removida (título duplo `<h2>`, parágrafo e botão "Conheca o Dalla design brand"). A seção "Conheca Nossos Cases" agora segue diretamente após o bloco de valor do hero.
   - **SEO:** Sem impacto negativo — o `<h1>` principal já cobre o posicionamento. O conteúdo textual relevante ("identidades visuais", "posicionar marcas") já está presente na meta description e em outras seções.
   - **Build:** Validado com sucesso (`npm run build`).
+
+- **2026-03-20 15:00 — Sistema de Propostas Comerciais:**
+  - **Motivação:** Criar sistema completo para gerar propostas comerciais acessíveis via link direto (não indexadas), com CRUD no AdminPanel, geração de PDF e compartilhamento via WhatsApp.
+  - **Arquivos criados:**
+    - `supabase/migrations/20260320150000_create_site_proposals.sql` — Tabela `site_proposals` com RLS (leitura pública condicionada a `is_public = true`), índice único em `slug`.
+    - `src/data/siteProposals.ts` — Data layer com interface `SiteProposal`, `getProposalBySlug()` e `slugify()`.
+    - `pages/ProposalDetails.tsx` — Página pública da proposta com layout premium mobile-first, PDF via html2canvas-pro/jspdf, WhatsApp share, meta robots `noindex, nofollow`.
+  - **Arquivos modificados:**
+    - `supabase/functions/admin/index.ts` — 3 novas actions: `list_proposals`, `upsert_proposal`, `delete_proposal`.
+    - `pages/AdminPanel.tsx` — Nova aba "Propostas" com CRUD completo (título, subtítulo, banner, cliente, contato, escopo, cronograma, sobre, footer_links como lista dinâmica, is_public). Slug auto-gerado via `slugify()`. Botão "Copiar link".
+    - `App.tsx` — Nova rota `/proposta/:slug` com PublicLayout.
+    - `components/Seo.tsx` — Nova prop `robots?` para suporte a `noindex, nofollow`.
+    - `package.json` — Dependências adicionadas: `html2canvas-pro`, `jspdf`.
+  - **Segurança:** Propostas não indexadas (meta robots noindex), não incluídas no sitemap, acessíveis apenas via link direto. RLS bloqueia propostas com `is_public = false`.
+  - **Build:** Validado com sucesso (`npm run build`). PDF e jspdf code-split em chunks separados (carregam sob demanda).

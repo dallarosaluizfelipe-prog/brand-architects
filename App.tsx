@@ -9,6 +9,7 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Admin from "./pages/Admin";
 import CaseDetails from "./pages/CaseDetails";
+import ProposalDetails from "./pages/ProposalDetails";
 
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white">
@@ -66,6 +67,14 @@ const AppRoutes: React.FC = () => {
         element={
           <PublicLayout>
             <CaseDetails />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/proposta/:slug"
+        element={
+          <PublicLayout>
+            <ProposalDetails />
           </PublicLayout>
         }
       />

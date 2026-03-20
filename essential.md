@@ -278,3 +278,62 @@ This document captures details of components, pages, functions, and any code add
 
 ### Validacao
 - Build de producao executado com sucesso: `npm run build`.
+
+## 2026-03-20 Sistema de Propostas Comerciais
+
+### Objetivo
+- Criar sistema completo de propostas comerciais acessíveis via link direto, com CRUD no AdminPanel, geração de PDF e compartilhamento via WhatsApp. Propostas NÃO são indexadas por buscadores.
+
+### Migration
+- `supabase/migrations/20260320150000_create_site_proposals.sql`
+  - Tabela `site_proposals`: `id` (uuid PK), `slug` (text UNIQUE NOT NULL), `title`, `subtitle`, `banner_url`, `client_name`, `client_contact`, `scope` (text), `timeline` (text), `about` (text), `footer_links` (jsonb default `[]`), `is_public` (boolean default true), `created_at`, `updated_at`.
+  - RLS habilitado com policy de leitura pública condicionada a `is_public = true`.
+  - Índice único em `slug`.
+
+### `src/data/siteProposals.ts` (novo)
+- Interface `SiteProposal` espelhando a tabela.
+- `getProposalBySlug(slug)`: query no Supabase filtrando `is_public = true`, retorna `null` se não encontrado.
+- `slugify(clientName, title)`: gera slug no formato `proposta-{cliente}-{titulo}` (normalizado: lowercase, sem acentos, hífens).
+- `normalizeProposal()`: função interna para coerção de tipos e defaults.
+
+### Edge Function `admin` — novas actions
+- `list_proposals`: SELECT * FROM site_proposals ORDER BY created_at DESC.
+- `upsert_proposal`: INSERT ... ON CONFLICT DO UPDATE, com `updated_at = now()`.
+- `delete_proposal`: DELETE por id.
+- Todas com validação de PIN (padrão existente).
+
+### `pages/ProposalDetails.tsx` (novo)
+- Página pública acessível via `/proposta/:slug`.
+- Layout mobile-first com seções: Hero (banner + título + subtítulo), Cliente (nome + contato), Escopo, Cronograma, Sobre, Links do rodapé.
+- Botão "Baixar PDF": usa `html2canvas-pro` + `jspdf` via dynamic import (code-split). Captura container da proposta e gera PDF A4 multi-página.
+- Botão "Compartilhar": abre WhatsApp com `https://wa.me/?text=Confira+essa+proposta:+{URL}`.
+- SEO: usa `<Seo robots="noindex, nofollow" />` para bloquear indexação.
+- Estados: loading, 404 (link expirado/incorreto), dados carregados.
+
+### `components/Seo.tsx` (atualizado)
+- Nova prop `robots?: string`.
+- Quando fornecida, injeta `<meta name="robots" content="...">` via `upsertMeta`.
+
+### `pages/AdminPanel.tsx` (atualizado)
+- Tab type expandido para `'cases' | 'media' | 'hero' | 'proposals'`.
+- States: `proposals`, `editingProposal`, `proposalsLoading`.
+- Funções: `loadProposals()`, `saveProposal()`, `deleteProposal()`, `newProposal()`, `updateProposalField()`, `addFooterLink()`, `updateFooterLink()`, `removeFooterLink()`, `copyProposalUrl()`.
+- UI da aba Propostas: lista com título, cliente, slug, status (pública/oculta), ações (copiar link, editar, excluir). Formulário com todos os campos, footer_links como lista dinâmica de {label, url}, slug auto-gerado.
+
+### `App.tsx` (atualizado)
+- Nova rota: `/proposta/:slug` → `ProposalDetails` dentro de `PublicLayout`.
+- Import de `ProposalDetails` adicionado.
+
+### Database Tables
+
+#### `site_proposals`
+- Propostas comerciais com título, subtítulo, banner, cliente, contato, escopo, cronograma, sobre, footer_links (jsonb). RLS: leitura pública condicionada a `is_public = true`.
+- Não incluída no sitemap. Não indexada por buscadores.
+
+### Dependências adicionadas
+- `html2canvas-pro` — fork ativo de html2canvas com melhor suporte CSS moderno.
+- `jspdf` — geração de PDF client-side.
+- Ambas carregadas via dynamic import (code-split) apenas quando o usuário clica "Baixar PDF".
+
+### Validação
+- Build de produção executado com sucesso: `npm run build`.

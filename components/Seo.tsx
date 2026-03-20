@@ -6,6 +6,7 @@ interface SeoProps {
   keywords?: string;
   image?: string;
   url?: string;
+  robots?: string;
 }
 
 const defaultTitle = 'Studio Dalla — High‑End Branding Studio';
@@ -20,6 +21,7 @@ export const Seo: React.FC<SeoProps> = ({
   keywords,
   image,
   url,
+  robots,
 }) => {
   useEffect(() => {
     document.title = title ? `${title} | Studio Dalla` : defaultTitle;
@@ -43,6 +45,9 @@ export const Seo: React.FC<SeoProps> = ({
       }
     };
 
+    if (robots) {
+      upsertMeta({ name: 'robots', content: robots });
+    }
     upsertMeta({ name: 'description', content: description || defaultDescription });
     upsertMeta({ name: 'keywords', content: keywords || defaultKeywords });
     upsertMeta({ property: 'og:title', content: title || defaultTitle });
@@ -59,7 +64,7 @@ export const Seo: React.FC<SeoProps> = ({
       document.head.appendChild(link);
     }
     link.setAttribute('href', canonical);
-  }, [title, description, keywords, image, url]);
+  }, [title, description, keywords, image, url, robots]);
 
   return null;
 };

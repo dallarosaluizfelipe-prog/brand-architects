@@ -128,6 +128,39 @@ Deno.serve(async (req) => {
         });
       }
 
+      case "list_proposals": {
+        const { data: proposals } = await supabase
+          .from("site_proposals")
+          .select("*")
+          .order("created_at", { ascending: false });
+        return new Response(JSON.stringify({ proposals }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "upsert_proposal": {
+        const { data: result, error } = await supabase
+          .from("site_proposals")
+          .upsert({ ...data, updated_at: new Date().toISOString() })
+          .select()
+          .single();
+        if (error) throw error;
+        return new Response(JSON.stringify({ proposal: result }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "delete_proposal": {
+        const { error } = await supabase
+          .from("site_proposals")
+          .delete()
+          .eq("id", data.id);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400,
