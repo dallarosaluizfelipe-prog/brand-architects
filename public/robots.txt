@@ -1,4 +1,61 @@
-User-agent: *
-Disallow:
+# Studio Dalla — robots.txt
+# https://estudiodalla.com
 
+# ── Default: allow all crawlers ──────────────────────────────────────────────
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# ── Search engines ────────────────────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Slurp
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# ── AI assistants & research crawlers (allowed — benefits brand discovery) ───
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Gemini
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# ── Sitemap ───────────────────────────────────────────────────────────────────
 Sitemap: https://estudiodalla.com/sitemap.xml

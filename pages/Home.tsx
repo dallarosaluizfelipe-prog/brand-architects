@@ -52,39 +52,24 @@ const Home: React.FC = () => {
             <source src={heroMobile} media="(max-width: 768px)" type="video/mp4" />
             <source src={heroDesktop} media="(min-width: 769px)" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/70"></div>
-          <div className="relative z-10 min-h-[100svh] md:min-h-screen px-6 pb-14 pt-32 md:pt-44 flex items-end">
-            <div className="max-w-4xl">
-              <span className="inline-block rounded-full border border-white/30 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-white/80 font-sans mb-6">
-                branding e posicionamento
-              </span>
-              <h1 className="text-white text-[clamp(2.2rem,10vw,5.5rem)] leading-[0.9] tracking-tight mb-5">
-                Marcas de alto valor com estrategia que vira percepcao.
-              </h1>
-              <p className="max-w-xl text-white/80 text-base md:text-xl leading-relaxed font-sans mb-8">
-                O Studio Dalla une direcao estrategica e identidade visual para empresas que precisam de autoridade imediata.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link to="/cases" className="bg-white text-black px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95">
-                  Ver cases
-                </Link>
-                <Link to="/contato" className="border border-white/40 text-white px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95">
-                  Falar com o studio
-                </Link>
-              </div>
-            </div>
-          </div>
         </section>
 
-        <section className="py-14 md:py-20 px-6 max-w-7xl mx-auto">
-          <div className="flex flex-col items-center justify-center text-center">
-            <h2 className="text-4xl sm:text-5xl md:text-8xl leading-[0.9] tracking-tight mb-2 md:mb-5">Poder criativo que</h2>
-            <h2 className="text-5xl sm:text-6xl md:text-8xl leading-[0.9] tracking-tight mb-8 md:mb-10">impulsiona os negocios</h2>
-            <p className="max-w-2xl text-base md:text-xl text-neutral-500 font-light leading-relaxed mb-8 md:mb-10">
-              Identidades visuais pensadas para posicionar marcas no mercado.
-            </p>
-            <Link to="/metodologia" className="bg-black text-white px-9 md:px-12 py-4 md:py-5 rounded-full text-xs md:text-sm font-bold uppercase tracking-[0.16em] hover:scale-105 transition-all font-sans">
-              Conheca o Dalla design brand
+        <section className="py-14 md:py-24 px-6 max-w-4xl mx-auto">
+          <span className="inline-block rounded-full border border-neutral-300 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-neutral-500 font-sans mb-6">
+            branding e posicionamento
+          </span>
+          <h1 className="text-[clamp(2.2rem,10vw,5.5rem)] leading-[0.9] tracking-tight mb-5">
+            Marcas de alto valor com estrategia que vira percepcao.
+          </h1>
+          <p className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8">
+            O Studio Dalla une direcao estrategica e identidade visual para empresas que precisam de autoridade imediata.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/cases" className="bg-black text-white px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95">
+              Ver cases
+            </Link>
+            <Link to="/contato" className="border border-black/40 text-black px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95">
+              Falar com o studio
             </Link>
           </div>
         </section>

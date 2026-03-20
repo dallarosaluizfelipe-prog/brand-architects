@@ -121,6 +121,39 @@ This document captures details of components, pages, functions, and any code add
 
 *End of documentation.*
 
+## 2026-03-20 Sitemap Dinâmico e Robots.txt Aprimorado
+
+### Objetivo
+- Substituir o sitemap estático por geração dinâmica que reflete automaticamente os cases visíveis no Supabase, sem rebuild ou edição manual.
+- Aprimorar o `robots.txt` com política explícita para crawlers de IA (todos permitidos) e bloqueio da área administrativa.
+
+### `api/sitemap.xml.js` (novo — função serverless Vercel)
+- Função JavaScript no formato Vercel Node.js serverless (`export default async function handler(req, res)`).
+- Consulta `site_cases` no Supabase (`is_visible=true`, ordenado por `display_order`) a cada request.
+- Páginas estáticas incluídas: `/`, `/estudio`, `/metodologia`, `/cases`, `/contato`.
+- Páginas dinâmicas: uma entrada para cada `slug` retornado pelo Supabase.
+- `lastmod` gerado a partir de `updated_at` do banco; `priority` 0.9 para `is_featured=true`, 0.7 para demais.
+- Fallback para array de 6 slugs hardcoded (`yerbal`, `clave`, `nuts-oclock`, `lummina`, `dalla`, `kuma`) quando Supabase retorna dados vazios ou lança erro.
+- Variáveis de ambiente usadas: `SITE_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`.
+- Cache via header `s-maxage=3600, stale-while-revalidate=86400`.
+- Rotas excluídas: `/admin`, aliases de redirect legados (`/about`, `/methodology`, `/portfolio`, `/contact`).
+
+### `vercel.json` (novo)
+- Arquivo de configuração da Vercel adicionado à raiz do projeto.
+- `rewrites`: `/sitemap.xml` → `/api/sitemap.xml` (rewrite antes dos arquivos estáticos, conforme documentação Vercel).
+- `rewrites`: `/((?!api/).*)` → `/index.html` para garantir que o React Router controle a navegação SPA em qualquer rota não-API.
+
+### `public/robots.txt` (atualizado)
+- Seções explícitas para: `*` (all), `Googlebot`, `Bingbot`, `Slurp`.
+- Seções permissivas dedicadas para crawlers de IA: `GPTBot`, `ChatGPT-User`, `anthropic-ai`, `ClaudeBot`, `Claude-Web`, `PerplexityBot`, `Gemini`, `GoogleOther`, `YouBot`, `cohere-ai`, `meta-externalagent`.
+- Todos os bots: `Allow: /`, `Disallow: /admin` e `Disallow: /admin/`.
+- Crawlers de IA: `Allow: /` sem Disallow (permissão total para indexação e treinamento).
+- `Sitemap:` aponta para `https://estudiodalla.com/sitemap.xml`.
+
+### `public/sitemap.xml` (removido)
+- Arquivo estático deletado para evitar conflito com a função serverless dinâmica.
+- O sitemap agora é servido exclusivamente via `/api/sitemap.xml`.
+
 ## 2026-03-03 Update
 
 ### Routing

@@ -84,3 +84,31 @@ This file records a chronological history of changes, requests, and reasoning fo
     - **Home.tsx:** Refatorada para buscar URLs de `site_content` via Supabase client (leitura publica). `<video>` agora usa `<source media="(max-width: 768px)">` e `<source media="(min-width: 769px)">` para selecionar video adequado ao dispositivo. Fallback para URLs locais caso a query falhe.
   - **Backend:** Nenhuma alteracao necessaria — `upsert_content` e `list_content` ja existiam na Edge Function.
   - **Build:** Validado com sucesso (`npm run build`).
+
+- **2026-03-20 — Sitemap dinâmico e robots.txt aprimorado:**
+  - **Motivação:** Sitemap era estático (`public/sitemap.xml`) e precisava ser atualizado manualmente. Qualquer case novo adicionado via admin não aparecia automaticamente no sitemap. O `robots.txt` tinha política genérica sem instruções explícitas para crawlers de IA.
+  - **Solução implementada:**
+    - **`api/sitemap.xml.js`** — Função serverless da Vercel. Consulta o Supabase (`site_cases` com `is_visible=true`) em cada request, retorna XML com `Content-Type: application/xml`, inclui `lastmod` via `updated_at`, `priority` ajustada para cases com `is_featured=true`. Exclui explicitamente `/admin` e rotas de redirect legadas. Possui fallback com os 6 slugs hardcoded caso o Supabase esteja indisponível.
+    - **`vercel.json`** — Novo arquivo de configuração da Vercel. Rewrite `/sitemap.xml` → `/api/sitemap.xml`. Rewrite SPA fallback `/(!(api/).*)` → `/index.html` para garantir navegação por React Router.
+    - **`public/robots.txt`** — Reescrito com: `Allow: /` global, `Disallow: /admin` para todos os bots, seções explícitas para Googlebot e Bingbot, e seções permissivas dedicadas para crawlers de IA (`GPTBot`, `ChatGPT-User`, `ClaudeBot`, `anthropic-ai`, `PerplexityBot`, `Gemini`, `GoogleOther`, `YouBot`, `cohere-ai`, `meta-externalagent`). Sitemap apontando para URL dinâmica.
+    - **`public/sitemap.xml`** — Arquivo estático deletado para evitar conflito com a função serverless (Vercel serves static files quando sem rewrite explícito em `vercel.json`).
+  - **Comportamento automático:** Qualquer case marcado como `is_visible=true` no painel admin aparece no sitemap imediatamente sem necessidade de rebuild ou redeploy do frontend.
+  - **Segurança:** A função usa `persistSession: false` / `autoRefreshToken: false` no cliente Supabase (compatível com Node.js serverless). Nenhum dado de admin ou rota administrativa é exposto.
+  - **Variáveis de ambiente necessárias na Vercel:** `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`. Opcional: `SITE_URL` (fallback: `https://estudiodalla.com`).
+  - **Build:** Validado com sucesso (`npm run build`).
+
+- **2026-03-20 — Hero: texto realocado abaixo do vídeo:**
+  - **Motivação:** Os textos sobrepostos ao vídeo de abertura causavam conflito visual e dificultavam a leitura, especialmente em mobile.
+  - **Alteração em `pages/Home.tsx`:**
+    - Removidos o overlay gradiente (`bg-gradient-to-b`) e o container absoluto de texto que ficava sobre o vídeo.
+    - O hero agora exibe apenas o `<video>` limpo (full-screen, sem sobreposição).
+    - Criada nova `<section>` logo abaixo do hero contendo: badge "branding e posicionamento", `<h1>`, parágrafo descritivo e CTAs ("Ver cases", "Falar com o studio").
+    - Cores adaptadas de branco/transparente para preto/neutro sobre fundo claro, mantendo contraste e legibilidade.
+    - O `<h1>` continua sendo o primeiro heading semântico da página — sem impacto negativo no SEO. Textos e CTAs inalterados.
+  - **Build:** Validado com sucesso (`npm run build`).
+
+- **2026-03-20 — Remoção da seção repetitiva "Poder criativo":**
+  - **Motivação:** Após realocar os textos do hero para uma seção própria, a seção seguinte ("Poder criativo que impulsiona os negócios") ficou visualmente redundante — mesmo padrão de texto grande + parágrafo + CTA.
+  - **Alteração em `pages/Home.tsx`:** Seção inteira removida (título duplo `<h2>`, parágrafo e botão "Conheca o Dalla design brand"). A seção "Conheca Nossos Cases" agora segue diretamente após o bloco de valor do hero.
+  - **SEO:** Sem impacto negativo — o `<h1>` principal já cobre o posicionamento. O conteúdo textual relevante ("identidades visuais", "posicionar marcas") já está presente na meta description e em outras seções.
+  - **Build:** Validado com sucesso (`npm run build`).
