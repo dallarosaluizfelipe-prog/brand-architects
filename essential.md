@@ -215,3 +215,33 @@ This document captures details of components, pages, functions, and any code add
 
 ### Validacao tecnica
 - Build de producao executado com sucesso: `npm run build`.
+
+## 2026-03-18 Hero Video Responsivo com Controle Admin
+
+### Objetivo
+- Corrigir video do hero quebrando em mobile (so usava video desktop).
+- Permitir troca de video desktop, mobile e poster via painel admin sem alterar codigo.
+
+### Migration
+- `supabase/migrations/20260318120000_seed_hero_video_content.sql`
+  - Seed de 2 registros em `site_content`: `hero_video_desktop` (com `video_url` e `image_url`) e `hero_video_mobile` (com `video_url`).
+  - Idempotente via `ON CONFLICT (section_key) DO NOTHING`.
+
+### AdminPanel.tsx
+- Tipo de aba expandido de `'cases' | 'media'` para `'cases' | 'media' | 'hero'`.
+- Novo state `hero: HeroSettings` com `desktopVideoUrl`, `mobileVideoUrl`, `posterUrl`.
+- `loadHero()` busca registros de `site_content` via action `list_content`.
+- `saveHero()` persiste via action `upsert_content` (2 chamadas: desktop e mobile).
+- UI da aba Hero: 3 campos de URL com preview inline (video/imagem) e botao "Salvar Hero".
+
+### Home.tsx
+- Importados `useState`, `useEffect`, `useRef` do React e `supabase` client.
+- Constantes de fallback: `FALLBACK_DESKTOP`, `FALLBACK_MOBILE`, `FALLBACK_POSTER`.
+- `useEffect` busca `site_content` com `section_key IN ('hero_video_desktop', 'hero_video_mobile')` e atualiza states.
+- `<video>` agora usa `ref`, com 2 `<source>` e atributo `media` para selecao responsiva automatica:
+  - `<source src={heroMobile} media="(max-width: 768px)">`
+  - `<source src={heroDesktop} media="(min-width: 769px)">`
+- Poster dinamico vindo do banco, com fallback local.
+
+### Validacao
+- Build de producao executado com sucesso: `npm run build`.

@@ -24,14 +24,26 @@ interface SiteCase {
   is_visible: boolean;
 }
 
+interface HeroSettings {
+  desktopVideoUrl: string;
+  mobileVideoUrl: string;
+  posterUrl: string;
+}
+
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'cases' | 'media'>('cases');
+  const [tab, setTab] = useState<'cases' | 'media' | 'hero'>('cases');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [mediaFiles, setMediaFiles] = useState<string[]>([]);
   const [message, setMessage] = useState('');
+  const [hero, setHero] = useState<HeroSettings>({
+    desktopVideoUrl: '',
+    mobileVideoUrl: '',
+    posterUrl: '',
+  });
+  const [heroLoading, setHeroLoading] = useState(false);
 
   const apiCall = async (action: string, data?: any) => {
     const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin`, {
@@ -76,9 +88,39 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setMediaFiles((data || []).map((f) => f.name));
   };
 
+  const loadHero = async () => {
+    const result = await apiCall('list_content');
+    const items = result.content || [];
+    const desktop = items.find((c: any) => c.section_key === 'hero_video_desktop');
+    const mobile = items.find((c: any) => c.section_key === 'hero_video_mobile');
+    setHero({
+      desktopVideoUrl: desktop?.video_url || '',
+      mobileVideoUrl: mobile?.video_url || '',
+      posterUrl: desktop?.image_url || '',
+    });
+  };
+
+  const saveHero = async () => {
+    setHeroLoading(true);
+    await apiCall('upsert_content', {
+      section_key: 'hero_video_desktop',
+      title: 'Hero Video Desktop',
+      video_url: hero.desktopVideoUrl,
+      image_url: hero.posterUrl,
+    });
+    await apiCall('upsert_content', {
+      section_key: 'hero_video_mobile',
+      title: 'Hero Video Mobile',
+      video_url: hero.mobileVideoUrl,
+    });
+    showMessage('Hero atualizado!');
+    setHeroLoading(false);
+  };
+
   useEffect(() => {
     loadCases();
     loadMedia();
+    loadHero();
   }, []);
 
   const showMessage = (msg: string) => {
@@ -173,7 +215,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto">
-        {(['cases', 'media'] as const).map((t) => (
+        {(['cases', 'media', 'hero'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -181,7 +223,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'cases' ? 'Cases' : 'Midia'}
+            {t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : 'Hero'}
           </button>
         ))}
       </div>
@@ -398,6 +440,60 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 )}
               </>
             )}
+          </div>
+        )}
+
+        {tab === 'hero' && (
+          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+            <h2 className="text-lg font-display mb-6">Video do Hero</h2>
+            <p className="text-sm text-neutral-500 font-sans mb-6">Gerencie os videos exibidos na hero da pagina inicial. Envie os arquivos na aba Midia, copie a URL e cole aqui.</p>
+            <div className="space-y-5">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Desktop (URL)</label>
+                <input
+                  value={hero.desktopVideoUrl}
+                  onChange={(e) => setHero({ ...hero, desktopVideoUrl: e.target.value })}
+                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                  placeholder="https://... ou /lovable-uploads/abertura-site.mp4"
+                />
+                {hero.desktopVideoUrl && (
+                  <video src={hero.desktopVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                )}
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Mobile (URL)</label>
+                <input
+                  value={hero.mobileVideoUrl}
+                  onChange={(e) => setHero({ ...hero, mobileVideoUrl: e.target.value })}
+                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                  placeholder="https://... ou /lovable-uploads/abertura-site-mobile.mp4"
+                />
+                {hero.mobileVideoUrl && (
+                  <video src={hero.mobileVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                )}
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Poster / Imagem de capa (URL)</label>
+                <input
+                  value={hero.posterUrl}
+                  onChange={(e) => setHero({ ...hero, posterUrl: e.target.value })}
+                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                  placeholder="https://... ou /lovable-uploads/poster.png"
+                />
+                {hero.posterUrl && (
+                  <img src={hero.posterUrl} alt="Poster preview" className="mt-3 rounded-xl max-h-40 object-cover" />
+                )}
+              </div>
+            </div>
+            <div className="mt-8">
+              <button
+                onClick={saveHero}
+                disabled={heroLoading}
+                className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
+              >
+                {heroLoading ? 'Salvando...' : 'Salvar Hero'}
+              </button>
+            </div>
           </div>
         )}
 

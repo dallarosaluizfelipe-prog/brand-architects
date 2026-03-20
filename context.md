@@ -75,3 +75,12 @@ This file records a chronological history of changes, requests, and reasoning fo
     - Hero principal com `poster` para melhorar percepcao de carregamento inicial.
   - **Validacao:**
     - Build validado com sucesso (`npm run build`).
+
+- **2026-03-18 12:00** - Hero Video responsivo com controle via Admin:
+  - **Problema:** Video do hero quebrando em dispositivos mobile por usar apenas o video desktop. Nenhuma logica responsiva existia.
+  - **Solucao implementada:**
+    - **Migration:** `supabase/migrations/20260318120000_seed_hero_video_content.sql` — seed idempotente de 2 registros em `site_content` (`hero_video_desktop` e `hero_video_mobile`) com URLs dos videos e poster.
+    - **AdminPanel.tsx:** Adicionada terceira aba "Hero" ao painel admin, com campos editaveis para Video Desktop URL, Video Mobile URL e Poster URL. Preview de video/imagem inline. Salva via action `upsert_content` (ja existente na Edge Function).
+    - **Home.tsx:** Refatorada para buscar URLs de `site_content` via Supabase client (leitura publica). `<video>` agora usa `<source media="(max-width: 768px)">` e `<source media="(min-width: 769px)">` para selecionar video adequado ao dispositivo. Fallback para URLs locais caso a query falhe.
+  - **Backend:** Nenhuma alteracao necessaria — `upsert_content` e `list_content` ja existiam na Edge Function.
+  - **Build:** Validado com sucesso (`npm run build`).

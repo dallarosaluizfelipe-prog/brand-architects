@@ -1,9 +1,36 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
+import { supabase } from '@/src/integrations/supabase/client';
+
+const FALLBACK_DESKTOP = '/lovable-uploads/abertura-site.mp4';
+const FALLBACK_MOBILE = '/lovable-uploads/abertura-site-mobile.mp4';
+const FALLBACK_POSTER = '/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png';
 
 const Home: React.FC = () => {
+  const [heroDesktop, setHeroDesktop] = useState(FALLBACK_DESKTOP);
+  const [heroMobile, setHeroMobile] = useState(FALLBACK_MOBILE);
+  const [heroPoster, setHeroPoster] = useState(FALLBACK_POSTER);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    supabase
+      .from('site_content')
+      .select('section_key, video_url, image_url')
+      .in('section_key', ['hero_video_desktop', 'hero_video_mobile'])
+      .then(({ data }) => {
+        if (!data) return;
+        const desktop = data.find((r) => r.section_key === 'hero_video_desktop');
+        const mobile = data.find((r) => r.section_key === 'hero_video_mobile');
+        if (desktop?.video_url) setHeroDesktop(desktop.video_url);
+        if (desktop?.image_url) setHeroPoster(desktop.image_url);
+        if (mobile?.video_url) setHeroMobile(mobile.video_url);
+
+        // Reload <video> with new sources
+        videoRef.current?.load();
+      });
+  }, []);
   return (
     <>
       <Seo
@@ -14,14 +41,17 @@ const Home: React.FC = () => {
       <div className="animate-in fade-in duration-700">
         <section className="relative min-h-[100svh] md:min-h-screen overflow-hidden bg-black rounded-b-[2.5rem] md:rounded-b-[6rem]">
           <video
-            src="/lovable-uploads/abertura-site.mp4"
+            ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
-            poster="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png"
+            poster={heroPoster}
             className="absolute inset-0 w-full h-full object-cover"
-          />
+          >
+            <source src={heroMobile} media="(max-width: 768px)" type="video/mp4" />
+            <source src={heroDesktop} media="(min-width: 769px)" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/70"></div>
           <div className="relative z-10 min-h-[100svh] md:min-h-screen px-6 pb-14 pt-32 md:pt-44 flex items-end">
             <div className="max-w-4xl">
