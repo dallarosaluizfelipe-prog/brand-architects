@@ -36,7 +36,7 @@ const normalizeProposal = (item: any): SiteProposal => ({
 
 export const getProposalBySlug = async (slug: string): Promise<SiteProposal | null> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('site_proposals')
       .select('*')
       .eq('slug', slug)

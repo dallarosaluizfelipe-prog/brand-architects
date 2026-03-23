@@ -128,6 +128,57 @@ export type Database = {
         }
         Relationships: []
       }
+      site_proposals: {
+        Row: {
+          about: string | null
+          banner_url: string | null
+          client_contact: string | null
+          client_name: string | null
+          created_at: string | null
+          footer_links: Json | null
+          id: string
+          is_public: boolean | null
+          scope: string | null
+          slug: string
+          subtitle: string | null
+          timeline: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          about?: string | null
+          banner_url?: string | null
+          client_contact?: string | null
+          client_name?: string | null
+          created_at?: string | null
+          footer_links?: Json | null
+          id?: string
+          is_public?: boolean | null
+          scope?: string | null
+          slug: string
+          subtitle?: string | null
+          timeline?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Update: {
+          about?: string | null
+          banner_url?: string | null
+          client_contact?: string | null
+          client_name?: string | null
+          created_at?: string | null
+          footer_links?: Json | null
+          id?: string
+          is_public?: boolean | null
+          scope?: string | null
+          slug?: string
+          subtitle?: string | null
+          timeline?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       site_tags: {
         Row: {
           id: string
@@ -155,6 +206,9 @@ export type Database = {
           is_active?: boolean
           created_at?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
         }
         Relationships: []
       }

@@ -38,10 +38,10 @@ export const Seo: React.FC<SeoProps> = ({
 
       if (!element) {
         element = document.createElement('meta');
-        Object.entries(attrs).forEach(([k, v]) => element.setAttribute(k, v));
-        document.head.appendChild(element);
+        Object.entries(attrs).forEach(([k, v]) => element!.setAttribute(k, v));
+        document.head.appendChild(element!);
       } else {
-        Object.entries(attrs).forEach(([k, v]) => element.setAttribute(k, v));
+        Object.entries(attrs).forEach(([k, v]) => element!.setAttribute(k, v));
       }
     };
 
