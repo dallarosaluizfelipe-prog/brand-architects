@@ -31,8 +31,24 @@ interface HeroSettings {
   posterUrl: string;
 }
 
+interface SiteTag {
+  id?: string;
+  tag_type: string;
+  tag_id: string;
+  label: string;
+  is_active: boolean;
+}
+
+const TAG_TYPES = [
+  { value: 'ga4', label: 'Google Analytics 4', placeholder: 'G-XXXXXXXXXX' },
+  { value: 'gtm', label: 'Google Tag Manager', placeholder: 'GTM-XXXXXXX' },
+  { value: 'facebook_pixel', label: 'Facebook Pixel', placeholder: '123456789012345' },
+  { value: 'google_ads', label: 'Google Ads', placeholder: 'AW-XXXXXXXXX' },
+  { value: 'custom', label: 'Custom', placeholder: 'ID ou codigo customizado' },
+];
+
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'cases' | 'media' | 'hero' | 'proposals'>('cases');
+  const [tab, setTab] = useState<'cases' | 'media' | 'hero' | 'proposals' | 'tags'>('cases');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -48,6 +64,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [proposals, setProposals] = useState<SiteProposal[]>([]);
   const [editingProposal, setEditingProposal] = useState<SiteProposal | null>(null);
   const [proposalsLoading, setProposalsLoading] = useState(false);
+  const [tags, setTags] = useState<SiteTag[]>([]);
+  const [editingTag, setEditingTag] = useState<SiteTag | null>(null);
+  const [tagsLoading, setTagsLoading] = useState(false);
 
   const apiCall = async (action: string, data?: any) => {
     const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin`, {
@@ -218,11 +237,62 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     showMessage('Link copiado!');
   };
 
+  const normalizeTag = (item: any): SiteTag => ({
+    id: item.id,
+    tag_type: item.tag_type ?? 'ga4',
+    tag_id: item.tag_id ?? '',
+    label: item.label ?? '',
+    is_active: !!item.is_active,
+  });
+
+  const loadTags = async () => {
+    setTagsLoading(true);
+    const result = await apiCall('list_tags');
+    const mapped = (result.tags || []).map(normalizeTag);
+    setTags(mapped);
+    setTagsLoading(false);
+  };
+
+  const saveTag = async () => {
+    if (!editingTag) return;
+    setTagsLoading(true);
+    await apiCall('upsert_tag', editingTag);
+    setEditingTag(null);
+    await loadTags();
+    showMessage('Tag salva!');
+    setTagsLoading(false);
+  };
+
+  const deleteTag = async (id: string) => {
+    if (!confirm('Excluir esta tag?')) return;
+    setTagsLoading(true);
+    await apiCall('delete_tag', { id });
+    await loadTags();
+    showMessage('Tag excluida!');
+    setTagsLoading(false);
+  };
+
+  const toggleTagActive = async (tag: SiteTag) => {
+    setTagsLoading(true);
+    await apiCall('upsert_tag', { ...tag, is_active: !tag.is_active });
+    await loadTags();
+    showMessage(tag.is_active ? 'Tag desativada!' : 'Tag ativada!');
+    setTagsLoading(false);
+  };
+
+  const newTag = (): SiteTag => ({
+    tag_type: 'ga4',
+    tag_id: '',
+    label: '',
+    is_active: true,
+  });
+
   useEffect(() => {
     loadCases();
     loadMedia();
     loadHero();
     loadProposals();
+    loadTags();
   }, []);
 
   const showMessage = (msg: string) => {
@@ -317,7 +387,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['cases', 'media', 'hero', 'proposals'] as const).map((t) => (
+        {(['cases', 'media', 'hero', 'proposals', 'tags'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -325,7 +395,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : 'Propostas'}
+            {t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : 'Tags'}
           </button>
         ))}
       </div>
@@ -823,6 +893,135 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {tab === 'tags' && (
+          <div>
+            {editingTag ? (
+              <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                <h2 className="text-lg font-display mb-6">{editingTag.id ? 'Editar Tag' : 'Nova Tag'}</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Tipo</label>
+                    <select
+                      value={editingTag.tag_type}
+                      onChange={(e) => setEditingTag({ ...editingTag, tag_type: e.target.value })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans bg-white"
+                    >
+                      {TAG_TYPES.map((tt) => (
+                        <option key={tt.value} value={tt.value}>{tt.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">ID de rastreamento</label>
+                    <input
+                      value={editingTag.tag_id}
+                      onChange={(e) => setEditingTag({ ...editingTag, tag_id: e.target.value.trim() })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                      placeholder={TAG_TYPES.find((tt) => tt.value === editingTag.tag_type)?.placeholder || 'ID'}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Label (nome amigavel)</label>
+                    <input
+                      value={editingTag.label}
+                      onChange={(e) => setEditingTag({ ...editingTag, label: e.target.value })}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                      placeholder="Ex: GA4 Principal"
+                    />
+                  </div>
+
+                  <label className="flex items-center gap-2 font-sans text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editingTag.is_active}
+                      onChange={(e) => setEditingTag({ ...editingTag, is_active: e.target.checked })}
+                      className="w-4 h-4"
+                    />
+                    Ativa (injetar no site)
+                  </label>
+                </div>
+
+                <div className="flex gap-3 mt-8">
+                  <button
+                    onClick={saveTag}
+                    disabled={tagsLoading || !editingTag.tag_id}
+                    className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
+                  >
+                    {tagsLoading ? 'Salvando...' : 'Salvar'}
+                  </button>
+                  <button
+                    onClick={() => setEditingTag(null)}
+                    className="border border-neutral-200 px-8 py-3 rounded-full text-sm font-sans text-neutral-600 hover:bg-neutral-50"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => setEditingTag(newTag())}
+                  className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider mb-6"
+                >
+                  + Nova Tag
+                </button>
+
+                <p className="text-sm text-neutral-500 font-sans mb-6">
+                  Gerencie as tags de rastreamento do site. Tags ativas sao injetadas automaticamente no site publico.
+                </p>
+
+                {tagsLoading ? (
+                  <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+                ) : tags.length === 0 ? (
+                  <p className="text-neutral-400 font-sans text-sm">Nenhuma tag cadastrada ainda.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {tags.map((tag) => {
+                      const typeInfo = TAG_TYPES.find((tt) => tt.value === tag.tag_type);
+                      return (
+                        <div key={tag.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
+                          <div className="flex-grow min-w-0">
+                            <h3 className="font-display text-lg truncate">{tag.label || tag.tag_id}</h3>
+                            <p className="text-xs text-neutral-400 font-sans truncate">
+                              {typeInfo?.label || tag.tag_type} — <span className="font-mono">{tag.tag_id}</span>
+                            </p>
+                          </div>
+                          <div className="flex gap-2 flex-shrink-0 flex-wrap justify-end items-center">
+                            <button
+                              onClick={() => toggleTagActive(tag)}
+                              className={`text-[10px] font-sans px-3 py-1.5 rounded-full font-medium transition-colors ${
+                                tag.is_active
+                                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                                  : 'bg-neutral-100 text-neutral-400 hover:bg-neutral-200'
+                              }`}
+                            >
+                              {tag.is_active ? 'Ativa' : 'Inativa'}
+                            </button>
+                            <button
+                              onClick={() => setEditingTag(tag)}
+                              className="text-xs font-sans text-neutral-500 hover:text-black px-3 py-2 rounded-lg hover:bg-neutral-50"
+                            >
+                              Editar
+                            </button>
+                            <button
+                              onClick={() => tag.id && deleteTag(tag.id)}
+                              className="text-xs font-sans text-red-400 hover:text-red-600 px-3 py-2 rounded-lg hover:bg-red-50"
+                            >
+                              Excluir
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </>

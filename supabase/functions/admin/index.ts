@@ -161,6 +161,39 @@ Deno.serve(async (req) => {
         });
       }
 
+      case "list_tags": {
+        const { data: tags } = await supabase
+          .from("site_tags")
+          .select("*")
+          .order("created_at", { ascending: true });
+        return new Response(JSON.stringify({ tags }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "upsert_tag": {
+        const { data: result, error } = await supabase
+          .from("site_tags")
+          .upsert({ ...data, updated_at: new Date().toISOString() })
+          .select()
+          .single();
+        if (error) throw error;
+        return new Response(JSON.stringify({ tag: result }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "delete_tag": {
+        const { error } = await supabase
+          .from("site_tags")
+          .delete()
+          .eq("id", data.id);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400,

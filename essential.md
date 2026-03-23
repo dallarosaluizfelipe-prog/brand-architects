@@ -24,6 +24,12 @@ This document captures details of components, pages, functions, and any code add
 - On render it updates `document.title`, creates/updates `<meta>` tags for description, keywords and Open Graph properties, and maintains a canonical `<link>`.
 - Designed to be included early in page components; ensures mobile‑first, keyword‑rich metadata.
 
+### `TrackingScripts.tsx`
+- Component that fetches active tags from `site_tags` table (public read) and injects corresponding tracking scripts into `document.head`.
+- Supports: GA4 (`gtag.js`), GTM (`gtm.js` + noscript iframe), Facebook Pixel (`fbevents.js` + noscript img), Google Ads (reuses gtag if loaded).
+- Cleanup on unmount removes all injected script/noscript elements.
+- Mounted once in `App.tsx` inside `BrowserRouter`, runs on all pages.
+
 ## Pages
 
 ### `App.tsx`
@@ -82,15 +88,16 @@ This document captures details of components, pages, functions, and any code add
 ### `AdminPanel.tsx`
 - Admin dashboard with tabs: Cases and Mídia.
 - **Cases tab:** List, create, edit, delete cases (title, category, description, cover_url, order, featured, visible).
-- **Mídia tab:** Upload images/videos to storage bucket `media`, list files, copy public URL, delete.
-- All CRUD operations go through edge function `admin` with PIN authentication.
+- **Mídia tab:** Upload images/videos to storage bucket `media`, list files, copy public URL, delete.- **Hero tab:** Manage desktop/mobile hero video URLs and poster image.
+- **Propostas tab:** CRUD for commercial proposals with slug auto-generation, footer links, and public toggle.
+- **Tags tab:** CRUD for tracking tags (GA4, Facebook Pixel, GTM, Google Ads). Toggle active/inactive per tag. Active tags are injected on the public site via `TrackingScripts` component.- All CRUD operations go through edge function `admin` with PIN authentication.
 
 ## Edge Functions
 
 ### `admin` (supabase/functions/admin/index.ts)
 - Serverless function for admin operations.
 - Uses service role key to bypass RLS for write operations.
-- Actions: `verify` (PIN check), `list_cases`, `upsert_case`, `delete_case`, `list_content`, `upsert_content`, `change_pin`.
+- Actions: `verify` (PIN check), `list_cases`, `upsert_case`, `delete_case`, `list_content`, `upsert_content`, `change_pin`, `list_proposals`, `upsert_proposal`, `delete_proposal`, `list_tags`, `upsert_tag`, `delete_tag`.
 - PIN stored as MD5 hash in `admin_settings` table. Default PIN: `1234`.
 
 ## Database Tables
@@ -106,6 +113,10 @@ This document captures details of components, pages, functions, and any code add
 
 ### `site_content`
 - Editable site sections identified by `section_key` (unique). Fields: title, subtitle, body, image_url, video_url. RLS: public read only.
+
+### `site_tags`
+- Tracking tags managed from admin. Fields: `tag_type` (ga4, gtm, facebook_pixel, google_ads, custom), `tag_id`, `label`, `is_active`. RLS: public read only.
+- Migration: `supabase/migrations/20260323120000_create_site_tags.sql`. Seed: GA4 `G-Y63NLTDN61` ativo.
 
 ## Storage
 

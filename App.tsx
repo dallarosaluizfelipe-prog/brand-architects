@@ -10,6 +10,7 @@ import About from "./pages/About";
 import Admin from "./pages/Admin";
 import CaseDetails from "./pages/CaseDetails";
 import ProposalDetails from "./pages/ProposalDetails";
+import TrackingScripts from "./components/TrackingScripts";
 
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white">
@@ -98,6 +99,7 @@ const AppRoutes: React.FC = () => {
 
 const App: React.FC = () => (
   <BrowserRouter>
+    <TrackingScripts />
     <AppRoutes />
   </BrowserRouter>
 );

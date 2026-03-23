@@ -127,3 +127,14 @@ This file records a chronological history of changes, requests, and reasoning fo
     - `package.json` — Dependências adicionadas: `html2canvas-pro`, `jspdf`.
   - **Segurança:** Propostas não indexadas (meta robots noindex), não incluídas no sitemap, acessíveis apenas via link direto. RLS bloqueia propostas com `is_public = false`.
   - **Build:** Validado com sucesso (`npm run build`). PDF e jspdf code-split em chunks separados (carregam sob demanda).
+
+- **2026-03-23 12:00 — Gerenciador de Tags de Rastreamento no Admin:**
+  - **Motivacao:** Permitir ao admin gerenciar tags de rastreamento (GA4, Facebook Pixel, GTM, Google Ads) diretamente pelo painel, com toggle on/off, sem editar codigo.
+  - **Arquivos criados:**
+    - `supabase/migrations/20260323120000_create_site_tags.sql` — Tabela `site_tags` com campos `tag_type`, `tag_id`, `label`, `is_active`. RLS leitura publica. Seed com GA4 `G-Y63NLTDN61` ativo.
+    - `components/TrackingScripts.tsx` — Componente React que busca tags ativas da tabela `site_tags` e injeta scripts correspondentes no `<head>` (GA4, GTM, Facebook Pixel, Google Ads). Cleanup no unmount.
+  - **Arquivos modificados:**
+    - `supabase/functions/admin/index.ts` — 3 novas actions: `list_tags`, `upsert_tag`, `delete_tag`.
+    - `pages/AdminPanel.tsx` — Nova aba "Tags" com CRUD completo (tipo, ID, label, toggle ativo/inativo). Seguindo padrao de UI das demais abas.
+    - `App.tsx` — `<TrackingScripts />` montado dentro do `BrowserRouter` para injecao em todas as paginas.
+    - `src/integrations/supabase/types.ts` — Adicionada tipagem da tabela `site_tags`.
