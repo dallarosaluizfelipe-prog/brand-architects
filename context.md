@@ -158,3 +158,17 @@ This file records a chronological history of changes, requests, and reasoning fo
     - `components/Seo.tsx` — SEO defaults carregados da tabela `site_content` (titulo, descricao, keywords padrao).
   - **Banco de dados:** Nenhuma alteracao de schema — usa tabela `site_content` existente (campo `body` para armazenar texto/HTML). Edge function `list_content`/`upsert_content` ja existiam.
   - **Build:** Validado com sucesso (`npm run build`).
+
+- **2026-03-24 14:00 — Dashboard Analytics no Admin:**
+  - **Motivacao:** Solicitacao do usuario para ter dashboards na tela inicial do admin com: visitas por periodo com seletor, cliques no WhatsApp, visitas por pagina (mais visitadas), coleta e armazenamento de formularios, e visitas por regiao.
+  - **Arquivos criados:**
+    - `supabase/migrations/20260324140000_create_analytics_tables.sql` — 3 novas tabelas: `site_page_views` (visualizacoes de pagina com geo), `site_events` (eventos como cliques WhatsApp), `site_form_submissions` (formularios de contato). RLS: insert publico (anon), sem select publico (admin le via service role). Indices para queries de dashboard.
+    - `api/track.js` — Funcao serverless Vercel para receber tracking. Aceita POST com tipos `pageview`, `event`, `form_submission`. Captura geolocalizacao via headers Vercel (`x-vercel-ip-country/region/city`). Input sanitizado e truncado.
+    - `src/hooks/useAnalytics.ts` — Hook e funcoes utilitarias: `useAnalytics()` (auto-track pageviews por rota + interceptor global de cliques WhatsApp), `trackPageView()`, `trackEvent()`, `trackFormSubmission()`. Usa `navigator.sendBeacon` para envio nao-bloqueante. Session ID via `sessionStorage`.
+  - **Arquivos modificados:**
+    - `App.tsx` — Importado e ativado `useAnalytics()` no `AppRoutes` para tracking automatico de todas as rotas e cliques WhatsApp.
+    - `components/ContactSection.tsx` — Formulario agora funcional: state management com `useState`, `onSubmit` que chama `trackFormSubmission()`. Estado de envio e mensagem de sucesso. Campos: nome, email, telefone, empresa, desafio, mensagem.
+    - `supabase/functions/admin/index.ts` — 2 novas actions: `analytics_summary` (contadores agregados com filtro de periodo: visitas, cliques WhatsApp, formularios, top paginas, top regioes, views diarias) e `list_form_submissions` (lista ultimos 50 envios).
+    - `pages/AdminPanel.tsx` — Nova aba "Dashboard" como aba padrao ao abrir. Seletor de periodo (7/30/90 dias). Cards KPI (visitas, cliques WhatsApp, formularios). Grafico de barras de visitas por dia. Listas de paginas mais visitadas e regioes com barras de progresso. Tabela de formularios recebidos com nome, email, empresa, desafio, data.
+    - `src/integrations/supabase/types.ts` — Tipagens adicionadas para `site_page_views`, `site_events`, `site_form_submissions`.
+  - **Build:** Validado com sucesso (`npm run build`).

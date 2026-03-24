@@ -194,6 +194,99 @@ Deno.serve(async (req) => {
         });
       }
 
+      case "analytics_summary": {
+        const days = data?.days || 30;
+        const since = new Date(Date.now() - days * 86400000).toISOString();
+
+        // Total page views
+        const { data: pvRows, error: pvErr } = await supabase
+          .from("site_page_views")
+          .select("id", { count: "exact", head: true })
+          .gte("created_at", since);
+        if (pvErr) throw pvErr;
+        const totalPageViews = pvRows;
+
+        // Page views by page
+        const { data: pvByPage } = await supabase
+          .from("site_page_views")
+          .select("page_path, created_at")
+          .gte("created_at", since);
+
+        const pageViewCounts: Record<string, number> = {};
+        for (const row of pvByPage || []) {
+          pageViewCounts[row.page_path] = (pageViewCounts[row.page_path] || 0) + 1;
+        }
+        const topPages = Object.entries(pageViewCounts)
+          .map(([page, count]) => ({ page, count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 20);
+
+        // Views by region
+        const regionCounts: Record<string, number> = {};
+        for (const row of pvByPage || []) {
+          // we need country/region, fetch separately
+        }
+        const { data: pvGeo } = await supabase
+          .from("site_page_views")
+          .select("country, region, city")
+          .gte("created_at", since);
+
+        const geoCounts: Record<string, number> = {};
+        for (const row of pvGeo || []) {
+          const key = [row.country, row.region, row.city].filter(Boolean).join(" / ") || "Desconhecido";
+          geoCounts[key] = (geoCounts[key] || 0) + 1;
+        }
+        const topRegions = Object.entries(geoCounts)
+          .map(([region, count]) => ({ region, count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 20);
+
+        // WhatsApp clicks
+        const { count: whatsappClicks } = await supabase
+          .from("site_events")
+          .select("id", { count: "exact", head: true })
+          .eq("event_type", "whatsapp_click")
+          .gte("created_at", since);
+
+        // Form submissions count
+        const { count: formCount } = await supabase
+          .from("site_form_submissions")
+          .select("id", { count: "exact", head: true })
+          .gte("created_at", since);
+
+        // Daily views for chart (last N days)
+        const dailyViews: Record<string, number> = {};
+        for (const row of pvByPage || []) {
+          const day = row.created_at.slice(0, 10);
+          dailyViews[day] = (dailyViews[day] || 0) + 1;
+        }
+
+        return new Response(JSON.stringify({
+          total_page_views: pvErr ? 0 : (pvByPage || []).length,
+          whatsapp_clicks: whatsappClicks || 0,
+          form_submissions: formCount || 0,
+          top_pages: topPages,
+          top_regions: topRegions,
+          daily_views: dailyViews,
+          period_days: days,
+        }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "list_form_submissions": {
+        const limit = data?.limit || 50;
+        const { data: submissions, error } = await supabase
+          .from("site_form_submissions")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(limit);
+        if (error) throw error;
+        return new Response(JSON.stringify({ submissions }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400,

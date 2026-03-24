@@ -11,6 +11,7 @@ import Admin from "./pages/Admin";
 import CaseDetails from "./pages/CaseDetails";
 import ProposalDetails from "./pages/ProposalDetails";
 import TrackingScripts from "./components/TrackingScripts";
+import { useAnalytics } from "./src/hooks/useAnalytics";
 
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white">
@@ -21,6 +22,8 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 );
 
 const AppRoutes: React.FC = () => {
+  useAnalytics();
+
   useEffect(() => {
     if (window.location.hash === "#admin" && window.location.pathname === "/") {
       window.history.replaceState(null, "", "/admin");

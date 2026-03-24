@@ -14,6 +14,7 @@ This document captures details of components, pages, functions, and any code add
 - Reusable contact form section present on many pages.
 - Contains title (editable via admin `cta_section_title`), social icon placeholders, and a stylized form with inputs.
 - Uses `useSiteTexts` hook for dynamic title content.
+- Form is fully functional: state management, onSubmit calls `trackFormSubmission()` from `useAnalytics`. Shows success feedback after submission.
 
 ### `Footer.tsx`
 - Site footer with contact information, social links, legal links, and copyright.
@@ -96,7 +97,8 @@ This document captures details of components, pages, functions, and any code add
 - Shows 4-dot indicator for PIN entry progress.
 
 ### `AdminPanel.tsx`
-- Admin dashboard with tabs: Cases, Midia, Hero, Propostas, Tags, Textos.
+- Admin dashboard with tabs: Dashboard, Cases, Midia, Hero, Propostas, Tags, Textos.
+- **Dashboard tab (default):** Period selector (7/30/90 days). KPI cards (total page views, WhatsApp clicks, form submissions). Daily views bar chart. Top pages list with progress bars. Top regions list. Form submissions table with name, email, company, challenge, date.
 - **Cases tab:** List, create, edit, delete cases (title, category, description, cover_url, order, featured, visible).
 - **Midia tab:** Upload images/videos to storage bucket `media`, list files, copy public URL, delete.
 - **Hero tab:** Manage desktop/mobile hero video URLs and poster image.
@@ -110,13 +112,27 @@ This document captures details of components, pages, functions, and any code add
 ### `admin` (supabase/functions/admin/index.ts)
 - Serverless function for admin operations.
 - Uses service role key to bypass RLS for write operations.
-- Actions: `verify` (PIN check), `list_cases`, `upsert_case`, `delete_case`, `list_content`, `upsert_content`, `change_pin`, `list_proposals`, `upsert_proposal`, `delete_proposal`, `list_tags`, `upsert_tag`, `delete_tag`.
-- PIN stored as MD5 hash in `admin_settings` table. Default PIN: `1234`.
+- Actions: `verify` (PIN check), `list_cases`, `upsert_case`, `delete_case`, `list_content`, `upsert_content`, `change_pin`, `list_proposals`, `upsert_proposal`, `delete_proposal`, `list_tags`, `upsert_tag`, `delete_tag`, `analytics_summary`, `list_form_submissions`.
+- `analytics_summary`: Returns aggregated analytics (total views, WhatsApp clicks, form count, top pages, top regions, daily views) filtered by period in days.
+- `list_form_submissions`: Returns latest 50 form submissions ordered by date.
+- PIN stored as SHA-256 hash in `admin_settings` table. Default PIN: `1234`.
 
 ## Database Tables
 
 ### `admin_settings`
 - Stores admin PIN hash. Single row. RLS: public read only.
+
+### `site_page_views`
+- Stores page view events with path, session_id, referrer, user_agent, country, region, city. RLS: anon insert only, no public select. Indexes on created_at and page_path.
+- Migration: `supabase/migrations/20260324140000_create_analytics_tables.sql`.
+
+### `site_events`
+- Stores tracked events (e.g. `whatsapp_click`) with event_type, page_path, metadata (jsonb), session_id. RLS: anon insert only.
+- Migration: same as above.
+
+### `site_form_submissions`
+- Stores contact form submissions with name, email, phone, company, challenge, message, page_path. RLS: anon insert only.
+- Migration: same as above.
 
 ### `site_cases`
 - Portfolio cases with title, category, description, cover_url, display_order, is_featured, is_visible. RLS: public read only.
@@ -138,6 +154,15 @@ This document captures details of components, pages, functions, and any code add
 - Returns `body` field values mapped by key, falling back to provided defaults if DB value is missing.
 - In-memory cache (`Map`) avoids repeated queries across component re-renders.
 - Used by all public pages (Home, About, Methodology, Portfolio, Contact) and shared components (Footer, ContactSection, Seo).
+
+### `src/hooks/useAnalytics.ts` (new)
+- `useAnalytics()`: Hook that auto-tracks page views on route change and intercepts WhatsApp link clicks globally via `document.addEventListener`.
+- `trackPageView(path)`: Sends pageview event to `/api/track`.
+- `trackEvent(type, metadata)`: Sends custom event to `/api/track`.
+- `trackFormSubmission(data)`: Sends form submission to `/api/track`.
+- Uses `navigator.sendBeacon` for non-blocking async delivery. Falls back to `fetch` with `keepalive`.
+- Session ID stored in `sessionStorage` for grouping events per visit.
+- Skips tracking on `/admin` routes.
 
 ### `site_tags`
 - Tracking tags managed from admin. Fields: `tag_type` (ga4, gtm, facebook_pixel, google_ads, custom), `tag_id`, `label`, `is_active`. RLS: public read only.
@@ -173,6 +198,12 @@ This document captures details of components, pages, functions, and any code add
 - Variáveis de ambiente usadas: `SITE_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`.
 - Cache via header `s-maxage=3600, stale-while-revalidate=86400`.
 - Rotas excluídas: `/admin`, aliases de redirect legados (`/about`, `/methodology`, `/portfolio`, `/contact`).
+
+### `api/track.js` (novo — funcao serverless Vercel)
+- Recebe POST com `{ type, data }`. Tipos: `pageview`, `event`, `form_submission`.
+- Insere diretamente no Supabase (`site_page_views`, `site_events`, `site_form_submissions`).
+- Captura geolocalizacao via headers Vercel (`x-vercel-ip-country`, `x-vercel-ip-region`, `x-vercel-ip-city`).
+- Inputs sanitizados e truncados para seguranca.
 
 ### `vercel.json` (novo)
 - Arquivo de configuração da Vercel adicionado à raiz do projeto.

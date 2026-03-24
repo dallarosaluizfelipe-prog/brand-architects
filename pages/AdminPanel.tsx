@@ -48,6 +48,28 @@ const TAG_TYPES = [
   { value: 'custom', label: 'Custom', placeholder: 'ID ou codigo customizado' },
 ];
 
+interface AnalyticsSummary {
+  total_page_views: number;
+  whatsapp_clicks: number;
+  form_submissions: number;
+  top_pages: { page: string; count: number }[];
+  top_regions: { region: string; count: number }[];
+  daily_views: Record<string, number>;
+  period_days: number;
+}
+
+interface FormSubmission {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  company: string | null;
+  challenge: string | null;
+  message: string | null;
+  page_path: string | null;
+  created_at: string;
+}
+
 interface TextFieldDef {
   key: string;
   label: string;
@@ -162,7 +184,7 @@ const TEXT_SECTIONS: TextSection[] = [
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos'>('cases');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos'>('dashboard');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -185,6 +207,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [textsLoading, setTextsLoading] = useState(false);
   const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
+
+  // Dashboard state
+  const [dashPeriod, setDashPeriod] = useState(30);
+  const [dashData, setDashData] = useState<AnalyticsSummary | null>(null);
+  const [dashLoading, setDashLoading] = useState(false);
+  const [dashSubmissions, setDashSubmissions] = useState<FormSubmission[]>([]);
+  const [dashSubsLoading, setDashSubsLoading] = useState(false);
 
   const apiCall = async (action: string, data?: any) => {
     const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin`, {
@@ -466,6 +495,26 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     });
   };
 
+  const loadDashboard = async (days?: number) => {
+    const d = days ?? dashPeriod;
+    setDashLoading(true);
+    const result = await apiCall('analytics_summary', { days: d });
+    setDashData(result);
+    setDashLoading(false);
+  };
+
+  const loadFormSubmissions = async () => {
+    setDashSubsLoading(true);
+    const result = await apiCall('list_form_submissions', { limit: 50 });
+    setDashSubmissions(result.submissions || []);
+    setDashSubsLoading(false);
+  };
+
+  const handlePeriodChange = (days: number) => {
+    setDashPeriod(days);
+    loadDashboard(days);
+  };
+
   useEffect(() => {
     loadCases();
     loadMedia();
@@ -473,6 +522,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     loadProposals();
     loadTags();
     loadTexts();
+    loadDashboard();
+    loadFormSubmissions();
   }, []);
 
   const showMessage = (msg: string) => {
@@ -567,7 +618,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
+        {(['dashboard', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -575,12 +626,180 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
           </button>
         ))}
       </div>
 
       <div className="px-6 pb-20 max-w-5xl mx-auto">
+        {tab === 'dashboard' && (
+          <div>
+            {/* Period Selector */}
+            <div className="flex items-center gap-3 mb-6 flex-wrap">
+              <span className="text-sm font-sans text-neutral-500">Periodo:</span>
+              {[7, 30, 90].map((d) => (
+                <button
+                  key={d}
+                  onClick={() => handlePeriodChange(d)}
+                  className={`px-4 py-2 rounded-full text-sm font-sans font-medium transition-all ${
+                    dashPeriod === d ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                  }`}
+                >
+                  {d} dias
+                </button>
+              ))}
+              <button
+                onClick={() => { loadDashboard(); loadFormSubmissions(); }}
+                disabled={dashLoading}
+                className="ml-auto text-xs font-sans text-neutral-500 hover:text-black px-4 py-2 rounded-lg hover:bg-neutral-50 transition-colors"
+              >
+                {dashLoading ? 'Atualizando...' : 'Atualizar'}
+              </button>
+            </div>
+
+            {dashLoading && !dashData ? (
+              <p className="text-neutral-400 font-sans text-sm">Carregando dashboard...</p>
+            ) : dashData ? (
+              <>
+                {/* KPI Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Visitas</p>
+                    <p className="text-4xl font-display">{dashData.total_page_views.toLocaleString('pt-BR')}</p>
+                    <p className="text-xs text-neutral-400 font-sans mt-1">ultimos {dashData.period_days} dias</p>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Cliques WhatsApp</p>
+                    <p className="text-4xl font-display">{dashData.whatsapp_clicks.toLocaleString('pt-BR')}</p>
+                    <p className="text-xs text-neutral-400 font-sans mt-1">ultimos {dashData.period_days} dias</p>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Formularios</p>
+                    <p className="text-4xl font-display">{dashData.form_submissions.toLocaleString('pt-BR')}</p>
+                    <p className="text-xs text-neutral-400 font-sans mt-1">ultimos {dashData.period_days} dias</p>
+                  </div>
+                </div>
+
+                {/* Daily Views Mini-Chart */}
+                {Object.keys(dashData.daily_views).length > 0 && (
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200 mb-8">
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Visitas por Dia</h3>
+                    <div className="flex items-end gap-[2px] h-32">
+                      {(() => {
+                        const entries = Object.entries(dashData.daily_views).sort(([a], [b]) => a.localeCompare(b));
+                        const maxVal = Math.max(...entries.map(([, v]) => v), 1);
+                        return entries.map(([day, count]) => (
+                          <div
+                            key={day}
+                            className="flex-1 bg-black rounded-t-sm hover:bg-neutral-700 transition-colors group relative min-w-[3px]"
+                            style={{ height: `${Math.max((count / maxVal) * 100, 2)}%` }}
+                            title={`${day}: ${count} visita(s)`}
+                          >
+                            <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-black text-white text-[9px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap font-sans">
+                              {day.slice(5)}: {count}
+                            </div>
+                          </div>
+                        ));
+                      })()}
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  {/* Top Pages */}
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Paginas Mais Visitadas</h3>
+                    {dashData.top_pages.length === 0 ? (
+                      <p className="text-neutral-400 font-sans text-sm">Sem dados ainda.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {dashData.top_pages.map((p, i) => {
+                          const maxCount = dashData.top_pages[0]?.count || 1;
+                          return (
+                            <div key={i}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-sm font-sans truncate max-w-[70%]">{p.page}</span>
+                                <span className="text-sm font-sans font-medium text-neutral-600">{p.count}</span>
+                              </div>
+                              <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-black rounded-full transition-all" style={{ width: `${(p.count / maxCount) * 100}%` }} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Top Regions */}
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Visitas por Regiao</h3>
+                    {dashData.top_regions.length === 0 ? (
+                      <p className="text-neutral-400 font-sans text-sm">Sem dados ainda.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {dashData.top_regions.map((r, i) => {
+                          const maxCount = dashData.top_regions[0]?.count || 1;
+                          return (
+                            <div key={i}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-sm font-sans truncate max-w-[70%]">{r.region}</span>
+                                <span className="text-sm font-sans font-medium text-neutral-600">{r.count}</span>
+                              </div>
+                              <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-black rounded-full transition-all" style={{ width: `${(r.count / maxCount) * 100}%` }} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Form Submissions */}
+                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Ultimos Formularios Recebidos</h3>
+                  {dashSubsLoading ? (
+                    <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+                  ) : dashSubmissions.length === 0 ? (
+                    <p className="text-neutral-400 font-sans text-sm">Nenhum formulario recebido ainda.</p>
+                  ) : (
+                    <div className="overflow-x-auto -mx-6">
+                      <table className="w-full text-sm font-sans min-w-[700px]">
+                        <thead>
+                          <tr className="border-b border-neutral-100">
+                            <th className="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Nome</th>
+                            <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Email</th>
+                            <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Empresa</th>
+                            <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Desafio</th>
+                            <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Data</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {dashSubmissions.map((s) => (
+                            <tr key={s.id} className="border-b border-neutral-50 hover:bg-neutral-50 transition-colors">
+                              <td className="px-6 py-3 font-medium">{s.name}</td>
+                              <td className="px-3 py-3 text-neutral-600">{s.email}</td>
+                              <td className="px-3 py-3 text-neutral-600">{s.company || '—'}</td>
+                              <td className="px-3 py-3 text-neutral-600">{s.challenge || '—'}</td>
+                              <td className="px-3 py-3 text-neutral-400 whitespace-nowrap">
+                                {new Date(s.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className="text-neutral-400 font-sans text-sm">Sem dados de analytics disponiveiss.</p>
+            )}
+          </div>
+        )}
+
         {tab === 'cases' && (
           <div>
             {editingCase ? (

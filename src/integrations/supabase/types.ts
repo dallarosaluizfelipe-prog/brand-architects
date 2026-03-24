@@ -209,6 +209,105 @@ export type Database = {
         }
         Relationships: []
       }
+      site_events: {
+        Row: {
+          id: string
+          event_type: string
+          page_path: string | null
+          metadata: Json
+          session_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          event_type: string
+          page_path?: string | null
+          metadata?: Json
+          session_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          event_type?: string
+          page_path?: string | null
+          metadata?: Json
+          session_id?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      site_form_submissions: {
+        Row: {
+          id: string
+          name: string
+          email: string
+          phone: string | null
+          company: string | null
+          challenge: string | null
+          message: string | null
+          page_path: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email: string
+          phone?: string | null
+          company?: string | null
+          challenge?: string | null
+          message?: string | null
+          page_path?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          email?: string
+          phone?: string | null
+          company?: string | null
+          challenge?: string | null
+          message?: string | null
+          page_path?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      site_page_views: {
+        Row: {
+          id: string
+          page_path: string
+          session_id: string | null
+          referrer: string | null
+          user_agent: string | null
+          country: string | null
+          region: string | null
+          city: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          page_path: string
+          session_id?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+          country?: string | null
+          region?: string | null
+          city?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          page_path?: string
+          session_id?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+          country?: string | null
+          region?: string | null
+          city?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
