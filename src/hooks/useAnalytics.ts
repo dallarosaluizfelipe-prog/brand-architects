@@ -1,5 +1,6 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 function getSessionId(): string {
   const KEY = 'dalla_sid';
@@ -11,42 +12,33 @@ function getSessionId(): string {
   return sid;
 }
 
-async function sendTrack(type: string, data: Record<string, unknown>) {
+export async function trackPageView(path: string) {
   try {
-    const payload = { type, data: { ...data, session_id: getSessionId() } };
-    const body = JSON.stringify(payload);
-    if (navigator.sendBeacon) {
-      const blob = new Blob([body], { type: 'application/json' });
-      navigator.sendBeacon('/api/track', blob);
-    } else {
-      fetch('/api/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body,
-        keepalive: true,
-      });
-    }
+    await supabase.from('site_page_views').insert({
+      page_path: path.slice(0, 500),
+      session_id: getSessionId(),
+      referrer: document.referrer ? document.referrer.slice(0, 1000) : null,
+      user_agent: navigator.userAgent ? navigator.userAgent.slice(0, 500) : null,
+    });
   } catch {
-    // silent fail — analytics should never break the site
+    // silent fail
   }
 }
 
-export function trackPageView(path: string) {
-  sendTrack('pageview', {
-    page_path: path,
-    referrer: document.referrer || null,
-  });
+export async function trackEvent(eventType: string, metadata?: Record<string, unknown>) {
+  try {
+    await supabase.from('site_events').insert({
+      event_type: eventType.slice(0, 100),
+      page_path: window.location.pathname.slice(0, 500),
+      metadata: metadata || {},
+      session_id: getSessionId(),
+    });
+  } catch {
+    // silent fail
+  }
 }
 
-export function trackEvent(eventType: string, metadata?: Record<string, unknown>) {
-  sendTrack('event', {
-    event_type: eventType,
-    page_path: window.location.pathname,
-    metadata: metadata || {},
-  });
-}
-
-export function trackFormSubmission(data: {
+export async function trackFormSubmission(data: {
   name: string;
   email: string;
   phone?: string;
@@ -54,31 +46,33 @@ export function trackFormSubmission(data: {
   challenge?: string;
   message?: string;
 }) {
-  sendTrack('form_submission', {
-    ...data,
-    page_path: window.location.pathname,
-  });
+  try {
+    await supabase.from('site_form_submissions').insert({
+      name: (data.name || '').slice(0, 200),
+      email: (data.email || '').slice(0, 200),
+      phone: data.phone ? data.phone.slice(0, 50) : null,
+      company: data.company ? data.company.slice(0, 200) : null,
+      challenge: data.challenge ? data.challenge.slice(0, 200) : null,
+      message: data.message ? data.message.slice(0, 2000) : null,
+      page_path: window.location.pathname.slice(0, 500),
+    });
+  } catch {
+    // silent fail
+  }
 }
 
-/**
- * Hook that auto-tracks page views on route change
- * and intercepts WhatsApp link clicks globally.
- */
 export function useAnalytics() {
   const location = useLocation();
   const lastTracked = useRef('');
 
-  // Track page views on route change
   useEffect(() => {
     const path = location.pathname;
     if (path === lastTracked.current) return;
-    // Skip admin
     if (path.startsWith('/admin')) return;
     lastTracked.current = path;
     trackPageView(path);
   }, [location.pathname]);
 
-  // Global WhatsApp click interceptor
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest('a');
