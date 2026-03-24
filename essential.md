@@ -27,6 +27,7 @@ This document captures details of components, pages, functions, and any code add
 - On render it updates `document.title`, creates/updates `<meta>` tags for description, keywords and Open Graph properties, and maintains a canonical `<link>`.
 - Designed to be included early in page components; ensures mobile‑first, keyword‑rich metadata.
 - Now loads SEO defaults dynamically from `site_content` table (keys: `seo_default_title`, `seo_default_description`, `seo_default_keywords`). Falls back to hardcoded defaults.
+- Updated to enforce absolute URLs for share metadata (`https://estudiodalla.com`) and always manage robust social tags: `og:url`, `og:site_name`, `og:image` (with fallback), `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`.
 
 ### `RichTextEditor.tsx` (new)
 - Reusable rich text editor component based on TipTap.
@@ -181,6 +182,32 @@ This document captures details of components, pages, functions, and any code add
 - Added media asset: `public/lovable-uploads/kuma-cover.gif`.
 
 *End of documentation.*
+
+## 2026-03-24 Favicon Tematico e OG Share
+
+### `index.html` (atualizado)
+- Adicionados favicons por tema do dispositivo com `prefers-color-scheme`:
+  - `DALLA_Favicon_ligth.svg.svg` (light)
+  - `DALLA_Favicon_dark.svg.svg` (dark)
+- Adicionados `apple-touch-icon` por tema e fallback light.
+- Adicionadas metas `theme-color` para claro/escuro.
+- Link de manifest com id (`site-manifest`) para troca conforme tema detectado.
+- Script inline no head escolhe `manifest-light.webmanifest` ou `manifest-dark.webmanifest` no load e escuta mudanca de tema do SO.
+- Open Graph/Twitter estaticos reforcados no HTML base para crawlers sem JS:
+  - `og:url`, `og:site_name`, `og:image`, `og:image:width`, `og:image:height`
+  - `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`
+
+### Manifests (novos)
+- `public/manifest-light.webmanifest`
+  - `background_color` e `theme_color` claros.
+  - icones light 192x192 e 512x512.
+- `public/manifest-dark.webmanifest`
+  - `background_color` e `theme_color` escuros.
+  - icones dark 192x192 e 512x512.
+
+### Impacto esperado
+- Favicon e app icon mais coerentes com tema claro/escuro do dispositivo.
+- Melhor consistencia de preview em compartilhamentos (WhatsApp, LinkedIn, etc.) por incluir fallback OG no HTML inicial.
 
 ## 2026-03-20 Sitemap Dinâmico e Robots.txt Aprimorado
 

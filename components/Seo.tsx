@@ -10,6 +10,18 @@ interface SeoProps {
   robots?: string;
 }
 
+const SITE_URL = 'https://estudiodalla.com';
+const DEFAULT_OG_IMAGE = '/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png';
+
+function toAbsoluteUrl(value?: string): string | undefined {
+  if (!value) return undefined;
+  try {
+    return new URL(value, SITE_URL).toString();
+  } catch {
+    return undefined;
+  }
+}
+
 let seoDefaults: { title: string; description: string; keywords: string } | null = null;
 let seoLoading: Promise<void> | null = null;
 
@@ -88,15 +100,25 @@ export const Seo: React.FC<SeoProps> = ({
     if (robots) {
       upsertMeta({ name: 'robots', content: robots });
     }
+
+    const canonical = toAbsoluteUrl(url) || window.location.href;
+    const ogImage = toAbsoluteUrl(image) || toAbsoluteUrl(DEFAULT_OG_IMAGE);
+
     upsertMeta({ name: 'description', content: description || dDescription });
     upsertMeta({ name: 'keywords', content: keywords || dKeywords });
     upsertMeta({ property: 'og:title', content: title || dTitle });
     upsertMeta({ property: 'og:description', content: description || dDescription });
     upsertMeta({ property: 'og:type', content: 'website' });
-    if (image) {
-      upsertMeta({ property: 'og:image', content: image });
+    upsertMeta({ property: 'og:url', content: canonical });
+    upsertMeta({ property: 'og:site_name', content: 'Studio Dalla' });
+    upsertMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    upsertMeta({ name: 'twitter:title', content: title || dTitle });
+    upsertMeta({ name: 'twitter:description', content: description || dDescription });
+    if (ogImage) {
+      upsertMeta({ property: 'og:image', content: ogImage });
+      upsertMeta({ name: 'twitter:image', content: ogImage });
     }
-    const canonical = url || window.location.href;
+
     let link: HTMLLinkElement | null = document.querySelector('link[rel="canonical"]');
     if (!link) {
       link = document.createElement('link');

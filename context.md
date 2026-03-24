@@ -180,3 +180,13 @@ This file records a chronological history of changes, requests, and reasoning fo
     - `supabase/functions/admin/index.ts` — `analytics_summary` aceita `{from, to}` para periodo personalizado alem de `{days}`. Retorna `period_label` (string descritiva) em vez de `period_days` (number). Helper `addRange()` centraliza filtros de data.
     - `pages/AdminPanel.tsx` — Padrao mudado de 30 para 7 dias. Seletor de periodo agora inclui inputs de data personalizado (de/ate) + botao Filtrar. Grafico de visitas diarias agora e SVG area chart com pontos, linhas e grid (em vez de div bars). Top paginas e regioes agora sao SVG horizontal bar charts com opacidade graduada. Todas as referencias `period_days` substituidas por `period_label`. Typo "disponiveiss" corrigido.
   - **Build:** Validado com sucesso.
+
+- **2026-03-24 17:20 — Favicon por tema do dispositivo + Open Graph de compartilhamento:**
+  - **Motivacao:** Ajustar favicon para claro/escuro conforme tema do dispositivo e garantir preview consistente ao compartilhar links do site.
+  - **Arquivos modificados:**
+    - `index.html` — Adicionados favicons light/dark com `prefers-color-scheme`, fallback light, `apple-touch-icon` por tema, `theme-color` por tema e link de manifest com script para selecionar `manifest-light.webmanifest` ou `manifest-dark.webmanifest` conforme o SO.
+    - `components/Seo.tsx` — Reforco de metatags OG/Twitter (`og:url`, `og:site_name`, `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`), absolutizacao de URLs para `https://estudiodalla.com` e fallback de imagem OG padrao do site.
+  - **Arquivos criados:**
+    - `public/manifest-light.webmanifest` — Manifest com icones e cores do tema claro.
+    - `public/manifest-dark.webmanifest` — Manifest com icones e cores do tema escuro.
+  - **SEO/Share:** `index.html` agora tem `og:image` e `twitter:image` estaticos para melhorar leitura por crawlers que nao executam JS.
