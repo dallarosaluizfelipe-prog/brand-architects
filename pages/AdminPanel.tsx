@@ -705,17 +705,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Visitas</p>
-                    <p className="text-4xl font-display">{dashData.total_page_views.toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-display">{(dashData.total_page_views ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Cliques WhatsApp</p>
-                    <p className="text-4xl font-display">{dashData.whatsapp_clicks.toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-display">{(dashData.whatsapp_clicks ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Formularios</p>
-                    <p className="text-4xl font-display">{dashData.form_submissions.toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-display">{(dashData.form_submissions ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                 </div>

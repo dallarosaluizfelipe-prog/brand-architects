@@ -128,6 +128,105 @@ export type Database = {
         }
         Relationships: []
       }
+      site_events: {
+        Row: {
+          created_at: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          page_path: string | null
+          session_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          page_path?: string | null
+          session_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          page_path?: string | null
+          session_id?: string | null
+        }
+        Relationships: []
+      }
+      site_form_submissions: {
+        Row: {
+          challenge: string | null
+          company: string | null
+          created_at: string | null
+          email: string
+          id: string
+          message: string | null
+          name: string
+          page_path: string | null
+          phone: string | null
+        }
+        Insert: {
+          challenge?: string | null
+          company?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          page_path?: string | null
+          phone?: string | null
+        }
+        Update: {
+          challenge?: string | null
+          company?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          page_path?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      site_page_views: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string | null
+          id: string
+          page_path: string
+          referrer: string | null
+          region: string | null
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string
+          page_path: string
+          referrer?: string | null
+          region?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string
+          page_path?: string
+          referrer?: string | null
+          region?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       site_proposals: {
         Row: {
           about: string | null
@@ -206,105 +305,6 @@ export type Database = {
           tag_id?: string
           tag_type?: string
           updated_at?: string
-        }
-        Relationships: []
-      }
-      site_events: {
-        Row: {
-          id: string
-          event_type: string
-          page_path: string | null
-          metadata: Json
-          session_id: string | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          event_type: string
-          page_path?: string | null
-          metadata?: Json
-          session_id?: string | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          event_type?: string
-          page_path?: string | null
-          metadata?: Json
-          session_id?: string | null
-          created_at?: string
-        }
-        Relationships: []
-      }
-      site_form_submissions: {
-        Row: {
-          id: string
-          name: string
-          email: string
-          phone: string | null
-          company: string | null
-          challenge: string | null
-          message: string | null
-          page_path: string | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          name: string
-          email: string
-          phone?: string | null
-          company?: string | null
-          challenge?: string | null
-          message?: string | null
-          page_path?: string | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          name?: string
-          email?: string
-          phone?: string | null
-          company?: string | null
-          challenge?: string | null
-          message?: string | null
-          page_path?: string | null
-          created_at?: string
-        }
-        Relationships: []
-      }
-      site_page_views: {
-        Row: {
-          id: string
-          page_path: string
-          session_id: string | null
-          referrer: string | null
-          user_agent: string | null
-          country: string | null
-          region: string | null
-          city: string | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          page_path: string
-          session_id?: string | null
-          referrer?: string | null
-          user_agent?: string | null
-          country?: string | null
-          region?: string | null
-          city?: string | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          page_path?: string
-          session_id?: string | null
-          referrer?: string | null
-          user_agent?: string | null
-          country?: string | null
-          region?: string | null
-          city?: string | null
-          created_at?: string
         }
         Relationships: []
       }
