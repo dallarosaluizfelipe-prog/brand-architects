@@ -27,12 +27,12 @@ export async function trackPageView(path: string) {
 
 export async function trackEvent(eventType: string, metadata?: Record<string, unknown>) {
   try {
-    await supabase.from('site_events').insert({
+    await supabase.from('site_events').insert([{
       event_type: eventType.slice(0, 100),
       page_path: window.location.pathname.slice(0, 500),
-      metadata: metadata || {},
+      metadata: (metadata || {}) as any,
       session_id: getSessionId(),
-    });
+    }]);
   } catch {
     // silent fail
   }
