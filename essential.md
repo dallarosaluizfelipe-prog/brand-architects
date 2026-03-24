@@ -20,6 +20,8 @@ This document captures details of components, pages, functions, and any code add
 - Site footer with contact information, social links, legal links, and copyright.
 - Displays `dalla-logo-footer.png` from public uploads.
 - Uses `useSiteTexts` hook for dynamic contacts and copyright text.
+- Includes external attribution block "Powered by iasin." in the copyright column, linking to `https://iasin.dev.br` in a new tab.
+- Attribution entrance animation is one-time (non-loop) using utility classes (`animate-in`, `fade-in-0`, `slide-in-from-bottom-2`).
 
 ### `Seo.tsx` 📈
 - New utility component added for SEO metadata management.

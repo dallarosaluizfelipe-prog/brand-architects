@@ -2,6 +2,13 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-03-24 18:10** - Rodape com atribuicao "Powered by" para parceiro externo:
+  - **Motivacao:** Solicitação do usuário para mencionar no final do rodape um "Powered by" com marca e link para outro site.
+  - **Alteracao em `components/Footer.tsx`:** Adicionado bloco na coluna de copyright com texto "Powered by" + wordmark "iasin." clicavel para `https://iasin.dev.br`.
+  - **Comportamento:** Link externo abre em nova aba (`target="_blank"`, `rel="noreferrer"`).
+  - **Animacao:** Entrada unica com classes utilitarias (`animate-in`, `fade-in-0`, `slide-in-from-bottom-2`, `duration-700`) sem loop continuo.
+  - **Responsividade:** Mantida estrutura mobile-first existente (grid 1/2/4 colunas) sem alterar layout principal do footer.
+
 - **2026-03-03 00:00** – Initial creation by AI after reading README. Project scanned and essential.md generated. No further actions yet.
 
 - **2026-03-03** – Lovable Cloud habilitado para o projeto, fornecendo banco de dados, autenticação e Edge Functions.
