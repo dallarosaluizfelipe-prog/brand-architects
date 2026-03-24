@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { supabase } from '@/src/integrations/supabase/client';
+import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
 const FALLBACK_DESKTOP = '/lovable-uploads/abertura-site.mp4';
 const FALLBACK_MOBILE = '/lovable-uploads/abertura-site-mobile.mp4';
@@ -13,6 +14,16 @@ const Home: React.FC = () => {
   const [heroMobile, setHeroMobile] = useState(FALLBACK_MOBILE);
   const [heroPoster, setHeroPoster] = useState(FALLBACK_POSTER);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const t = useSiteTexts({
+    home_hero_badge: 'branding e posicionamento',
+    home_hero_title: 'Marcas de alto valor com estrategia que vira percepcao.',
+    home_hero_subtitle: 'O Studio Dalla une direcao estrategica e identidade visual para empresas que precisam de autoridade imediata.',
+    home_cases_title: 'Conheca Nossos Cases',
+    home_cases_subtitle: 'Marcas que carregam estrategia na essencia, e validaram o nosso metodo.',
+    home_partners_title: 'Nossos Parceiros',
+    home_partners_subtitle: 'Parceiros estrategicos que colocam a marca em acao por meio do design.',
+  });
 
   useEffect(() => {
     supabase
@@ -56,14 +67,12 @@ const Home: React.FC = () => {
 
         <section className="py-14 md:py-24 px-6 max-w-4xl mx-auto">
           <span className="inline-block rounded-full border border-neutral-300 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-neutral-500 font-sans mb-6">
-            branding e posicionamento
+            {t.home_hero_badge}
           </span>
           <h1 className="text-[clamp(2.2rem,10vw,5.5rem)] leading-[0.9] tracking-tight mb-5">
-            Marcas de alto valor com estrategia que vira percepcao.
+            {t.home_hero_title}
           </h1>
-          <p className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8">
-            O Studio Dalla une direcao estrategica e identidade visual para empresas que precisam de autoridade imediata.
-          </p>
+          <div className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8" dangerouslySetInnerHTML={{ __html: t.home_hero_subtitle }} />
           <div className="flex flex-wrap gap-3">
             <Link to="/cases" className="bg-black text-white px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95">
               Ver cases
@@ -77,10 +86,8 @@ const Home: React.FC = () => {
         <section className="py-14 md:py-16 px-6 bg-[#efeff0]" id="work">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-4xl sm:text-5xl md:text-8xl mb-6 md:mb-8 tracking-tighter">Conheca Nossos Cases</h2>
-              <p className="text-base md:text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed">
-                Marcas que carregam estrategia na essencia, e validaram o nosso metodo.
-              </p>
+              <h2 className="text-4xl sm:text-5xl md:text-8xl mb-6 md:mb-8 tracking-tighter">{t.home_cases_title}</h2>
+              <div className="text-base md:text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: t.home_cases_subtitle }} />
             </div>
 
             <div className="grid md:grid-cols-2 gap-10 md:gap-12">
@@ -148,8 +155,8 @@ const Home: React.FC = () => {
         <section className="py-20 md:py-40 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8 md:gap-10">
-              <h2 className="text-4xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">Nossos Parceiros</h2>
-              <p className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg">Parceiros estrategicos que colocam a marca em acao por meio do design.</p>
+              <h2 className="text-4xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">{t.home_partners_title}</h2>
+              <div className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg" dangerouslySetInnerHTML={{ __html: t.home_partners_subtitle }} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">
               <div className="flex justify-center"><img src="/lovable-uploads/partner-1.png" alt="Parceiro 1" loading="lazy" className="h-16 md:h-32 object-contain" /></div>

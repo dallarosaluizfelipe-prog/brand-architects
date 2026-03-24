@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/src/integrations/supabase/client';
 
 interface SeoProps {
   title?: string;
@@ -7,6 +8,33 @@ interface SeoProps {
   image?: string;
   url?: string;
   robots?: string;
+}
+
+let seoDefaults: { title: string; description: string; keywords: string } | null = null;
+let seoLoading: Promise<void> | null = null;
+
+function loadSeoDefaults() {
+  if (seoDefaults) return Promise.resolve();
+  if (seoLoading) return seoLoading;
+  seoLoading = supabase
+    .from('site_content')
+    .select('section_key, body')
+    .in('section_key', ['seo_default_title', 'seo_default_description', 'seo_default_keywords'])
+    .then(({ data }) => {
+      seoDefaults = {
+        title: 'Studio Dalla — High\u2011End Branding Studio',
+        description: 'Consultoria de branding e rebranding para marcas de luxo em São Paulo. Transformamos identidades visuais com método, maturidade e visão estratégica.',
+        keywords: 'branding luxo, agência branding São Paulo, rebranding marcas premium, identidade visual luxo',
+      };
+      if (data) {
+        for (const row of data) {
+          if (row.section_key === 'seo_default_title' && row.body) seoDefaults!.title = row.body;
+          if (row.section_key === 'seo_default_description' && row.body) seoDefaults!.description = row.body;
+          if (row.section_key === 'seo_default_keywords' && row.body) seoDefaults!.keywords = row.body;
+        }
+      }
+    });
+  return seoLoading;
 }
 
 const defaultTitle = 'Studio Dalla — High‑End Branding Studio';
@@ -23,8 +51,20 @@ export const Seo: React.FC<SeoProps> = ({
   url,
   robots,
 }) => {
+  const [defaults, setDefaults] = useState(seoDefaults);
+
   useEffect(() => {
-    document.title = title ? `${title} | Studio Dalla` : defaultTitle;
+    loadSeoDefaults().then(() => {
+      if (seoDefaults && seoDefaults !== defaults) setDefaults(seoDefaults);
+    });
+  }, []);
+
+  const dTitle = defaults?.title || defaultTitle;
+  const dDescription = defaults?.description || defaultDescription;
+  const dKeywords = defaults?.keywords || defaultKeywords;
+
+  useEffect(() => {
+    document.title = title ? `${title} | Studio Dalla` : dTitle;
 
     const upsertMeta = (attrs: Record<string, string>) => {
       const name = attrs.name || attrs.property;
@@ -48,10 +88,10 @@ export const Seo: React.FC<SeoProps> = ({
     if (robots) {
       upsertMeta({ name: 'robots', content: robots });
     }
-    upsertMeta({ name: 'description', content: description || defaultDescription });
-    upsertMeta({ name: 'keywords', content: keywords || defaultKeywords });
-    upsertMeta({ property: 'og:title', content: title || defaultTitle });
-    upsertMeta({ property: 'og:description', content: description || defaultDescription });
+    upsertMeta({ name: 'description', content: description || dDescription });
+    upsertMeta({ name: 'keywords', content: keywords || dKeywords });
+    upsertMeta({ property: 'og:title', content: title || dTitle });
+    upsertMeta({ property: 'og:description', content: description || dDescription });
     upsertMeta({ property: 'og:type', content: 'website' });
     if (image) {
       upsertMeta({ property: 'og:image', content: image });
@@ -64,7 +104,7 @@ export const Seo: React.FC<SeoProps> = ({
       document.head.appendChild(link);
     }
     link.setAttribute('href', canonical);
-  }, [title, description, keywords, image, url, robots]);
+  }, [title, description, keywords, image, url, robots, dTitle, dDescription, dKeywords]);
 
   return null;
 };

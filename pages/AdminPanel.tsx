@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/src/integrations/supabase/client';
 import { SiteProposal, slugify } from '../src/data/siteProposals';
+import RichTextEditor from '../src/components/RichTextEditor';
 
 interface AdminPanelProps {
   pin: string;
@@ -47,8 +48,121 @@ const TAG_TYPES = [
   { value: 'custom', label: 'Custom', placeholder: 'ID ou codigo customizado' },
 ];
 
+interface TextFieldDef {
+  key: string;
+  label: string;
+  rich?: boolean;
+}
+
+interface TextSection {
+  page: string;
+  label: string;
+  fields: TextFieldDef[];
+}
+
+const TEXT_SECTIONS: TextSection[] = [
+  {
+    page: 'home',
+    label: 'Home',
+    fields: [
+      { key: 'home_hero_badge', label: 'Badge do Hero' },
+      { key: 'home_hero_title', label: 'Titulo do Hero' },
+      { key: 'home_hero_subtitle', label: 'Subtitulo do Hero', rich: true },
+      { key: 'home_cases_title', label: 'Titulo da Secao Cases' },
+      { key: 'home_cases_subtitle', label: 'Subtitulo da Secao Cases', rich: true },
+      { key: 'home_partners_title', label: 'Titulo Parceiros' },
+      { key: 'home_partners_subtitle', label: 'Subtitulo Parceiros', rich: true },
+    ],
+  },
+  {
+    page: 'about',
+    label: 'Sobre',
+    fields: [
+      { key: 'about_header_badge', label: 'Badge do Header' },
+      { key: 'about_header_title', label: 'Titulo do Header' },
+      { key: 'about_header_subtitle', label: 'Subtitulo do Header', rich: true },
+      { key: 'about_vision_title', label: 'Titulo Visao' },
+      { key: 'about_vision_p1', label: 'Visao - Paragrafo 1', rich: true },
+      { key: 'about_vision_p2', label: 'Visao - Paragrafo 2', rich: true },
+      { key: 'about_pillars_badge', label: 'Badge dos Pilares' },
+      { key: 'about_pillars_title', label: 'Titulo dos Pilares' },
+      { key: 'about_pillar1_title', label: 'Pilar 1 - Titulo' },
+      { key: 'about_pillar1_desc', label: 'Pilar 1 - Descricao', rich: true },
+      { key: 'about_pillar2_title', label: 'Pilar 2 - Titulo' },
+      { key: 'about_pillar2_desc', label: 'Pilar 2 - Descricao', rich: true },
+      { key: 'about_pillar3_title', label: 'Pilar 3 - Titulo' },
+      { key: 'about_pillar3_desc', label: 'Pilar 3 - Descricao', rich: true },
+    ],
+  },
+  {
+    page: 'methodology',
+    label: 'Metodologia',
+    fields: [
+      { key: 'method_header_badge', label: 'Badge do Header' },
+      { key: 'method_header_title', label: 'Titulo do Header' },
+      { key: 'method_header_subtitle', label: 'Subtitulo do Header', rich: true },
+      { key: 'method_phase1_label', label: 'Fase I - Label' },
+      { key: 'method_phase1_title', label: 'Fase I - Titulo' },
+      { key: 'method_phase1_desc', label: 'Fase I - Descricao', rich: true },
+      { key: 'method_phase2_label', label: 'Fase II - Label' },
+      { key: 'method_phase2_title', label: 'Fase II - Titulo' },
+      { key: 'method_phase2_desc', label: 'Fase II - Descricao', rich: true },
+      { key: 'method_phase3_label', label: 'Fase III - Label' },
+      { key: 'method_phase3_title', label: 'Fase III - Titulo' },
+      { key: 'method_phase3_desc', label: 'Fase III - Descricao', rich: true },
+      { key: 'method_phase4_label', label: 'Fase IV - Label' },
+      { key: 'method_phase4_title', label: 'Fase IV - Titulo' },
+      { key: 'method_phase4_desc', label: 'Fase IV - Descricao', rich: true },
+      { key: 'method_phase5_label', label: 'Fase V - Label' },
+      { key: 'method_phase5_title', label: 'Fase V - Titulo' },
+      { key: 'method_phase5_desc', label: 'Fase V - Descricao', rich: true },
+    ],
+  },
+  {
+    page: 'portfolio',
+    label: 'Portfolio',
+    fields: [
+      { key: 'portfolio_header_title', label: 'Titulo do Header' },
+      { key: 'portfolio_header_subtitle', label: 'Subtitulo do Header', rich: true },
+    ],
+  },
+  {
+    page: 'contact',
+    label: 'Contato',
+    fields: [
+      { key: 'contact_header_title', label: 'Titulo do Header' },
+      { key: 'contact_info', label: 'Info de Contato (endereco/tel)', rich: true },
+      { key: 'contact_emails', label: 'Emails', rich: true },
+    ],
+  },
+  {
+    page: 'footer',
+    label: 'Footer',
+    fields: [
+      { key: 'footer_contacts', label: 'Info de Contatos', rich: true },
+      { key: 'footer_copyright', label: 'Copyright' },
+    ],
+  },
+  {
+    page: 'contact_section',
+    label: 'Secao de Contato (CTA)',
+    fields: [
+      { key: 'cta_section_title', label: 'Titulo da Secao CTA', rich: true },
+    ],
+  },
+  {
+    page: 'seo',
+    label: 'SEO Padrao',
+    fields: [
+      { key: 'seo_default_title', label: 'Titulo Padrao' },
+      { key: 'seo_default_description', label: 'Descricao Padrao' },
+      { key: 'seo_default_keywords', label: 'Keywords Padrao' },
+    ],
+  },
+];
+
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'cases' | 'media' | 'hero' | 'proposals' | 'tags'>('cases');
+  const [tab, setTab] = useState<'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos'>('cases');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -67,6 +181,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [tags, setTags] = useState<SiteTag[]>([]);
   const [editingTag, setEditingTag] = useState<SiteTag | null>(null);
   const [tagsLoading, setTagsLoading] = useState(false);
+  const [siteTexts, setSiteTexts] = useState<Record<string, string>>({});
+  const [textsLoading, setTextsLoading] = useState(false);
+  const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set());
 
   const apiCall = async (action: string, data?: any) => {
     const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin`, {
@@ -287,12 +405,74 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     is_active: true,
   });
 
+  const loadTexts = async () => {
+    setTextsLoading(true);
+    const result = await apiCall('list_content');
+    const items: any[] = result.content || [];
+    const map: Record<string, string> = {};
+    for (const item of items) {
+      if (item.section_key && item.body != null) {
+        map[item.section_key] = item.body;
+      }
+    }
+    setSiteTexts(map);
+    setTextsDirty(new Set());
+    setTextsLoading(false);
+  };
+
+  const updateTextField = (key: string, value: string) => {
+    setSiteTexts((prev) => ({ ...prev, [key]: value }));
+    setTextsDirty((prev) => new Set(prev).add(key));
+  };
+
+  const saveTextField = async (key: string) => {
+    setTextsLoading(true);
+    await apiCall('upsert_content', {
+      section_key: key,
+      title: key,
+      body: siteTexts[key] || '',
+    });
+    setTextsDirty((prev) => {
+      const next = new Set(prev);
+      next.delete(key);
+      return next;
+    });
+    showMessage('Texto salvo!');
+    setTextsLoading(false);
+  };
+
+  const saveAllTexts = async () => {
+    const dirty = Array.from(textsDirty);
+    if (dirty.length === 0) return;
+    setTextsLoading(true);
+    for (const key of dirty) {
+      await apiCall('upsert_content', {
+        section_key: key,
+        title: key,
+        body: siteTexts[key] || '',
+      });
+    }
+    setTextsDirty(new Set());
+    showMessage(`${dirty.length} texto(s) salvo(s)!`);
+    setTextsLoading(false);
+  };
+
+  const toggleSection = (page: string) => {
+    setOpenSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(page)) next.delete(page);
+      else next.add(page);
+      return next;
+    });
+  };
+
   useEffect(() => {
     loadCases();
     loadMedia();
     loadHero();
     loadProposals();
     loadTags();
+    loadTexts();
   }, []);
 
   const showMessage = (msg: string) => {
@@ -387,7 +567,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['cases', 'media', 'hero', 'proposals', 'tags'] as const).map((t) => (
+        {(['cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -395,7 +575,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : 'Tags'}
+            {t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
           </button>
         ))}
       </div>
@@ -1025,6 +1205,94 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </div>
                 )}
               </>
+            )}
+          </div>
+        )}
+
+        {tab === 'textos' && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-lg font-display">Textos do Site</h2>
+                <p className="text-sm text-neutral-500 font-sans mt-1">Edite os textos de todas as paginas. Campos com editor permitem negrito, italico e sublinhado.</p>
+              </div>
+              {textsDirty.size > 0 && (
+                <button
+                  onClick={saveAllTexts}
+                  disabled={textsLoading}
+                  className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
+                >
+                  {textsLoading ? 'Salvando...' : `Salvar Todos (${textsDirty.size})`}
+                </button>
+              )}
+            </div>
+
+            {textsLoading && Object.keys(siteTexts).length === 0 ? (
+              <p className="text-neutral-400 font-sans text-sm">Carregando textos...</p>
+            ) : (
+              <div className="space-y-4">
+                {TEXT_SECTIONS.map((section) => {
+                  const isOpen = openSections.has(section.page);
+                  const dirtyCount = section.fields.filter((f) => textsDirty.has(f.key)).length;
+                  return (
+                    <div key={section.page} className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                      <button
+                        onClick={() => toggleSection(section.page)}
+                        className="w-full px-6 py-4 flex items-center justify-between hover:bg-neutral-50 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg font-display">{section.label}</span>
+                          <span className="text-xs text-neutral-400 font-sans">{section.fields.length} campos</span>
+                          {dirtyCount > 0 && (
+                            <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-sans font-medium">
+                              {dirtyCount} alterado(s)
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-neutral-400 text-xl transition-transform" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                          ▾
+                        </span>
+                      </button>
+
+                      {isOpen && (
+                        <div className="px-6 pb-6 space-y-5 border-t border-neutral-100">
+                          {section.fields.map((field) => (
+                            <div key={field.key} className="pt-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">
+                                  {field.label}
+                                </label>
+                                {textsDirty.has(field.key) && (
+                                  <button
+                                    onClick={() => saveTextField(field.key)}
+                                    disabled={textsLoading}
+                                    className="text-[10px] font-sans bg-black text-white px-3 py-1 rounded-full font-medium disabled:opacity-50"
+                                  >
+                                    Salvar
+                                  </button>
+                                )}
+                              </div>
+                              {field.rich ? (
+                                <RichTextEditor
+                                  value={siteTexts[field.key] || ''}
+                                  onChange={(html) => updateTextField(field.key, html)}
+                                />
+                              ) : (
+                                <input
+                                  value={siteTexts[field.key] || ''}
+                                  onChange={(e) => updateTextField(field.key, e.target.value)}
+                                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                                  placeholder={field.label}
+                                />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             )}
           </div>
         )}

@@ -1,8 +1,26 @@
 ﻿import React from 'react';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
+import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
 const About: React.FC = () => {
+  const t = useSiteTexts({
+    about_header_badge: 'Nossa identidade',
+    about_header_title: 'This is Dalla.',
+    about_header_subtitle: 'Somos um estudio de design, estrategista e pensador, dedicado a busca da excelencia visual e da clareza estrategica.',
+    about_vision_title: 'Criado com uma visao de precisao.',
+    about_vision_p1: 'O Estudio Dalla surgiu com o principio de que o branding nao se resume a estetica, mas sim a base arquitetonica de uma marca forte.',
+    about_vision_p2: 'Acreditamos no poder da estrategia, nao como discurso abstrato, mas como direcao clara para cada decisao. Nosso processo e estruturado e nossos resultados geram posicionamento e valor real.',
+    about_pillars_badge: 'Nossos pilares',
+    about_pillars_title: 'O que nos move.',
+    about_pillar1_title: '01. Estrategia',
+    about_pillar1_desc: 'Tudo comeca pela clareza de mercado. Analisamos cenario, concorrencia e negocio para transformar decisoes de design em vantagem competitiva.',
+    about_pillar2_title: '02. Identidade',
+    about_pillar2_desc: 'Construcao de sistemas visuais proprietarios, nao apenas estetica.',
+    about_pillar3_title: '03. Posicionamento',
+    about_pillar3_desc: 'Posicionamento e o territorio que a marca ocupa. Definimos espacos estrategicos que geram diferenciacao real e valor percebido.',
+  });
+
   return (
     <>
       <Seo
@@ -12,24 +30,18 @@ const About: React.FC = () => {
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-36 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">
-          <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-6 md:mb-8 opacity-40">Nossa identidade</p>
-          <h1 className="text-5xl sm:text-6xl md:text-[12rem] leading-[0.82] tracking-tighter font-display mb-7 md:mb-10">This is Dalla.</h1>
-          <p className="text-base md:text-2xl text-neutral-500 max-w-3xl font-light leading-relaxed">
-            Somos um estudio de design, estrategista e pensador, dedicado a busca da excelencia visual e da clareza estrategica.
-          </p>
+          <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-6 md:mb-8 opacity-40">{t.about_header_badge}</p>
+          <h1 className="text-5xl sm:text-6xl md:text-[12rem] leading-[0.82] tracking-tighter font-display mb-7 md:mb-10">{t.about_header_title}</h1>
+          <div className="text-base md:text-2xl text-neutral-500 max-w-3xl font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_header_subtitle }} />
         </header>
 
         <section className="py-20 md:py-40 px-6 bg-neutral-50">
           <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-10 md:gap-16">
             <div className="md:col-span-7">
-              <h2 className="text-4xl md:text-7xl mb-8 md:mb-12 leading-[0.9] tracking-tighter">Criado com uma visao de precisao.</h2>
+              <h2 className="text-4xl md:text-7xl mb-8 md:mb-12 leading-[0.9] tracking-tighter">{t.about_vision_title}</h2>
               <div className="space-y-6 md:space-y-8 text-base md:text-xl text-neutral-600 font-light leading-relaxed font-sans">
-                <p>
-                  O Estudio Dalla surgiu com o principio de que o branding nao se resume a estetica, mas sim a base arquitetonica de uma marca forte.
-                </p>
-                <p>
-                  Acreditamos no poder da estrategia, nao como discurso abstrato, mas como direcao clara para cada decisao. Nosso processo e estruturado e nossos resultados geram posicionamento e valor real.
-                </p>
+                <div dangerouslySetInnerHTML={{ __html: t.about_vision_p1 }} />
+                <div dangerouslySetInnerHTML={{ __html: t.about_vision_p2 }} />
               </div>
             </div>
             <div className="md:col-span-5">
@@ -49,21 +61,21 @@ const About: React.FC = () => {
 
         <section className="py-20 md:py-40 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-14 md:mb-32">
-            <span className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans opacity-40">Nossos pilares</span>
-            <h2 className="text-4xl sm:text-5xl md:text-8xl mt-6 md:mt-8 tracking-tighter">O que nos move.</h2>
+            <span className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans opacity-40">{t.about_pillars_badge}</span>
+            <h2 className="text-4xl sm:text-5xl md:text-8xl mt-6 md:mt-8 tracking-tighter">{t.about_pillars_title}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-10 md:gap-16">
             <div className="space-y-5 md:space-y-6">
-              <div className="text-3xl md:text-4xl font-display">01. Estrategia</div>
-              <p className="text-neutral-500 font-light font-sans leading-relaxed">Tudo comeca pela clareza de mercado. Analisamos cenario, concorrencia e negocio para transformar decisoes de design em vantagem competitiva.</p>
+              <div className="text-3xl md:text-4xl font-display">{t.about_pillar1_title}</div>
+              <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar1_desc }} />
             </div>
             <div className="space-y-5 md:space-y-6">
-              <div className="text-3xl md:text-4xl font-display">02. Identidade</div>
-              <p className="text-neutral-500 font-light font-sans leading-relaxed">Construcao de sistemas visuais proprietarios, nao apenas estetica.</p>
+              <div className="text-3xl md:text-4xl font-display">{t.about_pillar2_title}</div>
+              <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar2_desc }} />
             </div>
             <div className="space-y-5 md:space-y-6">
-              <div className="text-3xl md:text-4xl font-display">03. Posicionamento</div>
-              <p className="text-neutral-500 font-light font-sans leading-relaxed">Posicionamento e o territorio que a marca ocupa. Definimos espacos estrategicos que geram diferenciacao real e valor percebido.</p>
+              <div className="text-3xl md:text-4xl font-display">{t.about_pillar3_title}</div>
+              <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar3_desc }} />
             </div>
           </div>
         </section>

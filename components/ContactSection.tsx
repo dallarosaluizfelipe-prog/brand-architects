@@ -1,11 +1,16 @@
 ﻿import React from 'react';
+import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
 const ContactSection: React.FC = () => {
+  const t = useSiteTexts({
+    cta_section_title: 'Pronto para transformar sua marca?',
+  });
+
   return (
     <section className="py-20 md:py-32 px-6 bg-black text-white rounded-t-[2.5rem] md:rounded-t-[5rem]" id="contact">
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 md:gap-20">
         <div>
-          <h2 className="text-4xl sm:text-5xl md:text-8xl leading-[0.95] mb-8 md:mb-10 font-display">Pronto para transformar sua marca?</h2>
+          <div className="text-4xl sm:text-5xl md:text-8xl leading-[0.95] mb-8 md:mb-10 font-display" dangerouslySetInnerHTML={{ __html: t.cta_section_title }} />
           <div className="flex gap-4 md:gap-6 mt-10 md:mt-12">
             <div className="w-11 h-11 border border-white/20 rounded-full flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
               <span className="material-symbols-outlined text-sm">share</span>

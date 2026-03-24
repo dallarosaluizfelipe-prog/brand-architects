@@ -12,17 +12,27 @@ This document captures details of components, pages, functions, and any code add
 
 ### `ContactSection.tsx`
 - Reusable contact form section present on many pages.
-- Contains title, social icon placeholders, and a stylized form with inputs.
+- Contains title (editable via admin `cta_section_title`), social icon placeholders, and a stylized form with inputs.
+- Uses `useSiteTexts` hook for dynamic title content.
 
 ### `Footer.tsx`
 - Site footer with contact information, social links, legal links, and copyright.
 - Displays `dalla-logo-footer.png` from public uploads.
+- Uses `useSiteTexts` hook for dynamic contacts and copyright text.
 
 ### `Seo.tsx` 📈
 - New utility component added for SEO metadata management.
 - Accepts props: `title`, `description`, `keywords`, `image`, `url`.
 - On render it updates `document.title`, creates/updates `<meta>` tags for description, keywords and Open Graph properties, and maintains a canonical `<link>`.
 - Designed to be included early in page components; ensures mobile‑first, keyword‑rich metadata.
+- Now loads SEO defaults dynamically from `site_content` table (keys: `seo_default_title`, `seo_default_description`, `seo_default_keywords`). Falls back to hardcoded defaults.
+
+### `RichTextEditor.tsx` (new)
+- Reusable rich text editor component based on TipTap.
+- Toolbar: Bold (B), Italic (I), Underline (U).
+- Props: `value: string` (HTML), `onChange: (html: string) => void`, `placeholder?: string`, `minHeight?: string`.
+- Outputs clean HTML. Used in AdminPanel Textos tab.
+- Disabled heading/codeBlock/blockquote extensions to keep output simple.
 
 ### `TrackingScripts.tsx`
 - Component that fetches active tags from `site_tags` table (public read) and injects corresponding tracking scripts into `document.head`.
@@ -86,11 +96,14 @@ This document captures details of components, pages, functions, and any code add
 - Shows 4-dot indicator for PIN entry progress.
 
 ### `AdminPanel.tsx`
-- Admin dashboard with tabs: Cases and Mídia.
+- Admin dashboard with tabs: Cases, Midia, Hero, Propostas, Tags, Textos.
 - **Cases tab:** List, create, edit, delete cases (title, category, description, cover_url, order, featured, visible).
-- **Mídia tab:** Upload images/videos to storage bucket `media`, list files, copy public URL, delete.- **Hero tab:** Manage desktop/mobile hero video URLs and poster image.
+- **Midia tab:** Upload images/videos to storage bucket `media`, list files, copy public URL, delete.
+- **Hero tab:** Manage desktop/mobile hero video URLs and poster image.
 - **Propostas tab:** CRUD for commercial proposals with slug auto-generation, footer links, and public toggle.
-- **Tags tab:** CRUD for tracking tags (GA4, Facebook Pixel, GTM, Google Ads). Toggle active/inactive per tag. Active tags are injected on the public site via `TrackingScripts` component.- All CRUD operations go through edge function `admin` with PIN authentication.
+- **Tags tab:** CRUD for tracking tags (GA4, Facebook Pixel, GTM, Google Ads). Toggle active/inactive per tag. Active tags are injected on the public site via `TrackingScripts` component.
+- **Textos tab (new):** Edit all site text content organized by page (Home, Sobre, Metodologia, Portfolio, Contato, Footer, Secao CTA, SEO Padrao). Collapsible sections. Rich text editor for descriptions (bold/italic/underline). Individual save per field or save all at once. Dirty tracking with visual indicators.
+- All CRUD operations go through edge function `admin` with PIN authentication.
 
 ## Edge Functions
 
@@ -113,6 +126,18 @@ This document captures details of components, pages, functions, and any code add
 
 ### `site_content`
 - Editable site sections identified by `section_key` (unique). Fields: title, subtitle, body, image_url, video_url. RLS: public read only.
+- Now stores all editable site texts (50+ keys) used by `useSiteTexts` hook across all pages.
+- Section key naming convention: `{page}_{section}_{field}` (e.g., `home_hero_title`, `about_pillar1_desc`, `method_phase3_title`).
+- Seed migration: `supabase/migrations/20260324120000_seed_site_texts.sql`.
+
+## Hooks
+
+### `src/hooks/useSiteTexts.ts` (new)
+- Custom hook: `useSiteTexts(defaults: Record<string, string>): Record<string, string>`
+- Fetches multiple `site_content` rows by `section_key` in a single query.
+- Returns `body` field values mapped by key, falling back to provided defaults if DB value is missing.
+- In-memory cache (`Map`) avoids repeated queries across component re-renders.
+- Used by all public pages (Home, About, Methodology, Portfolio, Contact) and shared components (Footer, ContactSection, Seo).
 
 ### `site_tags`
 - Tracking tags managed from admin. Fields: `tag_type` (ga4, gtm, facebook_pixel, google_ads, custom), `tag_id`, `label`, `is_active`. RLS: public read only.

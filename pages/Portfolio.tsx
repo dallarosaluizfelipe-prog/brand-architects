@@ -3,9 +3,15 @@ import { Link } from 'react-router-dom';
 import ContactSection from '../components/ContactSection';
 import { getSiteCases, type SiteCase } from '@/src/data/siteCases';
 import { Seo } from '../components/Seo';
+import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
 const Portfolio: React.FC = () => {
   const [projects, setProjects] = useState<SiteCase[]>([]);
+
+  const t = useSiteTexts({
+    portfolio_header_title: 'Nossos Cases',
+    portfolio_header_subtitle: 'Identidades visuais que transformam proposito em desempenho. Design puro, executado com rigor.',
+  });
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -25,10 +31,8 @@ const Portfolio: React.FC = () => {
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-36 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">
-          <h1 className="text-5xl sm:text-6xl md:text-8xl leading-[0.82] tracking-tighter font-display mb-7 md:mb-10">Nossos Cases</h1>
-          <p className="text-base md:text-xl text-neutral-400 max-w-2xl font-light leading-relaxed">
-            Identidades visuais que transformam proposito em desempenho. Design puro, executado com rigor.
-          </p>
+          <h1 className="text-5xl sm:text-6xl md:text-8xl leading-[0.82] tracking-tighter font-display mb-7 md:mb-10">{t.portfolio_header_title}</h1>
+          <div className="text-base md:text-xl text-neutral-400 max-w-2xl font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: t.portfolio_header_subtitle }} />
         </header>
 
         <section className="pb-24 md:pb-40 px-6 max-w-7xl mx-auto">

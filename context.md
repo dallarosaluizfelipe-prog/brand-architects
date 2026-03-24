@@ -138,3 +138,23 @@ This file records a chronological history of changes, requests, and reasoning fo
     - `pages/AdminPanel.tsx` — Nova aba "Tags" com CRUD completo (tipo, ID, label, toggle ativo/inativo). Seguindo padrao de UI das demais abas.
     - `App.tsx` — `<TrackingScripts />` montado dentro do `BrowserRouter` para injecao em todas as paginas.
     - `src/integrations/supabase/types.ts` — Adicionada tipagem da tabela `site_tags`.
+
+- **2026-03-24 12:00 — Editor de Textos do Site no Admin:**
+  - **Motivacao:** Permitir ao admin editar todos os textos hardcoded do site diretamente pelo painel, com suporte a negrito, italico e sublinhado via editor rich text. Cases e propostas excluidos (ja editaveis).
+  - **Dependencias instaladas:** `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-underline`, `@tiptap/pm`.
+  - **Arquivos criados:**
+    - `src/components/RichTextEditor.tsx` — Componente reutilizavel de editor rich text com toolbar (Bold, Italic, Underline) baseado em TipTap. Gera HTML limpo.
+    - `src/hooks/useSiteTexts.ts` — Hook customizado que busca textos da tabela `site_content` por `section_key`, com cache em memoria e fallback para valores hardcoded.
+    - `supabase/migrations/20260324120000_seed_site_texts.sql` — Seed de todos os textos atuais do site em `site_content` com `ON CONFLICT DO NOTHING`.
+  - **Arquivos modificados:**
+    - `pages/AdminPanel.tsx` — Nova aba "Textos" com secoes colapsaveis por pagina (Home, Sobre, Metodologia, Portfolio, Contato, Footer, Secao CTA, SEO Padrao). Campos simples para titulos, editor rich text para descricoes. Salvar individual por campo ou todos de uma vez. Indicador visual de campos alterados.
+    - `pages/Home.tsx` — Textos hardcoded substituidos por `useSiteTexts()` com fallback. Campos rich text renderizados via `dangerouslySetInnerHTML`.
+    - `pages/About.tsx` — Idem: header, visao, 3 pilares dinamicos.
+    - `pages/Methodology.tsx` — Idem: header e 5 fases dinamicas.
+    - `pages/Portfolio.tsx` — Idem: header dinamico.
+    - `pages/Contact.tsx` — Idem: header, info contatos, emails dinamicos.
+    - `components/Footer.tsx` — Contatos e copyright dinamicos.
+    - `components/ContactSection.tsx` — Titulo CTA dinamico.
+    - `components/Seo.tsx` — SEO defaults carregados da tabela `site_content` (titulo, descricao, keywords padrao).
+  - **Banco de dados:** Nenhuma alteracao de schema — usa tabela `site_content` existente (campo `body` para armazenar texto/HTML). Edge function `list_content`/`upsert_content` ja existiam.
+  - **Build:** Validado com sucesso (`npm run build`).
