@@ -6,7 +6,7 @@ import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 const Contact: React.FC = () => {
   const t = useSiteTexts({
     contact_header_title: "Let's talk.",
-    contact_info: 'CURITIBA / BR / PR<br />TEL +55 42 9 9915 3014<br />Central Office<br />TEL +44 20 7946 0000',
+    contact_info: 'CURITIBA / BR / PR<br />TEL +55 42 9 9915 3014',
     contact_emails: '<a class="hover:opacity-60 transition-opacity" href="mailto:dallarosaluizfelipe@gmail.com">dallarosaluizfelipe@gmail.com</a><br /><a class="hover:opacity-60 transition-opacity" href="mailto:press@brandingstudio.com">press@brandingstudio.com</a>',
   });
 

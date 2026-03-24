@@ -16,11 +16,11 @@ let seoLoading: Promise<void> | null = null;
 function loadSeoDefaults() {
   if (seoDefaults) return Promise.resolve();
   if (seoLoading) return seoLoading;
-  seoLoading = supabase
+  seoLoading = (supabase as any)
     .from('site_content')
     .select('section_key, body')
     .in('section_key', ['seo_default_title', 'seo_default_description', 'seo_default_keywords'])
-    .then(({ data }) => {
+    .then(({ data }: any) => {
       seoDefaults = {
         title: 'Studio Dalla — High\u2011End Branding Studio',
         description: 'Consultoria de branding e rebranding para marcas de luxo em São Paulo. Transformamos identidades visuais com método, maturidade e visão estratégica.',
