@@ -56,7 +56,7 @@ export const Seo: React.FC<SeoProps> = ({
   useEffect(() => {
     loadSeoDefaults().then(() => {
       if (seoDefaults && seoDefaults !== defaults) setDefaults(seoDefaults);
-    });
+    }).catch(() => {});
   }, []);
 
   const dTitle = defaults?.title || defaultTitle;
