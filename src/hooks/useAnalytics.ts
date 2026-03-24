@@ -14,13 +14,15 @@ function getSessionId(): string {
 async function sendTrack(type: string, data: Record<string, unknown>) {
   try {
     const payload = { type, data: { ...data, session_id: getSessionId() } };
+    const body = JSON.stringify(payload);
     if (navigator.sendBeacon) {
-      navigator.sendBeacon('/api/track', JSON.stringify(payload));
+      const blob = new Blob([body], { type: 'application/json' });
+      navigator.sendBeacon('/api/track', blob);
     } else {
       fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body,
         keepalive: true,
       });
     }

@@ -195,42 +195,49 @@ Deno.serve(async (req) => {
       }
 
       case "analytics_summary": {
-        const days = data?.days || 30;
-        const since = new Date(Date.now() - days * 86400000).toISOString();
+        // Support both "days" (preset) and "from"/"to" (custom range)
+        let since: string;
+        let until: string | null = null;
+        let periodLabel = "";
 
-        // Total page views
-        const { data: pvRows, error: pvErr } = await supabase
-          .from("site_page_views")
-          .select("id", { count: "exact", head: true })
-          .gte("created_at", since);
-        if (pvErr) throw pvErr;
-        const totalPageViews = pvRows;
+        if (data?.from && data?.to) {
+          since = new Date(data.from).toISOString();
+          until = new Date(new Date(data.to).getTime() + 86400000).toISOString(); // end of "to" day
+          periodLabel = `${data.from} a ${data.to}`;
+        } else {
+          const days = data?.days || 7;
+          since = new Date(Date.now() - days * 86400000).toISOString();
+          periodLabel = `${days} dias`;
+        }
 
-        // Page views by page
-        const { data: pvByPage } = await supabase
-          .from("site_page_views")
-          .select("page_path, created_at")
-          .gte("created_at", since);
+        // Build query helpers
+        const addRange = (query: any) => {
+          query = query.gte("created_at", since);
+          if (until) query = query.lt("created_at", until);
+          return query;
+        };
+
+        // Page views with page_path + created_at
+        const { data: pvByPage } = await addRange(
+          supabase.from("site_page_views").select("page_path, created_at")
+        );
 
         const pageViewCounts: Record<string, number> = {};
+        const dailyViews: Record<string, number> = {};
         for (const row of pvByPage || []) {
           pageViewCounts[row.page_path] = (pageViewCounts[row.page_path] || 0) + 1;
+          const day = row.created_at.slice(0, 10);
+          dailyViews[day] = (dailyViews[day] || 0) + 1;
         }
         const topPages = Object.entries(pageViewCounts)
           .map(([page, count]) => ({ page, count }))
           .sort((a, b) => b.count - a.count)
           .slice(0, 20);
 
-        // Views by region
-        const regionCounts: Record<string, number> = {};
-        for (const row of pvByPage || []) {
-          // we need country/region, fetch separately
-        }
-        const { data: pvGeo } = await supabase
-          .from("site_page_views")
-          .select("country, region, city")
-          .gte("created_at", since);
-
+        // Geo data
+        const { data: pvGeo } = await addRange(
+          supabase.from("site_page_views").select("country, region, city")
+        );
         const geoCounts: Record<string, number> = {};
         for (const row of pvGeo || []) {
           const key = [row.country, row.region, row.city].filter(Boolean).join(" / ") || "Desconhecido";
@@ -242,33 +249,23 @@ Deno.serve(async (req) => {
           .slice(0, 20);
 
         // WhatsApp clicks
-        const { count: whatsappClicks } = await supabase
-          .from("site_events")
-          .select("id", { count: "exact", head: true })
-          .eq("event_type", "whatsapp_click")
-          .gte("created_at", since);
+        const { count: whatsappClicks } = await addRange(
+          supabase.from("site_events").select("id", { count: "exact", head: true }).eq("event_type", "whatsapp_click")
+        );
 
         // Form submissions count
-        const { count: formCount } = await supabase
-          .from("site_form_submissions")
-          .select("id", { count: "exact", head: true })
-          .gte("created_at", since);
-
-        // Daily views for chart (last N days)
-        const dailyViews: Record<string, number> = {};
-        for (const row of pvByPage || []) {
-          const day = row.created_at.slice(0, 10);
-          dailyViews[day] = (dailyViews[day] || 0) + 1;
-        }
+        const { count: formCount } = await addRange(
+          supabase.from("site_form_submissions").select("id", { count: "exact", head: true })
+        );
 
         return new Response(JSON.stringify({
-          total_page_views: pvErr ? 0 : (pvByPage || []).length,
+          total_page_views: (pvByPage || []).length,
           whatsapp_clicks: whatsappClicks || 0,
           form_submissions: formCount || 0,
           top_pages: topPages,
           top_regions: topRegions,
           daily_views: dailyViews,
-          period_days: days,
+          period_label: periodLabel,
         }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });

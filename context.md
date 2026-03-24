@@ -172,3 +172,11 @@ This file records a chronological history of changes, requests, and reasoning fo
     - `pages/AdminPanel.tsx` — Nova aba "Dashboard" como aba padrao ao abrir. Seletor de periodo (7/30/90 dias). Cards KPI (visitas, cliques WhatsApp, formularios). Grafico de barras de visitas por dia. Listas de paginas mais visitadas e regioes com barras de progresso. Tabela de formularios recebidos com nome, email, empresa, desafio, data.
     - `src/integrations/supabase/types.ts` — Tipagens adicionadas para `site_page_views`, `site_events`, `site_form_submissions`.
   - **Build:** Validado com sucesso (`npm run build`).
+
+- **2026-03-24 16:00 — Refinamento Dashboard Analytics:**
+  - **Motivacao:** Corrigir tracking (sendBeacon Content-Type), adicionar periodo personalizado, padrao 7 dias, graficos SVG seguindo identidade visual.
+  - **Arquivos modificados:**
+    - `src/hooks/useAnalytics.ts` — sendBeacon agora usa `new Blob([body], { type: 'application/json' })` em vez de string crua (fix: Vercel nao parseava text/plain como JSON).
+    - `supabase/functions/admin/index.ts` — `analytics_summary` aceita `{from, to}` para periodo personalizado alem de `{days}`. Retorna `period_label` (string descritiva) em vez de `period_days` (number). Helper `addRange()` centraliza filtros de data.
+    - `pages/AdminPanel.tsx` — Padrao mudado de 30 para 7 dias. Seletor de periodo agora inclui inputs de data personalizado (de/ate) + botao Filtrar. Grafico de visitas diarias agora e SVG area chart com pontos, linhas e grid (em vez de div bars). Top paginas e regioes agora sao SVG horizontal bar charts com opacidade graduada. Todas as referencias `period_days` substituidas por `period_label`. Typo "disponiveiss" corrigido.
+  - **Build:** Validado com sucesso.

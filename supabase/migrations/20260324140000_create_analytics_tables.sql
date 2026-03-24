@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS site_page_views (
 
 ALTER TABLE site_page_views ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "anon_insert_page_views" ON site_page_views;
 CREATE POLICY "anon_insert_page_views" ON site_page_views
   FOR INSERT TO anon WITH CHECK (true);
 
@@ -33,6 +34,7 @@ CREATE TABLE IF NOT EXISTS site_events (
 
 ALTER TABLE site_events ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "anon_insert_events" ON site_events;
 CREATE POLICY "anon_insert_events" ON site_events
   FOR INSERT TO anon WITH CHECK (true);
 
@@ -51,12 +53,13 @@ CREATE TABLE IF NOT EXISTS site_form_submissions (
 
 ALTER TABLE site_form_submissions ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "anon_insert_form_submissions" ON site_form_submissions;
 CREATE POLICY "anon_insert_form_submissions" ON site_form_submissions
   FOR INSERT TO anon WITH CHECK (true);
 
 -- Indexes for dashboard queries
-CREATE INDEX idx_page_views_created_at ON site_page_views (created_at DESC);
-CREATE INDEX idx_page_views_page_path ON site_page_views (page_path);
-CREATE INDEX idx_events_created_at ON site_events (created_at DESC);
-CREATE INDEX idx_events_type ON site_events (event_type);
-CREATE INDEX idx_form_submissions_created_at ON site_form_submissions (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_page_views_created_at ON site_page_views (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_page_views_page_path ON site_page_views (page_path);
+CREATE INDEX IF NOT EXISTS idx_events_created_at ON site_events (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_events_type ON site_events (event_type);
+CREATE INDEX IF NOT EXISTS idx_form_submissions_created_at ON site_form_submissions (created_at DESC);

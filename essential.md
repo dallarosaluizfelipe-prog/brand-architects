@@ -98,7 +98,7 @@ This document captures details of components, pages, functions, and any code add
 
 ### `AdminPanel.tsx`
 - Admin dashboard with tabs: Dashboard, Cases, Midia, Hero, Propostas, Tags, Textos.
-- **Dashboard tab (default):** Period selector (7/30/90 days). KPI cards (total page views, WhatsApp clicks, form submissions). Daily views bar chart. Top pages list with progress bars. Top regions list. Form submissions table with name, email, company, challenge, date.
+- **Dashboard tab (default, 7 days):** Period selector (7/30/90 days + custom date range with from/to inputs). KPI cards (total page views, WhatsApp clicks, form submissions) with period_label. SVG area chart for daily views (line + fill + grid). SVG horizontal bar charts for top pages and top regions (graduated opacity). Form submissions table with name, email, company, challenge, date.
 - **Cases tab:** List, create, edit, delete cases (title, category, description, cover_url, order, featured, visible).
 - **Midia tab:** Upload images/videos to storage bucket `media`, list files, copy public URL, delete.
 - **Hero tab:** Manage desktop/mobile hero video URLs and poster image.
@@ -113,7 +113,7 @@ This document captures details of components, pages, functions, and any code add
 - Serverless function for admin operations.
 - Uses service role key to bypass RLS for write operations.
 - Actions: `verify` (PIN check), `list_cases`, `upsert_case`, `delete_case`, `list_content`, `upsert_content`, `change_pin`, `list_proposals`, `upsert_proposal`, `delete_proposal`, `list_tags`, `upsert_tag`, `delete_tag`, `analytics_summary`, `list_form_submissions`.
-- `analytics_summary`: Returns aggregated analytics (total views, WhatsApp clicks, form count, top pages, top regions, daily views) filtered by period in days.
+- `analytics_summary`: Returns aggregated analytics (total views, WhatsApp clicks, form count, top pages, top regions, daily views) filtered by `{days: N}` or custom `{from, to}` date range. Returns `period_label` string.
 - `list_form_submissions`: Returns latest 50 form submissions ordered by date.
 - PIN stored as SHA-256 hash in `admin_settings` table. Default PIN: `1234`.
 

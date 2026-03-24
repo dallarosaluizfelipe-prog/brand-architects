@@ -55,7 +55,7 @@ interface AnalyticsSummary {
   top_pages: { page: string; count: number }[];
   top_regions: { region: string; count: number }[];
   daily_views: Record<string, number>;
-  period_days: number;
+  period_label: string;
 }
 
 interface FormSubmission {
@@ -209,11 +209,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
 
   // Dashboard state
-  const [dashPeriod, setDashPeriod] = useState(30);
+  const [dashPeriod, setDashPeriod] = useState<number | 'custom'>(7);
   const [dashData, setDashData] = useState<AnalyticsSummary | null>(null);
   const [dashLoading, setDashLoading] = useState(false);
   const [dashSubmissions, setDashSubmissions] = useState<FormSubmission[]>([]);
   const [dashSubsLoading, setDashSubsLoading] = useState(false);
+  const [customFrom, setCustomFrom] = useState('');
+  const [customTo, setCustomTo] = useState('');
 
   const apiCall = async (action: string, data?: any) => {
     const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin`, {
@@ -495,10 +497,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     });
   };
 
-  const loadDashboard = async (days?: number) => {
-    const d = days ?? dashPeriod;
+  const loadDashboard = async (period?: number | 'custom', from?: string, to?: string) => {
+    const p = period ?? dashPeriod;
     setDashLoading(true);
-    const result = await apiCall('analytics_summary', { days: d });
+    let payload: any;
+    if (p === 'custom' && from && to) {
+      payload = { from, to };
+    } else if (typeof p === 'number') {
+      payload = { days: p };
+    } else {
+      payload = { days: 7 };
+    }
+    const result = await apiCall('analytics_summary', payload);
     setDashData(result);
     setDashLoading(false);
   };
@@ -513,6 +523,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const handlePeriodChange = (days: number) => {
     setDashPeriod(days);
     loadDashboard(days);
+  };
+
+  const handleCustomRange = () => {
+    if (!customFrom || !customTo) return;
+    setDashPeriod('custom');
+    loadDashboard('custom', customFrom, customTo);
   };
 
   useEffect(() => {
@@ -648,6 +664,30 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   {d} dias
                 </button>
               ))}
+              <div className="flex items-center gap-2">
+                <input
+                  type="date"
+                  value={customFrom}
+                  onChange={(e) => setCustomFrom(e.target.value)}
+                  className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans text-neutral-600"
+                />
+                <span className="text-neutral-400 text-xs">ate</span>
+                <input
+                  type="date"
+                  value={customTo}
+                  onChange={(e) => setCustomTo(e.target.value)}
+                  className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans text-neutral-600"
+                />
+                <button
+                  onClick={handleCustomRange}
+                  disabled={!customFrom || !customTo}
+                  className={`px-4 py-2 rounded-full text-sm font-sans font-medium transition-all ${
+                    dashPeriod === 'custom' ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                  } disabled:opacity-40 disabled:cursor-not-allowed`}
+                >
+                  Filtrar
+                </button>
+              </div>
               <button
                 onClick={() => { loadDashboard(); loadFormSubmissions(); }}
                 disabled={dashLoading}
@@ -666,94 +706,142 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Visitas</p>
                     <p className="text-4xl font-display">{dashData.total_page_views.toLocaleString('pt-BR')}</p>
-                    <p className="text-xs text-neutral-400 font-sans mt-1">ultimos {dashData.period_days} dias</p>
+                    <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Cliques WhatsApp</p>
                     <p className="text-4xl font-display">{dashData.whatsapp_clicks.toLocaleString('pt-BR')}</p>
-                    <p className="text-xs text-neutral-400 font-sans mt-1">ultimos {dashData.period_days} dias</p>
+                    <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Formularios</p>
                     <p className="text-4xl font-display">{dashData.form_submissions.toLocaleString('pt-BR')}</p>
-                    <p className="text-xs text-neutral-400 font-sans mt-1">ultimos {dashData.period_days} dias</p>
+                    <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                 </div>
 
-                {/* Daily Views Mini-Chart */}
+                {/* Daily Views — SVG Area Chart */}
                 {Object.keys(dashData.daily_views).length > 0 && (
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200 mb-8">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Visitas por Dia</h3>
-                    <div className="flex items-end gap-[2px] h-32">
-                      {(() => {
-                        const entries = Object.entries(dashData.daily_views).sort(([a], [b]) => a.localeCompare(b));
-                        const maxVal = Math.max(...entries.map(([, v]) => v), 1);
-                        return entries.map(([day, count]) => (
-                          <div
-                            key={day}
-                            className="flex-1 bg-black rounded-t-sm hover:bg-neutral-700 transition-colors group relative min-w-[3px]"
-                            style={{ height: `${Math.max((count / maxVal) * 100, 2)}%` }}
-                            title={`${day}: ${count} visita(s)`}
-                          >
-                            <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-black text-white text-[9px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap font-sans">
-                              {day.slice(5)}: {count}
-                            </div>
-                          </div>
-                        ));
-                      })()}
-                    </div>
+                    {(() => {
+                      const entries = Object.entries(dashData.daily_views).sort(([a], [b]) => a.localeCompare(b));
+                      const maxVal = Math.max(...entries.map(([, v]) => v), 1);
+                      const chartW = 720;
+                      const chartH = 160;
+                      const padL = 40;
+                      const padB = 24;
+                      const w = chartW - padL;
+                      const h = chartH - padB;
+                      const step = entries.length > 1 ? w / (entries.length - 1) : 0;
+                      const points = entries.map(([, v], i) => ({
+                        x: padL + i * step,
+                        y: h - (v / maxVal) * h,
+                      }));
+                      const lineD = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+                      const areaD = `${lineD} L${points[points.length - 1]?.x ?? padL},${h} L${padL},${h} Z`;
+                      const gridLines = 4;
+                      return (
+                        <svg viewBox={`0 0 ${chartW} ${chartH}`} className="w-full" preserveAspectRatio="none" style={{ maxHeight: 200 }}>
+                          {/* Y-axis grid lines */}
+                          {Array.from({ length: gridLines + 1 }).map((_, i) => {
+                            const yy = (h / gridLines) * i;
+                            const val = Math.round(maxVal - (maxVal / gridLines) * i);
+                            return (
+                              <g key={i}>
+                                <line x1={padL} y1={yy} x2={chartW} y2={yy} stroke="#e5e5e5" strokeWidth="0.5" />
+                                <text x={padL - 6} y={yy + 3} textAnchor="end" fontSize="8" fill="#a3a3a3" fontFamily="Nunito Sans, sans-serif">{val}</text>
+                              </g>
+                            );
+                          })}
+                          {/* Area fill */}
+                          <path d={areaD} fill="black" fillOpacity="0.06" />
+                          {/* Line */}
+                          <path d={lineD} fill="none" stroke="black" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+                          {/* Data points + x-labels */}
+                          {points.map((p, i) => {
+                            const showLabel = entries.length <= 14 || i % Math.ceil(entries.length / 10) === 0 || i === entries.length - 1;
+                            return (
+                              <g key={i}>
+                                <circle cx={p.x} cy={p.y} r="3" fill="white" stroke="black" strokeWidth="1.5" />
+                                <title>{entries[i][0]}: {entries[i][1]} visita(s)</title>
+                                {showLabel && (
+                                  <text x={p.x} y={chartH - 4} textAnchor="middle" fontSize="7" fill="#a3a3a3" fontFamily="Nunito Sans, sans-serif">
+                                    {entries[i][0].slice(5)}
+                                  </text>
+                                )}
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      );
+                    })()}
                   </div>
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  {/* Top Pages */}
+                  {/* Top Pages — Horizontal Bar Chart */}
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Paginas Mais Visitadas</h3>
                     {dashData.top_pages.length === 0 ? (
                       <p className="text-neutral-400 font-sans text-sm">Sem dados ainda.</p>
-                    ) : (
-                      <div className="space-y-3">
-                        {dashData.top_pages.map((p, i) => {
-                          const maxCount = dashData.top_pages[0]?.count || 1;
-                          return (
-                            <div key={i}>
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-sans truncate max-w-[70%]">{p.page}</span>
-                                <span className="text-sm font-sans font-medium text-neutral-600">{p.count}</span>
-                              </div>
-                              <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-black rounded-full transition-all" style={{ width: `${(p.count / maxCount) * 100}%` }} />
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                    ) : (() => {
+                      const maxCount = dashData.top_pages[0]?.count || 1;
+                      const barH = 28;
+                      const gap = 6;
+                      const svgH = dashData.top_pages.length * (barH + gap);
+                      return (
+                        <svg viewBox={`0 0 400 ${svgH}`} className="w-full" style={{ maxHeight: svgH }}>
+                          {dashData.top_pages.map((p, i) => {
+                            const y = i * (barH + gap);
+                            const barW = Math.max((p.count / maxCount) * 300, 4);
+                            return (
+                              <g key={i}>
+                                <rect x="0" y={y + 2} width={barW} height={barH - 4} rx="4" fill="black" fillOpacity={1 - i * 0.12 > 0.3 ? 1 - i * 0.12 : 0.3} />
+                                <text x="6" y={y + barH / 2 + 1} dominantBaseline="middle" fontSize="10" fill="white" fontFamily="Nunito Sans, sans-serif" fontWeight="600">
+                                  {p.page.length > 30 ? `${p.page.slice(0, 30)}...` : p.page}
+                                </text>
+                                <text x={barW + 8} y={y + barH / 2 + 1} dominantBaseline="middle" fontSize="10" fill="#525252" fontFamily="Nunito Sans, sans-serif" fontWeight="700">
+                                  {p.count}
+                                </text>
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      );
+                    })()}
                   </div>
 
-                  {/* Top Regions */}
+                  {/* Top Regions — Horizontal Bar Chart */}
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Visitas por Regiao</h3>
                     {dashData.top_regions.length === 0 ? (
                       <p className="text-neutral-400 font-sans text-sm">Sem dados ainda.</p>
-                    ) : (
-                      <div className="space-y-3">
-                        {dashData.top_regions.map((r, i) => {
-                          const maxCount = dashData.top_regions[0]?.count || 1;
-                          return (
-                            <div key={i}>
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-sans truncate max-w-[70%]">{r.region}</span>
-                                <span className="text-sm font-sans font-medium text-neutral-600">{r.count}</span>
-                              </div>
-                              <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-black rounded-full transition-all" style={{ width: `${(r.count / maxCount) * 100}%` }} />
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                    ) : (() => {
+                      const maxCount = dashData.top_regions[0]?.count || 1;
+                      const barH = 28;
+                      const gap = 6;
+                      const svgH = dashData.top_regions.length * (barH + gap);
+                      return (
+                        <svg viewBox={`0 0 400 ${svgH}`} className="w-full" style={{ maxHeight: svgH }}>
+                          {dashData.top_regions.map((r, i) => {
+                            const y = i * (barH + gap);
+                            const barW = Math.max((r.count / maxCount) * 300, 4);
+                            return (
+                              <g key={i}>
+                                <rect x="0" y={y + 2} width={barW} height={barH - 4} rx="4" fill="black" fillOpacity={1 - i * 0.12 > 0.3 ? 1 - i * 0.12 : 0.3} />
+                                <text x="6" y={y + barH / 2 + 1} dominantBaseline="middle" fontSize="10" fill="white" fontFamily="Nunito Sans, sans-serif" fontWeight="600">
+                                  {r.region.length > 30 ? `${r.region.slice(0, 30)}...` : r.region}
+                                </text>
+                                <text x={barW + 8} y={y + barH / 2 + 1} dominantBaseline="middle" fontSize="10" fill="#525252" fontFamily="Nunito Sans, sans-serif" fontWeight="700">
+                                  {r.count}
+                                </text>
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      );
+                    })()}
                   </div>
                 </div>
 
@@ -795,7 +883,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 </div>
               </>
             ) : (
-              <p className="text-neutral-400 font-sans text-sm">Sem dados de analytics disponiveiss.</p>
+              <p className="text-neutral-400 font-sans text-sm">Sem dados de analytics disponiveis.</p>
             )}
           </div>
         )}
