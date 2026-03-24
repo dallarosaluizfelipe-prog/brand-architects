@@ -113,7 +113,7 @@ const Home: React.FC = () => {
 
             <div className="mt-10 md:mt-12">
               <Link to="/cases/nuts-oclock" className="group cursor-pointer">
-                <div className="rounded-3xl overflow-hidden aspect-[21/9] mb-8 shadow-lg">
+                <div className="rounded-3xl overflow-hidden aspect-[4/3] md:aspect-[21/9] mb-8 shadow-lg">
                   <img alt="Nuts O'Clock" className="w-full h-full object-cover" src="/lovable-uploads/nuts-oclock-cover.gif" loading="lazy" />
                 </div>
                 <div>
