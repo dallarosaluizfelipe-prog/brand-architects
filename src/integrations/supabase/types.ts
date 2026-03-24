@@ -181,34 +181,31 @@ export type Database = {
       }
       site_tags: {
         Row: {
-          id: string
-          tag_type: string
-          tag_id: string
-          label: string
-          is_active: boolean
           created_at: string
+          id: string
+          is_active: boolean
+          label: string
+          tag_id: string
+          tag_type: string
           updated_at: string
         }
         Insert: {
-          id?: string
-          tag_type?: string
-          tag_id?: string
-          label?: string
-          is_active?: boolean
           created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          tag_id?: string
+          tag_type?: string
           updated_at?: string
         }
         Update: {
-          id?: string
-          tag_type?: string
-          tag_id?: string
-          label?: string
-          is_active?: boolean
           created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          tag_id?: string
+          tag_type?: string
           updated_at?: string
-        }
-        Relationships: []
-      }
         }
         Relationships: []
       }
