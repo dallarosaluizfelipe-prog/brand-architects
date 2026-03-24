@@ -14,7 +14,7 @@ const DallaLogo = ({ className = "" }: { className?: string }) => (
 const NavLinks: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   const { pathname } = useLocation();
   const links = [
-    { label: "Estudio", path: "/estudio" },
+    { label: "Estúdio", path: "/estudio" },
     { label: "Metodologia", path: "/metodologia" },
     { label: "Cases", path: "/cases" },
     { label: "Contatos", path: "/contato" },
