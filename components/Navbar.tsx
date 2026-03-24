@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
   const { pathname } = useLocation();
 
   const links = [
-    { label: "Estudio", path: "/estudio" },
+    { label: "Estúdio", path: "/estudio" },
     { label: "Metodologia", path: "/metodologia" },
     { label: "Cases", path: "/cases" },
     { label: "Contatos", path: "/contato" },
