@@ -13,14 +13,14 @@ interface SeoProps {
 let seoDefaults: { title: string; description: string; keywords: string } | null = null;
 let seoLoading: Promise<void> | null = null;
 
-function loadSeoDefaults() {
+function loadSeoDefaults(): Promise<void> {
   if (seoDefaults) return Promise.resolve();
   if (seoLoading) return seoLoading;
-  seoLoading = supabase
+  seoLoading = (supabase as any)
     .from('site_content')
     .select('section_key, body')
     .in('section_key', ['seo_default_title', 'seo_default_description', 'seo_default_keywords'])
-    .then(({ data }) => {
+    .then(({ data }: any) => {
       seoDefaults = {
         title: 'Studio Dalla — High\u2011End Branding Studio',
         description: 'Consultoria de branding e rebranding para marcas de luxo em São Paulo. Transformamos identidades visuais com método, maturidade e visão estratégica.',
@@ -34,7 +34,7 @@ function loadSeoDefaults() {
         }
       }
     });
-  return seoLoading;
+  return seoLoading!;
 }
 
 const defaultTitle = 'Studio Dalla — High‑End Branding Studio';
@@ -56,7 +56,7 @@ export const Seo: React.FC<SeoProps> = ({
   useEffect(() => {
     loadSeoDefaults().then(() => {
       if (seoDefaults && seoDefaults !== defaults) setDefaults(seoDefaults);
-    });
+    }).catch(() => {});
   }, []);
 
   const dTitle = defaults?.title || defaultTitle;

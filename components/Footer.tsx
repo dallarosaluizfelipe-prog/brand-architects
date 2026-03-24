@@ -3,7 +3,7 @@ import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
 const Footer: React.FC = () => {
   const t = useSiteTexts({
-    footer_contacts: 'CURITIBA / PARANA / BR<br />TEL +55 42 9 99153814<br />CENTRAL OFFICE<br />TEL +44 20 7946 0000',
+    footer_contacts: 'CURITIBA / PARANA / BR<br />TEL +55 42 9 99153814',
     footer_copyright: '© 2026 Studio Dalla. All rights reserved.',
   });
 
