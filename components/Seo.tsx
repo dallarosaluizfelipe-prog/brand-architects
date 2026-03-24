@@ -13,7 +13,7 @@ interface SeoProps {
 let seoDefaults: { title: string; description: string; keywords: string } | null = null;
 let seoLoading: Promise<void> | null = null;
 
-function loadSeoDefaults() {
+function loadSeoDefaults(): Promise<void> {
   if (seoDefaults) return Promise.resolve();
   if (seoLoading) return seoLoading;
   seoLoading = (supabase as any)
@@ -34,7 +34,7 @@ function loadSeoDefaults() {
         }
       }
     });
-  return seoLoading;
+  return seoLoading!;
 }
 
 const defaultTitle = 'Studio Dalla — High‑End Branding Studio';
