@@ -65,21 +65,18 @@ const ContactSection: React.FC = () => {
             </div>
           ) : (
           <form className="space-y-5 md:space-y-6 font-sans" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input name="name" value={form.name} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="text" required placeholder="Nome *" />
-              <input name="email" value={form.email} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" placeholder="Email *" type="email" required />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input name="phone" value={form.phone} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="tel" placeholder="Telefone *" />
-              <input name="company" value={form.company} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="text" required placeholder="Empresa *" />
-            </div>
-            <select name="challenge" value={form.challenge} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 text-neutral-400 font-light appearance-none bg-transparent">
-              <option value="">Main Challenge?</option>
-              <option>Visual Identity</option>
-              <option>Integrated Strategy</option>
-              <option>Performance Design</option>
+            <input name="name" value={form.name} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="text" required placeholder="Nome *" />
+            <input name="phone" value={form.phone} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="tel" required placeholder="Número *" />
+            <input name="email" value={form.email} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" placeholder="Email *" type="email" required />
+            <input name="company" value={form.company} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="text" required placeholder="Nome da empresa *" />
+            <select name="service" value={form.service} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 text-neutral-400 font-light appearance-none bg-transparent" required>
+              <option value="">Precisa de... *</option>
+              <option value="estrategia">Estratégia de marca (posicionamento e conceito)</option>
+              <option value="identidade_visual">Identidade visual (logo, cores, tipografia)</option>
+              <option value="sistema_identidade">Sistema de identidade (aplicações e consistência)</option>
+              <option value="branding_lancamento">Branding, lançamentos e reposicionamento</option>
+              <option value="consultoria">Consultoria de marca</option>
             </select>
-            <textarea name="message" value={form.message} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light min-h-[100px]" rows={3} placeholder="Descreva o seu projeto..."></textarea>
             <button
               type="submit"
               disabled={sending}
@@ -88,7 +85,7 @@ const ContactSection: React.FC = () => {
               {sending ? 'Enviando...' : 'Enviar'}
             </button>
             <p className="text-[10px] text-neutral-400 leading-tight uppercase tracking-widest text-center">
-              Your data is processed in accordance with our high-end privacy standards.
+              Seus dados são tratados conforme nossos padrões de privacidade.
             </p>
           </form>
           )}
