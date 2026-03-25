@@ -66,7 +66,7 @@ const Home: React.FC = () => {
         </section>
 
         <section className="py-14 md:py-24 px-6 max-w-4xl mx-auto">
-          <span className="inline-block rounded-full border border-neutral-300 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-neutral-500 font-sans mb-6">
+          <span className="inline-block text-[11px] uppercase tracking-[0.24em] text-neutral-500 font-sans mb-6">
             {t.home_hero_badge}
           </span>
           <h1 className="text-[clamp(2.2rem,10vw,5.5rem)] leading-[0.9] tracking-tight mb-5">
