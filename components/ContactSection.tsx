@@ -1,6 +1,7 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 import { trackFormSubmission } from '@/src/hooks/useAnalytics';
+import { supabase } from '@/src/integrations/supabase/client';
 
 const ContactSection: React.FC = () => {
   const t = useSiteTexts({
