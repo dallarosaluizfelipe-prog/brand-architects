@@ -79,6 +79,8 @@ function injectGoogleAds(id: string) {
 
 const TrackingScripts: React.FC = () => {
   useEffect(() => {
+    if (window.location.pathname.startsWith('/admin') || window.location.hash === '#admin') return;
+
     let cancelled = false;
 
     supabase
