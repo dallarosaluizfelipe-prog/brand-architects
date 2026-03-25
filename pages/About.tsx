@@ -19,14 +19,17 @@ const About: React.FC = () => {
     about_pillar2_desc: 'Construcao de sistemas visuais proprietarios, nao apenas estetica.',
     about_pillar3_title: '03. Posicionamento',
     about_pillar3_desc: 'Posicionamento e o territorio que a marca ocupa. Definimos espacos estrategicos que geram diferenciacao real e valor percebido.',
+    about_seo_title: 'Sobre o Estudio Dalla',
+    about_seo_description: 'Conheca a filosofia, valores e visao do Estudio Dalla, referencia em branding de luxo em Sao Paulo.',
+    about_seo_keywords: 'sobre estudio de branding, branding SP, agencia branding luxo',
   });
 
   return (
     <>
       <Seo
-        title="Sobre o Estudio Dalla"
-        description="Conheca a filosofia, valores e visao do Estudio Dalla, referencia em branding de luxo em Sao Paulo."
-        keywords="sobre estudio de branding, branding SP, agencia branding luxo"
+        title={t.about_seo_title}
+        description={t.about_seo_description}
+        keywords={t.about_seo_keywords}
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-36 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">

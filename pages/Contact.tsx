@@ -9,14 +9,17 @@ const Contact: React.FC = () => {
     contact_header_title: "Let's talk.",
     contact_info: `CURITIBA / BR / PR<br />TEL ${CONTACT_PHONE_DISPLAY}`,
     contact_emails: '<a class="hover:opacity-60 transition-opacity" href="mailto:dallarosaluizfelipe@gmail.com">dallarosaluizfelipe@gmail.com</a><br /><a class="hover:opacity-60 transition-opacity" href="mailto:press@brandingstudio.com">press@brandingstudio.com</a>',
+    contact_seo_title: 'Contato - Estudio Dalla',
+    contact_seo_description: 'Fale com o Estudio Dalla. Estamos prontos para transformar sua marca de luxo com design estrategico.',
+    contact_seo_keywords: 'contato agencia branding, contato branding SP',
   });
 
   return (
     <>
       <Seo
-        title="Contato - Estudio Dalla"
-        description="Fale com o Estudio Dalla. Estamos prontos para transformar sua marca de luxo com design estrategico."
-        keywords="contato agencia branding, contato branding SP"
+        title={t.contact_seo_title}
+        description={t.contact_seo_description}
+        keywords={t.contact_seo_keywords}
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-36 md:pt-48 pb-12 md:pb-20 px-6 max-w-7xl mx-auto">

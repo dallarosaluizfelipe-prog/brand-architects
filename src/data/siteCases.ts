@@ -16,6 +16,9 @@ export interface SiteCase {
   display_order: number;
   is_featured: boolean;
   is_visible: boolean;
+  meta_title?: string;
+  meta_description?: string;
+  meta_keywords?: string;
 }
 
 const fallbackCases: SiteCase[] = [
@@ -207,6 +210,9 @@ const normalizeCase = (item: any): SiteCase => ({
   display_order: item.display_order ?? 0,
   is_featured: !!item.is_featured,
   is_visible: item.is_visible !== false,
+  meta_title: item.meta_title ?? '',
+  meta_description: item.meta_description ?? '',
+  meta_keywords: item.meta_keywords ?? '',
 });
 
 export const getSiteCases = async (limit?: number): Promise<SiteCase[]> => {

@@ -82,9 +82,10 @@ const ProposalDetails: React.FC = () => {
   return (
     <>
       <Seo
-        title={`Proposta — ${proposal.client_name}`}
-        description={`Proposta comercial para ${proposal.client_name}.`}
-        robots="noindex, nofollow"
+        title={proposal.meta_title || `Proposta \u2014 ${proposal.client_name}`}
+        description={proposal.meta_description || `Proposta comercial para ${proposal.client_name}.`}
+        keywords={proposal.meta_keywords || undefined}
+        robots={proposal.meta_robots || 'noindex, nofollow'}
       />
 
       <div ref={printRef}>

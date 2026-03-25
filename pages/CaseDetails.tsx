@@ -53,9 +53,9 @@ const CaseDetails: React.FC = () => {
   return (
     <>
       <Seo
-        title={project?.title}
-        description={project?.description || undefined}
-        keywords={project?.category}
+        title={project?.meta_title || project?.title}
+        description={project?.meta_description || project?.description || undefined}
+        keywords={project?.meta_keywords || project?.category}
         url={window.location.href}
         image={project?.cover_url}
       />

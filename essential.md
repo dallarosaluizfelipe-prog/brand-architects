@@ -107,7 +107,9 @@ This document captures details of components, pages, functions, and any code add
 - **Hero tab:** Manage desktop/mobile hero video URLs and poster image.
 - **Propostas tab:** CRUD for commercial proposals with slug auto-generation, footer links, and public toggle.
 - **Tags tab:** CRUD for tracking tags (GA4, Facebook Pixel, GTM, Google Ads). Toggle active/inactive per tag. Active tags are injected on the public site via `TrackingScripts` component.
-- **Textos tab (new):** Edit all site text content organized by page (Home, Sobre, Metodologia, Portfolio, Contato, Footer, Secao CTA, SEO Padrao). Collapsible sections. Rich text editor for descriptions (bold/italic/underline). Individual save per field or save all at once. Dirty tracking with visual indicators.
+- **Textos tab (new):** Edit all site text content organized by page (Home, Sobre, Metodologia, Portfolio, Contato, Footer, Secao CTA, SEO Padrao, SEO por Pagina — Home/Sobre/Metodologia/Portfolio/Contato). Collapsible sections. Rich text editor for descriptions (bold/italic/underline). Individual save per field or save all at once. Dirty tracking with visual indicators.
+- **Case edit form — SEO section (new):** Editable Meta Title, Meta Description, Meta Keywords per case. Placeholder shows fallback values. Data persisted to `site_cases` table.
+- **Proposal edit form — SEO section (new):** Editable Meta Title, Meta Description, Meta Keywords, Robots per proposal. Defaults to `noindex, nofollow`. Data persisted to `site_proposals` table.
 - All CRUD operations go through edge function `admin` with PIN authentication.
 
 ## Edge Functions
@@ -139,6 +141,7 @@ This document captures details of components, pages, functions, and any code add
 
 ### `site_cases`
 - Portfolio cases with title, category, description, cover_url, display_order, is_featured, is_visible. RLS: public read only.
+- **SEO fields (new):** `meta_title`, `meta_description`, `meta_keywords` — optional text columns defaulting to empty string. Used by CaseDetails.tsx with fallback to title/description/category.
 - Realtime enabled.
 - One-time idempotent import migration created: `supabase/migrations/20260303201000_import_initial_cases.sql`.
 - Seed includes: Yerbal, Clave, Nuts O'Clock, Lummina, Dalla, Kuma.
@@ -146,6 +149,7 @@ This document captures details of components, pages, functions, and any code add
 ### `site_content`
 - Editable site sections identified by `section_key` (unique). Fields: title, subtitle, body, image_url, video_url. RLS: public read only.
 - Now stores all editable site texts (50+ keys) used by `useSiteTexts` hook across all pages.
+- **Per-page SEO keys (new):** `{page}_seo_title`, `{page}_seo_description`, `{page}_seo_keywords` for Home, About, Methodology, Portfolio, Contact (15 new keys). Managed in AdminPanel Textos tab under dedicated SEO sections.
 - Section key naming convention: `{page}_{section}_{field}` (e.g., `home_hero_title`, `about_pillar1_desc`, `method_phase3_title`).
 - Seed migration: `supabase/migrations/20260324120000_seed_site_texts.sql`.
 
@@ -424,7 +428,8 @@ This document captures details of components, pages, functions, and any code add
 
 #### `site_proposals`
 - Propostas comerciais com título, subtítulo, banner, cliente, contato, escopo, cronograma, sobre, footer_links (jsonb). RLS: leitura pública condicionada a `is_public = true`.
-- Não incluída no sitemap. Não indexada por buscadores.
+- **SEO fields (new):** `meta_title`, `meta_description`, `meta_keywords`, `meta_robots` (default: `noindex, nofollow`) — optional text columns. Used by ProposalDetails.tsx with fallback to auto-generated title/description.
+- Não incluída no sitemap.
 
 ### Dependências adicionadas
 - `html2canvas-pro` — fork ativo de html2canvas com melhor suporte CSS moderno.

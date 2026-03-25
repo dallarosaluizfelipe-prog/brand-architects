@@ -23,6 +23,9 @@ const Home: React.FC = () => {
     home_cases_subtitle: 'Marcas que carregam estrategia na essencia, e validaram o nosso metodo.',
     home_partners_title: 'Nossos Parceiros',
     home_partners_subtitle: 'Parceiros estrategicos que colocam a marca em acao por meio do design.',
+    home_seo_title: 'Estudio de Branding de Luxo em Sao Paulo',
+    home_seo_description: 'Poder criativo que impulsiona negocios de marcas premium. Identidades visuais estrategicamente desenvolvidas para o mercado de luxo em Sao Paulo.',
+    home_seo_keywords: 'branding luxo, agencia de branding SP, identidade visual premium',
   });
 
   useEffect(() => {
@@ -45,9 +48,9 @@ const Home: React.FC = () => {
   return (
     <>
       <Seo
-        title="Estudio de Branding de Luxo em Sao Paulo"
-        description="Poder criativo que impulsiona negocios de marcas premium. Identidades visuais estrategicamente desenvolvidas para o mercado de luxo em Sao Paulo."
-        keywords="branding luxo, agencia de branding SP, identidade visual premium"
+        title={t.home_seo_title}
+        description={t.home_seo_description}
+        keywords={t.home_seo_keywords}
       />
       <div className="animate-in fade-in duration-700">
         <section className="relative min-h-[100svh] md:min-h-screen overflow-hidden bg-black rounded-b-[2.5rem] md:rounded-b-[6rem]">

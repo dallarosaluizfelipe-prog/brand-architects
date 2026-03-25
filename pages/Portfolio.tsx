@@ -11,6 +11,9 @@ const Portfolio: React.FC = () => {
   const t = useSiteTexts({
     portfolio_header_title: 'Nossos Cases',
     portfolio_header_subtitle: 'Identidades visuais que transformam proposito em desempenho. Design puro, executado com rigor.',
+    portfolio_seo_title: 'Portfolio de Cases - Estudio Dalla',
+    portfolio_seo_description: 'Explore os estudos de caso do Estudio Dalla e veja como nossas identidades visuais geram resultados para marcas de luxo.',
+    portfolio_seo_keywords: 'portfolio branding luxo, estudos de caso branding',
   });
 
   useEffect(() => {
@@ -25,9 +28,9 @@ const Portfolio: React.FC = () => {
   return (
     <>
       <Seo
-        title="Portfolio de Cases - Estudio Dalla"
-        description="Explore os estudos de caso do Estudio Dalla e veja como nossas identidades visuais geram resultados para marcas de luxo."
-        keywords="portfolio branding luxo, estudos de caso branding"
+        title={t.portfolio_seo_title}
+        description={t.portfolio_seo_description}
+        keywords={t.portfolio_seo_keywords}
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-36 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">

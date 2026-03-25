@@ -2,6 +2,14 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-03-25 16:00** - SEO editavel no Admin Panel:
+  - **Motivacao:** Permitir edicao rapida de meta title, meta description e meta keywords por pagina, por case e por proposta, tudo refletindo no front.
+  - **Phase 1 — SEO por Pagina (aba Textos):** Adicionadas 5 secoes colapsaveis "SEO — Home/Sobre/Metodologia/Portfolio/Contato" ao TEXT_SECTIONS do AdminPanel, com 3 campos cada (title, description, keywords). Usa `site_content` existente, zero mudanca no backend. Todas as 5 paginas publicas (Home, About, Portfolio, Methodology, Contact) atualizadas para consumir SEO dinamico via `useSiteTexts` com valores atuais como fallback.
+  - **Phase 2 — SEO por Case (aba Cases):** Nova migration `20260325160000_add_seo_columns.sql` adicionando `meta_title`, `meta_description`, `meta_keywords` em `site_cases`. Secao "SEO do Case" adicionada ao form de edicao no AdminPanel com placeholders indicando fallback. CaseDetails.tsx atualizado para usar campos meta com fallback para title/description/category.
+  - **Phase 3 — SEO por Proposta (aba Propostas):** Mesma migration adiciona `meta_title`, `meta_description`, `meta_keywords`, `meta_robots` (default: `noindex, nofollow`) em `site_proposals`. Secao "SEO da Proposta" adicionada ao form de edicao com 4 campos (incl. robots). ProposalDetails.tsx atualizado para usar campos meta.
+  - **Arquivos alterados:** AdminPanel.tsx, Home.tsx, About.tsx, Portfolio.tsx, Methodology.tsx, Contact.tsx, CaseDetails.tsx, ProposalDetails.tsx, siteCases.ts, siteProposals.ts, supabase/types.ts, nova migration SQL.
+  - **Validacao:** `npx tsc --noEmit` sem erros.
+
 - **2026-03-24 18:10** - Rodape com atribuicao "Powered by" para parceiro externo:
   - **Motivacao:** Solicitação do usuário para mencionar no final do rodape um "Powered by" com marca e link para outro site.
   - **Alteracao em `components/Footer.tsx`:** Adicionado bloco na coluna de copyright com texto "Powered by" + wordmark "iasin." clicavel para `https://iasin.dev.br`.

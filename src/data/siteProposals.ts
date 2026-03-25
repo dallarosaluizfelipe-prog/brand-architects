@@ -13,6 +13,10 @@ export interface SiteProposal {
   about: string;
   footer_links: { label: string; url: string }[];
   is_public: boolean;
+  meta_title?: string;
+  meta_description?: string;
+  meta_keywords?: string;
+  meta_robots?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -30,6 +34,10 @@ const normalizeProposal = (item: any): SiteProposal => ({
   about: item.about ?? '',
   footer_links: Array.isArray(item.footer_links) ? item.footer_links : [],
   is_public: item.is_public !== false,
+  meta_title: item.meta_title ?? '',
+  meta_description: item.meta_description ?? '',
+  meta_keywords: item.meta_keywords ?? '',
+  meta_robots: item.meta_robots ?? 'noindex, nofollow',
   created_at: item.created_at,
   updated_at: item.updated_at,
 });

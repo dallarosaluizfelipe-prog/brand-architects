@@ -23,6 +23,9 @@ const Methodology: React.FC = () => {
     method_phase5_label: 'LEGACY',
     method_phase5_title: 'Legado.',
     method_phase5_desc: 'A marca transcende o presente. Construimos os alicerces para que ela se torne referencia duradoura no seu mercado.',
+    methodology_seo_title: 'Metodologia de Branding Dalla',
+    methodology_seo_description: 'Entenda o metodo proprietario do Estudio Dalla para criar marcas de luxo com posicionamento estrategico e estetica autoral.',
+    methodology_seo_keywords: 'metodologia branding, processo de branding luxo, metodo Dalla',
   });
 
   const phases = [
@@ -36,9 +39,9 @@ const Methodology: React.FC = () => {
   return (
     <>
       <Seo
-        title="Metodologia de Branding Dalla"
-        description="Entenda o metodo proprietario do Estudio Dalla para criar marcas de luxo com posicionamento estrategico e estetica autoral."
-        keywords="metodologia branding, processo de branding luxo, metodo Dalla"
+        title={t.methodology_seo_title}
+        description={t.methodology_seo_description}
+        keywords={t.methodology_seo_keywords}
       />
       <div className="animate-in fade-in duration-700">
         <header className="relative min-h-[85svh] md:h-[95vh] flex flex-col justify-start items-center overflow-hidden bg-black text-white rounded-b-[2.5rem] md:rounded-b-[6rem] pt-[120px] md:pt-[180px]">

@@ -51,6 +51,9 @@ export type Database = {
           id: string
           is_featured: boolean
           is_visible: boolean
+          meta_title: string | null
+          meta_description: string | null
+          meta_keywords: string | null
           slug: string | null
           title: string
           updated_at: string
@@ -70,6 +73,9 @@ export type Database = {
           id?: string
           is_featured?: boolean
           is_visible?: boolean
+          meta_title?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
           slug?: string | null
           title: string
           updated_at?: string
@@ -89,6 +95,9 @@ export type Database = {
           id?: string
           is_featured?: boolean
           is_visible?: boolean
+          meta_title?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
           slug?: string | null
           title?: string
           updated_at?: string
@@ -237,6 +246,10 @@ export type Database = {
           footer_links: Json | null
           id: string
           is_public: boolean | null
+          meta_title: string | null
+          meta_description: string | null
+          meta_keywords: string | null
+          meta_robots: string | null
           scope: string | null
           slug: string
           subtitle: string | null
@@ -253,6 +266,10 @@ export type Database = {
           footer_links?: Json | null
           id?: string
           is_public?: boolean | null
+          meta_title?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
+          meta_robots?: string | null
           scope?: string | null
           slug: string
           subtitle?: string | null
@@ -269,6 +286,10 @@ export type Database = {
           footer_links?: Json | null
           id?: string
           is_public?: boolean | null
+          meta_title?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
+          meta_robots?: string | null
           scope?: string | null
           slug?: string
           subtitle?: string | null

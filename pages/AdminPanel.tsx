@@ -25,6 +25,9 @@ interface SiteCase {
   display_order: number;
   is_featured: boolean;
   is_visible: boolean;
+  meta_title: string;
+  meta_description: string;
+  meta_keywords: string;
 }
 
 interface HeroSettings {
@@ -182,6 +185,51 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'seo_default_keywords', label: 'Keywords Padrao' },
     ],
   },
+  {
+    page: 'seo_home',
+    label: 'SEO — Home',
+    fields: [
+      { key: 'home_seo_title', label: 'Meta Title' },
+      { key: 'home_seo_description', label: 'Meta Description' },
+      { key: 'home_seo_keywords', label: 'Meta Keywords' },
+    ],
+  },
+  {
+    page: 'seo_about',
+    label: 'SEO — Sobre',
+    fields: [
+      { key: 'about_seo_title', label: 'Meta Title' },
+      { key: 'about_seo_description', label: 'Meta Description' },
+      { key: 'about_seo_keywords', label: 'Meta Keywords' },
+    ],
+  },
+  {
+    page: 'seo_methodology',
+    label: 'SEO — Metodologia',
+    fields: [
+      { key: 'methodology_seo_title', label: 'Meta Title' },
+      { key: 'methodology_seo_description', label: 'Meta Description' },
+      { key: 'methodology_seo_keywords', label: 'Meta Keywords' },
+    ],
+  },
+  {
+    page: 'seo_portfolio',
+    label: 'SEO — Portfolio',
+    fields: [
+      { key: 'portfolio_seo_title', label: 'Meta Title' },
+      { key: 'portfolio_seo_description', label: 'Meta Description' },
+      { key: 'portfolio_seo_keywords', label: 'Meta Keywords' },
+    ],
+  },
+  {
+    page: 'seo_contact',
+    label: 'SEO — Contato',
+    fields: [
+      { key: 'contact_seo_title', label: 'Meta Title' },
+      { key: 'contact_seo_description', label: 'Meta Description' },
+      { key: 'contact_seo_keywords', label: 'Meta Keywords' },
+    ],
+  },
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
@@ -246,6 +294,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     display_order: item.display_order ?? 0,
     is_featured: !!item.is_featured,
     is_visible: item.is_visible !== false,
+    meta_title: item.meta_title ?? '',
+    meta_description: item.meta_description ?? '',
+    meta_keywords: item.meta_keywords ?? '',
   });
 
   const loadCases = async () => {
@@ -303,6 +354,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     about: item.about ?? '',
     footer_links: Array.isArray(item.footer_links) ? item.footer_links : [],
     is_public: item.is_public !== false,
+    meta_title: item.meta_title ?? '',
+    meta_description: item.meta_description ?? '',
+    meta_keywords: item.meta_keywords ?? '',
+    meta_robots: item.meta_robots ?? 'noindex, nofollow',
     created_at: item.created_at,
     updated_at: item.updated_at,
   });
@@ -346,6 +401,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     about: '',
     footer_links: [],
     is_public: true,
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
+    meta_robots: 'noindex, nofollow',
   });
 
   const updateProposalField = (field: keyof SiteProposal, value: any) => {
@@ -617,6 +676,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     display_order: cases.length + 1,
     is_featured: false,
     is_visible: true,
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
   });
 
   return (
@@ -1047,6 +1109,40 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </div>
                 </div>
 
+                {/* SEO */}
+                <div className="border border-neutral-200 rounded-2xl p-5 mt-6">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">SEO do Case</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Meta Title</label>
+                      <input
+                        value={editingCase.meta_title}
+                        onChange={(e) => setEditingCase({ ...editingCase, meta_title: e.target.value })}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                        placeholder={editingCase.title || 'Titulo do case (fallback)'}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Meta Description</label>
+                      <textarea
+                        value={editingCase.meta_description}
+                        onChange={(e) => setEditingCase({ ...editingCase, meta_description: e.target.value })}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans min-h-[80px]"
+                        placeholder={editingCase.description?.slice(0, 120) || 'Descricao do case (fallback)'}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Meta Keywords</label>
+                      <input
+                        value={editingCase.meta_keywords}
+                        onChange={(e) => setEditingCase({ ...editingCase, meta_keywords: e.target.value })}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                        placeholder={editingCase.category || 'Categoria do case (fallback)'}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex gap-3 mt-8">
                   <button
                     onClick={saveCase}
@@ -1328,6 +1424,49 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     />
                     Publica (acessivel via link)
                   </label>
+                </div>
+
+                {/* SEO */}
+                <div className="border border-neutral-200 rounded-2xl p-5 mt-6">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">SEO da Proposta</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Meta Title</label>
+                      <input
+                        value={editingProposal.meta_title || ''}
+                        onChange={(e) => setEditingProposal({ ...editingProposal, meta_title: e.target.value })}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                        placeholder={`Proposta — ${editingProposal.client_name || 'Cliente'}`}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Meta Description</label>
+                      <textarea
+                        value={editingProposal.meta_description || ''}
+                        onChange={(e) => setEditingProposal({ ...editingProposal, meta_description: e.target.value })}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans min-h-[80px]"
+                        placeholder={`Proposta comercial para ${editingProposal.client_name || 'cliente'}.`}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Meta Keywords</label>
+                      <input
+                        value={editingProposal.meta_keywords || ''}
+                        onChange={(e) => setEditingProposal({ ...editingProposal, meta_keywords: e.target.value })}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                        placeholder="branding, proposta comercial"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Robots</label>
+                      <input
+                        value={editingProposal.meta_robots || 'noindex, nofollow'}
+                        onChange={(e) => setEditingProposal({ ...editingProposal, meta_robots: e.target.value })}
+                        className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                        placeholder="noindex, nofollow"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex gap-3 mt-8">
