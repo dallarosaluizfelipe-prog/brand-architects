@@ -9,11 +9,10 @@ const ContactSection: React.FC = () => {
 
   const [form, setForm] = useState({
     name: '',
-    email: '',
     phone: '',
+    email: '',
     company: '',
-    challenge: '',
-    message: '',
+    service: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
