@@ -21,12 +21,8 @@
     <meta name="twitter:image" content="https://estudiodalla.com/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png">
     <link rel="canonical" href="https://estudiodalla.com/">
     <meta name="robots" content="index,follow">
-    <link rel="icon" type="image/svg+xml" href="/DALLA_Favicon_ligth.svg.svg" media="(prefers-color-scheme: light)">
-    <link rel="icon" type="image/svg+xml" href="/DALLA_Favicon_dark.svg.svg" media="(prefers-color-scheme: dark)">
-    <link rel="icon" type="image/svg+xml" href="/DALLA_Favicon_ligth.svg.svg">
-    <link rel="apple-touch-icon" href="/DALLA_Favicon_ligth_appletouch.png" media="(prefers-color-scheme: light)">
-    <link rel="apple-touch-icon" href="/DALLA_Favicon_dark_appletouch.png" media="(prefers-color-scheme: dark)">
-    <link rel="apple-touch-icon" href="/DALLA_Favicon_ligth_appletouch.png">
+    <link id="site-favicon" rel="icon" type="image/svg+xml" href="/DALLA_Favicon_dark.svg">
+    <link id="site-apple-touch-icon" rel="apple-touch-icon" href="/DALLA_Favicon_dark_appletouch.png">
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
     <link id="site-manifest" rel="manifest" href="/manifest-light.webmanifest">
@@ -38,22 +34,26 @@
     <script>
         (function () {
             var manifestLink = document.getElementById('site-manifest');
-            if (!manifestLink || !window.matchMedia) return;
+            var faviconLink = document.getElementById('site-favicon');
+            var appleTouchIconLink = document.getElementById('site-apple-touch-icon');
+            if (!manifestLink || !faviconLink || !appleTouchIconLink || !window.matchMedia) return;
 
             var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            var updateManifest = function (isDark) {
+            var updateBrandAssets = function (isDark) {
                 manifestLink.setAttribute('href', isDark ? '/manifest-dark.webmanifest' : '/manifest-light.webmanifest');
+                faviconLink.setAttribute('href', isDark ? '/DALLA_Favicon_dark.svg' : '/DALLA_Favicon_light.svg');
+                appleTouchIconLink.setAttribute('href', isDark ? '/DALLA_Favicon_dark_appletouch.png' : '/DALLA_Favicon_light_appletouch.png');
             };
 
-            updateManifest(mediaQuery.matches);
+            updateBrandAssets(mediaQuery.matches);
 
             if (typeof mediaQuery.addEventListener === 'function') {
                 mediaQuery.addEventListener('change', function (event) {
-                    updateManifest(event.matches);
+                    updateBrandAssets(event.matches);
                 });
             } else if (typeof mediaQuery.addListener === 'function') {
                 mediaQuery.addListener(function (event) {
-                    updateManifest(event.matches);
+                    updateBrandAssets(event.matches);
                 });
             }
         })();

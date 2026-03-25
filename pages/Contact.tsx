@@ -2,11 +2,12 @@
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { CONTACT_PHONE_DISPLAY } from '@/src/utils/contact';
 
 const Contact: React.FC = () => {
   const t = useSiteTexts({
     contact_header_title: "Let's talk.",
-    contact_info: 'CURITIBA / BR / PR<br />TEL +55 42 9 9915 3014',
+    contact_info: `CURITIBA / BR / PR<br />TEL ${CONTACT_PHONE_DISPLAY}`,
     contact_emails: '<a class="hover:opacity-60 transition-opacity" href="mailto:dallarosaluizfelipe@gmail.com">dallarosaluizfelipe@gmail.com</a><br /><a class="hover:opacity-60 transition-opacity" href="mailto:press@brandingstudio.com">press@brandingstudio.com</a>',
   });
 

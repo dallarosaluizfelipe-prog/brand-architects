@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/src/integrations/supabase/client';
 import { SiteProposal, slugify } from '../src/data/siteProposals';
 import RichTextEditor from '../src/components/RichTextEditor';
+import { getWhatsAppUrl } from '@/src/utils/contact';
 
 interface AdminPanelProps {
   pin: string;
@@ -612,7 +613,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     case_date: '',
     external_url: '',
     cta_text: 'Quero uma marca nesse nivel',
-    cta_url: 'https://api.whatsapp.com/send/?phone=5542999153814&text=Ola%2C+quero+falar+sobre+um+projeto+de+branding&type=phone_number&app_absent=0',
+    cta_url: getWhatsAppUrl(),
     display_order: cases.length + 1,
     is_featured: false,
     is_visible: true,

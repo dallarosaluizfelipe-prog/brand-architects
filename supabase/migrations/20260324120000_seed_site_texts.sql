@@ -53,11 +53,11 @@ INSERT INTO site_content (section_key, title, body) VALUES
 
   -- Contact
   ('contact_header_title', 'contact_header_title', 'Let''s talk.'),
-  ('contact_info', 'contact_info', 'CURITIBA / BR / PR<br />TEL +55 42 9 9915 3014<br />Central Office<br />TEL +44 20 7946 0000'),
+  ('contact_info', 'contact_info', 'CURITIBA / BR / PR<br />TEL +55 42 9 9915 3814<br />Central Office<br />TEL +44 20 7946 0000'),
   ('contact_emails', 'contact_emails', '<a class="hover:opacity-60 transition-opacity" href="mailto:dallarosaluizfelipe@gmail.com">dallarosaluizfelipe@gmail.com</a><br /><a class="hover:opacity-60 transition-opacity" href="mailto:press@brandingstudio.com">press@brandingstudio.com</a>'),
 
   -- Footer
-  ('footer_contacts', 'footer_contacts', 'CURITIBA / PARANA / BR<br />TEL +55 42 9 99153814<br />CENTRAL OFFICE<br />TEL +44 20 7946 0000'),
+  ('footer_contacts', 'footer_contacts', 'CURITIBA / PARANA / BR<br />TEL +55 42 9 9915 3814<br />CENTRAL OFFICE<br />TEL +44 20 7946 0000'),
   ('footer_copyright', 'footer_copyright', '© 2026 Studio Dalla. All rights reserved.'),
 
   -- Contact Section (CTA)

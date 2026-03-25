@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import WhatsAppFloatingButton from "./components/WhatsAppFloatingButton";
 import Home from "./pages/Home";
 import Methodology from "./pages/Methodology";
 import Portfolio from "./pages/Portfolio";
@@ -23,6 +24,8 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
 const AppRoutes: React.FC = () => {
   useAnalytics();
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   useEffect(() => {
     if (window.location.hash === "#admin" && window.location.pathname === "/") {
@@ -31,8 +34,9 @@ const AppRoutes: React.FC = () => {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/admin" element={<Admin />} />
+    <>
+      <Routes>
+        <Route path="/admin" element={<Admin />} />
 
       <Route
         path="/"
@@ -95,8 +99,10 @@ const AppRoutes: React.FC = () => {
       <Route path="/methodology" element={<Navigate to="/metodologia" replace />} />
       <Route path="/portfolio" element={<Navigate to="/cases" replace />} />
       <Route path="/contact" element={<Navigate to="/contato" replace />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      {!isAdminRoute && <WhatsAppFloatingButton />}
+    </>
   );
 };
 
