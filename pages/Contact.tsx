@@ -1,18 +1,47 @@
-﻿import React from 'react';
+import React, { useState } from 'react';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 import { CONTACT_PHONE_DISPLAY } from '@/src/utils/contact';
+import { trackFormSubmission } from '@/src/hooks/useAnalytics';
+import { supabase } from '@/src/integrations/supabase/client';
 
 const Contact: React.FC = () => {
   const t = useSiteTexts({
     contact_header_title: "Let's talk.",
     contact_info: `CURITIBA / BR / PR<br />TEL ${CONTACT_PHONE_DISPLAY}`,
-    contact_emails: '<a class="hover:opacity-60 transition-opacity" href="mailto:dallarosaluizfelipe@gmail.com">dallarosaluizfelipe@gmail.com</a><br /><a class="hover:opacity-60 transition-opacity" href="mailto:press@brandingstudio.com">press@brandingstudio.com</a>',
+    contact_emails: '<a class="hover:opacity-60 transition-opacity" href="mailto:contato@estudiodalla.com">contato@estudiodalla.com</a>',
     contact_seo_title: 'Contato - Estudio Dalla',
     contact_seo_description: 'Fale com o Estudio Dalla. Estamos prontos para transformar sua marca de luxo com design estrategico.',
     contact_seo_keywords: 'contato agencia branding, contato branding SP',
   });
+
+  const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    company: '',
+    service: '',
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.phone || !form.company || !form.service) return;
+    setSending(true);
+    try {
+      trackFormSubmission({ name: form.name, email: form.email, phone: form.phone, company: form.company, challenge: form.service });
+      await supabase.functions.invoke('send-contact', { body: form });
+    } catch { /* silent */ }
+    setSending(false);
+    setSubmitted(true);
+    setForm({ name: '', phone: '', email: '', company: '', service: '' });
+  };
 
   return (
     <>
@@ -47,22 +76,38 @@ const Contact: React.FC = () => {
               </section>
             </div>
             <div className="md:col-span-8">
-              <form className="space-y-9 md:space-y-16 font-sans">
-                <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-                  <input className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Name *" type="text" required />
-                  <input className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Email *" type="email" required />
+              {submitted ? (
+                <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-6">
+                    <span className="material-symbols-outlined text-white text-2xl">check</span>
+                  </div>
+                  <h3 className="text-2xl font-display mb-3">Mensagem enviada!</h3>
+                  <p className="text-neutral-500 font-sans text-sm mb-6">Entraremos em contato em breve.</p>
+                  <button onClick={() => setSubmitted(false)} className="text-sm font-sans underline text-neutral-500 hover:text-black transition-colors">
+                    Enviar outra mensagem
+                  </button>
                 </div>
-                <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-                  <input className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Company" type="text" />
-                  <input className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Subject *" type="text" required />
-                </div>
-                <textarea className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300 min-h-[160px] md:min-h-[200px]" placeholder="Message *" required></textarea>
+              ) : (
+              <form className="space-y-9 md:space-y-12 font-sans" onSubmit={handleSubmit}>
+                <input name="name" value={form.name} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Nome *" type="text" required />
+                <input name="phone" value={form.phone} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Número *" type="tel" required />
+                <input name="email" value={form.email} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Email *" type="email" required />
+                <input name="company" value={form.company} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Nome da empresa *" type="text" required />
+                <select name="service" value={form.service} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light text-neutral-300 appearance-none" required>
+                  <option value="">Precisa de... *</option>
+                  <option value="estrategia" className="text-black">Estratégia de marca (posicionamento e conceito)</option>
+                  <option value="identidade_visual" className="text-black">Identidade visual (logo, cores, tipografia)</option>
+                  <option value="sistema_identidade" className="text-black">Sistema de identidade (aplicações e consistência)</option>
+                  <option value="branding_lancamento" className="text-black">Branding, lançamentos e reposicionamento</option>
+                  <option value="consultoria" className="text-black">Consultoria de marca</option>
+                </select>
                 <div className="pt-3 md:pt-8">
-                  <button className="bg-black text-white px-10 md:px-16 py-5 md:py-7 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] hover:scale-105 transition-all shadow-xl">
-                    Send Inquiry
+                  <button type="submit" disabled={sending} className="bg-black text-white px-10 md:px-16 py-5 md:py-7 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] hover:scale-105 transition-all shadow-xl disabled:opacity-50">
+                    {sending ? 'Enviando...' : 'Enviar'}
                   </button>
                 </div>
               </form>
+              )}
             </div>
           </div>
         </main>
