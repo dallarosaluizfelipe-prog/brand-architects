@@ -25,10 +25,10 @@ const ContactSection: React.FC = () => {
     e.preventDefault();
     if (!form.name || !form.email) return;
     setSending(true);
-    trackFormSubmission(form);
+    trackFormSubmission({ name: form.name, email: form.email, phone: form.phone, company: form.company, challenge: form.service });
     setSending(false);
     setSubmitted(true);
-    setForm({ name: '', email: '', phone: '', company: '', challenge: '', message: '' });
+    setForm({ name: '', phone: '', email: '', company: '', service: '' });
   };
 
   return (
