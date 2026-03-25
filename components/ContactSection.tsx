@@ -1,6 +1,7 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 import { trackFormSubmission } from '@/src/hooks/useAnalytics';
+import { supabase } from '@/src/integrations/supabase/client';
 
 const ContactSection: React.FC = () => {
   const t = useSiteTexts({
@@ -23,9 +24,12 @@ const ContactSection: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email) return;
+    if (!form.name || !form.email || !form.phone || !form.company || !form.service) return;
     setSending(true);
-    trackFormSubmission({ name: form.name, email: form.email, phone: form.phone, company: form.company, challenge: form.service });
+    try {
+      trackFormSubmission({ name: form.name, email: form.email, phone: form.phone, company: form.company, challenge: form.service });
+      await supabase.functions.invoke('send-contact', { body: form });
+    } catch { /* silent */ }
     setSending(false);
     setSubmitted(true);
     setForm({ name: '', phone: '', email: '', company: '', service: '' });
