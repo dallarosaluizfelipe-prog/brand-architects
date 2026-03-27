@@ -77,10 +77,10 @@ const Home: React.FC = () => {
           </h1>
           <div className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8" dangerouslySetInnerHTML={{ __html: t.home_hero_subtitle }} />
           <div className="flex flex-wrap gap-3">
-            <Link to="/cases" className="bg-black text-white px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95">
+            <Link to="/cases" className="bg-black text-white px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center min-w-[200px]">
               Ver cases
             </Link>
-            <Link to="/contato" className="border border-black/40 text-black px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95">
+            <Link to="/contato" className="border border-black/40 text-black px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center min-w-[200px]">
               Falar com o studio
             </Link>
           </div>
