@@ -33,7 +33,7 @@ const Portfolio: React.FC = () => {
         keywords={t.portfolio_seo_keywords}
       />
       <div className="animate-in fade-in duration-700">
-        <header className="pt-36 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">
+        <header className="pt-24 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">
           <h1 className="text-5xl sm:text-6xl md:text-8xl leading-[0.82] tracking-tighter font-display mb-7 md:mb-10">{t.portfolio_header_title}</h1>
           <div className="text-base md:text-xl text-neutral-400 max-w-2xl font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: t.portfolio_header_subtitle }} />
         </header>
