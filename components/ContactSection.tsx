@@ -72,9 +72,9 @@ const ContactSection: React.FC = () => {
             <input name="name" value={form.name} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="text" required placeholder="Nome *" />
             <input name="phone" value={form.phone} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="tel" required placeholder="Telefone *" />
             <input name="email" value={form.email} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" placeholder="Email *" type="email" required />
-            <input name="company" value={form.company} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="text" required placeholder="Nome da empresa *" />
-            <select name="service" value={form.service} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 text-neutral-400 font-light appearance-none bg-transparent" required>
-              <option value="">Estou buscando... *</option>
+            <input name="company" value={form.company} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 placeholder:text-neutral-400 font-light" type="text" placeholder="Nome da empresa" />
+            <select name="service" value={form.service} onChange={handleChange} className="border-b border-neutral-200 border-x-0 border-t-0 focus:ring-0 focus:border-black w-full px-0 py-4 text-neutral-400 font-light appearance-none bg-transparent">
+              <option value="">Estou buscando...</option>
               <option value="estrategia">Estratégia de marca (posicionamento e conceito)</option>
               <option value="identidade_visual">Identidade visual (logo, cores, tipografia)</option>
               <option value="sistema_identidade">Sistema de identidade (aplicações e consistência)</option>
