@@ -90,11 +90,11 @@ const Contact: React.FC = () => {
               ) : (
               <form className="space-y-9 md:space-y-12 font-sans" onSubmit={handleSubmit}>
                 <input name="name" value={form.name} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Nome *" type="text" required />
-                <input name="phone" value={form.phone} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Número *" type="tel" required />
+                <input name="phone" value={form.phone} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Telefone *" type="tel" required />
                 <input name="email" value={form.email} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Email *" type="email" required />
                 <input name="company" value={form.company} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Nome da empresa *" type="text" required />
                 <select name="service" value={form.service} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light text-neutral-300 appearance-none" required>
-                  <option value="">Precisa de... *</option>
+                  <option value="">Estou buscando... *</option>
                   <option value="estrategia" className="text-black">Estratégia de marca (posicionamento e conceito)</option>
                   <option value="identidade_visual" className="text-black">Identidade visual (logo, cores, tipografia)</option>
                   <option value="sistema_identidade" className="text-black">Sistema de identidade (aplicações e consistência)</option>
