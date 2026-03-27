@@ -28,6 +28,10 @@ const AppRoutes: React.FC = () => {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (window.location.hash === "#admin" && window.location.pathname === "/") {
       window.history.replaceState(null, "", "/admin");
     }
