@@ -14,7 +14,7 @@ This document captures details of components, pages, functions, and any code add
 - Reusable contact form section present on many pages.
 - Contains title (editable via admin `cta_section_title`), social icon placeholders, and a stylized form with inputs.
 - Uses `useSiteTexts` hook for dynamic title content.
-- Form is fully functional: state management, onSubmit calls `trackFormSubmission()` from `useAnalytics`. Shows success feedback after submission.
+- Form is fully functional: state management, onSubmit calls `trackFormSubmission()` from `useAnalytics`. Shows success feedback after submission. Also pushes `dalla_lead_form_submit` to `dataLayer` on success.
 
 ### `Footer.tsx`
 - Site footer with contact information, social links, legal links, and copyright.
@@ -89,6 +89,7 @@ This document captures details of components, pages, functions, and any code add
 - Contact information page with form and details.
 - Includes `ContactSection`.
 - Metadata added via `Seo` component with contact-focused description to capture lead inquiries.
+- Includes identical dataLayer instrumentation (`dalla_lead_form_submit`) for the top-level form as in `ContactSection.tsx`.
 
 ### `Admin.tsx`
 - Admin entry point. Manages session state (PIN stored in sessionStorage with 30min expiry).
@@ -163,7 +164,8 @@ This document captures details of components, pages, functions, and any code add
 - Used by all public pages (Home, About, Methodology, Portfolio, Contact) and shared components (Footer, ContactSection, Seo).
 
 ### `src/hooks/useAnalytics.ts` (new)
-- `useAnalytics()`: Hook that auto-tracks page views on route change and intercepts WhatsApp link clicks globally via `document.addEventListener`.
+- `useAnalytics()`: Hook that auto-tracks page views on route change and intercepts WhatsApp link clicks globally via `document.addEventListener`. Now also pushes `dalla_whatsapp_click` event to `window.dataLayer`.
+- `pushToDataLayer(event, data)`: Utility to send events directly to GTM via `window.dataLayer`.
 - `trackPageView(path)`: Sends pageview event to `/api/track`.
 - `trackEvent(type, metadata)`: Sends custom event to `/api/track`.
 - `trackFormSubmission(data)`: Sends form submission to `/api/track`.

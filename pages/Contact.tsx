@@ -3,7 +3,7 @@ import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 import { CONTACT_PHONE_DISPLAY } from '@/src/utils/contact';
-import { trackFormSubmission } from '@/src/hooks/useAnalytics';
+import { trackFormSubmission, pushToDataLayer } from '@/src/hooks/useAnalytics';
 import { supabase } from '@/src/integrations/supabase/client';
 
 const Contact: React.FC = () => {
@@ -37,6 +37,14 @@ const Contact: React.FC = () => {
     try {
       trackFormSubmission({ name: form.name, email: form.email, phone: form.phone, company: form.company, challenge: form.service });
       await supabase.functions.invoke('send-contact', { body: form });
+      pushToDataLayer('dalla_lead_form_submit', {
+        page_path: window.location.pathname,
+        form_name: 'Contact Page Form',
+        email: form.email,
+        phone: form.phone,
+        company: form.company,
+        service: form.service
+      });
     } catch { /* silent */ }
     setSending(false);
     setSubmitted(true);

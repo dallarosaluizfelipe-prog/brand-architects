@@ -2,6 +2,14 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-03-27 18:00** - Centralização do rastreamento no GTM para Google Ads:
+  - **Motivacao:** Implementar eventos dataLayer confiáveis no front-end para capturar leads via formulário (conversão primária) e cliques no WhatsApp (conversão secundária), evitando falsos positivos e duplicidade de tags.
+  - **Alterações:**
+    - `src/hooks/useAnalytics.ts`: Adicionado utilitário `pushToDataLayer` que acessa `window.dataLayer`. Listener de cliques em links do WhatsApp atualizado para disparar o evento `dalla_whatsapp_click`.
+    - `components/ContactSection.tsx`: Form submission atualizado com o disparo de `dalla_lead_form_submit` pro dataLayer apenas dentro do bloco try após sucesso do disparo interno.
+    - `pages/Contact.tsx`: Mesma lógica de validação de `dalla_lead_form_submit` implementada para o formulário principal da página de contato.
+  - **Impacto:** Permite configuração precisa de Enhanced Conversions no Google Tag Manager em conjunto com as tags nativas.
+
 - **2026-03-25 16:00** - SEO editavel no Admin Panel:
   - **Motivacao:** Permitir edicao rapida de meta title, meta description e meta keywords por pagina, por case e por proposta, tudo refletindo no front.
   - **Phase 1 — SEO por Pagina (aba Textos):** Adicionadas 5 secoes colapsaveis "SEO — Home/Sobre/Metodologia/Portfolio/Contato" ao TEXT_SECTIONS do AdminPanel, com 3 campos cada (title, description, keywords). Usa `site_content` existente, zero mudanca no backend. Todas as 5 paginas publicas (Home, About, Portfolio, Methodology, Contact) atualizadas para consumir SEO dinamico via `useSiteTexts` com valores atuais como fallback.

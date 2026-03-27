@@ -12,6 +12,16 @@ function getSessionId(): string {
   return sid;
 }
 
+export function pushToDataLayer(event: string, data?: Record<string, any>) {
+  try {
+    const w = window as any;
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({ event, ...data });
+  } catch {
+    // silent fail
+  }
+}
+
 export async function trackPageView(path: string) {
   try {
     await supabase.from('site_page_views').insert({
@@ -80,6 +90,7 @@ export function useAnalytics() {
       const href = target.getAttribute('href') || '';
       if (href.includes('wa.me') || href.includes('whatsapp.com') || href.includes('api.whatsapp.com')) {
         trackEvent('whatsapp_click', { href });
+        pushToDataLayer('dalla_whatsapp_click', { page_path: window.location.pathname, href });
       }
     };
     document.addEventListener('click', handler, true);

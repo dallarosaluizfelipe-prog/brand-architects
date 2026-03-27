@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
-import { trackFormSubmission } from '@/src/hooks/useAnalytics';
+import { trackFormSubmission, pushToDataLayer } from '@/src/hooks/useAnalytics';
 import { supabase } from '@/src/integrations/supabase/client';
 
 const ContactSection: React.FC = () => {
@@ -29,6 +29,14 @@ const ContactSection: React.FC = () => {
     try {
       trackFormSubmission({ name: form.name, email: form.email, phone: form.phone, company: form.company, challenge: form.service });
       await supabase.functions.invoke('send-contact', { body: form });
+      pushToDataLayer('dalla_lead_form_submit', {
+        page_path: window.location.pathname,
+        form_name: 'ContactSection Footer',
+        email: form.email,
+        phone: form.phone,
+        company: form.company,
+        service: form.service
+      });
     } catch { /* silent */ }
     setSending(false);
     setSubmitted(true);
