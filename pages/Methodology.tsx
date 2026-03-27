@@ -44,7 +44,7 @@ const Methodology: React.FC = () => {
         keywords={t.methodology_seo_keywords}
       />
       <div className="animate-in fade-in duration-700">
-        <header className="relative min-h-[85svh] md:h-[95vh] flex flex-col justify-start items-center overflow-hidden bg-black text-white rounded-b-[2.5rem] md:rounded-b-[6rem] pt-[120px] md:pt-[180px]">
+        <header className="relative min-h-[50svh] md:h-[95vh] flex flex-col justify-start items-center overflow-hidden bg-black text-white rounded-b-[2.5rem] md:rounded-b-[6rem] pt-24 md:pt-[180px] pb-14 md:pb-0">
           <div className="absolute inset-0 z-0 bg-black"></div>
           <div className="relative z-10 max-w-5xl w-full text-center px-6">
             <span className="uppercase tracking-[0.45em] text-white/40 mb-7 block font-sans text-[11px] md:text-sm font-normal">{t.method_header_badge}</span>
