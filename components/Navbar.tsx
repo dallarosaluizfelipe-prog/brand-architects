@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
 
   const links = [
     { label: "Estúdio", path: "/estudio" },
-    { label: "Metodologia", path: "/metodologia" },
+    { label: "Método", path: "/metodologia" },
     { label: "Cases", path: "/cases" },
     { label: "Contatos", path: "/contato" },
   ];
