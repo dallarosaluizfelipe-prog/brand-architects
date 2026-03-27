@@ -32,7 +32,7 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.phone || !form.company || !form.service) return;
+    if (!form.name || !form.email || !form.phone) return;
     setSending(true);
     try {
       trackFormSubmission({ name: form.name, email: form.email, phone: form.phone, company: form.company, challenge: form.service });
