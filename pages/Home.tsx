@@ -81,7 +81,7 @@ const Home: React.FC = () => {
               Ver cases
             </Link>
             <Link to="/contato" className="border border-black/40 text-black px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center flex-1 sm:flex-none sm:min-w-[200px]">
-              Falar com o studio
+              Falar com o estúdio
             </Link>
           </div>
         </section>
