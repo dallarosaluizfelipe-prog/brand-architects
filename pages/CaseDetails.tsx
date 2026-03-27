@@ -84,10 +84,10 @@ const CaseDetails: React.FC = () => {
           )}
 
           {project.gallery_urls.length > 0 && (
-            <div className="grid md:grid-cols-2 gap-5 md:gap-8">
+            <div className="flex flex-col gap-5 md:gap-8">
               {project.gallery_urls.map((url, index) => (
                 <div key={`${url}-${index}`} className="rounded-3xl overflow-hidden bg-neutral-100 shadow-sm">
-                  <img src={url} alt={`${project.title} ${index + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                  <img src={url} alt={`${project.title} ${index + 1}`} className="w-full object-contain" loading="lazy" />
                 </div>
               ))}
             </div>
