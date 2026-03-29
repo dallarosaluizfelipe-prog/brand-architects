@@ -213,3 +213,11 @@ This file records a chronological history of changes, requests, and reasoning fo
     - `public/manifest-light.webmanifest` — Manifest com icones e cores do tema claro.
     - `public/manifest-dark.webmanifest` — Manifest com icones e cores do tema escuro.
   - **SEO/Share:** `index.html` agora tem `og:image` e `twitter:image` estaticos para melhorar leitura por crawlers que nao executam JS.
+
+- **2026-03-29 15:00** - Integração Microsoft Clarity via Supabase:
+  - **Motivação:** Solicitação do usuário para instalar Microsoft Clarity sem duplicidade de script.
+  - **Alterações:**
+    - Adicionada função `injectClarity` em `TrackingScripts.tsx` para injetar o script do Clarity apenas se houver uma tag ativa do tipo `clarity` na tabela `site_tags`.
+    - Migration SQL criada para seed inicial da tag Clarity (`20260329120000_seed_clarity_tag.sql`).
+    - Lógica garante que o script não será injetado mais de uma vez, mesmo que existam múltiplas tags ou seeds repetidos.
+  - **Validação:** Não há duplicidade de script Clarity no site. Documentação atualizada em essential.md.

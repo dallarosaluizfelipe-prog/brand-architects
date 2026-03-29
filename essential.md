@@ -43,6 +43,11 @@ This document captures details of components, pages, functions, and any code add
 - Supports: GA4 (`gtag.js`), GTM (`gtm.js` + noscript iframe), Facebook Pixel (`fbevents.js` + noscript img), Google Ads (reuses gtag if loaded).
 - Cleanup on unmount removes all injected script/noscript elements.
 - Mounted once in `App.tsx` inside `BrowserRouter`, runs on all pages.
+- **Microsoft Clarity (2026-03-29)**
+  - Adicionada função `injectClarity` em `TrackingScripts.tsx` para injetar o script do Microsoft Clarity dinamicamente, apenas se houver uma tag ativa do tipo `clarity` na tabela `site_tags`.
+  - O componente garante que o script não será injetado mais de uma vez, mesmo que existam múltiplas tags ou seeds repetidos.
+  - Migration SQL criada para seed inicial da tag Clarity (`20260329120000_seed_clarity_tag.sql`).
+  - Não há duplicidade de script: se já existe uma tag ativa, não injeta novamente.
 
 ## Pages
 
