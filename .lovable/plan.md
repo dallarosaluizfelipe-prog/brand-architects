@@ -1,38 +1,53 @@
 
 
-## Diagnosis
+## Hub de Links — `/links`
 
-All 3 analytics tables (`site_page_views`, `site_events`, `site_form_submissions`) have **0 records**. The root cause:
+### Objetivo
+Criar uma página de links (estilo linktree) em `/links` com a identidade visual do Studio Dalla, mobile-first.
 
-- `useAnalytics` and `trackFormSubmission` send data to `/api/track` — a **Vercel serverless function** (`api/track.js`)
-- This endpoint only works when deployed to Vercel. In the Lovable preview (and any non-Vercel environment), `/api/track` returns 404, so nothing is recorded
-- Even on Vercel, geo headers (`x-vercel-ip-country`, etc.) are Vercel-specific
+### Estrutura da página
 
-## Solution
+```text
+┌─────────────────────────┐
+│      Logo Dalla         │  (SVG branco, fundo preto)
+│   STUDIO DALLA          │  (Instrument Serif, texto menor)
+│                         │
+│  ┌───────────────────┐  │
+│  │ 📱 WhatsApp       │  │  → api.whatsapp.com
+│  └───────────────────┘  │
+│  ┌───────────────────┐  │
+│  │ ✉️  E-mail         │  │  → mailto:contato@estudiodalla.com
+│  └───────────────────┘  │
+│  ┌───────────────────┐  │
+│  │ 📷 Instagram      │  │  → instagram.com/estudiodalla
+│  └───────────────────┘  │
+│  ┌───────────────────┐  │
+│  │ 🎨 Behance        │  │  → behance.net/luizfedalla-r
+│  └───────────────────┘  │
+│  ┌───────────────────┐  │
+│  │ 📘 Facebook       │  │  → facebook (necessário URL)
+│  └───────────────────┘  │
+│                         │
+│      [ Footer ]         │  (rodapé padrão reutilizado)
+└─────────────────────────┘
+```
 
-Replace the `/api/track` serverless approach with **direct Supabase inserts from the client**. This works because:
-- All 3 tables already have `anon_insert` RLS policies (INSERT allowed for anonymous users)
-- No sensitive data is involved — these are public analytics events
-- No serverless function needed
+### Design
+- Fundo preto, links em botões brancos com borda, hover com inversão (fundo branco, texto preto)
+- Tipografia: Nunito Sans nos botões, Instrument Serif no subtítulo
+- Ícones minimalistas (Lucide React, já disponível no projeto)
+- Sem Navbar — página standalone como um linktree
+- Footer padrão importado do componente existente
+- Mobile-first: botões full-width com `max-w-md mx-auto`
 
-### Changes
+### Arquivos a criar/editar
+1. **`pages/Links.tsx`** — nova página com layout descrito
+2. **`App.tsx`** — adicionar rota `/links`
+3. **`context.md`** — registrar alteração
+4. **`essential.md`** — documentar novo componente
 
-**1. Rewrite `src/hooks/useAnalytics.ts`**
-- Remove `sendTrack` / `sendBeacon` / `fetch('/api/track')` logic entirely
-- Import the Supabase client directly
-- `trackPageView`: insert into `site_page_views` via `supabase.from('site_page_views').insert({...})`
-- `trackEvent`: insert into `site_events` via `supabase.from('site_events').insert({...})`
-- `trackFormSubmission`: insert into `site_form_submissions` via `supabase.from('site_form_submissions').insert({...})`
-- Keep session ID logic, `useAnalytics` hook behavior (route tracking + WhatsApp interceptor) unchanged
-- Geo data (country/region/city) won't be available client-side — those columns will be null (acceptable tradeoff; could be added later via an IP geolocation API if needed)
-- `user_agent` will be set via `navigator.userAgent`
-
-**2. Keep `api/track.js` as-is** (for Vercel deployments that may still receive beacons from cached pages)
-
-**3. Update `context.md` and `essential.md`** with the change log
-
-### What this fixes
-- Dashboard will start showing real pageviews, WhatsApp clicks, and form submissions immediately
-- Works in both Lovable preview and Vercel production
-- No new dependencies or migrations needed
+### Observação
+- A página `/links` não terá Navbar nem bottom tab bar (é standalone)
+- O pixel do Facebook não será disparado nesta página se estiver na rota pública (verificar TrackingScripts)
+- Preciso da URL do Facebook do estúdio — vou usar um placeholder que você pode substituir
 
