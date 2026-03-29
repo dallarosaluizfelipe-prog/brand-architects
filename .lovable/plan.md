@@ -1,53 +1,35 @@
 
 
-## Hub de Links — `/links`
+## Plano: Aba "Leads" no Admin + Validação do E-mail
 
-### Objetivo
-Criar uma página de links (estilo linktree) em `/links` com a identidade visual do Studio Dalla, mobile-first.
+### Situação atual
+- O painel admin já carrega e exibe leads na aba Dashboard (seção "Últimos Formulários Recebidos"), mas de forma resumida
+- A tabela `site_form_submissions` já armazena `name`, `email`, `phone`, `company`, `challenge` (serviço) e `page_path`
+- A edge function `send-contact` já envia e-mail para `lipe@estudiodalla.com` via Resend
+- O `trackFormSubmission` em `useAnalytics.ts` já salva `page_path` via `window.location.pathname`
 
-### Estrutura da página
+### Alterações
 
-```text
-┌─────────────────────────┐
-│      Logo Dalla         │  (SVG branco, fundo preto)
-│   STUDIO DALLA          │  (Instrument Serif, texto menor)
-│                         │
-│  ┌───────────────────┐  │
-│  │ 📱 WhatsApp       │  │  → api.whatsapp.com
-│  └───────────────────┘  │
-│  ┌───────────────────┐  │
-│  │ ✉️  E-mail         │  │  → mailto:contato@estudiodalla.com
-│  └───────────────────┘  │
-│  ┌───────────────────┐  │
-│  │ 📷 Instagram      │  │  → instagram.com/estudiodalla
-│  └───────────────────┘  │
-│  ┌───────────────────┐  │
-│  │ 🎨 Behance        │  │  → behance.net/luizfedalla-r
-│  └───────────────────┘  │
-│  ┌───────────────────┐  │
-│  │ 📘 Facebook       │  │  → facebook (necessário URL)
-│  └───────────────────┘  │
-│                         │
-│      [ Footer ]         │  (rodapé padrão reutilizado)
-└─────────────────────────┘
-```
+**1. AdminPanel.tsx — Adicionar aba "Leads"**
+- Adicionar `'leads'` ao tipo do state `tab` e ao array de tabs
+- Criar seção dedicada com tabela completa de leads contendo:
+  - Nome, Telefone, E-mail, Empresa, Serviço buscado (com label legível), Página de origem (`page_path`), Data/hora
+  - Cards de resumo no topo (total de leads, leads últimos 7 dias, últimos 30 dias)
+  - Botão para exportar/copiar dados
+- Carregar leads ao entrar na aba (reutilizar `loadFormSubmissions` existente)
+- Mapa de labels para os valores de serviço (estrategia → "Estratégia de marca", etc.)
+- Design mobile-first consistente com as outras abas
 
-### Design
-- Fundo preto, links em botões brancos com borda, hover com inversão (fundo branco, texto preto)
-- Tipografia: Nunito Sans nos botões, Instrument Serif no subtítulo
-- Ícones minimalistas (Lucide React, já disponível no projeto)
-- Sem Navbar — página standalone como um linktree
-- Footer padrão importado do componente existente
-- Mobile-first: botões full-width com `max-w-md mx-auto`
+**2. Validar fluxo de e-mail**
+- O formulário do footer (`ContactSection.tsx`) e da página de contato (`Contact.tsx`) já chamam `supabase.functions.invoke('send-contact', { body: form })` que envia para `lipe@estudiodalla.com`
+- A secret `RESEND_API_KEY` precisa estar configurada — verificaremos se existe
+- Nenhuma alteração de código necessária no fluxo de e-mail, apenas validação
 
-### Arquivos a criar/editar
-1. **`pages/Links.tsx`** — nova página com layout descrito
-2. **`App.tsx`** — adicionar rota `/links`
-3. **`context.md`** — registrar alteração
-4. **`essential.md`** — documentar novo componente
+**3. Documentação**
+- Atualizar `context.md` e `essential.md` com a nova aba
 
-### Observação
-- A página `/links` não terá Navbar nem bottom tab bar (é standalone)
-- O pixel do Facebook não será disparado nesta página se estiver na rota pública (verificar TrackingScripts)
-- Preciso da URL do Facebook do estúdio — vou usar um placeholder que você pode substituir
+### Arquivos modificados
+- `pages/AdminPanel.tsx` — nova aba "Leads" com tabela completa e resumo
+- `context.md` — registro da alteração
+- `essential.md` — documentação do componente
 
