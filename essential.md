@@ -440,3 +440,11 @@ This document captures details of components, pages, functions, and any code add
 
 ### Validação
 - Build de produção executado com sucesso: `npm run build`.
+
+### `Links.tsx` (página)
+- Rota: `/links`
+- Hub de links standalone (estilo linktree) com fundo preto.
+- Exibe logo Dalla, subtítulo "Studio Dalla" (Instrument Serif) e lista de links: WhatsApp, E-mail, Instagram, Behance, Facebook.
+- Botões full-width com borda branca, hover com inversão de cores.
+- Sem Navbar nem bottom tab bar. Reutiliza Footer padrão.
+- Mobile-first: `max-w-md mx-auto`, `px-6`, `py-16`.
