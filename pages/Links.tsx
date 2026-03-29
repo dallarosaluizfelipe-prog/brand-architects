@@ -41,7 +41,7 @@ const Links: React.FC = () => (
     <Seo
       title="Links — Studio Dalla"
       description="Conecte-se com o Studio Dalla. WhatsApp, e-mail, Instagram, Behance e Facebook."
-      path="/links"
+      url="https://estudiodalla.com/links"
     />
 
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-16">
