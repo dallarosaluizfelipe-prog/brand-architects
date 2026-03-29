@@ -1,12 +1,5 @@
 # Context Log
 
-- **2026-03-29 — Hub de Links `/links`**
-  - Criada página standalone estilo linktree em `pages/Links.tsx` com links para WhatsApp, E-mail, Instagram, Behance e Facebook.
-  - Fundo preto, botões com borda branca e hover invertido, logo Dalla no topo, footer padrão reutilizado.
-  - Sem Navbar nem bottom tab bar. Mobile-first com `max-w-md mx-auto`.
-  - Rota `/links` adicionada em `App.tsx`.
-
-
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
 - **2026-03-27 18:00** - Centralização do rastreamento no GTM para Google Ads:

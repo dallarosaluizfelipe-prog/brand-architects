@@ -11,7 +11,6 @@ import About from "./pages/About";
 import Admin from "./pages/Admin";
 import CaseDetails from "./pages/CaseDetails";
 import ProposalDetails from "./pages/ProposalDetails";
-import Links from "./pages/Links";
 import TrackingScripts from "./components/TrackingScripts";
 import { useAnalytics } from "./src/hooks/useAnalytics";
 
@@ -42,7 +41,6 @@ const AppRoutes: React.FC = () => {
     <>
       <Routes>
         <Route path="/admin" element={<Admin />} />
-        <Route path="/links" element={<Links />} />
 
       <Route
         path="/"
