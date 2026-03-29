@@ -233,7 +233,7 @@ const TEXT_SECTIONS: TextSection[] = [
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos'>('dashboard');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads'>('dashboard');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -697,15 +697,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['dashboard', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
+        {(['dashboard', 'leads', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
           <button
             key={t}
-            onClick={() => setTab(t)}
+            onClick={() => {
+              setTab(t);
+              if (t === 'leads') loadFormSubmissions();
+            }}
             className={`px-6 py-3 rounded-full text-sm font-sans font-medium transition-all ${
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'dashboard' ? 'Dashboard' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
           </button>
         ))}
       </div>
@@ -950,6 +953,108 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
             )}
           </div>
         )}
+
+        {tab === 'leads' && (() => {
+          const SERVICE_LABELS: Record<string, string> = {
+            estrategia: 'Estratégia de marca',
+            identidade_visual: 'Identidade visual',
+            sistema_identidade: 'Sistema de identidade',
+            branding_lancamento: 'Branding e reposicionamento',
+            consultoria: 'Consultoria de marca',
+          };
+          const now = new Date();
+          const d7 = new Date(now.getTime() - 7 * 86400000);
+          const d30 = new Date(now.getTime() - 30 * 86400000);
+          const total = dashSubmissions.length;
+          const last7 = dashSubmissions.filter(s => new Date(s.created_at) >= d7).length;
+          const last30 = dashSubmissions.filter(s => new Date(s.created_at) >= d30).length;
+
+          const exportCSV = () => {
+            const header = 'Nome,Telefone,Email,Empresa,Servico,Pagina,Data\n';
+            const rows = dashSubmissions.map(s =>
+              [s.name, s.phone || '', s.email, s.company || '', SERVICE_LABELS[s.challenge || ''] || s.challenge || '', s.page_path || '', new Date(s.created_at).toLocaleString('pt-BR')]
+                .map(v => `"${(v || '').replace(/"/g, '""')}"`)
+                .join(',')
+            ).join('\n');
+            const blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+          };
+
+          return (
+            <div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                  <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Total de Leads</p>
+                  <p className="text-4xl font-display">{total}</p>
+                </div>
+                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                  <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Últimos 7 dias</p>
+                  <p className="text-4xl font-display">{last7}</p>
+                </div>
+                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                  <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Últimos 30 dias</p>
+                  <p className="text-4xl font-display">{last30}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans">Todos os Leads</h3>
+                <div className="flex gap-2">
+                  <button onClick={() => loadFormSubmissions()} className="text-xs font-sans text-neutral-500 hover:text-black px-4 py-2 rounded-lg hover:bg-neutral-50 transition-colors">
+                    {dashSubsLoading ? 'Atualizando...' : 'Atualizar'}
+                  </button>
+                  <button onClick={exportCSV} className="text-xs font-sans bg-black text-white px-4 py-2 rounded-lg hover:bg-neutral-800 transition-colors">
+                    Exportar CSV
+                  </button>
+                </div>
+              </div>
+
+              {dashSubsLoading ? (
+                <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+              ) : dashSubmissions.length === 0 ? (
+                <p className="text-neutral-400 font-sans text-sm">Nenhum lead recebido ainda.</p>
+              ) : (
+                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm font-sans min-w-[900px]">
+                      <thead>
+                        <tr className="border-b border-neutral-100 bg-neutral-50">
+                          <th className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Nome</th>
+                          <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Telefone</th>
+                          <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Email</th>
+                          <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Empresa</th>
+                          <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Serviço</th>
+                          <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Página</th>
+                          <th className="text-left px-3 py-3 text-xs font-bold uppercase tracking-wider text-neutral-400">Data</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dashSubmissions.map((s) => (
+                          <tr key={s.id} className="border-b border-neutral-50 hover:bg-neutral-50 transition-colors">
+                            <td className="px-4 py-3 font-medium">{s.name}</td>
+                            <td className="px-3 py-3 text-neutral-600">{s.phone || '—'}</td>
+                            <td className="px-3 py-3 text-neutral-600">{s.email}</td>
+                            <td className="px-3 py-3 text-neutral-600">{s.company || '—'}</td>
+                            <td className="px-3 py-3 text-neutral-600">{SERVICE_LABELS[s.challenge || ''] || s.challenge || '—'}</td>
+                            <td className="px-3 py-3 text-neutral-400 text-xs">{s.page_path || '—'}</td>
+                            <td className="px-3 py-3 text-neutral-400 whitespace-nowrap text-xs">
+                              {new Date(s.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {tab === 'cases' && (
           <div>
