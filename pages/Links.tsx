@@ -1,7 +1,7 @@
 import React from 'react';
-import { MessageCircle, Mail, Instagram, Palette, Facebook } from 'lucide-react';
+import { MessageCircle, Mail, Palette } from 'lucide-react';
 import Footer from '../components/Footer';
-import Seo from '../components/Seo';
+import { Seo } from '../components/Seo';
 import { getWhatsAppUrl } from '@/src/utils/contact';
 
 const links = [
