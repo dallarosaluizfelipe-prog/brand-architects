@@ -1056,7 +1056,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           );
         })()}
 
-
+        {tab === 'cases' && (
           <div>
             {editingCase ? (
               <div className="bg-white rounded-2xl p-6 border border-neutral-200">
