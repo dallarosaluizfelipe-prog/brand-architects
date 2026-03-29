@@ -42,6 +42,7 @@ const AppRoutes: React.FC = () => {
     <>
       <Routes>
         <Route path="/admin" element={<Admin />} />
+        <Route path="/links" element={<Links />} />
 
       <Route
         path="/"
