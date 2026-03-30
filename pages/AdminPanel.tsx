@@ -801,7 +801,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
                 {/* Daily Views — SVG Area Chart */}
                 {Object.keys(dashData.daily_views).length > 0 && (
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200 mb-8">
+                  <div key={dashData.period_label + '-' + dashData.total_page_views} className="bg-white rounded-2xl p-6 border border-neutral-200 mb-8">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Visitas por Dia</h3>
                     {(() => {
                       const entries = Object.entries(dashData.daily_views).sort(([a], [b]) => a.localeCompare(b));
