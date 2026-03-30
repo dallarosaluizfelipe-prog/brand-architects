@@ -725,18 +725,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['dashboard', 'leads', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
+        {(['dashboard', 'leads', 'emails', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
           <button
             key={t}
             onClick={() => {
               setTab(t);
               if (t === 'leads') loadFormSubmissions();
+              if (t === 'emails') loadEmails();
             }}
             className={`px-6 py-3 rounded-full text-sm font-sans font-medium transition-all ${
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'emails' ? 'E-mail' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
           </button>
         ))}
       </div>
