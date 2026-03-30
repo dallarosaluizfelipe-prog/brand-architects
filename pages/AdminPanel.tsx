@@ -601,6 +601,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setDashSubsLoading(false);
   };
 
+  const loadEmails = async () => {
+    setEmailsLoading(true);
+    const result = await apiCall('list_emails', { limit: 100 });
+    setAdminEmails(result.emails || []);
+    setEmailsLoading(false);
+  };
+
   const handlePeriodChange = (days: number) => {
     setDashPeriod(days);
     loadDashboard(days);
