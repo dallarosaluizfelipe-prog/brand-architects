@@ -266,19 +266,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [customFrom, setCustomFrom] = useState('');
   const [customTo, setCustomTo] = useState('');
 
-  // Email state
-  interface AdminEmail {
-    id: string;
-    from_address: string;
-    from_name: string;
-    subject: string;
-    body_html: string;
-    body_text: string;
-    received_at: string;
-  }
-  const [adminEmails, setAdminEmails] = useState<AdminEmail[]>([]);
-  const [emailsLoading, setEmailsLoading] = useState(false);
-  const [selectedEmail, setSelectedEmail] = useState<AdminEmail | null>(null);
 
   const apiCall = async (action: string, data?: any) => {
     const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin`, {
