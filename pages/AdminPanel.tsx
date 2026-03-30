@@ -771,9 +771,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               </button>
             </div>
 
-            {dashLoading && !dashData ? (
+            {!dashData && dashLoading ? (
               <p className="text-neutral-400 font-sans text-sm">Carregando dashboard...</p>
             ) : dashData ? (
+              <div className="relative">
+                {dashLoading && (
+                  <div className="absolute inset-0 bg-white/70 z-10 flex items-center justify-center rounded-2xl">
+                    <p className="text-neutral-500 font-sans text-sm animate-pulse">Atualizando...</p>
+                  </div>
+                )}
               <>
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
