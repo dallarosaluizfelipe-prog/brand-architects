@@ -762,7 +762,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 </button>
               </div>
               <button
-                onClick={() => { loadDashboard(); loadFormSubmissions(); }}
+                onClick={() => { loadDashboard(dashPeriod, customFrom, customTo); loadFormSubmissions(); }}
                 disabled={dashLoading}
                 className="ml-auto text-xs font-sans text-neutral-500 hover:text-black px-4 py-2 rounded-lg hover:bg-neutral-50 transition-colors"
               >
