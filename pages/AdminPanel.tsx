@@ -780,7 +780,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     <p className="text-neutral-500 font-sans text-sm animate-pulse">Atualizando...</p>
                   </div>
                 )}
-              </div>
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
