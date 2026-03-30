@@ -92,6 +92,14 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
+        path="/identidadevisual"
+        element={
+          <PublicLayout>
+            <IdentidadeVisual />
+          </PublicLayout>
+        }
+      />
+      <Route
         path="/contato"
         element={
           <PublicLayout>
