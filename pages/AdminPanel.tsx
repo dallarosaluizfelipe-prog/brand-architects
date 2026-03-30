@@ -1085,6 +1085,69 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           );
         })()}
 
+        {tab === 'emails' && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans">Caixa de Entrada</h3>
+              <button onClick={loadEmails} disabled={emailsLoading} className="text-xs font-sans text-neutral-500 hover:text-black px-4 py-2 rounded-lg hover:bg-neutral-50 transition-colors">
+                {emailsLoading ? 'Atualizando...' : 'Atualizar'}
+              </button>
+            </div>
+
+            {selectedEmail ? (
+              <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+                <button onClick={() => setSelectedEmail(null)} className="text-xs font-sans text-neutral-500 hover:text-black mb-4 flex items-center gap-1">
+                  ← Voltar
+                </button>
+                <div className="mb-4 space-y-2">
+                  <h2 className="text-lg font-display">{selectedEmail.subject}</h2>
+                  <p className="text-sm font-sans text-neutral-600">
+                    <span className="font-medium">De:</span> {selectedEmail.from_name ? `${selectedEmail.from_name} <${selectedEmail.from_address}>` : selectedEmail.from_address}
+                  </p>
+                  <p className="text-xs font-sans text-neutral-400">
+                    {new Date(selectedEmail.received_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+                <div className="border-t border-neutral-100 pt-4">
+                  {selectedEmail.body_html ? (
+                    <div className="prose prose-sm max-w-none font-sans text-neutral-700" dangerouslySetInnerHTML={{ __html: selectedEmail.body_html }} />
+                  ) : (
+                    <pre className="whitespace-pre-wrap text-sm font-sans text-neutral-700">{selectedEmail.body_text || '(sem conteúdo)'}</pre>
+                  )}
+                </div>
+              </div>
+            ) : emailsLoading ? (
+              <p className="text-neutral-400 font-sans text-sm">Carregando e-mails...</p>
+            ) : adminEmails.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-neutral-200 p-8 text-center">
+                <p className="text-neutral-400 font-sans text-sm mb-2">Nenhum e-mail recebido ainda.</p>
+                <p className="text-neutral-300 font-sans text-xs">Configure o encaminhamento automático do seu provedor de e-mail para o webhook do sistema.</p>
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                {adminEmails.map((email, idx) => (
+                  <button
+                    key={email.id}
+                    onClick={() => setSelectedEmail(email)}
+                    className={`w-full text-left px-4 py-4 flex flex-col gap-1 hover:bg-neutral-50 transition-colors ${idx < adminEmails.length - 1 ? 'border-b border-neutral-100' : ''}`}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-sm font-sans font-medium text-neutral-800 truncate">
+                        {email.from_name || email.from_address || 'Remetente desconhecido'}
+                      </span>
+                      <span className="text-xs font-sans text-neutral-400 whitespace-nowrap shrink-0">
+                        {new Date(email.received_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                    <p className="text-sm font-sans text-neutral-700 truncate">{email.subject}</p>
+                    <p className="text-xs font-sans text-neutral-400 truncate">{email.body_text?.slice(0, 120) || '(sem preview)'}</p>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {tab === 'cases' && (
           <div>
             {editingCase ? (
