@@ -91,12 +91,12 @@ const IdentidadeVisual: React.FC = () => {
               <span className="uppercase tracking-[0.45em] text-white/50 mb-6 block font-sans text-[11px] md:text-sm">
                 Identidade visual estratégica
               </span>
-              <h1 className="text-white text-3xl sm:text-4xl md:text-7xl leading-[1] tracking-tight max-w-5xl font-display mb-6">
+              <h1 className="text-white text-4xl sm:text-5xl md:text-8xl leading-[0.9] tracking-tight max-w-5xl font-display mb-6 md:mb-8">
                 Só estética não vende.{' '}
                 <br className="hidden md:block" />
                 Sem estratégia, sua marca não será escolhida.
               </h1>
-              <p className="text-white/60 font-sans font-light text-base md:text-xl max-w-2xl mb-10">
+              <p className="text-white/60 font-sans font-light text-base md:text-lg max-w-2xl mb-10 leading-relaxed">
                 Criamos identidades visuais que não só atraem,
                 <br className="hidden md:block" />
                 mas posicionam você para ser a decisão óbvia.
