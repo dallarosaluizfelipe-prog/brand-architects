@@ -233,7 +233,7 @@ const TEXT_SECTIONS: TextSection[] = [
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads' | 'emails'>('dashboard');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads'>('dashboard');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -266,19 +266,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [customFrom, setCustomFrom] = useState('');
   const [customTo, setCustomTo] = useState('');
 
-  // Email state
-  interface AdminEmail {
-    id: string;
-    from_address: string;
-    from_name: string;
-    subject: string;
-    body_html: string;
-    body_text: string;
-    received_at: string;
-  }
-  const [adminEmails, setAdminEmails] = useState<AdminEmail[]>([]);
-  const [emailsLoading, setEmailsLoading] = useState(false);
-  const [selectedEmail, setSelectedEmail] = useState<AdminEmail | null>(null);
 
   const apiCall = async (action: string, data?: any) => {
     const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin`, {
@@ -573,7 +560,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
   const loadDashboard = async (period?: number | 'custom', from?: string, to?: string) => {
     const p = period ?? dashPeriod;
-    setDashData(null);
     setDashLoading(true);
     let payload: any;
     if (p === 'custom') {
@@ -601,12 +587,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setDashSubsLoading(false);
   };
 
-  const loadEmails = async () => {
-    setEmailsLoading(true);
-    const result = await apiCall('list_emails', { limit: 100 });
-    setAdminEmails(result.emails || []);
-    setEmailsLoading(false);
-  };
 
   const handlePeriodChange = (days: number) => {
     setDashPeriod(days);
@@ -725,19 +705,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['dashboard', 'leads', 'emails', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
+        {(['dashboard', 'leads', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
           <button
             key={t}
             onClick={() => {
               setTab(t);
               if (t === 'leads') loadFormSubmissions();
-              if (t === 'emails') loadEmails();
             }}
             className={`px-6 py-3 rounded-full text-sm font-sans font-medium transition-all ${
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'emails' ? 'E-mail' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
           </button>
         ))}
       </div>
@@ -792,10 +771,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               </button>
             </div>
 
-            {dashLoading && !dashData ? (
+            {!dashData && dashLoading ? (
               <p className="text-neutral-400 font-sans text-sm">Carregando dashboard...</p>
             ) : dashData ? (
-              <>
+              <div className="relative">
+                {dashLoading && (
+                  <div className="absolute inset-0 bg-white/70 z-10 flex items-center justify-center rounded-2xl">
+                    <p className="text-neutral-500 font-sans text-sm animate-pulse">Atualizando...</p>
+                  </div>
+                )}
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
@@ -817,7 +801,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
                 {/* Daily Views — SVG Area Chart */}
                 {Object.keys(dashData.daily_views).length > 0 && (
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200 mb-8">
+                  <div key={dashData.period_label + '-' + dashData.total_page_views} className="bg-white rounded-2xl p-6 border border-neutral-200 mb-8">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans mb-4">Visitas por Dia</h3>
                     {(() => {
                       const entries = Object.entries(dashData.daily_views).sort(([a], [b]) => a.localeCompare(b));
@@ -976,7 +960,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             ) : (
               <p className="text-neutral-400 font-sans text-sm">Sem dados de analytics disponiveis.</p>
             )}
@@ -1085,68 +1069,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           );
         })()}
 
-        {tab === 'emails' && (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-400 font-sans">Caixa de Entrada</h3>
-              <button onClick={loadEmails} disabled={emailsLoading} className="text-xs font-sans text-neutral-500 hover:text-black px-4 py-2 rounded-lg hover:bg-neutral-50 transition-colors">
-                {emailsLoading ? 'Atualizando...' : 'Atualizar'}
-              </button>
-            </div>
-
-            {selectedEmail ? (
-              <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-                <button onClick={() => setSelectedEmail(null)} className="text-xs font-sans text-neutral-500 hover:text-black mb-4 flex items-center gap-1">
-                  ← Voltar
-                </button>
-                <div className="mb-4 space-y-2">
-                  <h2 className="text-lg font-display">{selectedEmail.subject}</h2>
-                  <p className="text-sm font-sans text-neutral-600">
-                    <span className="font-medium">De:</span> {selectedEmail.from_name ? `${selectedEmail.from_name} <${selectedEmail.from_address}>` : selectedEmail.from_address}
-                  </p>
-                  <p className="text-xs font-sans text-neutral-400">
-                    {new Date(selectedEmail.received_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-                <div className="border-t border-neutral-100 pt-4">
-                  {selectedEmail.body_html ? (
-                    <div className="prose prose-sm max-w-none font-sans text-neutral-700" dangerouslySetInnerHTML={{ __html: selectedEmail.body_html }} />
-                  ) : (
-                    <pre className="whitespace-pre-wrap text-sm font-sans text-neutral-700">{selectedEmail.body_text || '(sem conteúdo)'}</pre>
-                  )}
-                </div>
-              </div>
-            ) : emailsLoading ? (
-              <p className="text-neutral-400 font-sans text-sm">Carregando e-mails...</p>
-            ) : adminEmails.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-neutral-200 p-8 text-center">
-                <p className="text-neutral-400 font-sans text-sm mb-2">Nenhum e-mail recebido ainda.</p>
-                <p className="text-neutral-300 font-sans text-xs">Configure o encaminhamento automático do seu provedor de e-mail para o webhook do sistema.</p>
-              </div>
-            ) : (
-              <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-                {adminEmails.map((email, idx) => (
-                  <button
-                    key={email.id}
-                    onClick={() => setSelectedEmail(email)}
-                    className={`w-full text-left px-4 py-4 flex flex-col gap-1 hover:bg-neutral-50 transition-colors ${idx < adminEmails.length - 1 ? 'border-b border-neutral-100' : ''}`}
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-sm font-sans font-medium text-neutral-800 truncate">
-                        {email.from_name || email.from_address || 'Remetente desconhecido'}
-                      </span>
-                      <span className="text-xs font-sans text-neutral-400 whitespace-nowrap shrink-0">
-                        {new Date(email.received_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
-                    <p className="text-sm font-sans text-neutral-700 truncate">{email.subject}</p>
-                    <p className="text-xs font-sans text-neutral-400 truncate">{email.body_text?.slice(0, 120) || '(sem preview)'}</p>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
 
         {tab === 'cases' && (
           <div>
