@@ -73,7 +73,8 @@ const IdentidadeVisual: React.FC = () => {
         {/* ── HERO: Vídeo institucional ── */}
         <section className="relative min-h-[100svh] md:min-h-screen overflow-hidden bg-black rounded-b-[2.5rem] md:rounded-b-[6rem]">
           <div className="absolute inset-0 bg-black" />
-          <div className="relative z-10 flex flex-col items-center justify-center min-h-[100svh] md:min-h-screen text-center px-6">
+          <div className="relative z-10 flex flex-col items-center justify-between min-h-[100svh] md:min-h-screen text-center px-6 pt-28 md:pt-32 pb-28 md:pb-32">
+            <div />
             <div className="flex flex-col items-center">
               <span className="uppercase tracking-[0.45em] text-white/50 mb-4 block font-sans text-[11px] md:text-sm">
                 Identidade visual estratégica
@@ -92,11 +93,12 @@ const IdentidadeVisual: React.FC = () => {
               </p>
               <Link
                 to="/contato"
-                className="bg-white text-black px-10 md:px-16 py-5 md:py-6 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] hover:scale-105 transition-all shadow-xl font-sans"
+                className="inline-block border border-white/40 text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-white hover:text-black font-sans"
               >
                 Solicitar proposta
               </Link>
             </div>
+            <div />
           </div>
         </section>
 
