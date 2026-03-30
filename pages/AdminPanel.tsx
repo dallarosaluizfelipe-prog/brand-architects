@@ -560,7 +560,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
   const loadDashboard = async (period?: number | 'custom', from?: string, to?: string) => {
     const p = period ?? dashPeriod;
-    setDashData(null);
     setDashLoading(true);
     let payload: any;
     if (p === 'custom') {
