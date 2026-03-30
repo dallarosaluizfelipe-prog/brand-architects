@@ -960,7 +960,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             ) : (
               <p className="text-neutral-400 font-sans text-sm">Sem dados de analytics disponiveis.</p>
             )}
