@@ -106,7 +106,8 @@ This document captures details of components, pages, functions, and any code add
 - Shows 4-dot indicator for PIN entry progress.
 
 ### `AdminPanel.tsx`
-- Admin dashboard with tabs: Dashboard, Cases, Midia, Hero, Propostas, Tags, Textos.
+- Admin dashboard with tabs: Dashboard, Leads, Cases, Midia, Hero, Propostas, Tags, Textos.
+- **Leads tab:** Dedicated view of all form submissions from `site_form_submissions`. Summary cards (total leads, last 7 days, last 30 days). Full table with columns: Nome, Telefone, E-mail, Empresa, Serviço (with readable labels mapped from keys), Página de origem, Data/hora. CSV export button. Service label map: estrategia, identidade_visual, sistema_identidade, branding_lancamento, consultoria.
 - **Dashboard tab (default, 7 days):** Period selector (7/30/90 days + custom date range with from/to inputs). KPI cards (total page views, WhatsApp clicks, form submissions) with period_label. SVG area chart for daily views (line + fill + grid). SVG horizontal bar charts for top pages and top regions (graduated opacity). Form submissions table with name, email, company, challenge, date.
 - **Cases tab:** List, create, edit, delete cases (title, category, description, cover_url, order, featured, visible).
 - **Midia tab:** Upload images/videos to storage bucket `media`, list files, copy public URL, delete.

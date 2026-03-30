@@ -2,6 +2,14 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-03-29 12:00** - Aba "Leads" no Admin Panel + Validação do fluxo de e-mail:
+  - **Motivação:** Centralizar visualização de leads no painel admin e validar envio de e-mails.
+  - **Alterações:**
+    - `pages/AdminPanel.tsx`: Nova aba "Leads" adicionada ao painel admin com tabela completa (Nome, Telefone, E-mail, Empresa, Serviço com labels legíveis, Página de origem, Data/hora), cards de resumo (total, últimos 7 e 30 dias), botão de exportar CSV.
+    - Configurada secret `RESEND_API_KEY` para ativar envio de e-mails via Resend.
+    - Edge function `send-contact` reimplantada.
+  - **Impacto:** Admin agora tem visão completa dos leads com exportação. E-mails de contato enviados para lipe@estudiodalla.com.
+
 - **2026-03-27 18:00** - Centralização do rastreamento no GTM para Google Ads:
   - **Motivacao:** Implementar eventos dataLayer confiáveis no front-end para capturar leads via formulário (conversão primária) e cliques no WhatsApp (conversão secundária), evitando falsos positivos e duplicidade de tags.
   - **Alterações:**
