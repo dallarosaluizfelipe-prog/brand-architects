@@ -2,6 +2,11 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-03-30 15:00** - Removida aba E-mail do AdminPanel + Fix definitivo do Dashboard:
+  - Removidos estados, função `loadEmails`, tab button e bloco JSX da aba E-mail (infraestrutura backend mantida para uso futuro).
+  - Dashboard fix: removido `setDashData(null)` que causava flash. Adicionado overlay semi-transparente "Atualizando..." durante reload. Adicionada `key` dinâmica ao gráfico SVG para forçar re-render ao trocar período.
+  - **Arquivos modificados:** `AdminPanel.tsx`, `context.md`, `essential.md`.
+
 - **2026-03-30 14:00** - Fix Dashboard + Aba E-mail no Admin:
   - **Bug corrigido:** Dashboard não atualizava visualmente ao mudar período. Causa: `dashData` não era resetado antes do reload e botão "Atualizar" não passava os parâmetros do período atual.
   - **Nova aba "E-mail":** Criada infraestrutura para leitura de e-mails no painel admin via webhook (tabela `admin_emails`, Edge Function `receive-email`, UI de listagem e visualização detalhada).
