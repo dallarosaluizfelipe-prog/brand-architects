@@ -233,7 +233,7 @@ const TEXT_SECTIONS: TextSection[] = [
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads' | 'emails'>('dashboard');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads'>('dashboard');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
