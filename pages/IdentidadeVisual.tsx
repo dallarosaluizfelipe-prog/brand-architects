@@ -85,22 +85,30 @@ const IdentidadeVisual: React.FC = () => {
             <source src={HERO_VIDEO_DESKTOP} media="(min-width: 769px)" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-black/40" />
-          <div className="relative z-10 flex flex-col items-center justify-center min-h-[100svh] md:min-h-screen text-center px-6">
-            <span className="uppercase tracking-[0.45em] text-white/50 mb-6 block font-sans text-[11px] md:text-sm">
-              Identidade visual estratégica
-            </span>
-            <h1 className="text-white text-4xl sm:text-5xl md:text-8xl leading-[0.9] tracking-tight max-w-5xl font-display mb-6">
-              Sua marca precisa ser mais do que bonita. Precisa ser incontestável.
-            </h1>
-            <p className="text-white/60 font-sans font-light text-base md:text-xl max-w-2xl mb-10">
-              Identidades visuais pensadas para posicionar marcas no mercado.
-            </p>
-            <Link
-              to="/contato"
-              className="bg-white text-black px-10 md:px-16 py-5 md:py-6 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] hover:scale-105 transition-all shadow-xl font-sans"
-            >
-              Solicitar proposta
-            </Link>
+          <div className="relative z-10 flex flex-col items-center justify-between min-h-[100svh] md:min-h-screen text-center px-6 py-28 md:py-32">
+            <div />
+            <div className="flex flex-col items-center">
+              <span className="uppercase tracking-[0.45em] text-white/50 mb-6 block font-sans text-[11px] md:text-sm">
+                Identidade visual estratégica
+              </span>
+              <h1 className="text-white text-3xl sm:text-4xl md:text-7xl leading-[1] tracking-tight max-w-5xl font-display mb-6">
+                Só estética não vende.{' '}
+                <br className="hidden md:block" />
+                Sem estratégia, sua marca não será escolhida.
+              </h1>
+              <p className="text-white/60 font-sans font-light text-base md:text-xl max-w-2xl mb-10">
+                Criamos identidades visuais que não só atraem,
+                <br className="hidden md:block" />
+                mas posicionam você para ser a decisão óbvia.
+              </p>
+              <Link
+                to="/contato"
+                className="bg-white text-black px-10 md:px-16 py-5 md:py-6 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] hover:scale-105 transition-all shadow-xl font-sans"
+              >
+                Solicitar proposta
+              </Link>
+            </div>
+            <div />
           </div>
         </section>
 
