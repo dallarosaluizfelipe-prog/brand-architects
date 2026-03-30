@@ -72,33 +72,22 @@ const IdentidadeVisual: React.FC = () => {
 
         {/* ── HERO: Vídeo institucional ── */}
         <section className="relative min-h-[100svh] md:min-h-screen overflow-hidden bg-black rounded-b-[2.5rem] md:rounded-b-[6rem]">
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster={HERO_POSTER}
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src={HERO_VIDEO_MOBILE} media="(max-width: 768px)" type="video/mp4" />
-            <source src={HERO_VIDEO_DESKTOP} media="(min-width: 769px)" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="relative z-10 flex flex-col items-center justify-between min-h-[100svh] md:min-h-screen text-center px-6 py-28 md:py-32">
-            <div />
+          <div className="absolute inset-0 bg-black" />
+          <div className="relative z-10 flex flex-col items-center justify-center min-h-[100svh] md:min-h-screen text-center px-6">
             <div className="flex flex-col items-center">
-              <span className="uppercase tracking-[0.45em] text-white/50 mb-6 block font-sans text-[11px] md:text-sm">
+              <span className="uppercase tracking-[0.45em] text-white/50 mb-4 block font-sans text-[11px] md:text-sm">
                 Identidade visual estratégica
               </span>
               <h1 className="text-white text-4xl sm:text-5xl md:text-8xl leading-[0.9] tracking-tight max-w-5xl font-display mb-6 md:mb-8">
-                Só estética não vende.{' '}
-                <br className="hidden md:block" />
-                Sem estratégia, sua marca não será escolhida.
+                Só estética não vende.
+                <br />
+                Sem estratégia, sua marca
+                <br />
+                não será escolhida.
               </h1>
               <p className="text-white/60 font-sans font-light text-base md:text-lg max-w-2xl mb-10 leading-relaxed">
                 Criamos identidades visuais que não só atraem,
-                <br className="hidden md:block" />
+                <br />
                 mas posicionam você para ser a decisão óbvia.
               </p>
               <Link
@@ -108,7 +97,6 @@ const IdentidadeVisual: React.FC = () => {
                 Solicitar proposta
               </Link>
             </div>
-            <div />
           </div>
         </section>
 
