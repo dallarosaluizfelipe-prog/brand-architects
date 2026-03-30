@@ -1,36 +1,40 @@
 
 
-## Plano: Corrigir Dashboard + Alternativa para Leitura de E-mails
+## Plano: Remover aba E-mail + Corrigir Dashboard
 
-### 1. Bug do Dashboard — Período não atualiza visualmente
+### 1. Remover aba "E-mail" do AdminPanel
 
-**Problema identificado:** Quando o dashboard já tem dados carregados, a condição de loading na linha 766 (`dashLoading && !dashData`) nunca é verdadeira novamente, porque `dashData` já existe. Isso faz com que durante o recarregamento os dados antigos continuem visíveis sem indicação clara de que estão atualizando. Além disso, o botão "Atualizar" chama `loadDashboard()` sem argumentos — se o período atual for "custom", os parâmetros `from`/`to` não são passados, e o fallback é `days: 7`.
+**Alteracoes em `AdminPanel.tsx`:**
+- Remover `'emails'` do tipo do state `tab` e do array de tabs renderizado (linha 728)
+- Remover state de emails: `adminEmails`, `emailsLoading`, `selectedEmail`, interface `AdminEmail` (linhas 269-281)
+- Remover funcao `loadEmails` (linhas 604-609)
+- Remover chamada `if (t === 'emails') loadEmails()` no click handler (linha 734)
+- Remover todo o bloco `{tab === 'emails' && (...)}` (linhas 1088-1149)
 
-**Correção em `AdminPanel.tsx`:**
-- Adicionar um indicador de loading sobreposto (overlay com opacity) quando `dashLoading` é true, mesmo com dados existentes
-- Corrigir o botão "Atualizar" para passar os parâmetros corretos do período atual (incluindo custom range)
-- Limpar `dashData` antes de recarregar para forçar feedback visual (`setDashData(null)` no início de `loadDashboard`)
+**Manter intactos** (nao excluir — podem ser uteis no futuro):
+- Tabela `admin_emails` no banco
+- Edge Function `receive-email/index.ts`
+- Action `list_emails` na Edge Function `admin/index.ts`
 
-### 2. Leitura de E-mails — Abordagem viável
+### 2. Corrigir gráfico do Dashboard que nao atualiza
 
-Integrar diretamente com IMAP de um provedor genérico é frágil. A alternativa proposta:
+**Problema real identificado:** Ao trocar o periodo, o `loadDashboard` chama `setDashData(null)` e depois `setDashData(result)`. O React re-renderiza, porem o grafico SVG (area chart) pode nao parecer diferente se os dados sao similares ou se ha problemas de cache visual do SVG.
 
-**Opção A — Encaminhamento automático (recomendada):**
-- Criar uma Edge Function `receive-email` que recebe e-mails via webhook (usando Resend Inbound ou serviço similar)
-- Configurar encaminhamento automático no provedor de e-mail para um endereço que dispara o webhook
-- Armazenar os e-mails em uma nova tabela `admin_emails` (from, subject, body_html, body_text, received_at)
-- Criar aba "E-mail" no AdminPanel para listar e visualizar os e-mails recebidos
+**Correcao:**
+- Adicionar uma `key` dinamica ao container do grafico baseada no `period_label` + timestamp, forcando React a destruir e recriar o SVG quando os dados mudam
+- Adicionar um indicador visual (overlay de loading com opacity) sobre os dados existentes durante o carregamento, em vez de apenas remover tudo com `setDashData(null)` — isso dara feedback mais claro ao usuario
+- Alterar a abordagem: em vez de `setDashData(null)`, manter dados antigos visiveis com um overlay de "Atualizando..." semi-transparente, e so substituir quando os novos dados chegarem
 
-**Opção B — IMAP direto (instável):**
-- Criar Edge Function que conecta via IMAP ao provedor
-- Requer credenciais IMAP do provedor
-- Limitações de timeout e compatibilidade com Deno
+**Mudanca especifica:**
+- Remover `setDashData(null)` do inicio de `loadDashboard`
+- No bloco de renderizacao do dashboard (linha 795), trocar a condicao `dashLoading && !dashData` para mostrar overlay quando `dashLoading` e `true` (independente de `dashData`)
+- Adicionar `key={dashData?.period_label}` no wrapper do grafico SVG
 
-**Recomendação:** Opção A é significativamente mais confiável. Requer configurar um encaminhamento no provedor de e-mail para um endereço Resend Inbound.
+### 3. Documentacao
+- Atualizar `context.md` e `essential.md`
 
-### Arquivos a modificar
-- `pages/AdminPanel.tsx` — fix do dashboard + nova aba E-mail (se aprovado)
-- `supabase/functions/receive-email/index.ts` — nova Edge Function (Opção A)
-- Nova migração — tabela `admin_emails`
-- `context.md` / `essential.md` — documentação
+### Arquivos modificados
+- `pages/AdminPanel.tsx` — remover aba emails + fix dashboard
+- `context.md`
+- `essential.md`
 
