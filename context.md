@@ -2,6 +2,11 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-03-30 14:00** - Fix Dashboard + Aba E-mail no Admin:
+  - **Bug corrigido:** Dashboard não atualizava visualmente ao mudar período. Causa: `dashData` não era resetado antes do reload e botão "Atualizar" não passava os parâmetros do período atual.
+  - **Nova aba "E-mail":** Criada infraestrutura para leitura de e-mails no painel admin via webhook (tabela `admin_emails`, Edge Function `receive-email`, UI de listagem e visualização detalhada).
+  - **Arquivos modificados:** `AdminPanel.tsx`, `supabase/functions/admin/index.ts`, `supabase/functions/receive-email/index.ts`.
+
 - **2026-03-29 12:00** - Aba "Leads" no Admin Panel + Validação do fluxo de e-mail:
   - **Motivação:** Centralizar visualização de leads no painel admin e validar envio de e-mails.
   - **Alterações:**
