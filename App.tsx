@@ -11,6 +11,7 @@ import About from "./pages/About";
 import Admin from "./pages/Admin";
 import CaseDetails from "./pages/CaseDetails";
 import ProposalDetails from "./pages/ProposalDetails";
+import IdentidadeVisual from "./pages/IdentidadeVisual";
 import TrackingScripts from "./components/TrackingScripts";
 import { useAnalytics } from "./src/hooks/useAnalytics";
 
@@ -87,6 +88,14 @@ const AppRoutes: React.FC = () => {
         element={
           <PublicLayout>
             <ProposalDetails />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/identidadevisual"
+        element={
+          <PublicLayout>
+            <IdentidadeVisual />
           </PublicLayout>
         }
       />
