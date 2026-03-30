@@ -71,52 +71,33 @@ const IdentidadeVisual: React.FC = () => {
       <div className="animate-in fade-in duration-700">
 
         {/* ── HERO: Vídeo institucional ── */}
-        <section className="relative min-h-[100svh] md:min-h-screen overflow-hidden bg-black rounded-b-[2.5rem] md:rounded-b-[6rem]">
-          <div className="absolute inset-0 bg-black" />
+        <section className="relative min-h-[100svh] md:min-h-screen overflow-hidden bg-white rounded-b-[2.5rem] md:rounded-b-[6rem]">
           <div className="relative z-10 flex flex-col items-center justify-between min-h-[100svh] md:min-h-screen text-center px-6 pt-28 md:pt-32 pb-28 md:pb-32">
             <div />
             <div className="flex flex-col items-center">
-              <span className="uppercase tracking-[0.45em] text-white/50 mb-4 block font-sans text-[11px] md:text-sm">
+              <span className="uppercase tracking-[0.45em] text-black/40 mb-4 block font-sans text-[11px] md:text-sm">
                 Identidade visual estratégica
               </span>
-              <h1 className="text-white text-4xl sm:text-5xl md:text-8xl leading-[0.9] tracking-tight max-w-5xl font-display mb-6 md:mb-8">
+              <h1 className="text-black text-4xl sm:text-5xl md:text-8xl leading-[0.9] tracking-tight max-w-5xl font-display mb-6 md:mb-8">
                 Só estética não vende.
                 <br />
                 Sem estratégia, sua marca
                 <br />
                 não será escolhida.
               </h1>
-              <p className="text-white/60 font-sans font-light text-base md:text-lg max-w-2xl mb-10 leading-relaxed">
+              <p className="text-black/50 font-sans font-light text-base md:text-lg max-w-2xl mb-10 leading-relaxed">
                 Criamos identidades visuais que não só atraem,
                 <br />
                 mas posicionam você para ser a decisão óbvia.
               </p>
               <Link
                 to="/contato"
-                className="inline-block border border-white/40 text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-white hover:text-black font-sans"
+                className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
               >
                 Solicitar proposta
               </Link>
             </div>
             <div />
-          </div>
-        </section>
-
-        {/* ── FRASE DE EFEITO ── */}
-        <section className="py-20 md:py-40 px-6">
-          <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-8">
-              Marcas que não se posicionam, são posicionadas pelo mercado.
-            </h2>
-            <p className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-2xl mx-auto mb-10">
-              Nós criamos identidades visuais que traduzem estratégia em percepção. Cada detalhe é pensado para gerar autoridade, reconhecimento e valor de marca.
-            </p>
-            <Link
-              to="/metodologia"
-              className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
-            >
-              Conheça nosso método
-            </Link>
           </div>
         </section>
 
