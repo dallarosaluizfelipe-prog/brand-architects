@@ -230,11 +230,18 @@ const IdentidadeVisual: React.FC = () => {
                   {METHOD_PHASES.map((_, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setActivePhase(idx)}
-                      className={`w-2.5 h-2.5 rounded-full transition-all ${
+                      onClick={() => handlePhaseClick(idx)}
+                      className={`relative w-2.5 h-2.5 rounded-full transition-all overflow-hidden ${
                         idx === activePhase ? 'bg-black scale-125' : 'bg-neutral-300'
                       }`}
-                    />
+                    >
+                      {idx === activePhase && (
+                        <span
+                          className="absolute inset-0 bg-neutral-500 origin-left transition-none"
+                          style={{ transform: `scaleX(${progress / 100})` }}
+                        />
+                      )}
+                    </button>
                   ))}
                 </div>
               </div>
