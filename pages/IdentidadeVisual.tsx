@@ -45,8 +45,8 @@ const DELIVERABLES = [
   { icon: 'palette', title: 'Paleta de cores', desc: 'Sistema cromático estratégico para todos os canais.' },
   { icon: 'text_fields', title: 'Tipografia', desc: 'Seleção e hierarquia tipográfica exclusiva.' },
   { icon: 'grid_view', title: 'Elementos gráficos', desc: 'Patterns, texturas e ícones proprietários.' },
-  { icon: 'auto_stories', title: 'Brandbook completo', desc: 'Manual de identidade com todas as diretrizes.' },
-  { icon: 'devices', title: 'Aplicações digitais', desc: 'Social media, site, apresentações e e-mail.' },
+  { icon: 'auto_stories', title: 'Manual de Aplicação', desc: 'Manual de identidade com todas as diretrizes.' },
+  { icon: 'devices', title: 'Templates', desc: 'Social media, site, apresentações e e-mail.' },
 ];
 
 const IdentidadeVisual: React.FC = () => {
@@ -258,12 +258,12 @@ const IdentidadeVisual: React.FC = () => {
           </div>
         </section>
 
-        {/* ── ENTREGÁVEIS ── */}
+        {/* ── BENEFÍCIOS ── */}
         <section className="py-20 md:py-32 px-6 bg-black text-white rounded-[2.5rem] md:rounded-[5rem]">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 md:mb-20">
               <span className="uppercase tracking-[0.45em] text-white/40 mb-6 block font-sans text-[11px] md:text-sm font-bold">
-                Entregáveis
+                Benefícios
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6">
                 O que sua marca ganha.
@@ -280,7 +280,7 @@ const IdentidadeVisual: React.FC = () => {
                   className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 hover:bg-white/10 transition-all"
                 >
                   <span className="material-symbols-outlined text-3xl mb-4 opacity-60">{item.icon}</span>
-                  <h3 className="text-lg md:text-xl font-display mb-2">{item.title}</h3>
+                  <h3 className="text-lg md:text-xl font-sans font-black mb-2">{item.title}</h3>
                   <p className="text-white/50 font-sans font-light text-sm leading-relaxed">{item.desc}</p>
                 </div>
               ))}
@@ -289,7 +289,7 @@ const IdentidadeVisual: React.FC = () => {
             <div className="text-center mt-12 md:mt-16">
               <Link
                 to="/contato"
-                className="inline-block bg-white text-black px-10 md:px-16 py-5 md:py-6 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] hover:scale-105 transition-all shadow-xl font-sans"
+                className="inline-block border border-white/40 text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-white hover:text-black font-sans"
               >
                 Quero uma identidade visual
               </Link>
