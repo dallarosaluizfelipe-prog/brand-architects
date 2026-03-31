@@ -52,11 +52,26 @@ const DELIVERABLES = [
 const IdentidadeVisual: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [activePhase, setActivePhase] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const PHASE_DURATION = 4000;
+  const TICK = 50;
+
+  const handlePhaseClick = useCallback((idx: number) => {
+    setActivePhase(idx);
+    setProgress(0);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActivePhase((prev) => (prev + 1) % METHOD_PHASES.length);
-    }, 4000);
+      setProgress((prev) => {
+        const next = prev + (TICK / PHASE_DURATION) * 100;
+        if (next >= 100) {
+          setActivePhase((p) => (p + 1) % METHOD_PHASES.length);
+          return 0;
+        }
+        return next;
+      });
+    }, TICK);
     return () => clearInterval(interval);
   }, []);
 
