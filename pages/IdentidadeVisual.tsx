@@ -289,7 +289,7 @@ const IdentidadeVisual: React.FC = () => {
             <div className="text-center mt-12 md:mt-16">
               <Link
                 to="/contato"
-                className="inline-block bg-white text-black px-10 md:px-16 py-5 md:py-6 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] hover:scale-105 transition-all shadow-xl font-sans"
+                className="inline-block border border-white/40 text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-white hover:text-black font-sans"
               >
                 Quero uma identidade visual
               </Link>
