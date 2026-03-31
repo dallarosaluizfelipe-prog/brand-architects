@@ -106,16 +106,26 @@ const IdentidadeVisual: React.FC = () => {
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             <div>
               <span className="text-[11px] uppercase tracking-[0.4em] text-neutral-400 font-sans font-bold mb-6 block">
-                Quem somos
+                Sobre nós
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-6xl leading-[0.9] tracking-tight font-display mb-6">
                 Estratégia e estética a serviço do seu negócio.
               </h2>
               <p className="text-neutral-500 font-sans font-light text-base md:text-lg leading-relaxed mb-4">
-                O Studio Dalla é um estúdio de branding e identidade visual especializado em marcas de alto valor. Atuamos com um método proprietário que une visão de mercado e design autoral para construir marcas com posicionamento incontestável.
+                Somos o Estúdio Dalla, especialista em estratégias para marcas que não querem disputar, querem ser escolhidas.
+              </p>
+              <p className="text-neutral-500 font-sans font-light text-base md:text-lg leading-relaxed mb-4">
+                Unindo análise de mercado e design estratégico
+                <br />
+                para criar identidades que sustentam valor e posicionamento.
+              </p>
+              <p className="text-neutral-500 font-sans font-light text-base md:text-lg leading-relaxed mb-4">
+                Não é só sobre como sua marca parece, é sobre como ela é percebida e por que isso define quanto ela vale.
               </p>
               <p className="text-neutral-500 font-sans font-light text-base md:text-lg leading-relaxed mb-8">
-                Nosso trabalho vai além do visual — construímos a percepção que o mercado terá da sua marca. Cada projeto é tratado com profundidade estratégica e excelência criativa.
+                Cada projeto é conduzido com profundidade estratégica
+                <br />
+                e rigor criativo para transformar estética em decisão de compra.
               </p>
               <Link
                 to="/estudio"
@@ -125,11 +135,13 @@ const IdentidadeVisual: React.FC = () => {
               </Link>
             </div>
             <div className="rounded-3xl overflow-hidden aspect-[4/5] shadow-lg">
-              <img
-                src="/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png"
-                alt="Studio Dalla — Identidade Visual"
+              <video
+                src="/lovable-uploads/dalla-teaser.mov"
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-full object-cover"
-                loading="lazy"
               />
             </div>
           </div>
