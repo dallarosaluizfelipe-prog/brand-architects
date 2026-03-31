@@ -263,9 +263,9 @@ const IdentidadeVisual: React.FC = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 md:mb-20">
               <span className="uppercase tracking-[0.45em] text-white/40 mb-6 block font-sans text-[11px] md:text-sm font-bold">
-                Entregáveis
+                Benefícios
               </span>
-              <h2 className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6">
+              <h2 className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-sans font-black mb-6">
                 O que sua marca ganha.
               </h2>
               <p className="text-white/50 font-sans font-light text-base md:text-xl max-w-2xl mx-auto">
@@ -289,7 +289,7 @@ const IdentidadeVisual: React.FC = () => {
             <div className="text-center mt-12 md:mt-16">
               <Link
                 to="/contato"
-                className="inline-block bg-white text-black px-10 md:px-16 py-5 md:py-6 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] hover:scale-105 transition-all shadow-xl font-sans"
+                className="inline-block border border-white/40 text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-white hover:text-black font-sans"
               >
                 Quero uma identidade visual
               </Link>
