@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
@@ -52,11 +52,26 @@ const DELIVERABLES = [
 const IdentidadeVisual: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [activePhase, setActivePhase] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const PHASE_DURATION = 4000;
+  const TICK = 50;
+
+  const handlePhaseClick = useCallback((idx: number) => {
+    setActivePhase(idx);
+    setProgress(0);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActivePhase((prev) => (prev + 1) % METHOD_PHASES.length);
-    }, 4000);
+      setProgress((prev) => {
+        const next = prev + (TICK / PHASE_DURATION) * 100;
+        if (next >= 100) {
+          setActivePhase((p) => (p + 1) % METHOD_PHASES.length);
+          return 0;
+        }
+        return next;
+      });
+    }, TICK);
     return () => clearInterval(interval);
   }, []);
 
@@ -170,16 +185,21 @@ const IdentidadeVisual: React.FC = () => {
                 {METHOD_PHASES.map((phase, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setActivePhase(idx)}
-                    className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold font-sans transition-all duration-500 ${
+                    onClick={() => handlePhaseClick(idx)}
+                    className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold font-sans transition-all duration-500 overflow-hidden ${
                       idx === activePhase
                         ? 'bg-black text-white scale-110'
-                        : idx < activePhase
-                        ? 'bg-neutral-800 text-white'
                         : 'bg-neutral-200 text-neutral-500'
                     }`}
                   >
-                    {phase.id}
+                    {/* Progress fill inside active bullet */}
+                    {idx === activePhase && (
+                      <span
+                        className="absolute inset-0 bg-neutral-600 origin-bottom transition-none"
+                        style={{ transform: `scaleY(${progress / 100})` }}
+                      />
+                    )}
+                    <span className="relative z-10">{phase.id}</span>
                   </button>
                 ))}
               </div>
@@ -210,11 +230,18 @@ const IdentidadeVisual: React.FC = () => {
                   {METHOD_PHASES.map((_, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setActivePhase(idx)}
-                      className={`w-2.5 h-2.5 rounded-full transition-all ${
+                      onClick={() => handlePhaseClick(idx)}
+                      className={`relative w-2.5 h-2.5 rounded-full transition-all overflow-hidden ${
                         idx === activePhase ? 'bg-black scale-125' : 'bg-neutral-300'
                       }`}
-                    />
+                    >
+                      {idx === activePhase && (
+                        <span
+                          className="absolute inset-0 bg-neutral-500 origin-left transition-none"
+                          style={{ transform: `scaleX(${progress / 100})` }}
+                        />
+                      )}
+                    </button>
                   ))}
                 </div>
               </div>
