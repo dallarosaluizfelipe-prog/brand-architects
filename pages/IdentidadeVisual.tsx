@@ -45,8 +45,8 @@ const DELIVERABLES = [
   { icon: 'palette', title: 'Paleta de cores', desc: 'Sistema cromático estratégico para todos os canais.' },
   { icon: 'text_fields', title: 'Tipografia', desc: 'Seleção e hierarquia tipográfica exclusiva.' },
   { icon: 'grid_view', title: 'Elementos gráficos', desc: 'Patterns, texturas e ícones proprietários.' },
-  { icon: 'auto_stories', title: 'Brandbook completo', desc: 'Manual de identidade com todas as diretrizes.' },
-  { icon: 'devices', title: 'Aplicações digitais', desc: 'Social media, site, apresentações e e-mail.' },
+  { icon: 'auto_stories', title: 'Manual de Aplicação', desc: 'Manual de identidade com todas as diretrizes.' },
+  { icon: 'devices', title: 'Templates', desc: 'Social media, site, apresentações e e-mail.' },
 ];
 
 const IdentidadeVisual: React.FC = () => {
