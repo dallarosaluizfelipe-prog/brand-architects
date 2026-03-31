@@ -185,16 +185,21 @@ const IdentidadeVisual: React.FC = () => {
                 {METHOD_PHASES.map((phase, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setActivePhase(idx)}
-                    className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold font-sans transition-all duration-500 ${
+                    onClick={() => handlePhaseClick(idx)}
+                    className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold font-sans transition-all duration-500 overflow-hidden ${
                       idx === activePhase
                         ? 'bg-black text-white scale-110'
-                        : idx < activePhase
-                        ? 'bg-neutral-800 text-white'
                         : 'bg-neutral-200 text-neutral-500'
                     }`}
                   >
-                    {phase.id}
+                    {/* Progress fill inside active bullet */}
+                    {idx === activePhase && (
+                      <span
+                        className="absolute inset-0 bg-neutral-600 origin-bottom transition-none"
+                        style={{ transform: `scaleY(${progress / 100})` }}
+                      />
+                    )}
+                    <span className="relative z-10">{phase.id}</span>
                   </button>
                 ))}
               </div>
