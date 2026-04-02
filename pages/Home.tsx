@@ -162,16 +162,16 @@ const Home: React.FC = () => {
               <div className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg" dangerouslySetInnerHTML={{ __html: t.home_partners_subtitle }} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-1.png" alt="Parceiro 1" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-2.png" alt="Parceiro 2" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-3.png" alt="Parceiro 3" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-4.png" alt="Parceiro 4" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-5.png" alt="Parceiro 5" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-6.png" alt="Parceiro 6" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-7.png" alt="Parceiro 7" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-8.png" alt="Parceiro 8" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-9.png" alt="Parceiro 9" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-10.png" alt="Parceiro 10" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-1.png" alt="Parceiro 1" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-2.png" alt="Parceiro 2" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-3.png" alt="Parceiro 3" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-4.png" alt="Parceiro 4" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-5.png" alt="Parceiro 5" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-6.png" alt="Parceiro 6" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-7.png" alt="Parceiro 7" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-8.png" alt="Parceiro 8" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-9.png" alt="Parceiro 9" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
+              <div className="flex justify-center"><img src="/lovable-uploads/partner-10.png" alt="Parceiro 10" loading="lazy" className="h-28 md:h-32 object-contain" /></div>
             </div>
           </div>
         </section>
