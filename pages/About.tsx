@@ -62,6 +62,31 @@ const About: React.FC = () => {
           </div>
         </section>
 
+        <section className="py-20 md:py-32 px-6 bg-black text-white">
+          <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-10 md:gap-14 items-center">
+            <div className="md:col-span-5">
+              <div className="rounded-[1.75rem] md:rounded-[2.25rem] overflow-hidden aspect-[4/5] bg-neutral-900 shadow-2xl">
+                <img
+                  alt="Retrato de Lipe Dalla-Rosa, designer e fundador"
+                  className="w-full h-full object-cover"
+                  src="/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+
+            <div className="md:col-span-7">
+              <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-5 opacity-70">Especialista em marcas</p>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl leading-[0.92] tracking-tight mb-8">Lipe Dalla-Rosa Designer &amp; Fundador</h2>
+              <div className="space-y-5 text-sm sm:text-base md:text-lg text-neutral-200 font-light leading-relaxed font-sans max-w-3xl">
+                <p>Paranaense, pai e marido, sou apaixonado por design e por tudo que envolve construcao de significado, estetica e percepcao. Acredito que as experiencias que vivemos fora do trabalho moldam diretamente a forma como enxergamos o mundo e nos conectamos com as pessoas.</p>
+                <p>Sou bacharel em Design e atuo como especialista em marca, desenvolvendo projetos que unem estrategia e direcao estetica para construir posicionamentos claros, consistentes e relevantes no mercado.</p>
+                <p>Acredito que marcas fortes nao sao fruto do acaso, mas de decisoes bem estruturadas, visao de longo prazo e intencao em cada detalhe, porque no fim, nao se trata apenas de como uma marca parece, mas de como ela e percebida e valorizada.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="py-20 md:py-40 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-14 md:mb-32">
             <span className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans opacity-40">{t.about_pillars_badge}</span>

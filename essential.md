@@ -2,6 +2,23 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-02 Restauracao do Sitemap Dinamico
+
+### `vercel.json` (atualizado)
+- Rewrite de fallback SPA endurecido para nao interceptar caminhos com extensao:
+  - Antes: `/((?!api/).*)`
+  - Depois: `/((?!api/|.*\..*).*)`
+- Com essa regra, `sitemap.xml` e outros assets/arquivos com extensao nao sao enviados para `index.html`.
+- Rewrite dedicado `/sitemap.xml -> /api/sitemap.xml` permanece prioritario.
+
+### `public/sitemap.xml` (removido)
+- Arquivo legado removido do repositrio para eliminar qualquer ambiguidade entre sitemap estatico e dinamico.
+- Fonte canonica do sitemap passa a ser apenas `api/sitemap.xml.js`.
+
+### Validacao executada
+- `npm run build` concluido com sucesso.
+- Teste em producao durante a sessao indicou que a release ativa ainda serve o conteudo legado (comentario `DEPRECATED`), portanto a correcao depende de novo deploy para entrar em vigor.
+
 ## Components
 
 ### `Navbar.tsx`
@@ -51,6 +68,17 @@ This document captures details of components, pages, functions, and any code add
 - Renders `Navbar`, the current page from switch, and `Footer`.
 - Implements scroll-to-top effect on page change.
 - Detects `#admin` hash to render Admin page without Navbar/Footer.
+
+### `About.tsx` (atualizado em 2026-04-02)
+- Nova secao institucional inserida antes do bloco "O que nos move.", com fundo preto e layout premium.
+- Estrutura responsiva mobile-first:
+  - Mobile: foto vertical e texto empilhados.
+  - Desktop: grid 2 colunas (foto a esquerda, texto a direita).
+- Conteudo estatico adicionado conforme briefing:
+  - "Especialista em marcas"
+  - "Lipe Dalla-Rosa Designer & Fundador"
+  - Tres paragrafos institucionais sobre repertorio pessoal, atuacao em branding e visao estrategica.
+- Imagem usada: `/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg` com `alt` descritivo e `loading="lazy"`.
 
 ### `Home.tsx`
 - Landing page with hero video, global excellence section, selected portfolio, partners logos, and `ContactSection`.

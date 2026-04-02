@@ -2,6 +2,25 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-02 15:30** - Nova secao institucional na pagina Estudio (antes de "O que nos move."):
+  - **Solicitacao:** Adicionar bloco com fundo preto, foto vertical a esquerda e texto institucional do fundador a direita.
+  - **Alteracao aplicada em `pages/About.tsx`:**
+    - Inserida nova `<section>` entre a secao "Criado com uma visao de precisao." e a secao de pilares.
+    - Layout responsivo mobile-first: pilha unica no mobile e grid em 2 colunas no desktop (foto esquerda / texto direita).
+    - Foto configurada com path URL-encoded: `/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg`.
+    - Conteudo textual inserido conforme briefing: "Especialista em marcas", nome/cargo e 3 paragrafos institucionais.
+  - **Validacao:** Build executado com sucesso (`npm run build`).
+
+- **2026-04-02 10:40** - Correcao de roteamento do sitemap para restaurar comportamento dinamico esperado:
+  - **Motivacao:** Usuario reportou que `/sitemap.xml` deixou de funcionar como esperado no passado. Diagnostico apontou conflito potencial entre rewrite especifico do sitemap e fallback SPA amplo no deploy Vercel.
+  - **Alteracoes aplicadas:**
+    - `vercel.json` — rewrite SPA alterado de `/((?!api/).*)` para `/((?!api/|.*\\..*).*)` para impedir captura de paths com extensao (ex.: `.xml`) e preservar prioridade do rewrite `/sitemap.xml` -> `/api/sitemap.xml`.
+    - `public/sitemap.xml` — arquivo legado removido definitivamente do workspace para eliminar ambiguidade entre sitemap estatico e dinamico.
+  - **Validacoes executadas:**
+    - Build local concluido com sucesso (`npm run build`).
+    - Verificacao HTTP em producao mostrou que o dominio ainda responde com o conteudo legado estatico (comentario `DEPRECATED`) na release atual, confirmando necessidade de novo deploy para publicar esta correcao.
+  - **Resultado esperado apos deploy:** `https://estudiodalla.com/sitemap.xml` deve retornar XML dinamico gerado pela funcao serverless (`api/sitemap.xml.js`) em vez do legado estatico.
+
 - **2026-03-27 18:00** - Centralização do rastreamento no GTM para Google Ads:
   - **Motivacao:** Implementar eventos dataLayer confiáveis no front-end para capturar leads via formulário (conversão primária) e cliques no WhatsApp (conversão secundária), evitando falsos positivos e duplicidade de tags.
   - **Alterações:**
