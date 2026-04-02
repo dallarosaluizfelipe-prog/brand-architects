@@ -217,16 +217,27 @@ Deno.serve(async (req) => {
           return query;
         };
 
-        // Page views with page_path + created_at
+        // Page views with page_path + created_at.
+        // We merge both sources to support legacy/alternative tracking pipelines.
         const { data: pvByPage } = await addRange(
           supabase.from("site_page_views").select("page_path, created_at")
         );
+        const { data: pvEvents } = await addRange(
+          supabase
+            .from("site_events")
+            .select("page_path, created_at")
+            .eq("event_type", "page_view")
+        );
+
+        const pageViewRows = [...(pvByPage || []), ...(pvEvents || [])];
 
         const pageViewCounts: Record<string, number> = {};
         const dailyViews: Record<string, number> = {};
-        for (const row of pvByPage || []) {
-          pageViewCounts[row.page_path] = (pageViewCounts[row.page_path] || 0) + 1;
-          const day = row.created_at.slice(0, 10);
+        for (const row of pageViewRows) {
+          const page = row.page_path || "/";
+          const createdAt = row.created_at || new Date().toISOString();
+          pageViewCounts[page] = (pageViewCounts[page] || 0) + 1;
+          const day = createdAt.slice(0, 10);
           dailyViews[day] = (dailyViews[day] || 0) + 1;
         }
         const topPages = Object.entries(pageViewCounts)
@@ -259,7 +270,7 @@ Deno.serve(async (req) => {
         );
 
         return new Response(JSON.stringify({
-          total_page_views: (pvByPage || []).length,
+          total_page_views: pageViewRows.length,
           whatsapp_clicks: whatsappClicks || 0,
           form_submissions: formCount || 0,
           top_pages: topPages,

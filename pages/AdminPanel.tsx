@@ -62,6 +62,45 @@ interface AnalyticsSummary {
   period_label: string;
 }
 
+const emptyAnalyticsSummary: AnalyticsSummary = {
+  total_page_views: 0,
+  whatsapp_clicks: 0,
+  form_submissions: 0,
+  top_pages: [],
+  top_regions: [],
+  daily_views: {},
+  period_label: '',
+};
+
+const normalizeAnalyticsSummary = (raw: any): AnalyticsSummary => {
+  if (!raw || typeof raw !== 'object') {
+    return { ...emptyAnalyticsSummary };
+  }
+
+  const rawDailyViews = raw.daily_views ?? raw.dailyViews;
+  const normalizedDailyViews: Record<string, number> = {};
+
+  if (rawDailyViews && typeof rawDailyViews === 'object' && !Array.isArray(rawDailyViews)) {
+    for (const [day, count] of Object.entries(rawDailyViews)) {
+      normalizedDailyViews[String(day)] = Number(count) || 0;
+    }
+  }
+
+  return {
+    total_page_views: Number(raw.total_page_views) || 0,
+    whatsapp_clicks: Number(raw.whatsapp_clicks) || 0,
+    form_submissions: Number(raw.form_submissions) || 0,
+    top_pages: Array.isArray(raw.top_pages)
+      ? raw.top_pages.map((p: any) => ({ page: String(p?.page || '/'), count: Number(p?.count) || 0 }))
+      : [],
+    top_regions: Array.isArray(raw.top_regions)
+      ? raw.top_regions.map((r: any) => ({ region: String(r?.region || 'Desconhecido'), count: Number(r?.count) || 0 }))
+      : [],
+    daily_views: normalizedDailyViews,
+    period_label: String(raw.period_label || ''),
+  };
+};
+
 interface FormSubmission {
   id: string;
   name: string;
@@ -582,7 +621,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       payload = { days: 7 };
     }
     const result = await apiCall('analytics_summary', payload);
-    setDashData(result);
+    if (result?.error) {
+      showMessage(`Erro ao carregar analytics: ${result.error}`);
+      setDashData({ ...emptyAnalyticsSummary, period_label: dashData?.period_label || '' });
+      setDashLoading(false);
+      return;
+    }
+    setDashData(normalizeAnalyticsSummary(result));
     setDashLoading(false);
   };
 

@@ -2,6 +2,28 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-02 Correcao do Grafico de Analytics no Dashboard
+
+### `pages/AdminPanel.tsx` (atualizado)
+- Adicionado `emptyAnalyticsSummary` para estado padrao seguro dos dados de dashboard.
+- Adicionada funcao `normalizeAnalyticsSummary(raw)` para normalizar o payload retornado da action `analytics_summary`.
+  - Garante coercao numerica de KPIs (`total_page_views`, `whatsapp_clicks`, `form_submissions`).
+  - Normaliza listas `top_pages` e `top_regions` para evitar quebra de renderizacao por tipos inesperados.
+  - Normaliza `daily_views` com suporte a variacoes de chave (`daily_views` e `dailyViews`).
+- `loadDashboard()` agora trata `result.error` explicitamente, exibe feedback ao usuario e evita render com shape invalido.
+
+### `supabase/functions/admin/index.ts` (atualizado)
+- Action `analytics_summary` reforcada para consolidar visualizacoes de pagina de duas fontes:
+  - `site_page_views`
+  - `site_events` com `event_type = "page_view"`
+- Essa consolidacao evita dashboard vazio quando o tracking real foi gravado em pipeline alternativo/legado.
+- Agregacao de `top_pages` e `daily_views` recebeu fallback para `page_path` e `created_at` nulos.
+- `total_page_views` passa a refletir o total consolidado (`pageViewRows.length`).
+
+### Validacao
+- `get_errors` executado nos arquivos alterados: sem erros.
+- `npm run build` executado: falha por problema preexistente e nao relacionado (asset ausente `assets/lipe-dalla-rosa.jpeg` importado em `pages/About.tsx`).
+
 ## 2026-04-02 Restauracao do Sitemap Dinamico
 
 ### `vercel.json` (atualizado)

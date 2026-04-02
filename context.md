@@ -2,6 +2,17 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-02 16:40** - Correcao do bug no grafico do Dashboard (dados reais nao renderizavam):
+  - **Motivacao:** Usuario reportou que o grafico da aba Dashboard nao refletia dados reais de analytics.
+  - **Alteracoes aplicadas:**
+    - `pages/AdminPanel.tsx` — adicionada normalizacao do payload de analytics (`normalizeAnalyticsSummary`) com fallback seguro para evitar quebra de renderizacao quando a resposta vier com formato inesperado ou erro.
+    - `pages/AdminPanel.tsx` — tratamento explicito de erro de `analytics_summary` com feedback visual via `showMessage`, evitando estado inconsistente em `dashData`.
+    - `supabase/functions/admin/index.ts` — `analytics_summary` passou a consolidar page views de duas fontes (`site_page_views` + eventos `site_events` com `event_type = page_view`) para suportar pipelines legados/alternativos e exibir dados reais no grafico.
+    - `supabase/functions/admin/index.ts` — adicionados guards para `page_path` e `created_at` nulos durante agregacao diaria.
+  - **Validacao:**
+    - Verificacao de erros nos arquivos alterados: sem erros.
+    - Build local falhou por causa preexistente e nao relacionada: asset ausente `assets/lipe-dalla-rosa.jpeg` importado por `pages/About.tsx`.
+
 - **2026-04-02 16:05** - Secao do fundador na pagina Estudio convertida para conteudo editavel (texto + imagem):
   - **Motivacao:** Usuario solicitou que a nova secao adicionada antes de "O que nos move." fosse totalmente editavel no painel.
   - **Alteracoes aplicadas:**
