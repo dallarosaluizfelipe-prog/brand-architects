@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
-import { CONTACT_PHONE_DISPLAY } from '@/src/utils/contact';
+import { CONTACT_PHONE_DISPLAY, getWhatsAppUrl } from '@/src/utils/contact';
 import { trackFormSubmission, pushToDataLayer } from '@/src/hooks/useAnalytics';
 import { supabase } from '@/src/integrations/supabase/client';
 
