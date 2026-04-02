@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
-import { CONTACT_PHONE_DISPLAY } from '@/src/utils/contact';
+import { CONTACT_PHONE_DISPLAY, getWhatsAppUrl } from '@/src/utils/contact';
 
 const Footer: React.FC = () => {
   const t = useSiteTexts({
