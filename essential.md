@@ -74,11 +74,19 @@ This document captures details of components, pages, functions, and any code add
 - Estrutura responsiva mobile-first:
   - Mobile: foto vertical e texto empilhados.
   - Desktop: grid 2 colunas (foto a esquerda, texto a direita).
-- Conteudo estatico adicionado conforme briefing:
+- Conteudo da secao convertido para modo editavel via `useSiteTexts` com as chaves:
+  - `about_expert_badge`
+  - `about_expert_title`
+  - `about_expert_p1`
+  - `about_expert_p2`
+  - `about_expert_p3`
+  - `about_expert_photo_url`
+- Campos foram adicionados em `AdminPanel.tsx` na aba `Textos > Sobre`, permitindo editar texto e imagem sem deploy.
+- Conteudo default aplicado conforme briefing:
   - "Especialista em marcas"
   - "Lipe Dalla-Rosa Designer & Fundador"
   - Tres paragrafos institucionais sobre repertorio pessoal, atuacao em branding e visao estrategica.
-- Imagem usada: `/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg` com `alt` descritivo e `loading="lazy"`.
+- Imagem usada: `/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg` com `alt` descritivo, `loading="lazy"` e sanitizacao por `encodeURI` para evitar quebra com URLs contendo espacos.
 
 ### `Home.tsx`
 - Landing page with hero video, global excellence section, selected portfolio, partners logos, and `ContactSection`.

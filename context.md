@@ -2,6 +2,21 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-02 16:05** - Secao do fundador na pagina Estudio convertida para conteudo editavel (texto + imagem):
+  - **Motivacao:** Usuario solicitou que a nova secao adicionada antes de "O que nos move." fosse totalmente editavel no painel.
+  - **Alteracoes aplicadas:**
+    - `pages/About.tsx` — bloco "Especialista em marcas" passou a consumir `useSiteTexts()` para badge, titulo, 3 paragrafos e URL da foto.
+    - `pages/About.tsx` — adicionada chave `about_expert_photo_url` com `encodeURI` no `src` para suportar URLs com espacos sem quebrar renderizacao.
+    - `pages/AdminPanel.tsx` — adicionados 6 campos na secao "Sobre" da aba Textos:
+      - `about_expert_badge`
+      - `about_expert_title`
+      - `about_expert_p1`
+      - `about_expert_p2`
+      - `about_expert_p3`
+      - `about_expert_photo_url`
+  - **Fluxo de edicao:** Conteudos editados em Admin > Textos > Sobre e salvos via `site_content` (action `upsert_content`).
+  - **Validacao:** Build executado com sucesso (`npm run build`).
+
 - **2026-04-02 15:30** - Nova secao institucional na pagina Estudio (antes de "O que nos move."):
   - **Solicitacao:** Adicionar bloco com fundo preto, foto vertical a esquerda e texto institucional do fundador a direita.
   - **Alteracao aplicada em `pages/About.tsx`:**

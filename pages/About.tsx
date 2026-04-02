@@ -11,6 +11,12 @@ const About: React.FC = () => {
     about_vision_title: 'Criado com uma visao de precisao.',
     about_vision_p1: 'O Estudio Dalla surgiu com o principio de que o branding nao se resume a estetica, mas sim a base arquitetonica de uma marca forte.',
     about_vision_p2: 'Acreditamos no poder da estrategia, nao como discurso abstrato, mas como direcao clara para cada decisao. Nosso processo e estruturado e nossos resultados geram posicionamento e valor real.',
+    about_expert_badge: 'Especialista em marcas',
+    about_expert_title: 'Lipe Dalla-Rosa Designer & Fundador',
+    about_expert_p1: 'Paranaense, pai e marido, sou apaixonado por design e por tudo que envolve construcao de significado, estetica e percepcao. Acredito que as experiencias que vivemos fora do trabalho moldam diretamente a forma como enxergamos o mundo e nos conectamos com as pessoas.',
+    about_expert_p2: 'Sou bacharel em Design e atuo como especialista em marca, desenvolvendo projetos que unem estrategia e direcao estetica para construir posicionamentos claros, consistentes e relevantes no mercado.',
+    about_expert_p3: 'Acredito que marcas fortes nao sao fruto do acaso, mas de decisoes bem estruturadas, visao de longo prazo e intencao em cada detalhe, porque no fim, nao se trata apenas de como uma marca parece, mas de como ela e percebida e valorizada.',
+    about_expert_photo_url: '/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg',
     about_pillars_badge: 'Nossos pilares',
     about_pillars_title: 'O que nos move.',
     about_pillar1_title: '01. Estrategia',
@@ -23,6 +29,10 @@ const About: React.FC = () => {
     about_seo_description: 'Conheca a filosofia, valores e visao do Estudio Dalla, referencia em branding de luxo em Sao Paulo.',
     about_seo_keywords: 'sobre estudio de branding, branding SP, agencia branding luxo',
   });
+
+  const expertPhotoUrl = t.about_expert_photo_url?.trim()
+    ? encodeURI(t.about_expert_photo_url.trim())
+    : '/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg';
 
   return (
     <>
@@ -69,19 +79,19 @@ const About: React.FC = () => {
                 <img
                   alt="Retrato de Lipe Dalla-Rosa, designer e fundador"
                   className="w-full h-full object-cover"
-                  src="/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg"
+                  src={expertPhotoUrl}
                   loading="lazy"
                 />
               </div>
             </div>
 
             <div className="md:col-span-7">
-              <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-5 opacity-70">Especialista em marcas</p>
-              <h2 className="text-3xl sm:text-4xl md:text-6xl leading-[0.92] tracking-tight mb-8">Lipe Dalla-Rosa Designer &amp; Fundador</h2>
+              <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-5 opacity-70">{t.about_expert_badge}</p>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl leading-[0.92] tracking-tight mb-8">{t.about_expert_title}</h2>
               <div className="space-y-5 text-sm sm:text-base md:text-lg text-neutral-200 font-light leading-relaxed font-sans max-w-3xl">
-                <p>Paranaense, pai e marido, sou apaixonado por design e por tudo que envolve construcao de significado, estetica e percepcao. Acredito que as experiencias que vivemos fora do trabalho moldam diretamente a forma como enxergamos o mundo e nos conectamos com as pessoas.</p>
-                <p>Sou bacharel em Design e atuo como especialista em marca, desenvolvendo projetos que unem estrategia e direcao estetica para construir posicionamentos claros, consistentes e relevantes no mercado.</p>
-                <p>Acredito que marcas fortes nao sao fruto do acaso, mas de decisoes bem estruturadas, visao de longo prazo e intencao em cada detalhe, porque no fim, nao se trata apenas de como uma marca parece, mas de como ela e percebida e valorizada.</p>
+                <div dangerouslySetInnerHTML={{ __html: t.about_expert_p1 }} />
+                <div dangerouslySetInnerHTML={{ __html: t.about_expert_p2 }} />
+                <div dangerouslySetInnerHTML={{ __html: t.about_expert_p3 }} />
               </div>
             </div>
           </div>
