@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import ContactSection from '../components/ContactSection';
+import lipePhoto from '@/assets/lipe-dalla-rosa.jpeg';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
@@ -61,6 +62,33 @@ const About: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/* Fundador Section */}
+        <section className="bg-black text-white py-20 md:py-32 px-6">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 md:gap-20 items-center">
+            <div className="w-full md:w-5/12 flex-shrink-0">
+              <div className="rounded-[2rem] md:rounded-[2.5rem] overflow-hidden aspect-[3/4] shadow-2xl">
+                <img
+                  src={lipePhoto}
+                  alt="Lipe Dalla-Rosa — Designer e Fundador do Studio Dalla"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div className="w-full md:w-7/12 space-y-6">
+              <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans opacity-40">Especialista em marcas</p>
+              <h2 className="text-4xl md:text-7xl tracking-tighter leading-[0.9] font-display">Lipe Dalla-Rosa</h2>
+              <p className="text-sm md:text-base uppercase tracking-[0.3em] font-sans opacity-50">Designer & Fundador</p>
+              <div className="space-y-5 text-base md:text-lg text-neutral-400 font-light leading-relaxed font-sans">
+                <p>Paranaense, pai e marido, sou apaixonado por design e por tudo que envolve construção de significado, estética e percepção. Acredito que as experiências que vivemos fora do trabalho moldam diretamente a forma como enxergamos o mundo e nos conectamos com as pessoas.</p>
+                <p>Sou bacharel em Design e atuo como especialista em marca, desenvolvendo projetos que unem estratégia e direção estética para construir posicionamentos claros, consistentes e relevantes no mercado.</p>
+                <p>Acredito que marcas fortes não são fruto do acaso, mas de decisões bem estruturadas, visão de longo prazo e intenção em cada detalhe, porque no fim, não se trata apenas de como uma marca parece, mas de como ela é percebida e valorizada.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
 
         <section className="py-20 md:py-40 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-14 md:mb-32">
