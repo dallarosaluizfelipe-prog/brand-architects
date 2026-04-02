@@ -18,7 +18,7 @@ import { useAnalytics } from "./src/hooks/useAnalytics";
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white">
     <Navbar />
-    <main className="pb-28 md:pb-0">{children}</main>
+    <main>{children}</main>
     <Footer />
   </div>
 );
