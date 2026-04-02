@@ -1,38 +1,40 @@
 
 
-## Diagnosis
+## Plano: Remover aba E-mail + Corrigir Dashboard
 
-All 3 analytics tables (`site_page_views`, `site_events`, `site_form_submissions`) have **0 records**. The root cause:
+### 1. Remover aba "E-mail" do AdminPanel
 
-- `useAnalytics` and `trackFormSubmission` send data to `/api/track` — a **Vercel serverless function** (`api/track.js`)
-- This endpoint only works when deployed to Vercel. In the Lovable preview (and any non-Vercel environment), `/api/track` returns 404, so nothing is recorded
-- Even on Vercel, geo headers (`x-vercel-ip-country`, etc.) are Vercel-specific
+**Alteracoes em `AdminPanel.tsx`:**
+- Remover `'emails'` do tipo do state `tab` e do array de tabs renderizado (linha 728)
+- Remover state de emails: `adminEmails`, `emailsLoading`, `selectedEmail`, interface `AdminEmail` (linhas 269-281)
+- Remover funcao `loadEmails` (linhas 604-609)
+- Remover chamada `if (t === 'emails') loadEmails()` no click handler (linha 734)
+- Remover todo o bloco `{tab === 'emails' && (...)}` (linhas 1088-1149)
 
-## Solution
+**Manter intactos** (nao excluir — podem ser uteis no futuro):
+- Tabela `admin_emails` no banco
+- Edge Function `receive-email/index.ts`
+- Action `list_emails` na Edge Function `admin/index.ts`
 
-Replace the `/api/track` serverless approach with **direct Supabase inserts from the client**. This works because:
-- All 3 tables already have `anon_insert` RLS policies (INSERT allowed for anonymous users)
-- No sensitive data is involved — these are public analytics events
-- No serverless function needed
+### 2. Corrigir gráfico do Dashboard que nao atualiza
 
-### Changes
+**Problema real identificado:** Ao trocar o periodo, o `loadDashboard` chama `setDashData(null)` e depois `setDashData(result)`. O React re-renderiza, porem o grafico SVG (area chart) pode nao parecer diferente se os dados sao similares ou se ha problemas de cache visual do SVG.
 
-**1. Rewrite `src/hooks/useAnalytics.ts`**
-- Remove `sendTrack` / `sendBeacon` / `fetch('/api/track')` logic entirely
-- Import the Supabase client directly
-- `trackPageView`: insert into `site_page_views` via `supabase.from('site_page_views').insert({...})`
-- `trackEvent`: insert into `site_events` via `supabase.from('site_events').insert({...})`
-- `trackFormSubmission`: insert into `site_form_submissions` via `supabase.from('site_form_submissions').insert({...})`
-- Keep session ID logic, `useAnalytics` hook behavior (route tracking + WhatsApp interceptor) unchanged
-- Geo data (country/region/city) won't be available client-side — those columns will be null (acceptable tradeoff; could be added later via an IP geolocation API if needed)
-- `user_agent` will be set via `navigator.userAgent`
+**Correcao:**
+- Adicionar uma `key` dinamica ao container do grafico baseada no `period_label` + timestamp, forcando React a destruir e recriar o SVG quando os dados mudam
+- Adicionar um indicador visual (overlay de loading com opacity) sobre os dados existentes durante o carregamento, em vez de apenas remover tudo com `setDashData(null)` — isso dara feedback mais claro ao usuario
+- Alterar a abordagem: em vez de `setDashData(null)`, manter dados antigos visiveis com um overlay de "Atualizando..." semi-transparente, e so substituir quando os novos dados chegarem
 
-**2. Keep `api/track.js` as-is** (for Vercel deployments that may still receive beacons from cached pages)
+**Mudanca especifica:**
+- Remover `setDashData(null)` do inicio de `loadDashboard`
+- No bloco de renderizacao do dashboard (linha 795), trocar a condicao `dashLoading && !dashData` para mostrar overlay quando `dashLoading` e `true` (independente de `dashData`)
+- Adicionar `key={dashData?.period_label}` no wrapper do grafico SVG
 
-**3. Update `context.md` and `essential.md`** with the change log
+### 3. Documentacao
+- Atualizar `context.md` e `essential.md`
 
-### What this fixes
-- Dashboard will start showing real pageviews, WhatsApp clicks, and form submissions immediately
-- Works in both Lovable preview and Vercel production
-- No new dependencies or migrations needed
+### Arquivos modificados
+- `pages/AdminPanel.tsx` — remover aba emails + fix dashboard
+- `context.md`
+- `essential.md`
 

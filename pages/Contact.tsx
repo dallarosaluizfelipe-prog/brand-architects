@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
-import { CONTACT_PHONE_DISPLAY } from '@/src/utils/contact';
+import { CONTACT_PHONE_DISPLAY, getWhatsAppUrl } from '@/src/utils/contact';
 import { trackFormSubmission, pushToDataLayer } from '@/src/hooks/useAnalytics';
 import { supabase } from '@/src/integrations/supabase/client';
 
 const Contact: React.FC = () => {
   const t = useSiteTexts({
     contact_header_title: "Let's talk.",
-    contact_info: `CURITIBA / BR / PR<br />TEL ${CONTACT_PHONE_DISPLAY}`,
+    contact_info: `CURITIBA / BR / PR<br />TEL <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="hover:opacity-60 transition-opacity">${CONTACT_PHONE_DISPLAY}</a>`,
     contact_emails: '<a class="hover:opacity-60 transition-opacity" href="mailto:contato@estudiodalla.com">contato@estudiodalla.com</a>',
     contact_seo_title: 'Contato - Estudio Dalla',
     contact_seo_description: 'Fale com o Estudio Dalla. Estamos prontos para transformar sua marca de luxo com design estrategico.',

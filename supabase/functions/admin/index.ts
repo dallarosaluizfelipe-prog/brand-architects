@@ -284,6 +284,19 @@ Deno.serve(async (req) => {
         });
       }
 
+      case "list_emails": {
+        const limit = data?.limit || 100;
+        const { data: emails, error } = await supabase
+          .from("admin_emails")
+          .select("*")
+          .order("received_at", { ascending: false })
+          .limit(limit);
+        if (error) throw error;
+        return new Response(JSON.stringify({ emails }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400,

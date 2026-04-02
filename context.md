@@ -36,6 +36,24 @@ This file records a chronological history of changes, requests, and reasoning fo
     - Verificacao HTTP em producao mostrou que o dominio ainda responde com o conteudo legado estatico (comentario `DEPRECATED`) na release atual, confirmando necessidade de novo deploy para publicar esta correcao.
   - **Resultado esperado apos deploy:** `https://estudiodalla.com/sitemap.xml` deve retornar XML dinamico gerado pela funcao serverless (`api/sitemap.xml.js`) em vez do legado estatico.
 
+- **2026-03-30 15:00** - Removida aba E-mail do AdminPanel + Fix definitivo do Dashboard:
+  - Removidos estados, função `loadEmails`, tab button e bloco JSX da aba E-mail (infraestrutura backend mantida para uso futuro).
+  - Dashboard fix: removido `setDashData(null)` que causava flash. Adicionado overlay semi-transparente "Atualizando..." durante reload. Adicionada `key` dinâmica ao gráfico SVG para forçar re-render ao trocar período.
+  - **Arquivos modificados:** `AdminPanel.tsx`, `context.md`, `essential.md`.
+
+- **2026-03-30 14:00** - Fix Dashboard + Aba E-mail no Admin:
+  - **Bug corrigido:** Dashboard não atualizava visualmente ao mudar período. Causa: `dashData` não era resetado antes do reload e botão "Atualizar" não passava os parâmetros do período atual.
+  - **Nova aba "E-mail":** Criada infraestrutura para leitura de e-mails no painel admin via webhook (tabela `admin_emails`, Edge Function `receive-email`, UI de listagem e visualização detalhada).
+  - **Arquivos modificados:** `AdminPanel.tsx`, `supabase/functions/admin/index.ts`, `supabase/functions/receive-email/index.ts`.
+
+- **2026-03-29 12:00** - Aba "Leads" no Admin Panel + Validação do fluxo de e-mail:
+  - **Motivação:** Centralizar visualização de leads no painel admin e validar envio de e-mails.
+  - **Alterações:**
+    - `pages/AdminPanel.tsx`: Nova aba "Leads" adicionada ao painel admin com tabela completa (Nome, Telefone, E-mail, Empresa, Serviço com labels legíveis, Página de origem, Data/hora), cards de resumo (total, últimos 7 e 30 dias), botão de exportar CSV.
+    - Configurada secret `RESEND_API_KEY` para ativar envio de e-mails via Resend.
+    - Edge function `send-contact` reimplantada.
+  - **Impacto:** Admin agora tem visão completa dos leads com exportação. E-mails de contato enviados para lipe@estudiodalla.com.
+
 - **2026-03-27 18:00** - Centralização do rastreamento no GTM para Google Ads:
   - **Motivacao:** Implementar eventos dataLayer confiáveis no front-end para capturar leads via formulário (conversão primária) e cliques no WhatsApp (conversão secundária), evitando falsos positivos e duplicidade de tags.
   - **Alterações:**
@@ -247,3 +265,11 @@ This file records a chronological history of changes, requests, and reasoning fo
     - `public/manifest-light.webmanifest` — Manifest com icones e cores do tema claro.
     - `public/manifest-dark.webmanifest` — Manifest com icones e cores do tema escuro.
   - **SEO/Share:** `index.html` agora tem `og:image` e `twitter:image` estaticos para melhorar leitura por crawlers que nao executam JS.
+
+- **2026-03-29 15:00** - Integração Microsoft Clarity via Supabase:
+  - **Motivação:** Solicitação do usuário para instalar Microsoft Clarity sem duplicidade de script.
+  - **Alterações:**
+    - Adicionada função `injectClarity` em `TrackingScripts.tsx` para injetar o script do Clarity apenas se houver uma tag ativa do tipo `clarity` na tabela `site_tags`.
+    - Migration SQL criada para seed inicial da tag Clarity (`20260329120000_seed_clarity_tag.sql`).
+    - Lógica garante que o script não será injetado mais de uma vez, mesmo que existam múltiplas tags ou seeds repetidos.
+  - **Validação:** Não há duplicidade de script Clarity no site. Documentação atualizada em essential.md.

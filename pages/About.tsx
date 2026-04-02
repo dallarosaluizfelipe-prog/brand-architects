@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import ContactSection from '../components/ContactSection';
+import lipePhoto from '@/assets/lipe-dalla-rosa.jpeg';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
@@ -32,7 +33,7 @@ const About: React.FC = () => {
 
   const expertPhotoUrl = t.about_expert_photo_url?.trim()
     ? encodeURI(t.about_expert_photo_url.trim())
-    : '/lovable-uploads/WhatsApp%20Image%202026-04-02%20at%2015.10.19.jpeg';
+    : lipePhoto;
 
   return (
     <>
@@ -96,7 +97,6 @@ const About: React.FC = () => {
             </div>
           </div>
         </section>
-
         <section className="py-20 md:py-40 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-14 md:mb-32">
             <span className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans opacity-40">{t.about_pillars_badge}</span>

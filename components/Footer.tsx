@@ -1,15 +1,15 @@
 ﻿import React from 'react';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
-import { CONTACT_PHONE_DISPLAY } from '@/src/utils/contact';
+import { CONTACT_PHONE_DISPLAY, getWhatsAppUrl } from '@/src/utils/contact';
 
 const Footer: React.FC = () => {
   const t = useSiteTexts({
-    footer_contacts: `CURITIBA / PARANA / BR<br />TEL ${CONTACT_PHONE_DISPLAY}`,
+    footer_contacts: `CURITIBA / PARANA / BR<br />TEL <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="hover:opacity-60 transition-opacity">${CONTACT_PHONE_DISPLAY}</a>`,
     footer_copyright: '© 2026 Studio Dalla. All rights reserved.',
   });
 
   return (
-    <footer className="bg-black pt-20 md:pt-32 pb-28 md:pb-16 px-6 text-white">
+    <footer className="bg-black pt-10 md:pt-32 pb-28 md:pb-16 px-6 text-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-14 md:mb-20 font-sans">
           <div>

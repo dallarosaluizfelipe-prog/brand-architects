@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_emails: {
+        Row: {
+          body_html: string | null
+          body_text: string | null
+          created_at: string
+          from_address: string
+          from_name: string | null
+          id: string
+          received_at: string
+          subject: string
+        }
+        Insert: {
+          body_html?: string | null
+          body_text?: string | null
+          created_at?: string
+          from_address?: string
+          from_name?: string | null
+          id?: string
+          received_at?: string
+          subject?: string
+        }
+        Update: {
+          body_html?: string | null
+          body_text?: string | null
+          created_at?: string
+          from_address?: string
+          from_name?: string | null
+          id?: string
+          received_at?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       admin_settings: {
         Row: {
           created_at: string

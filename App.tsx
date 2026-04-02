@@ -11,13 +11,14 @@ import About from "./pages/About";
 import Admin from "./pages/Admin";
 import CaseDetails from "./pages/CaseDetails";
 import ProposalDetails from "./pages/ProposalDetails";
+import IdentidadeVisual from "./pages/IdentidadeVisual";
 import TrackingScripts from "./components/TrackingScripts";
 import { useAnalytics } from "./src/hooks/useAnalytics";
 
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white">
     <Navbar />
-    <main className="pb-28 md:pb-0">{children}</main>
+    <main>{children}</main>
     <Footer />
   </div>
 );
@@ -87,6 +88,14 @@ const AppRoutes: React.FC = () => {
         element={
           <PublicLayout>
             <ProposalDetails />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/identidadevisual"
+        element={
+          <PublicLayout>
+            <IdentidadeVisual />
           </PublicLayout>
         }
       />

@@ -76,12 +76,12 @@ const Home: React.FC = () => {
             {t.home_hero_title}
           </h1>
           <div className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8" dangerouslySetInnerHTML={{ __html: t.home_hero_subtitle }} />
-          <div className="flex flex-wrap gap-3">
-            <Link to="/cases" className="bg-black text-white px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center min-w-[200px]">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link to="/cases" className="bg-black text-white px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center flex-1 sm:flex-none sm:min-w-[200px]">
               Ver cases
             </Link>
-            <Link to="/contato" className="border border-black/40 text-black px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center min-w-[200px]">
-              Falar com o studio
+            <Link to="/contato" className="border border-black/40 text-black px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center flex-1 sm:flex-none sm:min-w-[200px]">
+              Falar com o estúdio
             </Link>
           </div>
         </section>
@@ -162,16 +162,22 @@ const Home: React.FC = () => {
               <div className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg" dangerouslySetInnerHTML={{ __html: t.home_partners_subtitle }} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-1.png" alt="Parceiro 1" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-2.png" alt="Parceiro 2" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-3.png" alt="Parceiro 3" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-4.png" alt="Parceiro 4" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-5.png" alt="Parceiro 5" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-6.png" alt="Parceiro 6" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-7.png" alt="Parceiro 7" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-8.png" alt="Parceiro 8" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-9.png" alt="Parceiro 9" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
-              <div className="flex justify-center"><img src="/lovable-uploads/partner-10.png" alt="Parceiro 10" loading="lazy" className="h-16 md:h-32 object-contain" /></div>
+              {[
+                { img: "partner-1.png", alt: "Nuts O'Clock", href: "/cases/nuts-oclock" },
+                { img: "partner-2.png", alt: "Yerbal", href: "/cases/yerbal" },
+                { img: "partner-3.png", alt: "Lummina", href: "/cases/lummina" },
+                { img: "partner-4.png", alt: "Parceiro 4", href: "/cases" },
+                { img: "partner-5.png", alt: "Parceiro 5", href: "/cases" },
+                { img: "partner-6.png", alt: "Parceiro 6", href: "/cases" },
+                { img: "partner-7.png", alt: "Parceiro 7", href: "/cases" },
+                { img: "partner-8.png", alt: "Parceiro 8", href: "/cases" },
+                { img: "partner-9.png", alt: "Parceiro 9", href: "/cases" },
+                { img: "partner-10.png", alt: "Parceiro 10", href: "/cases" },
+              ].map((p) => (
+                <Link key={p.img} to={p.href} className="flex justify-center">
+                  <img src={`/lovable-uploads/${p.img}`} alt={p.alt} loading="lazy" className="h-28 md:h-32 object-contain" />
+                </Link>
+              ))}
             </div>
           </div>
         </section>
