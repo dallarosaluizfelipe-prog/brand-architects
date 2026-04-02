@@ -90,6 +90,7 @@ const About: React.FC = () => {
         </section>
 
 
+        <section className="py-20 md:py-40 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-14 md:mb-32">
             <span className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans opacity-40">{t.about_pillars_badge}</span>
             <h2 className="text-4xl sm:text-5xl md:text-8xl mt-6 md:mt-8 tracking-tighter">{t.about_pillars_title}</h2>
