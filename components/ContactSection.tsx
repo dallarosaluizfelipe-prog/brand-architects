@@ -44,7 +44,7 @@ const ContactSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 md:py-32 px-6 bg-black text-white rounded-t-[2.5rem] md:rounded-t-[5rem]" id="contact">
+    <section className="py-20 md:py-32 pb-10 md:pb-32 px-6 bg-black text-white rounded-t-[2.5rem] md:rounded-t-[5rem]" id="contact">
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 md:gap-20">
         <div>
           <div className="text-4xl sm:text-5xl md:text-8xl leading-[0.95] mb-8 md:mb-10 font-display" dangerouslySetInnerHTML={{ __html: t.cta_section_title }} />
