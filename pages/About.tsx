@@ -87,7 +87,7 @@ const About: React.FC = () => {
             </div>
 
             <div className="md:col-span-7">
-              <h2 className="text-3xl sm:text-4xl md:text-6xl font-display leading-[0.92] tracking-tight mb-6 uppercase">{t.about_expert_badge}</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-display leading-[0.92] tracking-tight mb-6">{t.about_expert_badge}</h2>
               <p className="text-xl sm:text-2xl md:text-3xl font-sans font-black mb-1">{t.about_expert_title?.split(' Designer')[0] || 'Lipe Dalla-Rosa'}</p>
               <p className="text-sm sm:text-base md:text-lg font-sans font-normal text-neutral-400 mb-8">Designer &amp; Fundador</p>
               <div className="space-y-5 text-sm sm:text-base md:text-lg text-neutral-200 font-light leading-relaxed font-sans max-w-3xl">
