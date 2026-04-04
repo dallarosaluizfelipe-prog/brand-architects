@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import ContactSection from '../components/ContactSection';
-import lipePhoto from '@/assets/lipe-dalla-rosa.jpeg';
+import lipePhoto from '@/src/assets/lipe-dalla-rosa.jpeg';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
