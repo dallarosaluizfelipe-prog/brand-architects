@@ -2037,12 +2037,42 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   placeholder={field.label}
                                 />
                               )}
-                              {pageSubTab === 'imagens' && siteTexts[field.key] && (
-                                /\.(mp4|mov|webm)$/i.test(siteTexts[field.key]) || field.key.includes('video') ? (
-                                  <video src={siteTexts[field.key]} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
-                                ) : (
-                                  <img src={siteTexts[field.key]} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />
-                                )
+                              {pageSubTab === 'imagens' && (
+                                <>
+                                  <div
+                                    className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                                      uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                                    }`}
+                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    onDrop={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      const file = e.dataTransfer.files?.[0];
+                                      if (file) handleImageFieldUpload(file, field.key, 'text');
+                                    }}
+                                    onClick={() => {
+                                      const input = document.createElement('input');
+                                      input.type = 'file';
+                                      input.accept = 'image/*,video/*';
+                                      input.onchange = (ev) => {
+                                        const file = (ev.target as HTMLInputElement).files?.[0];
+                                        if (file) handleImageFieldUpload(file, field.key, 'text');
+                                      };
+                                      input.click();
+                                    }}
+                                  >
+                                    <p className="text-sm text-neutral-500 font-sans">
+                                      {uploading ? 'Enviando...' : 'Arraste um arquivo aqui ou clique para enviar'}
+                                    </p>
+                                  </div>
+                                  {siteTexts[field.key] && (
+                                    /\.(mp4|mov|webm)$/i.test(siteTexts[field.key]) || field.key.includes('video') ? (
+                                      <video src={siteTexts[field.key]} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                    ) : (
+                                      <img src={siteTexts[field.key]} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />
+                                    )
+                                  )}
+                                </>
                               )}
                             </div>
                           ))}
