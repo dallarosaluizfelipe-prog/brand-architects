@@ -26,12 +26,18 @@ This document captures details of components, pages, functions, and any code add
 - Seed dos 10 parceiros originais hardcoded.
 
 ### `pages/AdminPanel.tsx` (atualizado)
-- Nova aba "Parceiros" com CRUD completo: nome, URL do logo (com preview), link de destino, ordem, visibilidade.
-- Tab type expandido para incluir `'parceiros'`.
-- TEXT_SECTIONS expandido com:
-  - Secao "Sobre": 3 novos campos (`about_expert_role`, `about_vision_video_url`, `about_bottom_image_url`).
-  - Secao "Footer": novo campo `footer_logo_url`.
-  - Nova secao "Redes Sociais": `social_instagram`, `social_linkedin`, `social_behance`.
+- Aba "Parceiros" com CRUD completo: nome, URL do logo (com preview), link de destino, ordem, visibilidade.
+- **Reestruturacao da gestao de conteudo:**
+  - Removidas abas "Textos" (flat com 14 secoes colapsaveis) e "Hero" (separada).
+  - Nova aba "Paginas" com 6 cards: Home, Estudio, Metodologia, Portfolio, Contato, Geral.
+  - Cada pagina tem 3 sub-abas: SEO, Textos, Imagens.
+  - Hero video fields integrados em Home > Imagens (hero state + saveHero reaproveitados).
+  - Previews de imagem/video para campos de URL na sub-aba Imagens.
+  - Botao "Salvar Todos" mostra contagem de campos alterados por pagina.
+- `TextSection` + `TEXT_SECTIONS` substituidos por `PageConfig` + `PAGE_CONFIGS`.
+- `PageConfig` interface: id, label, icon, seo[], textos[], imagens[], hasHero?.
+- Estado `openSections`/`toggleSection` removidos. Adicionados `selectedPage` (string|null) + `pageSubTab` ('seo'|'textos'|'imagens').
+- Tab type: `'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros'`.
 
 ### `supabase/functions/admin/index.ts` (atualizado)
 - 3 novas actions para parceiros:

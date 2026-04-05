@@ -2,6 +2,15 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-04 14:00** - Reestruturacao da aba de conteudo no Admin Panel:
+  - **Motivacao:** Interface flat "Textos" com 14 secoes colapsaveis + aba "Hero" separada nao era intuitiva. Usuario pediu organizacao por pagina.
+  - **Mudanca:** Removidas abas "Textos" e "Hero". Criada nova aba "Paginas" com 6 cards (Home, Estudio, Metodologia, Portfolio, Contato, Geral).
+  - **Navegacao:** Clicar em uma pagina abre detalhe com 3 sub-abas: SEO, Textos, Imagens.
+  - **Hero:** Campos de video hero movidos para Home > Imagens (hero state + saveHero reaproveitados).
+  - **Dados:** `TextSection` + `TEXT_SECTIONS` substituidos por `PageConfig` + `PAGE_CONFIGS`. Mesmas section_keys — zero mudancas no banco.
+  - **Estado:** `openSections`/`toggleSection` removidos. Adicionados `selectedPage` + `pageSubTab`.
+  - **Arquivo alterado:** AdminPanel.tsx. Zero erros TypeScript.
+
 - **2026-04-04 12:00** - Dinamizacao completa de conteudo do site (textos, imagens, SEO) editaveis via Admin:
   - **Motivacao:** Usuario solicitou que todas as imagens e textos, incluindo SEO, sejam conteudos dinamicos editaveis no painel, com atencao especial a pagina /estudio.
   - **Fase 1 — About.tsx completamente dinamica:**

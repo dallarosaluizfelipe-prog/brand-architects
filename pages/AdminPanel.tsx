@@ -128,17 +128,28 @@ interface TextFieldDef {
   rich?: boolean;
 }
 
-interface TextSection {
-  page: string;
+interface PageConfig {
+  id: string;
   label: string;
-  fields: TextFieldDef[];
+  icon: string;
+  seo: TextFieldDef[];
+  textos: TextFieldDef[];
+  imagens: TextFieldDef[];
+  hasHero?: boolean;
 }
 
-const TEXT_SECTIONS: TextSection[] = [
+const PAGE_CONFIGS: PageConfig[] = [
   {
-    page: 'home',
+    id: 'home',
     label: 'Home',
-    fields: [
+    icon: '🏠',
+    hasHero: true,
+    seo: [
+      { key: 'home_seo_title', label: 'Meta Title' },
+      { key: 'home_seo_description', label: 'Meta Description' },
+      { key: 'home_seo_keywords', label: 'Meta Keywords' },
+    ],
+    textos: [
       { key: 'home_hero_badge', label: 'Badge do Hero' },
       { key: 'home_hero_title', label: 'Titulo do Hero' },
       { key: 'home_hero_subtitle', label: 'Subtitulo do Hero', rich: true },
@@ -147,11 +158,18 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'home_partners_title', label: 'Titulo Parceiros' },
       { key: 'home_partners_subtitle', label: 'Subtitulo Parceiros', rich: true },
     ],
+    imagens: [],
   },
   {
-    page: 'about',
-    label: 'Sobre',
-    fields: [
+    id: 'about',
+    label: 'Estúdio',
+    icon: '✦',
+    seo: [
+      { key: 'about_seo_title', label: 'Meta Title' },
+      { key: 'about_seo_description', label: 'Meta Description' },
+      { key: 'about_seo_keywords', label: 'Meta Keywords' },
+    ],
+    textos: [
       { key: 'about_header_badge', label: 'Badge do Header' },
       { key: 'about_header_title', label: 'Titulo do Header' },
       { key: 'about_header_subtitle', label: 'Subtitulo do Header', rich: true },
@@ -160,13 +178,10 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'about_vision_p2', label: 'Visao - Paragrafo 2', rich: true },
       { key: 'about_expert_badge', label: 'Especialista - Badge' },
       { key: 'about_expert_title', label: 'Especialista - Nome e Cargo' },
+      { key: 'about_expert_role', label: 'Especialista - Cargo' },
       { key: 'about_expert_p1', label: 'Especialista - Paragrafo 1', rich: true },
       { key: 'about_expert_p2', label: 'Especialista - Paragrafo 2', rich: true },
       { key: 'about_expert_p3', label: 'Especialista - Paragrafo 3', rich: true },
-      { key: 'about_expert_photo_url', label: 'Especialista - URL da Foto' },
-      { key: 'about_expert_role', label: 'Especialista - Cargo' },
-      { key: 'about_vision_video_url', label: 'Visao - URL do Video' },
-      { key: 'about_bottom_image_url', label: 'Imagem Inferior - URL' },
       { key: 'about_pillars_badge', label: 'Badge dos Pilares' },
       { key: 'about_pillars_title', label: 'Titulo dos Pilares' },
       { key: 'about_pillar1_title', label: 'Pilar 1 - Titulo' },
@@ -176,11 +191,22 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'about_pillar3_title', label: 'Pilar 3 - Titulo' },
       { key: 'about_pillar3_desc', label: 'Pilar 3 - Descricao', rich: true },
     ],
+    imagens: [
+      { key: 'about_expert_photo_url', label: 'Especialista - URL da Foto' },
+      { key: 'about_vision_video_url', label: 'Visao - URL do Video' },
+      { key: 'about_bottom_image_url', label: 'Imagem Inferior - URL' },
+    ],
   },
   {
-    page: 'methodology',
+    id: 'methodology',
     label: 'Metodologia',
-    fields: [
+    icon: '◆',
+    seo: [
+      { key: 'methodology_seo_title', label: 'Meta Title' },
+      { key: 'methodology_seo_description', label: 'Meta Description' },
+      { key: 'methodology_seo_keywords', label: 'Meta Keywords' },
+    ],
+    textos: [
       { key: 'method_header_badge', label: 'Badge do Header' },
       { key: 'method_header_title', label: 'Titulo do Header' },
       { key: 'method_header_subtitle', label: 'Subtitulo do Header', rich: true },
@@ -200,107 +226,64 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'method_phase5_title', label: 'Fase V - Titulo' },
       { key: 'method_phase5_desc', label: 'Fase V - Descricao', rich: true },
     ],
+    imagens: [],
   },
   {
-    page: 'portfolio',
-    label: 'Portfolio',
-    fields: [
-      { key: 'portfolio_header_title', label: 'Titulo do Header' },
-      { key: 'portfolio_header_subtitle', label: 'Subtitulo do Header', rich: true },
-    ],
-  },
-  {
-    page: 'contact',
-    label: 'Contato',
-    fields: [
-      { key: 'contact_header_title', label: 'Titulo do Header' },
-      { key: 'contact_info', label: 'Info de Contato (endereco/tel)', rich: true },
-      { key: 'contact_emails', label: 'Emails', rich: true },
-    ],
-  },
-  {
-    page: 'footer',
-    label: 'Footer',
-    fields: [
-      { key: 'footer_contacts', label: 'Info de Contatos', rich: true },
-      { key: 'footer_copyright', label: 'Copyright' },
-      { key: 'footer_logo_url', label: 'URL do Logo do Footer' },
-    ],
-  },
-  {
-    page: 'social',
-    label: 'Redes Sociais',
-    fields: [
-      { key: 'social_instagram', label: 'URL do Instagram' },
-      { key: 'social_linkedin', label: 'URL do LinkedIn' },
-      { key: 'social_behance', label: 'URL do Behance' },
-    ],
-  },
-  {
-    page: 'contact_section',
-    label: 'Secao de Contato (CTA)',
-    fields: [
-      { key: 'cta_section_title', label: 'Titulo da Secao CTA', rich: true },
-    ],
-  },
-  {
-    page: 'seo',
-    label: 'SEO Padrao',
-    fields: [
-      { key: 'seo_default_title', label: 'Titulo Padrao' },
-      { key: 'seo_default_description', label: 'Descricao Padrao' },
-      { key: 'seo_default_keywords', label: 'Keywords Padrao' },
-    ],
-  },
-  {
-    page: 'seo_home',
-    label: 'SEO — Home',
-    fields: [
-      { key: 'home_seo_title', label: 'Meta Title' },
-      { key: 'home_seo_description', label: 'Meta Description' },
-      { key: 'home_seo_keywords', label: 'Meta Keywords' },
-    ],
-  },
-  {
-    page: 'seo_about',
-    label: 'SEO — Sobre',
-    fields: [
-      { key: 'about_seo_title', label: 'Meta Title' },
-      { key: 'about_seo_description', label: 'Meta Description' },
-      { key: 'about_seo_keywords', label: 'Meta Keywords' },
-    ],
-  },
-  {
-    page: 'seo_methodology',
-    label: 'SEO — Metodologia',
-    fields: [
-      { key: 'methodology_seo_title', label: 'Meta Title' },
-      { key: 'methodology_seo_description', label: 'Meta Description' },
-      { key: 'methodology_seo_keywords', label: 'Meta Keywords' },
-    ],
-  },
-  {
-    page: 'seo_portfolio',
-    label: 'SEO — Portfolio',
-    fields: [
+    id: 'portfolio',
+    label: 'Portfólio',
+    icon: '▣',
+    seo: [
       { key: 'portfolio_seo_title', label: 'Meta Title' },
       { key: 'portfolio_seo_description', label: 'Meta Description' },
       { key: 'portfolio_seo_keywords', label: 'Meta Keywords' },
     ],
+    textos: [
+      { key: 'portfolio_header_title', label: 'Titulo do Header' },
+      { key: 'portfolio_header_subtitle', label: 'Subtitulo do Header', rich: true },
+    ],
+    imagens: [],
   },
   {
-    page: 'seo_contact',
-    label: 'SEO — Contato',
-    fields: [
+    id: 'contact',
+    label: 'Contato',
+    icon: '✉',
+    seo: [
       { key: 'contact_seo_title', label: 'Meta Title' },
       { key: 'contact_seo_description', label: 'Meta Description' },
       { key: 'contact_seo_keywords', label: 'Meta Keywords' },
+    ],
+    textos: [
+      { key: 'contact_header_title', label: 'Titulo do Header' },
+      { key: 'contact_info', label: 'Info de Contato (endereco/tel)', rich: true },
+      { key: 'contact_emails', label: 'Emails', rich: true },
+    ],
+    imagens: [],
+  },
+  {
+    id: 'general',
+    label: 'Geral',
+    icon: '⚙',
+    seo: [
+      { key: 'seo_default_title', label: 'Titulo Padrao' },
+      { key: 'seo_default_description', label: 'Descricao Padrao' },
+      { key: 'seo_default_keywords', label: 'Keywords Padrao' },
+    ],
+    textos: [
+      { key: 'footer_contacts', label: 'Info de Contatos', rich: true },
+      { key: 'footer_copyright', label: 'Copyright' },
+      { key: 'cta_section_title', label: 'Titulo da Secao CTA', rich: true },
+      { key: 'social_instagram', label: 'URL do Instagram' },
+      { key: 'social_linkedin', label: 'URL do LinkedIn' },
+      { key: 'social_behance', label: 'URL do Behance' },
+    ],
+    imagens: [
+      { key: 'footer_logo_url', label: 'URL do Logo do Footer' },
     ],
   },
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads' | 'parceiros'>('dashboard');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros'>('dashboard');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -325,7 +308,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [siteTexts, setSiteTexts] = useState<Record<string, string>>({});
   const [textsLoading, setTextsLoading] = useState(false);
   const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
-  const [openSections, setOpenSections] = useState<Set<string>>(new Set());
+  const [selectedPage, setSelectedPage] = useState<string | null>(null);
+  const [pageSubTab, setPageSubTab] = useState<'seo' | 'textos' | 'imagens'>('seo');
 
   // Dashboard state
   const [dashPeriod, setDashPeriod] = useState<number | 'custom'>(7);
@@ -663,14 +647,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setTextsLoading(false);
   };
 
-  const toggleSection = (page: string) => {
-    setOpenSections((prev) => {
-      const next = new Set(prev);
-      if (next.has(page)) next.delete(page);
-      else next.add(page);
-      return next;
-    });
-  };
+
 
   const loadDashboard = async (period?: number | 'custom', from?: string, to?: string) => {
     const p = period ?? dashPeriod;
@@ -826,18 +803,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['dashboard', 'leads', 'cases', 'media', 'hero', 'proposals', 'parceiros', 'tags', 'textos'] as const).map((t) => (
+        {(['dashboard', 'leads', 'cases', 'media', 'paginas', 'proposals', 'parceiros', 'tags'] as const).map((t) => (
           <button
             key={t}
             onClick={() => {
               setTab(t);
               if (t === 'leads') loadFormSubmissions();
+              if (t === 'paginas') { setSelectedPage(null); setPageSubTab('seo'); }
             }}
             className={`px-6 py-3 rounded-full text-sm font-sans font-medium transition-all ${
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : t === 'tags' ? 'Tags' : 'Textos'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Mídia' : t === 'paginas' ? 'Páginas' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : 'Tags'}
           </button>
         ))}
       </div>
@@ -1439,60 +1417,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           </div>
         )}
 
-        {tab === 'hero' && (
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-            <h2 className="text-lg font-display mb-6">Video do Hero</h2>
-            <p className="text-sm text-neutral-500 font-sans mb-6">Gerencie os videos exibidos na hero da pagina inicial. Envie os arquivos na aba Midia, copie a URL e cole aqui.</p>
-            <div className="space-y-5">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Desktop (URL)</label>
-                <input
-                  value={hero.desktopVideoUrl}
-                  onChange={(e) => setHero({ ...hero, desktopVideoUrl: e.target.value })}
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                  placeholder="https://... ou /lovable-uploads/abertura-site.mp4"
-                />
-                {hero.desktopVideoUrl && (
-                  <video src={hero.desktopVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
-                )}
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Mobile (URL)</label>
-                <input
-                  value={hero.mobileVideoUrl}
-                  onChange={(e) => setHero({ ...hero, mobileVideoUrl: e.target.value })}
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                  placeholder="https://... ou /lovable-uploads/abertura-site-mobile.mp4"
-                />
-                {hero.mobileVideoUrl && (
-                  <video src={hero.mobileVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
-                )}
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Poster / Imagem de capa (URL)</label>
-                <input
-                  value={hero.posterUrl}
-                  onChange={(e) => setHero({ ...hero, posterUrl: e.target.value })}
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                  placeholder="https://... ou /lovable-uploads/poster.png"
-                />
-                {hero.posterUrl && (
-                  <img src={hero.posterUrl} alt="Poster preview" className="mt-3 rounded-xl max-h-40 object-cover" />
-                )}
-              </div>
-            </div>
-            <div className="mt-8">
-              <button
-                onClick={saveHero}
-                disabled={heroLoading}
-                className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
-              >
-                {heroLoading ? 'Salvando...' : 'Salvar Hero'}
-              </button>
-            </div>
-          </div>
-        )}
-
         {tab === 'media' && (
           <div>
             <div className="mb-6">
@@ -1965,54 +1889,89 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           </div>
         )}
 
-        {tab === 'textos' && (
+        {tab === 'paginas' && (
           <div>
-            <div className="flex items-center justify-between mb-6">
+            {selectedPage === null ? (
               <div>
-                <h2 className="text-lg font-display">Textos do Site</h2>
-                <p className="text-sm text-neutral-500 font-sans mt-1">Edite os textos de todas as paginas. Campos com editor permitem negrito, italico e sublinhado.</p>
-              </div>
-              {textsDirty.size > 0 && (
-                <button
-                  onClick={saveAllTexts}
-                  disabled={textsLoading}
-                  className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
-                >
-                  {textsLoading ? 'Salvando...' : `Salvar Todos (${textsDirty.size})`}
-                </button>
-              )}
-            </div>
-
-            {textsLoading && Object.keys(siteTexts).length === 0 ? (
-              <p className="text-neutral-400 font-sans text-sm">Carregando textos...</p>
-            ) : (
-              <div className="space-y-4">
-                {TEXT_SECTIONS.map((section) => {
-                  const isOpen = openSections.has(section.page);
-                  const dirtyCount = section.fields.filter((f) => textsDirty.has(f.key)).length;
-                  return (
-                    <div key={section.page} className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                <h2 className="text-lg font-display mb-6">Páginas do Site</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {PAGE_CONFIGS.map((page) => {
+                    const totalFields = page.seo.length + page.textos.length + page.imagens.length;
+                    return (
                       <button
-                        onClick={() => toggleSection(section.page)}
-                        className="w-full px-6 py-4 flex items-center justify-between hover:bg-neutral-50 transition-colors"
+                        key={page.id}
+                        onClick={() => { setSelectedPage(page.id); setPageSubTab('seo'); }}
+                        className="bg-white rounded-2xl p-6 border border-neutral-200 text-left hover:border-neutral-400 transition-colors group"
                       >
-                        <div className="flex items-center gap-3">
-                          <span className="text-lg font-display">{section.label}</span>
-                          <span className="text-xs text-neutral-400 font-sans">{section.fields.length} campos</span>
-                          {dirtyCount > 0 && (
-                            <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-sans font-medium">
-                              {dirtyCount} alterado(s)
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-neutral-400 text-xl transition-transform" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                          ▾
-                        </span>
+                        <span className="text-3xl mb-3 block">{page.icon}</span>
+                        <h3 className="text-lg font-display group-hover:text-black">{page.label}</h3>
+                        <p className="text-xs text-neutral-400 font-sans mt-1">{totalFields} campos editáveis{page.hasHero ? ' + Hero' : ''}</p>
                       </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (() => {
+              const currentPage = PAGE_CONFIGS.find((p) => p.id === selectedPage);
+              if (!currentPage) return null;
+              const fields = currentPage[pageSubTab] || [];
+              const allPageKeys = [...currentPage.seo, ...currentPage.textos, ...currentPage.imagens].map(f => f.key);
+              const pageDirtyCount = allPageKeys.filter(k => textsDirty.has(k)).length;
+              return (
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => setSelectedPage(null)}
+                        className="text-neutral-400 hover:text-black text-sm font-sans px-3 py-2 rounded-lg hover:bg-neutral-100 transition-colors"
+                      >
+                        ← Voltar
+                      </button>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">{currentPage.icon}</span>
+                        <h2 className="text-lg font-display">{currentPage.label}</h2>
+                      </div>
+                    </div>
+                    {pageDirtyCount > 0 && (
+                      <button
+                        onClick={saveAllTexts}
+                        disabled={textsLoading}
+                        className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
+                      >
+                        {textsLoading ? 'Salvando...' : `Salvar Todos (${pageDirtyCount})`}
+                      </button>
+                    )}
+                  </div>
 
-                      {isOpen && (
-                        <div className="px-6 pb-6 space-y-5 border-t border-neutral-100">
-                          {section.fields.map((field) => (
+                  <div className="flex gap-2 mb-6">
+                    {(['seo', 'textos', 'imagens'] as const).map((st) => {
+                      const count = currentPage[st].length + (st === 'imagens' && currentPage.hasHero ? 3 : 0);
+                      return (
+                        <button
+                          key={st}
+                          onClick={() => setPageSubTab(st)}
+                          className={`px-5 py-2.5 rounded-full text-sm font-sans font-medium transition-all ${
+                            pageSubTab === st ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                          }`}
+                        >
+                          {st === 'seo' ? 'SEO' : st === 'textos' ? 'Textos' : 'Imagens'}
+                          <span className="ml-1.5 text-[10px] opacity-60">({count})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {textsLoading && Object.keys(siteTexts).length === 0 ? (
+                    <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+                  ) : (
+                    <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                      {fields.length === 0 && !(pageSubTab === 'imagens' && currentPage.hasHero) ? (
+                        <div className="px-6 py-12 text-center">
+                          <p className="text-neutral-400 font-sans text-sm">Nenhum campo de {pageSubTab === 'seo' ? 'SEO' : pageSubTab === 'textos' ? 'texto' : 'imagem'} para esta página.</p>
+                        </div>
+                      ) : (
+                        <div className="px-6 pb-6 space-y-5">
+                          {fields.map((field) => (
                             <div key={field.key} className="pt-4">
                               <div className="flex items-center justify-between mb-2">
                                 <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">
@@ -2041,15 +2000,75 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   placeholder={field.label}
                                 />
                               )}
+                              {pageSubTab === 'imagens' && siteTexts[field.key] && (
+                                /\.(mp4|mov|webm)$/i.test(siteTexts[field.key]) || field.key.includes('video') ? (
+                                  <video src={siteTexts[field.key]} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                ) : (
+                                  <img src={siteTexts[field.key]} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />
+                                )
+                              )}
                             </div>
                           ))}
+
+                          {pageSubTab === 'imagens' && currentPage.hasHero && (
+                            <div className="pt-6 mt-4 border-t border-neutral-100">
+                              <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-5">Vídeo do Hero</h3>
+                              <div className="space-y-5">
+                                <div>
+                                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Desktop (URL)</label>
+                                  <input
+                                    value={hero.desktopVideoUrl}
+                                    onChange={(e) => setHero({ ...hero, desktopVideoUrl: e.target.value })}
+                                    className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                                    placeholder="https://... ou /lovable-uploads/abertura-site.mp4"
+                                  />
+                                  {hero.desktopVideoUrl && (
+                                    <video src={hero.desktopVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Mobile (URL)</label>
+                                  <input
+                                    value={hero.mobileVideoUrl}
+                                    onChange={(e) => setHero({ ...hero, mobileVideoUrl: e.target.value })}
+                                    className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                                    placeholder="https://... ou /lovable-uploads/abertura-site-mobile.mp4"
+                                  />
+                                  {hero.mobileVideoUrl && (
+                                    <video src={hero.mobileVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Poster / Imagem de capa (URL)</label>
+                                  <input
+                                    value={hero.posterUrl}
+                                    onChange={(e) => setHero({ ...hero, posterUrl: e.target.value })}
+                                    className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                                    placeholder="https://... ou /lovable-uploads/poster.png"
+                                  />
+                                  {hero.posterUrl && (
+                                    <img src={hero.posterUrl} alt="Poster preview" className="mt-3 rounded-xl max-h-40 object-cover" />
+                                  )}
+                                </div>
+                              </div>
+                              <div className="mt-6">
+                                <button
+                                  onClick={saveHero}
+                                  disabled={heroLoading}
+                                  className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
+                                >
+                                  {heroLoading ? 'Salvando...' : 'Salvar Hero'}
+                                </button>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  )}
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>
