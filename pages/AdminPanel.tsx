@@ -755,6 +755,43 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     return data.publicUrl;
   };
 
+  const uploadFileAndGetUrl = async (file: File): Promise<string> => {
+    const ext = file.name.split('.').pop();
+    const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from('media').upload(name, file);
+    if (error) throw error;
+    const { data } = supabase.storage.from('media').getPublicUrl(name);
+    return data.publicUrl;
+  };
+
+  const handleImageFieldUpload = async (file: File, fieldKey: string, setter: 'text' | 'case_cover' | 'hero_desktop' | 'hero_mobile' | 'hero_poster') => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      switch (setter) {
+        case 'text':
+          updateTextField(fieldKey, url);
+          break;
+        case 'case_cover':
+          if (editingCase) setEditingCase({ ...editingCase, cover_url: url });
+          break;
+        case 'hero_desktop':
+          setHero((h: HeroSettings) => ({ ...h, desktopVideoUrl: url }));
+          break;
+        case 'hero_mobile':
+          setHero((h: HeroSettings) => ({ ...h, mobileVideoUrl: url }));
+          break;
+        case 'hero_poster':
+          setHero((h: HeroSettings) => ({ ...h, posterUrl: url }));
+          break;
+      }
+      showMessage('Arquivo enviado!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
   const deleteMedia = async (name: string) => {
     if (!confirm('Excluir este arquivo?')) return;
     await supabase.storage.from('media').remove([name]);
