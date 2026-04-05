@@ -269,6 +269,39 @@ export type Database = {
         }
         Relationships: []
       }
+      site_partners: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_visible: boolean
+          link_url: string
+          logo_url: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_visible?: boolean
+          link_url?: string
+          logo_url?: string
+          name?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_visible?: boolean
+          link_url?: string
+          logo_url?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_proposals: {
         Row: {
           about: string | null
