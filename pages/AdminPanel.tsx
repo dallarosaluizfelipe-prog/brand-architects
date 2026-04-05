@@ -44,6 +44,15 @@ interface SiteTag {
   is_active: boolean;
 }
 
+interface SitePartner {
+  id?: string;
+  name: string;
+  logo_url: string;
+  link_url: string;
+  display_order: number;
+  is_visible: boolean;
+}
+
 const TAG_TYPES = [
   { value: 'ga4', label: 'Google Analytics 4', placeholder: 'G-XXXXXXXXXX' },
   { value: 'gtm', label: 'Google Tag Manager', placeholder: 'GTM-XXXXXXX' },
@@ -155,6 +164,9 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'about_expert_p2', label: 'Especialista - Paragrafo 2', rich: true },
       { key: 'about_expert_p3', label: 'Especialista - Paragrafo 3', rich: true },
       { key: 'about_expert_photo_url', label: 'Especialista - URL da Foto' },
+      { key: 'about_expert_role', label: 'Especialista - Cargo' },
+      { key: 'about_vision_video_url', label: 'Visao - URL do Video' },
+      { key: 'about_bottom_image_url', label: 'Imagem Inferior - URL' },
       { key: 'about_pillars_badge', label: 'Badge dos Pilares' },
       { key: 'about_pillars_title', label: 'Titulo dos Pilares' },
       { key: 'about_pillar1_title', label: 'Pilar 1 - Titulo' },
@@ -212,6 +224,16 @@ const TEXT_SECTIONS: TextSection[] = [
     fields: [
       { key: 'footer_contacts', label: 'Info de Contatos', rich: true },
       { key: 'footer_copyright', label: 'Copyright' },
+      { key: 'footer_logo_url', label: 'URL do Logo do Footer' },
+    ],
+  },
+  {
+    page: 'social',
+    label: 'Redes Sociais',
+    fields: [
+      { key: 'social_instagram', label: 'URL do Instagram' },
+      { key: 'social_linkedin', label: 'URL do LinkedIn' },
+      { key: 'social_behance', label: 'URL do Behance' },
     ],
   },
   {
@@ -278,7 +300,7 @@ const TEXT_SECTIONS: TextSection[] = [
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads'>('dashboard');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads' | 'parceiros'>('dashboard');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -297,6 +319,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [tags, setTags] = useState<SiteTag[]>([]);
   const [editingTag, setEditingTag] = useState<SiteTag | null>(null);
   const [tagsLoading, setTagsLoading] = useState(false);
+  const [partners, setPartners] = useState<SitePartner[]>([]);
+  const [editingPartner, setEditingPartner] = useState<SitePartner | null>(null);
+  const [partnersLoading, setPartnersLoading] = useState(false);
   const [siteTexts, setSiteTexts] = useState<Record<string, string>>({});
   const [textsLoading, setTextsLoading] = useState(false);
   const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
@@ -542,6 +567,50 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     is_active: true,
   });
 
+  const normalizePartner = (item: any): SitePartner => ({
+    id: item.id,
+    name: item.name ?? '',
+    logo_url: item.logo_url ?? '',
+    link_url: item.link_url ?? '/cases',
+    display_order: item.display_order ?? 0,
+    is_visible: item.is_visible !== false,
+  });
+
+  const loadPartners = async () => {
+    setPartnersLoading(true);
+    const result = await apiCall('list_partners');
+    const mapped = (result.partners || []).map(normalizePartner);
+    setPartners(mapped);
+    setPartnersLoading(false);
+  };
+
+  const savePartner = async () => {
+    if (!editingPartner) return;
+    setPartnersLoading(true);
+    await apiCall('upsert_partner', editingPartner);
+    setEditingPartner(null);
+    await loadPartners();
+    showMessage('Parceiro salvo!');
+    setPartnersLoading(false);
+  };
+
+  const deletePartner = async (id: string) => {
+    if (!confirm('Excluir este parceiro?')) return;
+    setPartnersLoading(true);
+    await apiCall('delete_partner', { id });
+    await loadPartners();
+    showMessage('Parceiro excluido!');
+    setPartnersLoading(false);
+  };
+
+  const newPartner = (): SitePartner => ({
+    name: '',
+    logo_url: '',
+    link_url: '/cases',
+    display_order: partners.length + 1,
+    is_visible: true,
+  });
+
   const loadTexts = async () => {
     setTextsLoading(true);
     const result = await apiCall('list_content');
@@ -656,6 +725,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     loadHero();
     loadProposals();
     loadTags();
+    loadPartners();
     loadTexts();
     loadDashboard();
     loadFormSubmissions();
@@ -756,7 +826,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['dashboard', 'leads', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
+        {(['dashboard', 'leads', 'cases', 'media', 'hero', 'proposals', 'parceiros', 'tags', 'textos'] as const).map((t) => (
           <button
             key={t}
             onClick={() => {
@@ -767,7 +837,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : t === 'tags' ? 'Tags' : 'Textos'}
           </button>
         ))}
       </div>
@@ -1819,6 +1889,75 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                         </div>
                       );
                     })}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {tab === 'parceiros' && (
+          <div>
+            {editingPartner ? (
+              <div className="bg-white rounded-2xl p-6 border border-neutral-200 space-y-4">
+                <h2 className="text-lg font-display mb-4">{editingPartner.id ? 'Editar Parceiro' : 'Novo Parceiro'}</h2>
+                <input value={editingPartner.name} onChange={(e) => setEditingPartner({ ...editingPartner, name: e.target.value })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Nome do parceiro" />
+                <input value={editingPartner.logo_url} onChange={(e) => setEditingPartner({ ...editingPartner, logo_url: e.target.value })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do logo" />
+                {editingPartner.logo_url && (
+                  <div className="bg-neutral-50 rounded-xl p-4 flex justify-center">
+                    <img src={editingPartner.logo_url} alt="Preview" className="h-20 object-contain" />
+                  </div>
+                )}
+                <input value={editingPartner.link_url} onChange={(e) => setEditingPartner({ ...editingPartner, link_url: e.target.value })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL de destino (ex: /cases/yerbal)" />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Ordem</label>
+                    <input type="number" value={editingPartner.display_order} onChange={(e) => setEditingPartner({ ...editingPartner, display_order: Number(e.target.value) })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" />
+                  </div>
+                  <div className="flex items-end">
+                    <label className="flex items-center gap-2 font-sans text-sm">
+                      <input type="checkbox" checked={editingPartner.is_visible} onChange={(e) => setEditingPartner({ ...editingPartner, is_visible: e.target.checked })} />
+                      Visivel
+                    </label>
+                  </div>
+                </div>
+                <div className="flex gap-3 pt-4">
+                  <button onClick={savePartner} disabled={partnersLoading} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50">
+                    {partnersLoading ? 'Salvando...' : 'Salvar'}
+                  </button>
+                  <button onClick={() => setEditingPartner(null)} className="border border-neutral-200 px-8 py-3 rounded-full text-sm font-sans">Cancelar</button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-display">Parceiros</h2>
+                  <button onClick={() => setEditingPartner(newPartner())} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider">
+                    + Novo Parceiro
+                  </button>
+                </div>
+                {partnersLoading ? (
+                  <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+                ) : partners.length === 0 ? (
+                  <p className="text-neutral-400 font-sans text-sm">Nenhum parceiro cadastrado.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {partners.map((p) => (
+                      <div key={p.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
+                        <div className="w-16 h-16 bg-neutral-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                          {p.logo_url && <img src={p.logo_url} alt={p.name} className="h-12 object-contain" />}
+                        </div>
+                        <div className="flex-grow min-w-0">
+                          <h3 className="font-display text-lg truncate">{p.name}</h3>
+                          <p className="text-xs text-neutral-400 font-sans truncate">{p.link_url}</p>
+                        </div>
+                        <span className={`text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-full ${p.is_visible ? 'bg-green-50 text-green-600' : 'bg-neutral-100 text-neutral-400'}`}>
+                          {p.is_visible ? 'Visivel' : 'Oculto'}
+                        </span>
+                        <button onClick={() => setEditingPartner(p)} className="text-sm font-sans text-neutral-400 hover:text-black">Editar</button>
+                        <button onClick={() => deletePartner(p.id!)} className="text-sm font-sans text-red-400 hover:text-red-600">Excluir</button>
+                      </div>
+                    ))}
                   </div>
                 )}
               </>

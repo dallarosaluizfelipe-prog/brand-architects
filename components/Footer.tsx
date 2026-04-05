@@ -6,6 +6,10 @@ const Footer: React.FC = () => {
   const t = useSiteTexts({
     footer_contacts: `CURITIBA / PARANA / BR<br />TEL <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="hover:opacity-60 transition-opacity">${CONTACT_PHONE_DISPLAY}</a>`,
     footer_copyright: '© 2026 Studio Dalla. All rights reserved.',
+    footer_logo_url: '/lovable-uploads/dalla-logo-footer.png',
+    social_instagram: 'https://www.instagram.com/estudiodalla/',
+    social_linkedin: '',
+    social_behance: 'https://www.behance.net/luizfedalla-r/projects',
   });
 
   return (
@@ -19,9 +23,9 @@ const Footer: React.FC = () => {
           <div>
             <h5 className="text-[10px] font-bold mb-5 md:mb-6 uppercase tracking-widest opacity-40">Redes</h5>
             <ul className="text-xs md:text-sm font-light opacity-80 space-y-2 uppercase tracking-[0.2em]">
-              <li><a className="hover:underline" href="https://www.instagram.com/estudiodalla/" target="_blank" rel="noreferrer">Instagram</a></li>
-              <li><a className="hover:underline" href="#">LinkedIn</a></li>
-              <li><a className="hover:underline" href="https://www.behance.net/luizfedalla-r/projects" target="_blank" rel="noreferrer">Behance</a></li>
+              {t.social_instagram && <li><a className="hover:underline" href={t.social_instagram} target="_blank" rel="noreferrer">Instagram</a></li>}
+              {t.social_linkedin && <li><a className="hover:underline" href={t.social_linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>}
+              {t.social_behance && <li><a className="hover:underline" href={t.social_behance} target="_blank" rel="noreferrer">Behance</a></li>}
             </ul>
           </div>
           <div>
@@ -49,7 +53,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="select-none">
-          <img src="/lovable-uploads/dalla-logo-footer.png" alt="Dalla" className="w-full" loading="lazy" />
+          <img src={t.footer_logo_url} alt="Dalla" className="w-full" loading="lazy" />
         </div>
       </div>
     </footer>

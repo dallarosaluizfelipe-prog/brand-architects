@@ -14,6 +14,9 @@ const Contact: React.FC = () => {
     contact_seo_title: 'Contato - Estudio Dalla',
     contact_seo_description: 'Fale com o Estudio Dalla. Estamos prontos para transformar sua marca de luxo com design estrategico.',
     contact_seo_keywords: 'contato agencia branding, contato branding SP',
+    social_instagram: 'https://www.instagram.com/estudiodalla/',
+    social_linkedin: '',
+    social_behance: 'https://www.behance.net/luizfedalla-r/projects',
   });
 
   const [form, setForm] = useState({
@@ -77,9 +80,9 @@ const Contact: React.FC = () => {
               <section>
                 <h5 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Redes</h5>
                 <ul className="font-light space-y-3 md:space-y-4 uppercase tracking-[0.2em] text-neutral-800 text-sm md:text-lg">
-                  <li><a className="hover:underline" href="https://www.instagram.com/estudiodalla/" target="_blank" rel="noreferrer">Instagram</a></li>
-                  <li><a className="hover:underline" href="#">LinkedIn</a></li>
-                  <li><a className="hover:underline" href="https://www.behance.net/luizfedalla-r/projects" target="_blank" rel="noreferrer">Behance</a></li>
+                  {t.social_instagram && <li><a className="hover:underline" href={t.social_instagram} target="_blank" rel="noreferrer">Instagram</a></li>}
+                  {t.social_linkedin && <li><a className="hover:underline" href={t.social_linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>}
+                  {t.social_behance && <li><a className="hover:underline" href={t.social_behance} target="_blank" rel="noreferrer">Behance</a></li>}
                 </ul>
               </section>
             </div>

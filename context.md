@@ -2,6 +2,33 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-04 12:00** - Dinamizacao completa de conteudo do site (textos, imagens, SEO) editaveis via Admin:
+  - **Motivacao:** Usuario solicitou que todas as imagens e textos, incluindo SEO, sejam conteudos dinamicos editaveis no painel, com atencao especial a pagina /estudio.
+  - **Fase 1 — About.tsx completamente dinamica:**
+    - Adicionadas 3 novas chaves ao `useSiteTexts`: `about_vision_video_url`, `about_bottom_image_url`, `about_expert_role`.
+    - Video da secao Visao, imagem inferior (GIF) e cargo do especialista agora sao editaveis via Admin > Textos > Sobre.
+    - 3 novos campos adicionados ao TEXT_SECTIONS do AdminPanel.
+  - **Fase 2 — Home: cases dinamicos:**
+    - Removidos 5 cases hardcoded (Yerbal, Clave, Nuts O'Clock, Lummina, Dalla).
+    - Importado `getSiteCases()` de `src/data/siteCases.ts` para puxar cases do Supabase.
+    - Layout preservado: 2 cols + 1 wide + 2 cols usando slicing por index.
+  - **Fase 3 — Parceiros editaveis:**
+    - Nova migration `20260404120000_create_site_partners.sql`: tabela `site_partners` com RLS publica + seed dos 10 parceiros atuais.
+    - Novo arquivo `src/data/sitePartners.ts` com `getSitePartners()` e fallback local.
+    - Home.tsx atualizada para consumir parceiros do banco.
+    - Nova aba "Parceiros" no AdminPanel com CRUD completo (nome, logo URL, link, ordem, visibilidade).
+    - Edge Function `admin/index.ts`: 3 novas actions — `list_partners`, `upsert_partner`, `delete_partner`.
+  - **Fase 4 — Redes sociais centralizadas:**
+    - Adicionadas chaves `social_instagram`, `social_linkedin`, `social_behance` ao sistema de textos.
+    - Nova secao "Redes Sociais" no AdminPanel TEXT_SECTIONS.
+    - Navbar.tsx, Footer.tsx e Contact.tsx atualizados para consumir URLs de redes sociais do banco. Links so aparecem se a URL existir (condicional).
+  - **Fase 5 — Footer logo dinamico:**
+    - Adicionada chave `footer_logo_url` ao useSiteTexts do Footer.
+    - Campo correspondente adicionado no AdminPanel secao Footer.
+  - **Arquivos alterados:** About.tsx, Home.tsx, Contact.tsx, Navbar.tsx, Footer.tsx, AdminPanel.tsx, admin/index.ts.
+  - **Arquivos criados:** `supabase/migrations/20260404120000_create_site_partners.sql`, `src/data/sitePartners.ts`.
+  - **Validacao:** Zero erros TypeScript. Zero erros de lint.
+
 - **2026-04-02 16:40** - Correcao do bug no grafico do Dashboard (dados reais nao renderizavam):
   - **Motivacao:** Usuario reportou que o grafico da aba Dashboard nao refletia dados reais de analytics.
   - **Alteracoes aplicadas:**

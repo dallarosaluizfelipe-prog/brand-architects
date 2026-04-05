@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
 const DallaLogo = ({ className = "" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 1278 294.92" xmlns="http://www.w3.org/2000/svg">
@@ -35,6 +36,10 @@ const NavLinks: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
+  const t = useSiteTexts({
+    social_instagram: 'https://www.instagram.com/estudiodalla/',
+    social_behance: 'https://www.behance.net/luizfedalla-r/projects',
+  });
 
   const links = [
     { label: "Estúdio", path: "/estudio" },
@@ -110,8 +115,8 @@ const Navbar: React.FC = () => {
 
           <div className="px-6 py-10 border-t border-neutral-100">
             <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-              <a href="https://www.instagram.com/estudiodalla/" target="_blank" rel="noreferrer">Instagram</a>
-              <a href="https://www.behance.net/luizfedalla-r/projects" target="_blank" rel="noreferrer">Behance</a>
+              {t.social_instagram && <a href={t.social_instagram} target="_blank" rel="noreferrer">Instagram</a>}
+              {t.social_behance && <a href={t.social_behance} target="_blank" rel="noreferrer">Behance</a>}
             </div>
           </div>
         </div>

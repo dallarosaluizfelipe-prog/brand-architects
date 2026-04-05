@@ -2,6 +2,54 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-04 Dinamizacao completa de conteudo editavel via Admin
+
+### `pages/About.tsx` (atualizado)
+- 3 novos campos dinamicos via `useSiteTexts`:
+  - `about_vision_video_url`: URL do video da secao Visao (default: `/lovable-uploads/dalla-teaser.mov`)
+  - `about_bottom_image_url`: URL da imagem inferior/GIF (default: `/lovable-uploads/logo-giratoria-2.gif`)
+  - `about_expert_role`: Cargo do especialista (default: `Designer & Fundador`)
+- Todos os textos, imagens e SEO da pagina /estudio sao agora 100% editaveis no Admin.
+
+### `pages/Home.tsx` (atualizado)
+- Cases na Home agora sao dinamicos: importa `getSiteCases(5)` e renderiza com layout preservado (2+1+2).
+- Parceiros na Home agora sao dinamicos: importa `getSitePartners()` de `src/data/sitePartners.ts`.
+- Removidos todos os dados hardcoded de cases e parceiros.
+
+### `src/data/sitePartners.ts` (novo)
+- Interface `SitePartner`: id, name, logo_url, link_url, display_order, is_visible.
+- `getSitePartners()`: Busca parceiros visiveis ordenados por `display_order` de `site_partners` com fallback local (10 parceiros).
+
+### `supabase/migrations/20260404120000_create_site_partners.sql` (novo)
+- Tabela `site_partners` com colunas: id (uuid PK), name, logo_url, link_url, display_order, is_visible, created_at, updated_at.
+- RLS habilitado com leitura publica para anon e authenticated.
+- Seed dos 10 parceiros originais hardcoded.
+
+### `pages/AdminPanel.tsx` (atualizado)
+- Nova aba "Parceiros" com CRUD completo: nome, URL do logo (com preview), link de destino, ordem, visibilidade.
+- Tab type expandido para incluir `'parceiros'`.
+- TEXT_SECTIONS expandido com:
+  - Secao "Sobre": 3 novos campos (`about_expert_role`, `about_vision_video_url`, `about_bottom_image_url`).
+  - Secao "Footer": novo campo `footer_logo_url`.
+  - Nova secao "Redes Sociais": `social_instagram`, `social_linkedin`, `social_behance`.
+
+### `supabase/functions/admin/index.ts` (atualizado)
+- 3 novas actions para parceiros:
+  - `list_partners`: Lista todos parceiros ordenados por `display_order`.
+  - `upsert_partner`: Cria ou atualiza parceiro com `updated_at`.
+  - `delete_partner`: Remove parceiro por ID.
+
+### `components/Footer.tsx` (atualizado)
+- Links de redes sociais agora dinamicos via `useSiteTexts` (chaves `social_instagram`, `social_linkedin`, `social_behance`).
+- Links so renderizam se a URL existir (condicional).
+- Logo do footer agora dinamico via chave `footer_logo_url`.
+
+### `components/Navbar.tsx` (atualizado)
+- Redes sociais no menu mobile agora dinamicas via `useSiteTexts`.
+
+### `pages/Contact.tsx` (atualizado)
+- Redes sociais na sidebar agora dinamicas via `useSiteTexts`.
+
 ## 2026-04-02 Correcao do Grafico de Analytics no Dashboard
 
 ### `pages/AdminPanel.tsx` (atualizado)

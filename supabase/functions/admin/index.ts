@@ -308,6 +308,40 @@ Deno.serve(async (req) => {
         });
       }
 
+      case "list_partners": {
+        const { data: partners, error } = await supabase
+          .from("site_partners")
+          .select("*")
+          .order("display_order", { ascending: true });
+        if (error) throw error;
+        return new Response(JSON.stringify({ partners }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "upsert_partner": {
+        const { data: result, error } = await supabase
+          .from("site_partners")
+          .upsert({ ...data, updated_at: new Date().toISOString() })
+          .select()
+          .single();
+        if (error) throw error;
+        return new Response(JSON.stringify({ partner: result }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "delete_partner": {
+        const { error } = await supabase
+          .from("site_partners")
+          .delete()
+          .eq("id", data.id);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400,

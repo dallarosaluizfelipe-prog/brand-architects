@@ -4,6 +4,8 @@ import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { supabase } from '@/src/integrations/supabase/client';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { getSiteCases, SiteCase } from '@/src/data/siteCases';
+import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
 
 const FALLBACK_DESKTOP = '/lovable-uploads/abertura-site.mp4';
 const FALLBACK_MOBILE = '/lovable-uploads/abertura-site-mobile.mp4';
@@ -13,6 +15,8 @@ const Home: React.FC = () => {
   const [heroDesktop, setHeroDesktop] = useState(FALLBACK_DESKTOP);
   const [heroMobile, setHeroMobile] = useState(FALLBACK_MOBILE);
   const [heroPoster, setHeroPoster] = useState(FALLBACK_POSTER);
+  const [homeCases, setHomeCases] = useState<SiteCase[]>([]);
+  const [partners, setPartners] = useState<SitePartner[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const t = useSiteTexts({
@@ -44,6 +48,11 @@ const Home: React.FC = () => {
         // Reload <video> with new sources
         videoRef.current?.load();
       });
+  }, []);
+
+  useEffect(() => {
+    getSiteCases(5).then(setHomeCases);
+    getSitePartners().then(setPartners);
   }, []);
   return (
     <>
@@ -94,58 +103,48 @@ const Home: React.FC = () => {
             </div>
 
             <div className="grid md:grid-cols-2 gap-10 md:gap-12">
-              <Link to="/cases/yerbal" className="group cursor-pointer">
-                <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
-                  <img alt="Yerbal" className="w-full h-full object-cover" src="/lovable-uploads/yerbal-cover.gif" loading="lazy" />
-                </div>
-                <div>
-                  <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">Yerbal</h3>
-                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
-                </div>
-              </Link>
-              <Link to="/cases/clave" className="group cursor-pointer">
-                <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
-                  <img alt="Clave" className="w-full h-full object-cover" src="/lovable-uploads/7eb64c92-69f8-4c75-8d27-c09dcc336dfb.png" loading="lazy" />
-                </div>
-                <div>
-                  <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">Clave</h3>
-                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Identidade  -   Tipografia</p>
-                </div>
-              </Link>
+              {homeCases.slice(0, 2).map((c) => (
+                <Link key={c.slug} to={`/cases/${c.slug}`} className="group cursor-pointer">
+                  <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
+                    <img alt={c.title} className="w-full h-full object-cover" src={c.cover_url} loading="lazy" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
+                    <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
+                  </div>
+                </Link>
+              ))}
             </div>
 
-            <div className="mt-10 md:mt-12">
-              <Link to="/cases/nuts-oclock" className="group cursor-pointer">
-                <div className="rounded-3xl overflow-hidden aspect-[4/3] md:aspect-[21/9] mb-8 shadow-lg">
-                  <img alt="Nuts O'Clock" className="w-full h-full object-cover" src="/lovable-uploads/nuts-oclock-cover.gif" loading="lazy" />
-                </div>
-                <div>
-                  <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">Nuts O'Clock</h3>
-                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
-                </div>
-              </Link>
-            </div>
+            {homeCases[2] && (
+              <div className="mt-10 md:mt-12">
+                <Link to={`/cases/${homeCases[2].slug}`} className="group cursor-pointer">
+                  <div className="rounded-3xl overflow-hidden aspect-[4/3] md:aspect-[21/9] mb-8 shadow-lg">
+                    <img alt={homeCases[2].title} className="w-full h-full object-cover" src={homeCases[2].cover_url} loading="lazy" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">{homeCases[2].title}</h3>
+                    <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{homeCases[2].category}</p>
+                  </div>
+                </Link>
+              </div>
+            )}
 
-            <div className="grid md:grid-cols-2 gap-10 md:gap-12 mt-10 md:mt-12">
-              <Link to="/cases/lummina" className="group cursor-pointer">
-                <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
-                  <img alt="Lummina" className="w-full h-full object-cover" src="/lovable-uploads/lummina-cover.png" loading="lazy" />
-                </div>
-                <div>
-                  <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">Lummina</h3>
-                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual   -   Embalagem</p>
-                </div>
-              </Link>
-              <Link to="/cases/dalla" className="group cursor-pointer">
-                <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
-                  <img alt="Dalla" className="w-full h-full object-cover" src="/lovable-uploads/dalla-cover.gif" loading="lazy" />
-                </div>
-                <div>
-                  <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">Dalla</h3>
-                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">Branding  -   Identidade Visual</p>
-                </div>
-              </Link>
-            </div>
+            {homeCases.length > 3 && (
+              <div className="grid md:grid-cols-2 gap-10 md:gap-12 mt-10 md:mt-12">
+                {homeCases.slice(3, 5).map((c) => (
+                  <Link key={c.slug} to={`/cases/${c.slug}`} className="group cursor-pointer">
+                    <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-8 shadow-lg">
+                      <img alt={c.title} className="w-full h-full object-cover" src={c.cover_url} loading="lazy" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
+                      <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
 
             <div className="mt-12 md:mt-16 text-center">
               <Link to="/cases" className="inline-block border border-black px-10 md:px-16 py-4 md:py-6 rounded-full font-bold uppercase tracking-[0.18em] hover:bg-black hover:text-white transition-all font-sans text-xs md:text-sm">
@@ -162,20 +161,9 @@ const Home: React.FC = () => {
               <div className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg" dangerouslySetInnerHTML={{ __html: t.home_partners_subtitle }} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">
-              {[
-                { img: "partner-1.png", alt: "Nuts O'Clock", href: "/cases/nuts-oclock" },
-                { img: "partner-2.png", alt: "Yerbal", href: "/cases/yerbal" },
-                { img: "partner-3.png", alt: "Lummina", href: "/cases/lummina" },
-                { img: "partner-4.png", alt: "Parceiro 4", href: "/cases" },
-                { img: "partner-5.png", alt: "Parceiro 5", href: "/cases" },
-                { img: "partner-6.png", alt: "Parceiro 6", href: "/cases" },
-                { img: "partner-7.png", alt: "Parceiro 7", href: "/cases" },
-                { img: "partner-8.png", alt: "Parceiro 8", href: "/cases" },
-                { img: "partner-9.png", alt: "Parceiro 9", href: "/cases" },
-                { img: "partner-10.png", alt: "Parceiro 10", href: "/cases" },
-              ].map((p) => (
-                <Link key={p.img} to={p.href} className="flex justify-center">
-                  <img src={`/lovable-uploads/${p.img}`} alt={p.alt} loading="lazy" className="h-28 md:h-32 object-contain" />
+              {partners.map((p) => (
+                <Link key={p.logo_url} to={p.link_url} className="flex justify-center">
+                  <img src={p.logo_url} alt={p.name} loading="lazy" className="h-28 md:h-32 object-contain" />
                 </Link>
               ))}
             </div>
