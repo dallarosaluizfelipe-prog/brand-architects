@@ -755,6 +755,43 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     return data.publicUrl;
   };
 
+  const uploadFileAndGetUrl = async (file: File): Promise<string> => {
+    const ext = file.name.split('.').pop();
+    const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from('media').upload(name, file);
+    if (error) throw error;
+    const { data } = supabase.storage.from('media').getPublicUrl(name);
+    return data.publicUrl;
+  };
+
+  const handleImageFieldUpload = async (file: File, fieldKey: string, setter: 'text' | 'case_cover' | 'hero_desktop' | 'hero_mobile' | 'hero_poster') => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      switch (setter) {
+        case 'text':
+          updateTextField(fieldKey, url);
+          break;
+        case 'case_cover':
+          if (editingCase) setEditingCase({ ...editingCase, cover_url: url });
+          break;
+        case 'hero_desktop':
+          setHero((h: HeroSettings) => ({ ...h, desktopVideoUrl: url }));
+          break;
+        case 'hero_mobile':
+          setHero((h: HeroSettings) => ({ ...h, mobileVideoUrl: url }));
+          break;
+        case 'hero_poster':
+          setHero((h: HeroSettings) => ({ ...h, posterUrl: url }));
+          break;
+      }
+      showMessage('Arquivo enviado!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
   const deleteMedia = async (name: string) => {
     if (!confirm('Excluir este arquivo?')) return;
     await supabase.storage.from('media').remove([name]);
@@ -1245,6 +1282,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
                       placeholder="Cole a URL da imagem de capa"
                     />
+                    <div
+                      className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                        uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) handleImageFieldUpload(file, '', 'case_cover');
+                      }}
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.onchange = (ev) => {
+                          const file = (ev.target as HTMLInputElement).files?.[0];
+                          if (file) handleImageFieldUpload(file, '', 'case_cover');
+                        };
+                        input.click();
+                      }}
+                    >
+                      <p className="text-sm text-neutral-500 font-sans">
+                        {uploading ? 'Enviando...' : 'Arraste a imagem aqui ou clique para enviar'}
+                      </p>
+                    </div>
                     {editingCase.cover_url && <img src={editingCase.cover_url} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />}
                   </div>
 
@@ -1261,6 +1324,57 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans min-h-[120px]"
                       placeholder="https://.../imagem-1.png"
                     />
+                    <div
+                      className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                        uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const files = Array.from(e.dataTransfer.files);
+                        if (files.length === 0) return;
+                        setUploading(true);
+                        try {
+                          const urls: string[] = [];
+                          for (const file of files) {
+                            urls.push(await uploadFileAndGetUrl(file));
+                          }
+                          setEditingCase((prev: SiteCase | null) => prev ? { ...prev, gallery_urls: [...prev.gallery_urls, ...urls] } : prev);
+                          showMessage(`${urls.length} arquivo(s) adicionado(s) à galeria!`);
+                        } catch (err: any) {
+                          showMessage('Erro ao enviar: ' + err.message);
+                        }
+                        setUploading(false);
+                      }}
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.multiple = true;
+                        input.onchange = async (ev) => {
+                          const files = Array.from((ev.target as HTMLInputElement).files || []);
+                          if (files.length === 0) return;
+                          setUploading(true);
+                          try {
+                            const urls: string[] = [];
+                            for (const file of files) {
+                              urls.push(await uploadFileAndGetUrl(file));
+                            }
+                            setEditingCase((prev: SiteCase | null) => prev ? { ...prev, gallery_urls: [...prev.gallery_urls, ...urls] } : prev);
+                            showMessage(`${urls.length} arquivo(s) adicionado(s) à galeria!`);
+                          } catch (err: any) {
+                            showMessage('Erro ao enviar: ' + err.message);
+                          }
+                          setUploading(false);
+                        };
+                        input.click();
+                      }}
+                    >
+                      <p className="text-sm text-neutral-500 font-sans">
+                        {uploading ? 'Enviando...' : 'Arraste imagens aqui ou clique para adicionar à galeria'}
+                      </p>
+                    </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
@@ -2000,12 +2114,42 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   placeholder={field.label}
                                 />
                               )}
-                              {pageSubTab === 'imagens' && siteTexts[field.key] && (
-                                /\.(mp4|mov|webm)$/i.test(siteTexts[field.key]) || field.key.includes('video') ? (
-                                  <video src={siteTexts[field.key]} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
-                                ) : (
-                                  <img src={siteTexts[field.key]} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />
-                                )
+                              {pageSubTab === 'imagens' && (
+                                <>
+                                  <div
+                                    className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                                      uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                                    }`}
+                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    onDrop={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      const file = e.dataTransfer.files?.[0];
+                                      if (file) handleImageFieldUpload(file, field.key, 'text');
+                                    }}
+                                    onClick={() => {
+                                      const input = document.createElement('input');
+                                      input.type = 'file';
+                                      input.accept = 'image/*,video/*';
+                                      input.onchange = (ev) => {
+                                        const file = (ev.target as HTMLInputElement).files?.[0];
+                                        if (file) handleImageFieldUpload(file, field.key, 'text');
+                                      };
+                                      input.click();
+                                    }}
+                                  >
+                                    <p className="text-sm text-neutral-500 font-sans">
+                                      {uploading ? 'Enviando...' : 'Arraste um arquivo aqui ou clique para enviar'}
+                                    </p>
+                                  </div>
+                                  {siteTexts[field.key] && (
+                                    /\.(mp4|mov|webm)$/i.test(siteTexts[field.key]) || field.key.includes('video') ? (
+                                      <video src={siteTexts[field.key]} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                    ) : (
+                                      <img src={siteTexts[field.key]} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />
+                                    )
+                                  )}
+                                </>
                               )}
                             </div>
                           ))}
