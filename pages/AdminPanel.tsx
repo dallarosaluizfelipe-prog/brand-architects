@@ -1324,6 +1324,57 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans min-h-[120px]"
                       placeholder="https://.../imagem-1.png"
                     />
+                    <div
+                      className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                        uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const files = Array.from(e.dataTransfer.files);
+                        if (files.length === 0) return;
+                        setUploading(true);
+                        try {
+                          const urls: string[] = [];
+                          for (const file of files) {
+                            urls.push(await uploadFileAndGetUrl(file));
+                          }
+                          setEditingCase((prev: SiteCase | null) => prev ? { ...prev, gallery_urls: [...prev.gallery_urls, ...urls] } : prev);
+                          showMessage(`${urls.length} arquivo(s) adicionado(s) à galeria!`);
+                        } catch (err: any) {
+                          showMessage('Erro ao enviar: ' + err.message);
+                        }
+                        setUploading(false);
+                      }}
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.multiple = true;
+                        input.onchange = async (ev) => {
+                          const files = Array.from((ev.target as HTMLInputElement).files || []);
+                          if (files.length === 0) return;
+                          setUploading(true);
+                          try {
+                            const urls: string[] = [];
+                            for (const file of files) {
+                              urls.push(await uploadFileAndGetUrl(file));
+                            }
+                            setEditingCase((prev: SiteCase | null) => prev ? { ...prev, gallery_urls: [...prev.gallery_urls, ...urls] } : prev);
+                            showMessage(`${urls.length} arquivo(s) adicionado(s) à galeria!`);
+                          } catch (err: any) {
+                            showMessage('Erro ao enviar: ' + err.message);
+                          }
+                          setUploading(false);
+                        };
+                        input.click();
+                      }}
+                    >
+                      <p className="text-sm text-neutral-500 font-sans">
+                        {uploading ? 'Enviando...' : 'Arraste imagens aqui ou clique para adicionar à galeria'}
+                      </p>
+                    </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
