@@ -1282,6 +1282,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
                       placeholder="Cole a URL da imagem de capa"
                     />
+                    <div
+                      className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                        uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) handleImageFieldUpload(file, '', 'case_cover');
+                      }}
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.onchange = (ev) => {
+                          const file = (ev.target as HTMLInputElement).files?.[0];
+                          if (file) handleImageFieldUpload(file, '', 'case_cover');
+                        };
+                        input.click();
+                      }}
+                    >
+                      <p className="text-sm text-neutral-500 font-sans">
+                        {uploading ? 'Enviando...' : 'Arraste a imagem aqui ou clique para enviar'}
+                      </p>
+                    </div>
                     {editingCase.cover_url && <img src={editingCase.cover_url} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />}
                   </div>
 
