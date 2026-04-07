@@ -39,9 +39,9 @@ const AppRoutes: React.FC = () => {
     }
   }, []);
 
-  return (
-    <>
-      <Routes>
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-white" />}>
+        <Routes>
         <Route path="/admin" element={<Admin />} />
 
       <Route
@@ -114,9 +114,9 @@ const AppRoutes: React.FC = () => {
       <Route path="/portfolio" element={<Navigate to="/cases" replace />} />
       <Route path="/contact" element={<Navigate to="/contato" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-      {!isAdminRoute && <WhatsAppFloatingButton />}
-    </>
+        </Routes>
+        {!isAdminRoute && <WhatsAppFloatingButton />}
+      </Suspense>
   );
 };
 
