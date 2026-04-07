@@ -69,6 +69,7 @@ const Home: React.FC = () => {
             loop
             muted
             playsInline
+            preload="metadata"
             poster={heroPoster}
             className="absolute inset-0 w-full h-full object-cover"
           >

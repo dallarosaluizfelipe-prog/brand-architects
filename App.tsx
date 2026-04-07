@@ -1,19 +1,20 @@
-import React, { useEffect } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WhatsAppFloatingButton from "./components/WhatsAppFloatingButton";
-import Home from "./pages/Home";
-import Methodology from "./pages/Methodology";
-import Portfolio from "./pages/Portfolio";
-import Contact from "./pages/Contact";
-import About from "./pages/About";
-import Admin from "./pages/Admin";
-import CaseDetails from "./pages/CaseDetails";
-import ProposalDetails from "./pages/ProposalDetails";
-import IdentidadeVisual from "./pages/IdentidadeVisual";
 import TrackingScripts from "./components/TrackingScripts";
 import { useAnalytics } from "./src/hooks/useAnalytics";
+
+const Home = lazy(() => import("./pages/Home"));
+const Methodology = lazy(() => import("./pages/Methodology"));
+const Portfolio = lazy(() => import("./pages/Portfolio"));
+const Contact = lazy(() => import("./pages/Contact"));
+const About = lazy(() => import("./pages/About"));
+const Admin = lazy(() => import("./pages/Admin"));
+const CaseDetails = lazy(() => import("./pages/CaseDetails"));
+const ProposalDetails = lazy(() => import("./pages/ProposalDetails"));
+const IdentidadeVisual = lazy(() => import("./pages/IdentidadeVisual"));
 
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white">
