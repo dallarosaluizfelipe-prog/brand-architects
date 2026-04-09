@@ -1,6 +1,5 @@
 ﻿import React from 'react';
 import ContactSection from '../components/ContactSection';
-import lipePhoto from '@/assets/lipe-dalla-rosa.jpeg';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 
@@ -33,7 +32,7 @@ const About: React.FC = () => {
 
   const expertPhotoUrl = t.about_expert_photo_url?.trim()
     ? encodeURI(t.about_expert_photo_url.trim())
-    : lipePhoto;
+    : '';
 
   return (
     <>

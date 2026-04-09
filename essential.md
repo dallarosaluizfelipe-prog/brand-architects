@@ -2,6 +2,37 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-09 — Otimizacao de Performance
+
+### `App.tsx` (atualizado)
+- Import de `React.lazy` e `Suspense` adicionados.
+- 8 paginas convertidas de import sincrono para `lazy()`: `About`, `Methodology`, `Portfolio`, `Contact`, `Admin`, `CaseDetails`, `ProposalDetails`, `IdentidadeVisual`.
+- `Home` permanece sincrona (rota LCP — nao deve ter lazy loading).
+- Novo componente `PageLoader` adicionado: spinner CSS puro (border-t-transparent + animate-spin), sem dependencias externas.
+- `PublicLayout` agora envolve `{children}` com `<Suspense fallback={<PageLoader />}>`, mantendo Navbar e Footer visiveis durante transicoes de rota.
+- `AppRoutes` tambem envolve `<Routes>` com `<Suspense>` para cobrir a rota `/admin` (sem Navbar/Footer).
+
+### `vite.config.ts` (atualizado)
+- Adicionado bloco `build` com:
+  - `chunkSizeWarningLimit: 500`
+  - `rollupOptions.output.manualChunks`:
+    - `vendor`: react, react-dom, react-router-dom
+    - `supabase`: @supabase/supabase-js
+    - `tiptap`: @tiptap/react, @tiptap/starter-kit, @tiptap/extension-underline
+    - `pdf`: html2canvas-pro, jspdf
+  - Nota: `@tiptap/pm` excluido do manualChunks pois nao possui entry point raiz (usa apenas sub-paths como `@tiptap/pm/state`).
+
+### `components/TrackingScripts.tsx` (atualizado)
+- Logica de tracking (fetch `site_tags` no Supabase + injecao de scripts) envolvida em `requestIdleCallback` com fallback `setTimeout(initialize, 3000)` para browsers sem suporte.
+- Variavel `idleCallbackId` armazena o ID para cancelamento no cleanup.
+- Cleanup do `useEffect` cancela `cancelIdleCallback` ou `clearTimeout` conforme disponibilidade do browser.
+- Impacto: scripts de rastreamento (GA4, GTM, Clarity, etc.) nao competem com o render inicial — so sao injetados quando o browser esta ocioso.
+
+### `pages/About.tsx` (atualizado)
+- Removido import quebrado `import lipePhoto from '@/assets/lipe-dalla-rosa.jpeg'` (arquivo inexistente no workspace — bug preexistente).
+- Fallback de `expertPhotoUrl` alterado de `lipePhoto` para `''` (string vazia). Em producao, a URL dinamica do Supabase e sempre fornecida via `useSiteTexts`.
+- Correcao desbloqueou o build de producao.
+
 ## 2026-04-02 Correcao do Grafico de Analytics no Dashboard
 
 ### `pages/AdminPanel.tsx` (atualizado)

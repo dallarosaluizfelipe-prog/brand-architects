@@ -23,6 +23,19 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
-      }
+      },
+      build: {
+        chunkSizeWarningLimit: 500,
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              vendor: ['react', 'react-dom', 'react-router-dom'],
+              supabase: ['@supabase/supabase-js'],
+              tiptap: ['@tiptap/react', '@tiptap/starter-kit', '@tiptap/extension-underline'],
+              pdf: ['html2canvas-pro', 'jspdf'],
+            },
+          },
+        },
+      },
     };
 });

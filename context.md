@@ -2,6 +2,19 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-09 — Otimizacao de performance: code splitting, lazy loading e tracking nao-bloqueante:**
+  - **Motivacao:** Auditoria de performance identificou bundle inicial massivo (TipTap 460KB + jsPDF/html2canvas 700KB+ carregados para todos os usuarios), zero code splitting nas rotas e scripts de rastreamento competindo com o render inicial.
+  - **Alteracoes aplicadas:**
+    - `App.tsx` — 8 paginas convertidas para `React.lazy()` com `Suspense` (About, Methodology, Portfolio, Contact, Admin, CaseDetails, ProposalDetails, IdentidadeVisual). `Home` mantida sincrona por ser o LCP. Adicionado componente `PageLoader` (spinner preto sobre fundo branco). `PublicLayout` envolve children com `Suspense` para manter Navbar/Footer visiveis durante navegacao entre rotas publicas.
+    - `vite.config.ts` — Adicionado bloco `build` com `manualChunks`: vendor (react/react-dom/react-router-dom), supabase (@supabase/supabase-js), tiptap (@tiptap/react/@tiptap/starter-kit/@tiptap/extension-underline), pdf (html2canvas-pro/jspdf). Limite de aviso de chunk definido em 500KB.
+    - `components/TrackingScripts.tsx` — Inicializacao dos trackers (fetch Supabase + injecao de scripts GA4/GTM/Clarity/etc.) envolvida em `requestIdleCallback` com fallback `setTimeout(3000ms)` para browsers sem suporte. Cleanup cancela idle callback ou timeout ao desmontar.
+    - `pages/About.tsx` — Removido import quebrado `@/assets/lipe-dalla-rosa.jpeg` (asset ausente, problema preexistente). Fallback de foto do fundador alterado para string vazia (URL dinamica do Supabase e sempre usada em producao).
+  - **Resultado do build (chunks gerados):**
+    - About: 7KB | Contact: 6KB | Portfolio: 2KB | Methodology: 4KB | CaseDetails: 3KB | ProposalDetails: 5KB | IdentidadeVisual: 15KB | Admin: 59KB
+    - vendor: 48KB | supabase: 174KB | tiptap: 371KB | pdf: 623KB (todos isolados)
+    - TipTap e PDF so carregam para usuarios que acessam /admin e /proposta/:slug respectivamente.
+  - **Validacao:** Build concluido com sucesso (`npm run build`). Sem erros TypeScript.
+
 - **2026-04-02 16:40** - Correcao do bug no grafico do Dashboard (dados reais nao renderizavam):
   - **Motivacao:** Usuario reportou que o grafico da aba Dashboard nao refletia dados reais de analytics.
   - **Alteracoes aplicadas:**
