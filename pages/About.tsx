@@ -25,6 +25,9 @@ const About: React.FC = () => {
     about_pillar2_desc: 'Construcao de sistemas visuais proprietarios, nao apenas estetica.',
     about_pillar3_title: '03. Posicionamento',
     about_pillar3_desc: 'Posicionamento e o territorio que a marca ocupa. Definimos espacos estrategicos que geram diferenciacao real e valor percebido.',
+    about_vision_video_url: '/lovable-uploads/dalla-teaser.mov',
+    about_bottom_image_url: '/lovable-uploads/logo-giratoria-2.gif',
+    about_expert_role: 'Designer & Fundador',
     about_seo_title: 'Sobre o Estudio Dalla',
     about_seo_description: 'Conheca a filosofia, valores e visao do Estudio Dalla, referencia em branding de luxo em Sao Paulo.',
     about_seo_keywords: 'sobre estudio de branding, branding SP, agencia branding luxo',
@@ -61,7 +64,7 @@ const About: React.FC = () => {
               <div className="rounded-[2rem] md:rounded-[2.5rem] overflow-hidden aspect-[3/4] shadow-2xl">
                 <video
                   className="w-full h-full object-cover grayscale"
-                  src="/lovable-uploads/dalla-teaser.mov"
+                  src={t.about_vision_video_url}
                   autoPlay
                   loop
                   muted
@@ -86,8 +89,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="md:col-span-7">
-              <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-5 opacity-70">{t.about_expert_badge}</p>
-              <h2 className="text-3xl sm:text-4xl md:text-6xl leading-[0.92] tracking-tight mb-8">{t.about_expert_title}</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-display leading-[0.92] tracking-tight mb-6">{t.about_expert_badge}</h2>
+              <p className="text-xl sm:text-2xl md:text-3xl font-sans font-black mb-1">{t.about_expert_title?.split(' Designer')[0] || 'Lipe Dalla-Rosa'}</p>
+              <p className="text-sm sm:text-base md:text-lg font-sans font-normal text-neutral-400 mb-8">{t.about_expert_role}</p>
               <div className="space-y-5 text-sm sm:text-base md:text-lg text-neutral-200 font-light leading-relaxed font-sans max-w-3xl">
                 <div dangerouslySetInnerHTML={{ __html: t.about_expert_p1 }} />
                 <div dangerouslySetInnerHTML={{ __html: t.about_expert_p2 }} />
@@ -119,7 +123,7 @@ const About: React.FC = () => {
 
         <section className="px-6 mb-24 md:mb-40">
           <div className="max-w-[1440px] mx-auto rounded-[2rem] md:rounded-[3rem] overflow-hidden aspect-[16/10] md:aspect-[21/9] shadow-2xl bg-neutral-100">
-            <img alt="Wide studio view" className="w-full h-full object-cover" src="/lovable-uploads/logo-giratoria-2.gif" loading="lazy" />
+            <img alt="Wide studio view" className="w-full h-full object-cover" src={t.about_bottom_image_url} loading="lazy" />
           </div>
         </section>
 

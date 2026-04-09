@@ -44,6 +44,15 @@ interface SiteTag {
   is_active: boolean;
 }
 
+interface SitePartner {
+  id?: string;
+  name: string;
+  logo_url: string;
+  link_url: string;
+  display_order: number;
+  is_visible: boolean;
+}
+
 const TAG_TYPES = [
   { value: 'ga4', label: 'Google Analytics 4', placeholder: 'G-XXXXXXXXXX' },
   { value: 'gtm', label: 'Google Tag Manager', placeholder: 'GTM-XXXXXXX' },
@@ -119,17 +128,28 @@ interface TextFieldDef {
   rich?: boolean;
 }
 
-interface TextSection {
-  page: string;
+interface PageConfig {
+  id: string;
   label: string;
-  fields: TextFieldDef[];
+  icon: string;
+  seo: TextFieldDef[];
+  textos: TextFieldDef[];
+  imagens: TextFieldDef[];
+  hasHero?: boolean;
 }
 
-const TEXT_SECTIONS: TextSection[] = [
+const PAGE_CONFIGS: PageConfig[] = [
   {
-    page: 'home',
+    id: 'home',
     label: 'Home',
-    fields: [
+    icon: '🏠',
+    hasHero: true,
+    seo: [
+      { key: 'home_seo_title', label: 'Meta Title' },
+      { key: 'home_seo_description', label: 'Meta Description' },
+      { key: 'home_seo_keywords', label: 'Meta Keywords' },
+    ],
+    textos: [
       { key: 'home_hero_badge', label: 'Badge do Hero' },
       { key: 'home_hero_title', label: 'Titulo do Hero' },
       { key: 'home_hero_subtitle', label: 'Subtitulo do Hero', rich: true },
@@ -138,11 +158,18 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'home_partners_title', label: 'Titulo Parceiros' },
       { key: 'home_partners_subtitle', label: 'Subtitulo Parceiros', rich: true },
     ],
+    imagens: [],
   },
   {
-    page: 'about',
-    label: 'Sobre',
-    fields: [
+    id: 'about',
+    label: 'Estúdio',
+    icon: '✦',
+    seo: [
+      { key: 'about_seo_title', label: 'Meta Title' },
+      { key: 'about_seo_description', label: 'Meta Description' },
+      { key: 'about_seo_keywords', label: 'Meta Keywords' },
+    ],
+    textos: [
       { key: 'about_header_badge', label: 'Badge do Header' },
       { key: 'about_header_title', label: 'Titulo do Header' },
       { key: 'about_header_subtitle', label: 'Subtitulo do Header', rich: true },
@@ -151,10 +178,10 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'about_vision_p2', label: 'Visao - Paragrafo 2', rich: true },
       { key: 'about_expert_badge', label: 'Especialista - Badge' },
       { key: 'about_expert_title', label: 'Especialista - Nome e Cargo' },
+      { key: 'about_expert_role', label: 'Especialista - Cargo' },
       { key: 'about_expert_p1', label: 'Especialista - Paragrafo 1', rich: true },
       { key: 'about_expert_p2', label: 'Especialista - Paragrafo 2', rich: true },
       { key: 'about_expert_p3', label: 'Especialista - Paragrafo 3', rich: true },
-      { key: 'about_expert_photo_url', label: 'Especialista - URL da Foto' },
       { key: 'about_pillars_badge', label: 'Badge dos Pilares' },
       { key: 'about_pillars_title', label: 'Titulo dos Pilares' },
       { key: 'about_pillar1_title', label: 'Pilar 1 - Titulo' },
@@ -164,11 +191,22 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'about_pillar3_title', label: 'Pilar 3 - Titulo' },
       { key: 'about_pillar3_desc', label: 'Pilar 3 - Descricao', rich: true },
     ],
+    imagens: [
+      { key: 'about_expert_photo_url', label: 'Especialista - URL da Foto' },
+      { key: 'about_vision_video_url', label: 'Visao - URL do Video' },
+      { key: 'about_bottom_image_url', label: 'Imagem Inferior - URL' },
+    ],
   },
   {
-    page: 'methodology',
+    id: 'methodology',
     label: 'Metodologia',
-    fields: [
+    icon: '◆',
+    seo: [
+      { key: 'methodology_seo_title', label: 'Meta Title' },
+      { key: 'methodology_seo_description', label: 'Meta Description' },
+      { key: 'methodology_seo_keywords', label: 'Meta Keywords' },
+    ],
+    textos: [
       { key: 'method_header_badge', label: 'Badge do Header' },
       { key: 'method_header_title', label: 'Titulo do Header' },
       { key: 'method_header_subtitle', label: 'Subtitulo do Header', rich: true },
@@ -188,97 +226,64 @@ const TEXT_SECTIONS: TextSection[] = [
       { key: 'method_phase5_title', label: 'Fase V - Titulo' },
       { key: 'method_phase5_desc', label: 'Fase V - Descricao', rich: true },
     ],
+    imagens: [],
   },
   {
-    page: 'portfolio',
-    label: 'Portfolio',
-    fields: [
-      { key: 'portfolio_header_title', label: 'Titulo do Header' },
-      { key: 'portfolio_header_subtitle', label: 'Subtitulo do Header', rich: true },
-    ],
-  },
-  {
-    page: 'contact',
-    label: 'Contato',
-    fields: [
-      { key: 'contact_header_title', label: 'Titulo do Header' },
-      { key: 'contact_info', label: 'Info de Contato (endereco/tel)', rich: true },
-      { key: 'contact_emails', label: 'Emails', rich: true },
-    ],
-  },
-  {
-    page: 'footer',
-    label: 'Footer',
-    fields: [
-      { key: 'footer_contacts', label: 'Info de Contatos', rich: true },
-      { key: 'footer_copyright', label: 'Copyright' },
-    ],
-  },
-  {
-    page: 'contact_section',
-    label: 'Secao de Contato (CTA)',
-    fields: [
-      { key: 'cta_section_title', label: 'Titulo da Secao CTA', rich: true },
-    ],
-  },
-  {
-    page: 'seo',
-    label: 'SEO Padrao',
-    fields: [
-      { key: 'seo_default_title', label: 'Titulo Padrao' },
-      { key: 'seo_default_description', label: 'Descricao Padrao' },
-      { key: 'seo_default_keywords', label: 'Keywords Padrao' },
-    ],
-  },
-  {
-    page: 'seo_home',
-    label: 'SEO — Home',
-    fields: [
-      { key: 'home_seo_title', label: 'Meta Title' },
-      { key: 'home_seo_description', label: 'Meta Description' },
-      { key: 'home_seo_keywords', label: 'Meta Keywords' },
-    ],
-  },
-  {
-    page: 'seo_about',
-    label: 'SEO — Sobre',
-    fields: [
-      { key: 'about_seo_title', label: 'Meta Title' },
-      { key: 'about_seo_description', label: 'Meta Description' },
-      { key: 'about_seo_keywords', label: 'Meta Keywords' },
-    ],
-  },
-  {
-    page: 'seo_methodology',
-    label: 'SEO — Metodologia',
-    fields: [
-      { key: 'methodology_seo_title', label: 'Meta Title' },
-      { key: 'methodology_seo_description', label: 'Meta Description' },
-      { key: 'methodology_seo_keywords', label: 'Meta Keywords' },
-    ],
-  },
-  {
-    page: 'seo_portfolio',
-    label: 'SEO — Portfolio',
-    fields: [
+    id: 'portfolio',
+    label: 'Portfólio',
+    icon: '▣',
+    seo: [
       { key: 'portfolio_seo_title', label: 'Meta Title' },
       { key: 'portfolio_seo_description', label: 'Meta Description' },
       { key: 'portfolio_seo_keywords', label: 'Meta Keywords' },
     ],
+    textos: [
+      { key: 'portfolio_header_title', label: 'Titulo do Header' },
+      { key: 'portfolio_header_subtitle', label: 'Subtitulo do Header', rich: true },
+    ],
+    imagens: [],
   },
   {
-    page: 'seo_contact',
-    label: 'SEO — Contato',
-    fields: [
+    id: 'contact',
+    label: 'Contato',
+    icon: '✉',
+    seo: [
       { key: 'contact_seo_title', label: 'Meta Title' },
       { key: 'contact_seo_description', label: 'Meta Description' },
       { key: 'contact_seo_keywords', label: 'Meta Keywords' },
+    ],
+    textos: [
+      { key: 'contact_header_title', label: 'Titulo do Header' },
+      { key: 'contact_info', label: 'Info de Contato (endereco/tel)', rich: true },
+      { key: 'contact_emails', label: 'Emails', rich: true },
+    ],
+    imagens: [],
+  },
+  {
+    id: 'general',
+    label: 'Geral',
+    icon: '⚙',
+    seo: [
+      { key: 'seo_default_title', label: 'Titulo Padrao' },
+      { key: 'seo_default_description', label: 'Descricao Padrao' },
+      { key: 'seo_default_keywords', label: 'Keywords Padrao' },
+    ],
+    textos: [
+      { key: 'footer_contacts', label: 'Info de Contatos', rich: true },
+      { key: 'footer_copyright', label: 'Copyright' },
+      { key: 'cta_section_title', label: 'Titulo da Secao CTA', rich: true },
+      { key: 'social_instagram', label: 'URL do Instagram' },
+      { key: 'social_linkedin', label: 'URL do LinkedIn' },
+      { key: 'social_behance', label: 'URL do Behance' },
+    ],
+    imagens: [
+      { key: 'footer_logo_url', label: 'URL do Logo do Footer' },
     ],
   },
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'hero' | 'proposals' | 'tags' | 'textos' | 'leads'>('dashboard');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros'>('dashboard');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -297,10 +302,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [tags, setTags] = useState<SiteTag[]>([]);
   const [editingTag, setEditingTag] = useState<SiteTag | null>(null);
   const [tagsLoading, setTagsLoading] = useState(false);
+  const [partners, setPartners] = useState<SitePartner[]>([]);
+  const [editingPartner, setEditingPartner] = useState<SitePartner | null>(null);
+  const [partnersLoading, setPartnersLoading] = useState(false);
   const [siteTexts, setSiteTexts] = useState<Record<string, string>>({});
   const [textsLoading, setTextsLoading] = useState(false);
   const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
-  const [openSections, setOpenSections] = useState<Set<string>>(new Set());
+  const [selectedPage, setSelectedPage] = useState<string | null>(null);
+  const [pageSubTab, setPageSubTab] = useState<'seo' | 'textos' | 'imagens'>('seo');
 
   // Dashboard state
   const [dashPeriod, setDashPeriod] = useState<number | 'custom'>(7);
@@ -542,6 +551,50 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     is_active: true,
   });
 
+  const normalizePartner = (item: any): SitePartner => ({
+    id: item.id,
+    name: item.name ?? '',
+    logo_url: item.logo_url ?? '',
+    link_url: item.link_url ?? '/cases',
+    display_order: item.display_order ?? 0,
+    is_visible: item.is_visible !== false,
+  });
+
+  const loadPartners = async () => {
+    setPartnersLoading(true);
+    const result = await apiCall('list_partners');
+    const mapped = (result.partners || []).map(normalizePartner);
+    setPartners(mapped);
+    setPartnersLoading(false);
+  };
+
+  const savePartner = async () => {
+    if (!editingPartner) return;
+    setPartnersLoading(true);
+    await apiCall('upsert_partner', editingPartner);
+    setEditingPartner(null);
+    await loadPartners();
+    showMessage('Parceiro salvo!');
+    setPartnersLoading(false);
+  };
+
+  const deletePartner = async (id: string) => {
+    if (!confirm('Excluir este parceiro?')) return;
+    setPartnersLoading(true);
+    await apiCall('delete_partner', { id });
+    await loadPartners();
+    showMessage('Parceiro excluido!');
+    setPartnersLoading(false);
+  };
+
+  const newPartner = (): SitePartner => ({
+    name: '',
+    logo_url: '',
+    link_url: '/cases',
+    display_order: partners.length + 1,
+    is_visible: true,
+  });
+
   const loadTexts = async () => {
     setTextsLoading(true);
     const result = await apiCall('list_content');
@@ -594,14 +647,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setTextsLoading(false);
   };
 
-  const toggleSection = (page: string) => {
-    setOpenSections((prev) => {
-      const next = new Set(prev);
-      if (next.has(page)) next.delete(page);
-      else next.add(page);
-      return next;
-    });
-  };
+
 
   const loadDashboard = async (period?: number | 'custom', from?: string, to?: string) => {
     const p = period ?? dashPeriod;
@@ -656,6 +702,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     loadHero();
     loadProposals();
     loadTags();
+    loadPartners();
     loadTexts();
     loadDashboard();
     loadFormSubmissions();
@@ -708,6 +755,43 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     return data.publicUrl;
   };
 
+  const uploadFileAndGetUrl = async (file: File): Promise<string> => {
+    const ext = file.name.split('.').pop();
+    const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from('media').upload(name, file);
+    if (error) throw error;
+    const { data } = supabase.storage.from('media').getPublicUrl(name);
+    return data.publicUrl;
+  };
+
+  const handleImageFieldUpload = async (file: File, fieldKey: string, setter: 'text' | 'case_cover' | 'hero_desktop' | 'hero_mobile' | 'hero_poster') => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      switch (setter) {
+        case 'text':
+          updateTextField(fieldKey, url);
+          break;
+        case 'case_cover':
+          if (editingCase) setEditingCase({ ...editingCase, cover_url: url });
+          break;
+        case 'hero_desktop':
+          setHero((h: HeroSettings) => ({ ...h, desktopVideoUrl: url }));
+          break;
+        case 'hero_mobile':
+          setHero((h: HeroSettings) => ({ ...h, mobileVideoUrl: url }));
+          break;
+        case 'hero_poster':
+          setHero((h: HeroSettings) => ({ ...h, posterUrl: url }));
+          break;
+      }
+      showMessage('Arquivo enviado!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
   const deleteMedia = async (name: string) => {
     if (!confirm('Excluir este arquivo?')) return;
     await supabase.storage.from('media').remove([name]);
@@ -743,7 +827,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
-        <h1 className="text-xl font-display tracking-tight">Painel Admin</h1>
+        <h1 className="text-xl font-sans font-bold tracking-tight">Painel Admin</h1>
         <button onClick={onLogout} className="text-sm text-neutral-400 hover:text-black font-sans transition-colors">
           Sair
         </button>
@@ -756,18 +840,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['dashboard', 'leads', 'cases', 'media', 'hero', 'proposals', 'tags', 'textos'] as const).map((t) => (
+        {(['dashboard', 'leads', 'cases', 'media', 'paginas', 'proposals', 'parceiros', 'tags'] as const).map((t) => (
           <button
             key={t}
             onClick={() => {
               setTab(t);
               if (t === 'leads') loadFormSubmissions();
+              if (t === 'paginas') { setSelectedPage(null); setPageSubTab('seo'); }
             }}
             className={`px-6 py-3 rounded-full text-sm font-sans font-medium transition-all ${
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Midia' : t === 'hero' ? 'Hero' : t === 'proposals' ? 'Propostas' : t === 'tags' ? 'Tags' : 'Textos'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Mídia' : t === 'paginas' ? 'Páginas' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : 'Tags'}
           </button>
         ))}
       </div>
@@ -835,17 +920,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Visitas</p>
-                    <p className="text-4xl font-display">{(dashData.total_page_views ?? 0).toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-sans font-bold">{(dashData.total_page_views ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Cliques WhatsApp</p>
-                    <p className="text-4xl font-display">{(dashData.whatsapp_clicks ?? 0).toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-sans font-bold">{(dashData.whatsapp_clicks ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Formularios</p>
-                    <p className="text-4xl font-display">{(dashData.form_submissions ?? 0).toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-sans font-bold">{(dashData.form_submissions ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                 </div>
@@ -1054,15 +1139,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Total de Leads</p>
-                  <p className="text-4xl font-display">{total}</p>
+                  <p className="text-4xl font-sans font-bold">{total}</p>
                 </div>
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Últimos 7 dias</p>
-                  <p className="text-4xl font-display">{last7}</p>
+                  <p className="text-4xl font-sans font-bold">{last7}</p>
                 </div>
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Últimos 30 dias</p>
-                  <p className="text-4xl font-display">{last30}</p>
+                  <p className="text-4xl font-sans font-bold">{last30}</p>
                 </div>
               </div>
 
@@ -1125,7 +1210,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           <div>
             {editingCase ? (
               <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                <h2 className="text-lg font-display mb-6">{editingCase.id ? 'Editar Case' : 'Novo Case'}</h2>
+                <h2 className="text-lg font-sans font-bold mb-6">{editingCase.id ? 'Editar Case' : 'Novo Case'}</h2>
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
@@ -1197,6 +1282,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
                       placeholder="Cole a URL da imagem de capa"
                     />
+                    <div
+                      className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                        uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) handleImageFieldUpload(file, '', 'case_cover');
+                      }}
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.onchange = (ev) => {
+                          const file = (ev.target as HTMLInputElement).files?.[0];
+                          if (file) handleImageFieldUpload(file, '', 'case_cover');
+                        };
+                        input.click();
+                      }}
+                    >
+                      <p className="text-sm text-neutral-500 font-sans">
+                        {uploading ? 'Enviando...' : 'Arraste a imagem aqui ou clique para enviar'}
+                      </p>
+                    </div>
                     {editingCase.cover_url && <img src={editingCase.cover_url} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />}
                   </div>
 
@@ -1213,6 +1324,57 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans min-h-[120px]"
                       placeholder="https://.../imagem-1.png"
                     />
+                    <div
+                      className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                        uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const files = Array.from(e.dataTransfer.files);
+                        if (files.length === 0) return;
+                        setUploading(true);
+                        try {
+                          const urls: string[] = [];
+                          for (const file of files) {
+                            urls.push(await uploadFileAndGetUrl(file));
+                          }
+                          setEditingCase((prev: SiteCase | null) => prev ? { ...prev, gallery_urls: [...prev.gallery_urls, ...urls] } : prev);
+                          showMessage(`${urls.length} arquivo(s) adicionado(s) à galeria!`);
+                        } catch (err: any) {
+                          showMessage('Erro ao enviar: ' + err.message);
+                        }
+                        setUploading(false);
+                      }}
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.multiple = true;
+                        input.onchange = async (ev) => {
+                          const files = Array.from((ev.target as HTMLInputElement).files || []);
+                          if (files.length === 0) return;
+                          setUploading(true);
+                          try {
+                            const urls: string[] = [];
+                            for (const file of files) {
+                              urls.push(await uploadFileAndGetUrl(file));
+                            }
+                            setEditingCase((prev: SiteCase | null) => prev ? { ...prev, gallery_urls: [...prev.gallery_urls, ...urls] } : prev);
+                            showMessage(`${urls.length} arquivo(s) adicionado(s) à galeria!`);
+                          } catch (err: any) {
+                            showMessage('Erro ao enviar: ' + err.message);
+                          }
+                          setUploading(false);
+                        };
+                        input.click();
+                      }}
+                    >
+                      <p className="text-sm text-neutral-500 font-sans">
+                        {uploading ? 'Enviando...' : 'Arraste imagens aqui ou clique para adicionar à galeria'}
+                      </p>
+                    </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
@@ -1348,7 +1510,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       <div key={c.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
                         {c.cover_url && <img src={c.cover_url} alt={c.title} className="w-20 h-14 rounded-xl object-cover flex-shrink-0" />}
                         <div className="flex-grow min-w-0">
-                          <h3 className="font-display text-lg truncate">{c.title}</h3>
+                          <h3 className="font-sans font-bold text-lg truncate">{c.title}</h3>
                           <p className="text-xs text-neutral-400 font-sans truncate">/{c.slug}</p>
                         </div>
                         <div className="flex gap-2 flex-shrink-0">
@@ -1366,60 +1528,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 )}
               </>
             )}
-          </div>
-        )}
-
-        {tab === 'hero' && (
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-            <h2 className="text-lg font-display mb-6">Video do Hero</h2>
-            <p className="text-sm text-neutral-500 font-sans mb-6">Gerencie os videos exibidos na hero da pagina inicial. Envie os arquivos na aba Midia, copie a URL e cole aqui.</p>
-            <div className="space-y-5">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Desktop (URL)</label>
-                <input
-                  value={hero.desktopVideoUrl}
-                  onChange={(e) => setHero({ ...hero, desktopVideoUrl: e.target.value })}
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                  placeholder="https://... ou /lovable-uploads/abertura-site.mp4"
-                />
-                {hero.desktopVideoUrl && (
-                  <video src={hero.desktopVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
-                )}
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Mobile (URL)</label>
-                <input
-                  value={hero.mobileVideoUrl}
-                  onChange={(e) => setHero({ ...hero, mobileVideoUrl: e.target.value })}
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                  placeholder="https://... ou /lovable-uploads/abertura-site-mobile.mp4"
-                />
-                {hero.mobileVideoUrl && (
-                  <video src={hero.mobileVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
-                )}
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Poster / Imagem de capa (URL)</label>
-                <input
-                  value={hero.posterUrl}
-                  onChange={(e) => setHero({ ...hero, posterUrl: e.target.value })}
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                  placeholder="https://... ou /lovable-uploads/poster.png"
-                />
-                {hero.posterUrl && (
-                  <img src={hero.posterUrl} alt="Poster preview" className="mt-3 rounded-xl max-h-40 object-cover" />
-                )}
-              </div>
-            </div>
-            <div className="mt-8">
-              <button
-                onClick={saveHero}
-                disabled={heroLoading}
-                className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
-              >
-                {heroLoading ? 'Salvando...' : 'Salvar Hero'}
-              </button>
-            </div>
           </div>
         )}
 
@@ -1460,7 +1568,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           <div>
             {editingProposal ? (
               <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                <h2 className="text-lg font-display mb-6">{editingProposal.id ? 'Editar Proposta' : 'Nova Proposta'}</h2>
+                <h2 className="text-lg font-sans font-bold mb-6">{editingProposal.id ? 'Editar Proposta' : 'Nova Proposta'}</h2>
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
@@ -1673,7 +1781,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     {proposals.map((p) => (
                       <div key={p.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
                         <div className="flex-grow min-w-0">
-                          <h3 className="font-display text-lg truncate">{p.title}</h3>
+                          <h3 className="font-sans font-bold text-lg truncate">{p.title}</h3>
                           <p className="text-xs text-neutral-400 font-sans truncate">{p.client_name} — /{p.slug}</p>
                         </div>
                         <div className="flex gap-2 flex-shrink-0 flex-wrap justify-end">
@@ -1701,7 +1809,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           <div>
             {editingTag ? (
               <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                <h2 className="text-lg font-display mb-6">{editingTag.id ? 'Editar Tag' : 'Nova Tag'}</h2>
+                <h2 className="text-lg font-sans font-bold mb-6">{editingTag.id ? 'Editar Tag' : 'Nova Tag'}</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Tipo</label>
@@ -1787,7 +1895,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       return (
                         <div key={tag.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
                           <div className="flex-grow min-w-0">
-                            <h3 className="font-display text-lg truncate">{tag.label || tag.tag_id}</h3>
+                            <h3 className="font-sans font-bold text-lg truncate">{tag.label || tag.tag_id}</h3>
                             <p className="text-xs text-neutral-400 font-sans truncate">
                               {typeInfo?.label || tag.tag_type} — <span className="font-mono">{tag.tag_id}</span>
                             </p>
@@ -1826,54 +1934,158 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           </div>
         )}
 
-        {tab === 'textos' && (
+        {tab === 'parceiros' && (
           <div>
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-lg font-display">Textos do Site</h2>
-                <p className="text-sm text-neutral-500 font-sans mt-1">Edite os textos de todas as paginas. Campos com editor permitem negrito, italico e sublinhado.</p>
+            {editingPartner ? (
+              <div className="bg-white rounded-2xl p-6 border border-neutral-200 space-y-4">
+                <h2 className="text-lg font-sans font-bold mb-4">{editingPartner.id ? 'Editar Parceiro' : 'Novo Parceiro'}</h2>
+                <input value={editingPartner.name} onChange={(e) => setEditingPartner({ ...editingPartner, name: e.target.value })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Nome do parceiro" />
+                <input value={editingPartner.logo_url} onChange={(e) => setEditingPartner({ ...editingPartner, logo_url: e.target.value })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do logo" />
+                {editingPartner.logo_url && (
+                  <div className="bg-neutral-50 rounded-xl p-4 flex justify-center">
+                    <img src={editingPartner.logo_url} alt="Preview" className="h-20 object-contain" />
+                  </div>
+                )}
+                <input value={editingPartner.link_url} onChange={(e) => setEditingPartner({ ...editingPartner, link_url: e.target.value })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL de destino (ex: /cases/yerbal)" />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Ordem</label>
+                    <input type="number" value={editingPartner.display_order} onChange={(e) => setEditingPartner({ ...editingPartner, display_order: Number(e.target.value) })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" />
+                  </div>
+                  <div className="flex items-end">
+                    <label className="flex items-center gap-2 font-sans text-sm">
+                      <input type="checkbox" checked={editingPartner.is_visible} onChange={(e) => setEditingPartner({ ...editingPartner, is_visible: e.target.checked })} />
+                      Visivel
+                    </label>
+                  </div>
+                </div>
+                <div className="flex gap-3 pt-4">
+                  <button onClick={savePartner} disabled={partnersLoading} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50">
+                    {partnersLoading ? 'Salvando...' : 'Salvar'}
+                  </button>
+                  <button onClick={() => setEditingPartner(null)} className="border border-neutral-200 px-8 py-3 rounded-full text-sm font-sans">Cancelar</button>
+                </div>
               </div>
-              {textsDirty.size > 0 && (
-                <button
-                  onClick={saveAllTexts}
-                  disabled={textsLoading}
-                  className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
-                >
-                  {textsLoading ? 'Salvando...' : `Salvar Todos (${textsDirty.size})`}
-                </button>
-              )}
-            </div>
-
-            {textsLoading && Object.keys(siteTexts).length === 0 ? (
-              <p className="text-neutral-400 font-sans text-sm">Carregando textos...</p>
             ) : (
-              <div className="space-y-4">
-                {TEXT_SECTIONS.map((section) => {
-                  const isOpen = openSections.has(section.page);
-                  const dirtyCount = section.fields.filter((f) => textsDirty.has(f.key)).length;
-                  return (
-                    <div key={section.page} className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-                      <button
-                        onClick={() => toggleSection(section.page)}
-                        className="w-full px-6 py-4 flex items-center justify-between hover:bg-neutral-50 transition-colors"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-lg font-display">{section.label}</span>
-                          <span className="text-xs text-neutral-400 font-sans">{section.fields.length} campos</span>
-                          {dirtyCount > 0 && (
-                            <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-sans font-medium">
-                              {dirtyCount} alterado(s)
-                            </span>
-                          )}
+              <>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-sans font-bold">Parceiros</h2>
+                  <button onClick={() => setEditingPartner(newPartner())} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider">
+                    + Novo Parceiro
+                  </button>
+                </div>
+                {partnersLoading ? (
+                  <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+                ) : partners.length === 0 ? (
+                  <p className="text-neutral-400 font-sans text-sm">Nenhum parceiro cadastrado.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {partners.map((p) => (
+                      <div key={p.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
+                        <div className="w-16 h-16 bg-neutral-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                          {p.logo_url && <img src={p.logo_url} alt={p.name} className="h-12 object-contain" />}
                         </div>
-                        <span className="text-neutral-400 text-xl transition-transform" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                          ▾
+                        <div className="flex-grow min-w-0">
+                          <h3 className="font-sans font-bold text-lg truncate">{p.name}</h3>
+                          <p className="text-xs text-neutral-400 font-sans truncate">{p.link_url}</p>
+                        </div>
+                        <span className={`text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-full ${p.is_visible ? 'bg-green-50 text-green-600' : 'bg-neutral-100 text-neutral-400'}`}>
+                          {p.is_visible ? 'Visivel' : 'Oculto'}
                         </span>
-                      </button>
+                        <button onClick={() => setEditingPartner(p)} className="text-sm font-sans text-neutral-400 hover:text-black">Editar</button>
+                        <button onClick={() => deletePartner(p.id!)} className="text-sm font-sans text-red-400 hover:text-red-600">Excluir</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
 
-                      {isOpen && (
-                        <div className="px-6 pb-6 space-y-5 border-t border-neutral-100">
-                          {section.fields.map((field) => (
+        {tab === 'paginas' && (
+          <div>
+            {selectedPage === null ? (
+              <div>
+                <h2 className="text-lg font-sans font-bold mb-6">Páginas do Site</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {PAGE_CONFIGS.map((page) => {
+                    const totalFields = page.seo.length + page.textos.length + page.imagens.length;
+                    return (
+                      <button
+                        key={page.id}
+                        onClick={() => { setSelectedPage(page.id); setPageSubTab('seo'); }}
+                        className="bg-white rounded-2xl p-6 border border-neutral-200 text-left hover:border-neutral-400 transition-colors group"
+                      >
+                        <span className="text-3xl mb-3 block">{page.icon}</span>
+                        <h3 className="text-lg font-sans font-bold group-hover:text-black">{page.label}</h3>
+                        <p className="text-xs text-neutral-400 font-sans mt-1">{totalFields} campos editáveis{page.hasHero ? ' + Hero' : ''}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (() => {
+              const currentPage = PAGE_CONFIGS.find((p) => p.id === selectedPage);
+              if (!currentPage) return null;
+              const fields = currentPage[pageSubTab] || [];
+              const allPageKeys = [...currentPage.seo, ...currentPage.textos, ...currentPage.imagens].map(f => f.key);
+              const pageDirtyCount = allPageKeys.filter(k => textsDirty.has(k)).length;
+              return (
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => setSelectedPage(null)}
+                        className="text-neutral-400 hover:text-black text-sm font-sans px-3 py-2 rounded-lg hover:bg-neutral-100 transition-colors"
+                      >
+                        ← Voltar
+                      </button>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">{currentPage.icon}</span>
+                        <h2 className="text-lg font-sans font-bold">{currentPage.label}</h2>
+                      </div>
+                    </div>
+                    {pageDirtyCount > 0 && (
+                      <button
+                        onClick={saveAllTexts}
+                        disabled={textsLoading}
+                        className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
+                      >
+                        {textsLoading ? 'Salvando...' : `Salvar Todos (${pageDirtyCount})`}
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2 mb-6">
+                    {(['seo', 'textos', 'imagens'] as const).map((st) => {
+                      const count = currentPage[st].length + (st === 'imagens' && currentPage.hasHero ? 3 : 0);
+                      return (
+                        <button
+                          key={st}
+                          onClick={() => setPageSubTab(st)}
+                          className={`px-5 py-2.5 rounded-full text-sm font-sans font-medium transition-all ${
+                            pageSubTab === st ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                          }`}
+                        >
+                          {st === 'seo' ? 'SEO' : st === 'textos' ? 'Textos' : 'Imagens'}
+                          <span className="ml-1.5 text-[10px] opacity-60">({count})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {textsLoading && Object.keys(siteTexts).length === 0 ? (
+                    <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+                  ) : (
+                    <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                      {fields.length === 0 && !(pageSubTab === 'imagens' && currentPage.hasHero) ? (
+                        <div className="px-6 py-12 text-center">
+                          <p className="text-neutral-400 font-sans text-sm">Nenhum campo de {pageSubTab === 'seo' ? 'SEO' : pageSubTab === 'textos' ? 'texto' : 'imagem'} para esta página.</p>
+                        </div>
+                      ) : (
+                        <div className="px-6 pb-6 space-y-5">
+                          {fields.map((field) => (
                             <div key={field.key} className="pt-4">
                               <div className="flex items-center justify-between mb-2">
                                 <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">
@@ -1902,15 +2114,105 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   placeholder={field.label}
                                 />
                               )}
+                              {pageSubTab === 'imagens' && (
+                                <>
+                                  <div
+                                    className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                                      uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                                    }`}
+                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    onDrop={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      const file = e.dataTransfer.files?.[0];
+                                      if (file) handleImageFieldUpload(file, field.key, 'text');
+                                    }}
+                                    onClick={() => {
+                                      const input = document.createElement('input');
+                                      input.type = 'file';
+                                      input.accept = 'image/*,video/*';
+                                      input.onchange = (ev) => {
+                                        const file = (ev.target as HTMLInputElement).files?.[0];
+                                        if (file) handleImageFieldUpload(file, field.key, 'text');
+                                      };
+                                      input.click();
+                                    }}
+                                  >
+                                    <p className="text-sm text-neutral-500 font-sans">
+                                      {uploading ? 'Enviando...' : 'Arraste um arquivo aqui ou clique para enviar'}
+                                    </p>
+                                  </div>
+                                  {siteTexts[field.key] && (
+                                    /\.(mp4|mov|webm)$/i.test(siteTexts[field.key]) || field.key.includes('video') ? (
+                                      <video src={siteTexts[field.key]} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                    ) : (
+                                      <img src={siteTexts[field.key]} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />
+                                    )
+                                  )}
+                                </>
+                              )}
                             </div>
                           ))}
+
+                          {pageSubTab === 'imagens' && currentPage.hasHero && (
+                            <div className="pt-6 mt-4 border-t border-neutral-100">
+                              <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-5">Vídeo do Hero</h3>
+                              <div className="space-y-5">
+                                <div>
+                                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Desktop (URL)</label>
+                                  <input
+                                    value={hero.desktopVideoUrl}
+                                    onChange={(e) => setHero({ ...hero, desktopVideoUrl: e.target.value })}
+                                    className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                                    placeholder="https://... ou /lovable-uploads/abertura-site.mp4"
+                                  />
+                                  {hero.desktopVideoUrl && (
+                                    <video src={hero.desktopVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Video Mobile (URL)</label>
+                                  <input
+                                    value={hero.mobileVideoUrl}
+                                    onChange={(e) => setHero({ ...hero, mobileVideoUrl: e.target.value })}
+                                    className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                                    placeholder="https://... ou /lovable-uploads/abertura-site-mobile.mp4"
+                                  />
+                                  {hero.mobileVideoUrl && (
+                                    <video src={hero.mobileVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Poster / Imagem de capa (URL)</label>
+                                  <input
+                                    value={hero.posterUrl}
+                                    onChange={(e) => setHero({ ...hero, posterUrl: e.target.value })}
+                                    className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                                    placeholder="https://... ou /lovable-uploads/poster.png"
+                                  />
+                                  {hero.posterUrl && (
+                                    <img src={hero.posterUrl} alt="Poster preview" className="mt-3 rounded-xl max-h-40 object-cover" />
+                                  )}
+                                </div>
+                              </div>
+                              <div className="mt-6">
+                                <button
+                                  onClick={saveHero}
+                                  disabled={heroLoading}
+                                  className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
+                                >
+                                  {heroLoading ? 'Salvando...' : 'Salvar Hero'}
+                                </button>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  )}
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>

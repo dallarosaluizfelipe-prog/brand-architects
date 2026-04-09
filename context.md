@@ -7,13 +7,49 @@ This file records a chronological history of changes, requests, and reasoning fo
   - **Alteracoes aplicadas:**
     - `App.tsx` — 8 paginas convertidas para `React.lazy()` com `Suspense` (About, Methodology, Portfolio, Contact, Admin, CaseDetails, ProposalDetails, IdentidadeVisual). `Home` mantida sincrona por ser o LCP. Adicionado componente `PageLoader` (spinner preto sobre fundo branco). `PublicLayout` envolve children com `Suspense` para manter Navbar/Footer visiveis durante navegacao entre rotas publicas.
     - `vite.config.ts` — Adicionado bloco `build` com `manualChunks`: vendor (react/react-dom/react-router-dom), supabase (@supabase/supabase-js), tiptap (@tiptap/react/@tiptap/starter-kit/@tiptap/extension-underline), pdf (html2canvas-pro/jspdf). Limite de aviso de chunk definido em 500KB.
-    - `components/TrackingScripts.tsx` — Inicializacao dos trackers (fetch Supabase + injecao de scripts GA4/GTM/Clarity/etc.) envolvida em `requestIdleCallback` com fallback `setTimeout(3000ms)` para browsers sem suporte. Cleanup cancela idle callback ou timeout ao desmontar.
+    - `components/TrackingScripts.tsx` — Revertido para carregamento imediato (requestIdleCallback removido a pedido do usuario).
     - `pages/About.tsx` — Removido import quebrado `@/assets/lipe-dalla-rosa.jpeg` (asset ausente, problema preexistente). Fallback de foto do fundador alterado para string vazia (URL dinamica do Supabase e sempre usada em producao).
   - **Resultado do build (chunks gerados):**
     - About: 7KB | Contact: 6KB | Portfolio: 2KB | Methodology: 4KB | CaseDetails: 3KB | ProposalDetails: 5KB | IdentidadeVisual: 15KB | Admin: 59KB
     - vendor: 48KB | supabase: 174KB | tiptap: 371KB | pdf: 623KB (todos isolados)
     - TipTap e PDF so carregam para usuarios que acessam /admin e /proposta/:slug respectivamente.
   - **Validacao:** Build concluido com sucesso (`npm run build`). Sem erros TypeScript.
+
+- **2026-04-04 14:00** - Reestruturacao da aba de conteudo no Admin Panel:
+  - **Motivacao:** Interface flat "Textos" com 14 secoes colapsaveis + aba "Hero" separada nao era intuitiva. Usuario pediu organizacao por pagina.
+  - **Mudanca:** Removidas abas "Textos" e "Hero". Criada nova aba "Paginas" com 6 cards (Home, Estudio, Metodologia, Portfolio, Contato, Geral).
+  - **Navegacao:** Clicar em uma pagina abre detalhe com 3 sub-abas: SEO, Textos, Imagens.
+  - **Hero:** Campos de video hero movidos para Home > Imagens (hero state + saveHero reaproveitados).
+  - **Dados:** `TextSection` + `TEXT_SECTIONS` substituidos por `PageConfig` + `PAGE_CONFIGS`. Mesmas section_keys — zero mudancas no banco.
+  - **Estado:** `openSections`/`toggleSection` removidos. Adicionados `selectedPage` + `pageSubTab`.
+  - **Arquivo alterado:** AdminPanel.tsx. Zero erros TypeScript.
+
+- **2026-04-04 12:00** - Dinamizacao completa de conteudo do site (textos, imagens, SEO) editaveis via Admin:
+  - **Motivacao:** Usuario solicitou que todas as imagens e textos, incluindo SEO, sejam conteudos dinamicos editaveis no painel, com atencao especial a pagina /estudio.
+  - **Fase 1 — About.tsx completamente dinamica:**
+    - Adicionadas 3 novas chaves ao `useSiteTexts`: `about_vision_video_url`, `about_bottom_image_url`, `about_expert_role`.
+    - Video da secao Visao, imagem inferior (GIF) e cargo do especialista agora sao editaveis via Admin > Textos > Sobre.
+    - 3 novos campos adicionados ao TEXT_SECTIONS do AdminPanel.
+  - **Fase 2 — Home: cases dinamicos:**
+    - Removidos 5 cases hardcoded (Yerbal, Clave, Nuts O'Clock, Lummina, Dalla).
+    - Importado `getSiteCases()` de `src/data/siteCases.ts` para puxar cases do Supabase.
+    - Layout preservado: 2 cols + 1 wide + 2 cols usando slicing por index.
+  - **Fase 3 — Parceiros editaveis:**
+    - Nova migration `20260404120000_create_site_partners.sql`: tabela `site_partners` com RLS publica + seed dos 10 parceiros atuais.
+    - Novo arquivo `src/data/sitePartners.ts` com `getSitePartners()` e fallback local.
+    - Home.tsx atualizada para consumir parceiros do banco.
+    - Nova aba "Parceiros" no AdminPanel com CRUD completo (nome, logo URL, link, ordem, visibilidade).
+    - Edge Function `admin/index.ts`: 3 novas actions — `list_partners`, `upsert_partner`, `delete_partner`.
+  - **Fase 4 — Redes sociais centralizadas:**
+    - Adicionadas chaves `social_instagram`, `social_linkedin`, `social_behance` ao sistema de textos.
+    - Nova secao "Redes Sociais" no AdminPanel TEXT_SECTIONS.
+    - Navbar.tsx, Footer.tsx e Contact.tsx atualizados para consumir URLs de redes sociais do banco. Links so aparecem se a URL existir (condicional).
+  - **Fase 5 — Footer logo dinamico:**
+    - Adicionada chave `footer_logo_url` ao useSiteTexts do Footer.
+    - Campo correspondente adicionado no AdminPanel secao Footer.
+  - **Arquivos alterados:** About.tsx, Home.tsx, Contact.tsx, Navbar.tsx, Footer.tsx, AdminPanel.tsx, admin/index.ts.
+  - **Arquivos criados:** `supabase/migrations/20260404120000_create_site_partners.sql`, `src/data/sitePartners.ts`.
+  - **Validacao:** Zero erros TypeScript. Zero erros de lint.
 
 - **2026-04-02 16:40** - Correcao do bug no grafico do Dashboard (dados reais nao renderizavam):
   - **Motivacao:** Usuario reportou que o grafico da aba Dashboard nao refletia dados reais de analytics.

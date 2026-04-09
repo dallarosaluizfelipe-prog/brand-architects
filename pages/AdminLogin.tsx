@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface AdminLoginProps {
   onSuccess: (pin: string) => void;
@@ -8,6 +8,19 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (loading) return;
+      if (e.key >= '0' && e.key <= '9') {
+        handleDigit(e.key);
+      } else if (e.key === 'Backspace') {
+        handleDelete();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
 
   const handleDigit = (digit: string) => {
     if (pin.length < 4) {
@@ -57,7 +70,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center px-6">
       <div className="w-full max-w-sm text-center">
-        <h1 className="text-3xl tracking-tight mb-2 font-display">Área Admin</h1>
+        <h1 className="text-3xl tracking-tight mb-2 font-sans font-bold">Área Admin</h1>
         <p className="text-neutral-400 text-sm font-sans mb-10">Digite o PIN de 4 dígitos</p>
 
         {/* PIN dots */}

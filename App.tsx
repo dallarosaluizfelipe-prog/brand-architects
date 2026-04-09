@@ -23,6 +23,7 @@ const PageLoader: React.FC = () => (
   </div>
 );
 
+
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white">
     <Navbar />

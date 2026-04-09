@@ -20,18 +20,66 @@ This document captures details of components, pages, functions, and any code add
     - `supabase`: @supabase/supabase-js
     - `tiptap`: @tiptap/react, @tiptap/starter-kit, @tiptap/extension-underline
     - `pdf`: html2canvas-pro, jspdf
-  - Nota: `@tiptap/pm` excluido do manualChunks pois nao possui entry point raiz (usa apenas sub-paths como `@tiptap/pm/state`).
-
-### `components/TrackingScripts.tsx` (atualizado)
-- Logica de tracking (fetch `site_tags` no Supabase + injecao de scripts) envolvida em `requestIdleCallback` com fallback `setTimeout(initialize, 3000)` para browsers sem suporte.
-- Variavel `idleCallbackId` armazena o ID para cancelamento no cleanup.
-- Cleanup do `useEffect` cancela `cancelIdleCallback` ou `clearTimeout` conforme disponibilidade do browser.
-- Impacto: scripts de rastreamento (GA4, GTM, Clarity, etc.) nao competem com o render inicial — so sao injetados quando o browser esta ocioso.
+  - Nota: `@tiptap/pm` excluido do manualChunks pois nao possui entry point raiz.
 
 ### `pages/About.tsx` (atualizado)
-- Removido import quebrado `import lipePhoto from '@/assets/lipe-dalla-rosa.jpeg'` (arquivo inexistente no workspace — bug preexistente).
-- Fallback de `expertPhotoUrl` alterado de `lipePhoto` para `''` (string vazia). Em producao, a URL dinamica do Supabase e sempre fornecida via `useSiteTexts`.
+- Removido import quebrado `import lipePhoto from '@/assets/lipe-dalla-rosa.jpeg'` (arquivo inexistente — bug preexistente).
+- Fallback de `expertPhotoUrl` alterado para `''`. Em producao, a URL dinamica do Supabase e sempre fornecida via `useSiteTexts`.
 - Correcao desbloqueou o build de producao.
+
+## 2026-04-04 Dinamizacao completa de conteudo editavel via Admin
+
+### `pages/About.tsx` (atualizado)
+- 3 novos campos dinamicos via `useSiteTexts`:
+  - `about_vision_video_url`: URL do video da secao Visao (default: `/lovable-uploads/dalla-teaser.mov`)
+  - `about_bottom_image_url`: URL da imagem inferior/GIF (default: `/lovable-uploads/logo-giratoria-2.gif`)
+  - `about_expert_role`: Cargo do especialista (default: `Designer & Fundador`)
+- Todos os textos, imagens e SEO da pagina /estudio sao agora 100% editaveis no Admin.
+
+### `pages/Home.tsx` (atualizado)
+- Cases na Home agora sao dinamicos: importa `getSiteCases(5)` e renderiza com layout preservado (2+1+2).
+- Parceiros na Home agora sao dinamicos: importa `getSitePartners()` de `src/data/sitePartners.ts`.
+- Removidos todos os dados hardcoded de cases e parceiros.
+
+### `src/data/sitePartners.ts` (novo)
+- Interface `SitePartner`: id, name, logo_url, link_url, display_order, is_visible.
+- `getSitePartners()`: Busca parceiros visiveis ordenados por `display_order` de `site_partners` com fallback local (10 parceiros).
+
+### `supabase/migrations/20260404120000_create_site_partners.sql` (novo)
+- Tabela `site_partners` com colunas: id (uuid PK), name, logo_url, link_url, display_order, is_visible, created_at, updated_at.
+- RLS habilitado com leitura publica para anon e authenticated.
+- Seed dos 10 parceiros originais hardcoded.
+
+### `pages/AdminPanel.tsx` (atualizado)
+- Aba "Parceiros" com CRUD completo: nome, URL do logo (com preview), link de destino, ordem, visibilidade.
+- **Reestruturacao da gestao de conteudo:**
+  - Removidas abas "Textos" (flat com 14 secoes colapsaveis) e "Hero" (separada).
+  - Nova aba "Paginas" com 6 cards: Home, Estudio, Metodologia, Portfolio, Contato, Geral.
+  - Cada pagina tem 3 sub-abas: SEO, Textos, Imagens.
+  - Hero video fields integrados em Home > Imagens (hero state + saveHero reaproveitados).
+  - Previews de imagem/video para campos de URL na sub-aba Imagens.
+  - Botao "Salvar Todos" mostra contagem de campos alterados por pagina.
+- `TextSection` + `TEXT_SECTIONS` substituidos por `PageConfig` + `PAGE_CONFIGS`.
+- `PageConfig` interface: id, label, icon, seo[], textos[], imagens[], hasHero?.
+- Estado `openSections`/`toggleSection` removidos. Adicionados `selectedPage` (string|null) + `pageSubTab` ('seo'|'textos'|'imagens').
+- Tab type: `'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros'`.
+
+### `supabase/functions/admin/index.ts` (atualizado)
+- 3 novas actions para parceiros:
+  - `list_partners`: Lista todos parceiros ordenados por `display_order`.
+  - `upsert_partner`: Cria ou atualiza parceiro com `updated_at`.
+  - `delete_partner`: Remove parceiro por ID.
+
+### `components/Footer.tsx` (atualizado)
+- Links de redes sociais agora dinamicos via `useSiteTexts` (chaves `social_instagram`, `social_linkedin`, `social_behance`).
+- Links so renderizam se a URL existir (condicional).
+- Logo do footer agora dinamico via chave `footer_logo_url`.
+
+### `components/Navbar.tsx` (atualizado)
+- Redes sociais no menu mobile agora dinamicas via `useSiteTexts`.
+
+### `pages/Contact.tsx` (atualizado)
+- Redes sociais na sidebar agora dinamicas via `useSiteTexts`.
 
 ## 2026-04-02 Correcao do Grafico de Analytics no Dashboard
 
