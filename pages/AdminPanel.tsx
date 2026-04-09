@@ -827,7 +827,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
-        <h1 className="text-xl font-display tracking-tight">Painel Admin</h1>
+        <h1 className="text-xl font-sans font-bold tracking-tight">Painel Admin</h1>
         <button onClick={onLogout} className="text-sm text-neutral-400 hover:text-black font-sans transition-colors">
           Sair
         </button>
@@ -920,17 +920,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Visitas</p>
-                    <p className="text-4xl font-display">{(dashData.total_page_views ?? 0).toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-sans font-bold">{(dashData.total_page_views ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Cliques WhatsApp</p>
-                    <p className="text-4xl font-display">{(dashData.whatsapp_clicks ?? 0).toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-sans font-bold">{(dashData.whatsapp_clicks ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                     <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Formularios</p>
-                    <p className="text-4xl font-display">{(dashData.form_submissions ?? 0).toLocaleString('pt-BR')}</p>
+                    <p className="text-4xl font-sans font-bold">{(dashData.form_submissions ?? 0).toLocaleString('pt-BR')}</p>
                     <p className="text-xs text-neutral-400 font-sans mt-1">{dashData.period_label}</p>
                   </div>
                 </div>
@@ -1139,15 +1139,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Total de Leads</p>
-                  <p className="text-4xl font-display">{total}</p>
+                  <p className="text-4xl font-sans font-bold">{total}</p>
                 </div>
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Últimos 7 dias</p>
-                  <p className="text-4xl font-display">{last7}</p>
+                  <p className="text-4xl font-sans font-bold">{last7}</p>
                 </div>
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Últimos 30 dias</p>
-                  <p className="text-4xl font-display">{last30}</p>
+                  <p className="text-4xl font-sans font-bold">{last30}</p>
                 </div>
               </div>
 
@@ -1210,7 +1210,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           <div>
             {editingCase ? (
               <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                <h2 className="text-lg font-display mb-6">{editingCase.id ? 'Editar Case' : 'Novo Case'}</h2>
+                <h2 className="text-lg font-sans font-bold mb-6">{editingCase.id ? 'Editar Case' : 'Novo Case'}</h2>
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
@@ -1510,7 +1510,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       <div key={c.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
                         {c.cover_url && <img src={c.cover_url} alt={c.title} className="w-20 h-14 rounded-xl object-cover flex-shrink-0" />}
                         <div className="flex-grow min-w-0">
-                          <h3 className="font-display text-lg truncate">{c.title}</h3>
+                          <h3 className="font-sans font-bold text-lg truncate">{c.title}</h3>
                           <p className="text-xs text-neutral-400 font-sans truncate">/{c.slug}</p>
                         </div>
                         <div className="flex gap-2 flex-shrink-0">
@@ -1568,7 +1568,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           <div>
             {editingProposal ? (
               <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                <h2 className="text-lg font-display mb-6">{editingProposal.id ? 'Editar Proposta' : 'Nova Proposta'}</h2>
+                <h2 className="text-lg font-sans font-bold mb-6">{editingProposal.id ? 'Editar Proposta' : 'Nova Proposta'}</h2>
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
@@ -1781,7 +1781,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     {proposals.map((p) => (
                       <div key={p.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
                         <div className="flex-grow min-w-0">
-                          <h3 className="font-display text-lg truncate">{p.title}</h3>
+                          <h3 className="font-sans font-bold text-lg truncate">{p.title}</h3>
                           <p className="text-xs text-neutral-400 font-sans truncate">{p.client_name} — /{p.slug}</p>
                         </div>
                         <div className="flex gap-2 flex-shrink-0 flex-wrap justify-end">
@@ -1809,7 +1809,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           <div>
             {editingTag ? (
               <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                <h2 className="text-lg font-display mb-6">{editingTag.id ? 'Editar Tag' : 'Nova Tag'}</h2>
+                <h2 className="text-lg font-sans font-bold mb-6">{editingTag.id ? 'Editar Tag' : 'Nova Tag'}</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-2">Tipo</label>
@@ -1895,7 +1895,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       return (
                         <div key={tag.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
                           <div className="flex-grow min-w-0">
-                            <h3 className="font-display text-lg truncate">{tag.label || tag.tag_id}</h3>
+                            <h3 className="font-sans font-bold text-lg truncate">{tag.label || tag.tag_id}</h3>
                             <p className="text-xs text-neutral-400 font-sans truncate">
                               {typeInfo?.label || tag.tag_type} — <span className="font-mono">{tag.tag_id}</span>
                             </p>
@@ -1938,7 +1938,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           <div>
             {editingPartner ? (
               <div className="bg-white rounded-2xl p-6 border border-neutral-200 space-y-4">
-                <h2 className="text-lg font-display mb-4">{editingPartner.id ? 'Editar Parceiro' : 'Novo Parceiro'}</h2>
+                <h2 className="text-lg font-sans font-bold mb-4">{editingPartner.id ? 'Editar Parceiro' : 'Novo Parceiro'}</h2>
                 <input value={editingPartner.name} onChange={(e) => setEditingPartner({ ...editingPartner, name: e.target.value })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Nome do parceiro" />
                 <input value={editingPartner.logo_url} onChange={(e) => setEditingPartner({ ...editingPartner, logo_url: e.target.value })} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do logo" />
                 {editingPartner.logo_url && (
@@ -1969,7 +1969,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
             ) : (
               <>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-display">Parceiros</h2>
+                  <h2 className="text-lg font-sans font-bold">Parceiros</h2>
                   <button onClick={() => setEditingPartner(newPartner())} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider">
                     + Novo Parceiro
                   </button>
@@ -1986,7 +1986,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                           {p.logo_url && <img src={p.logo_url} alt={p.name} className="h-12 object-contain" />}
                         </div>
                         <div className="flex-grow min-w-0">
-                          <h3 className="font-display text-lg truncate">{p.name}</h3>
+                          <h3 className="font-sans font-bold text-lg truncate">{p.name}</h3>
                           <p className="text-xs text-neutral-400 font-sans truncate">{p.link_url}</p>
                         </div>
                         <span className={`text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-full ${p.is_visible ? 'bg-green-50 text-green-600' : 'bg-neutral-100 text-neutral-400'}`}>
@@ -2007,7 +2007,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
           <div>
             {selectedPage === null ? (
               <div>
-                <h2 className="text-lg font-display mb-6">Páginas do Site</h2>
+                <h2 className="text-lg font-sans font-bold mb-6">Páginas do Site</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {PAGE_CONFIGS.map((page) => {
                     const totalFields = page.seo.length + page.textos.length + page.imagens.length;
@@ -2018,7 +2018,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                         className="bg-white rounded-2xl p-6 border border-neutral-200 text-left hover:border-neutral-400 transition-colors group"
                       >
                         <span className="text-3xl mb-3 block">{page.icon}</span>
-                        <h3 className="text-lg font-display group-hover:text-black">{page.label}</h3>
+                        <h3 className="text-lg font-sans font-bold group-hover:text-black">{page.label}</h3>
                         <p className="text-xs text-neutral-400 font-sans mt-1">{totalFields} campos editáveis{page.hasHero ? ' + Hero' : ''}</p>
                       </button>
                     );
@@ -2043,7 +2043,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       </button>
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{currentPage.icon}</span>
-                        <h2 className="text-lg font-display">{currentPage.label}</h2>
+                        <h2 className="text-lg font-sans font-bold">{currentPage.label}</h2>
                       </div>
                     </div>
                     {pageDirtyCount > 0 && (
