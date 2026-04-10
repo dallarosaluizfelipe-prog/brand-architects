@@ -11,7 +11,7 @@ interface SeoProps {
 }
 
 const SITE_URL = 'https://estudiodalla.com';
-const DEFAULT_OG_IMAGE = '/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png';
+const DEFAULT_OG_IMAGE = '/og-default.png';
 
 function toAbsoluteUrl(value?: string): string | undefined {
   if (!value) return undefined;
@@ -22,7 +22,7 @@ function toAbsoluteUrl(value?: string): string | undefined {
   }
 }
 
-let seoDefaults: { title: string; description: string; keywords: string } | null = null;
+let seoDefaults: { title: string; description: string; keywords: string; og_image: string } | null = null;
 let seoLoading: Promise<void> | null = null;
 
 function loadSeoDefaults(): Promise<void> {
@@ -30,19 +30,21 @@ function loadSeoDefaults(): Promise<void> {
   if (seoLoading) return seoLoading;
   seoLoading = (supabase as any)
     .from('site_content')
-    .select('section_key, body')
-    .in('section_key', ['seo_default_title', 'seo_default_description', 'seo_default_keywords'])
+    .select('section_key, body, image_url')
+    .in('section_key', ['seo_default_title', 'seo_default_description', 'seo_default_keywords', 'seo_default_og_image'])
     .then(({ data }: any) => {
       seoDefaults = {
         title: 'Studio Dalla — High\u2011End Branding Studio',
         description: 'Consultoria de branding e rebranding para marcas de luxo em São Paulo. Transformamos identidades visuais com método, maturidade e visão estratégica.',
         keywords: 'branding luxo, agência branding São Paulo, rebranding marcas premium, identidade visual luxo',
+        og_image: '',
       };
       if (data) {
         for (const row of data) {
           if (row.section_key === 'seo_default_title' && row.body) seoDefaults!.title = row.body;
           if (row.section_key === 'seo_default_description' && row.body) seoDefaults!.description = row.body;
           if (row.section_key === 'seo_default_keywords' && row.body) seoDefaults!.keywords = row.body;
+          if (row.section_key === 'seo_default_og_image' && row.body) seoDefaults!.og_image = row.body;
         }
       }
     });
@@ -102,7 +104,7 @@ export const Seo: React.FC<SeoProps> = ({
     }
 
     const canonical = toAbsoluteUrl(url) || window.location.href;
-    const ogImage = toAbsoluteUrl(image) || toAbsoluteUrl(DEFAULT_OG_IMAGE);
+    const ogImage = toAbsoluteUrl(image) || toAbsoluteUrl(defaults?.og_image) || toAbsoluteUrl(DEFAULT_OG_IMAGE);
 
     upsertMeta({ name: 'description', content: description || dDescription });
     upsertMeta({ name: 'keywords', content: keywords || dKeywords });
