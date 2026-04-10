@@ -1,0 +1,1 @@
+UPDATE site_lps SET slug = 'identidade-visual', updated_at = now() WHERE slug = 'identidadevisual';
