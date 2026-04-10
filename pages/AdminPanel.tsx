@@ -127,6 +127,7 @@ interface TextFieldDef {
   key: string;
   label: string;
   rich?: boolean;
+  type?: 'text' | 'image';
 }
 
 interface PageConfig {
