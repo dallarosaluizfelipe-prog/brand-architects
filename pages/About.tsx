@@ -54,7 +54,7 @@ const About: React.FC = () => {
         <section className="py-20 md:py-40 px-6 bg-neutral-50">
           <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-10 md:gap-16">
             <div className="md:col-span-7">
-              <h2 className="text-4xl md:text-7xl mb-8 md:mb-12 leading-[0.9] tracking-tighter">{t.about_vision_title}</h2>
+              <h2 className="text-[2.5rem] md:text-7xl mb-8 md:mb-12 leading-[0.9] tracking-tighter">{t.about_vision_title}</h2>
               <div className="space-y-6 md:space-y-8 text-base md:text-xl text-neutral-600 font-light leading-relaxed font-sans">
                 <div dangerouslySetInnerHTML={{ __html: t.about_vision_p1 }} />
                 <div dangerouslySetInnerHTML={{ __html: t.about_vision_p2 }} />
@@ -103,19 +103,19 @@ const About: React.FC = () => {
         <section className="py-20 md:py-40 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-14 md:mb-32">
             <span className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans opacity-40">{t.about_pillars_badge}</span>
-            <h2 className="text-4xl sm:text-5xl md:text-8xl mt-6 md:mt-8 tracking-tighter">{t.about_pillars_title}</h2>
+            <h2 className="text-5xl sm:text-5xl md:text-8xl mt-6 md:mt-8 tracking-tighter">{t.about_pillars_title}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-10 md:gap-16">
             <div className="space-y-5 md:space-y-6">
-              <div className="text-3xl md:text-4xl font-display">{t.about_pillar1_title}</div>
+              <div className="text-[2rem] md:text-4xl font-display">{t.about_pillar1_title}</div>
               <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar1_desc }} />
             </div>
             <div className="space-y-5 md:space-y-6">
-              <div className="text-3xl md:text-4xl font-display">{t.about_pillar2_title}</div>
+              <div className="text-[2rem] md:text-4xl font-display">{t.about_pillar2_title}</div>
               <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar2_desc }} />
             </div>
             <div className="space-y-5 md:space-y-6">
-              <div className="text-3xl md:text-4xl font-display">{t.about_pillar3_title}</div>
+              <div className="text-[2rem] md:text-4xl font-display">{t.about_pillar3_title}</div>
               <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar3_desc }} />
             </div>
           </div>

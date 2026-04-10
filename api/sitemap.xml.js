@@ -23,7 +23,11 @@ const FALLBACK_CASES = [
   { slug: 'kuma',        is_featured: true,  updated_at: null },
 ];
 
-function buildXml(staticPages, caseEntries, today) {
+const FALLBACK_LPS = [
+  { slug: 'identidadevisual', updated_at: null },
+];
+
+function buildXml(staticPages, caseEntries, lpEntries, today) {
   const urlBlock = (loc, lastmod, changefreq, priority) =>
     `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
 
@@ -37,11 +41,17 @@ function buildXml(staticPages, caseEntries, today) {
     return urlBlock(`${SITE_URL}/cases/${c.slug}`, lastmod, 'monthly', priority);
   });
 
+  const lpUrls = lpEntries.map(l => {
+    const lastmod = l.updated_at ? l.updated_at.split('T')[0] : today;
+    return urlBlock(`${SITE_URL}/lp/${l.slug}`, lastmod, 'monthly', '0.8');
+  });
+
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...staticUrls,
     ...caseUrls,
+    ...lpUrls,
     '</urlset>',
   ].join('\n');
 }
@@ -49,6 +59,7 @@ function buildXml(staticPages, caseEntries, today) {
 export default async function handler(req, res) {
   const today = new Date().toISOString().split('T')[0];
   let cases = [];
+  let lps = [];
 
   if (SUPABASE_URL && SUPABASE_KEY) {
     try {
@@ -69,6 +80,16 @@ export default async function handler(req, res) {
       if (data && data.length > 0) {
         cases = data;
       }
+
+      const { data: lpData } = await supabase
+        .from('site_lps')
+        .select('slug, updated_at')
+        .eq('is_visible', true)
+        .order('display_order', { ascending: true });
+
+      if (lpData && lpData.length > 0) {
+        lps = lpData;
+      }
     } catch {
       // silently fall through to fallback
     }
@@ -77,8 +98,11 @@ export default async function handler(req, res) {
   if (cases.length === 0) {
     cases = FALLBACK_CASES;
   }
+  if (lps.length === 0) {
+    lps = FALLBACK_LPS;
+  }
 
-  const xml = buildXml(STATIC_PAGES, cases, today);
+  const xml = buildXml(STATIC_PAGES, cases, lps, today);
 
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');

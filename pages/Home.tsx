@@ -14,7 +14,7 @@ const FALLBACK_POSTER = '/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.p
 const Home: React.FC = () => {
   const [heroDesktop, setHeroDesktop] = useState(FALLBACK_DESKTOP);
   const [heroMobile, setHeroMobile] = useState(FALLBACK_MOBILE);
-  const [heroPoster, setHeroPoster] = useState(FALLBACK_POSTER);
+  const [heroPoster, setHeroPoster] = useState('');
   const [homeCases, setHomeCases] = useState<SiteCase[]>([]);
   const [partners, setPartners] = useState<SitePartner[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -42,7 +42,7 @@ const Home: React.FC = () => {
         const desktop = data.find((r) => r.section_key === 'hero_video_desktop');
         const mobile = data.find((r) => r.section_key === 'hero_video_mobile');
         if (desktop?.video_url) setHeroDesktop(desktop.video_url);
-        if (desktop?.image_url) setHeroPoster(desktop.image_url);
+        setHeroPoster(desktop?.image_url || FALLBACK_POSTER);
         if (mobile?.video_url) setHeroMobile(mobile.video_url);
 
         // Reload <video> with new sources
@@ -70,7 +70,7 @@ const Home: React.FC = () => {
             muted
             playsInline
             preload="metadata"
-            poster={heroPoster}
+            poster={heroPoster || undefined}
             className="absolute inset-0 w-full h-full object-cover"
           >
             <source src={heroMobile} media="(max-width: 768px)" type="video/mp4" />
@@ -82,7 +82,7 @@ const Home: React.FC = () => {
           <span className="inline-block text-[11px] uppercase tracking-[0.24em] text-neutral-500 font-sans mb-6">
             {t.home_hero_badge}
           </span>
-          <h1 className="text-[clamp(2.2rem,10vw,5.5rem)] leading-[0.9] tracking-tight mb-5">
+          <h1 className="text-[clamp(2.5rem,10vw,5.5rem)] leading-[0.9] tracking-tight mb-5">
             {t.home_hero_title}
           </h1>
           <div className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8" dangerouslySetInnerHTML={{ __html: t.home_hero_subtitle }} />
@@ -99,7 +99,7 @@ const Home: React.FC = () => {
         <section className="py-14 md:py-16 px-6 bg-[#efeff0]" id="work">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-4xl sm:text-5xl md:text-8xl mb-6 md:mb-8 tracking-tighter">{t.home_cases_title}</h2>
+              <h2 className="text-5xl sm:text-5xl md:text-8xl mb-6 md:mb-8 tracking-tighter">{t.home_cases_title}</h2>
               <div className="text-base md:text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: t.home_cases_subtitle }} />
             </div>
 
@@ -158,7 +158,7 @@ const Home: React.FC = () => {
         <section className="py-20 md:py-40 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8 md:gap-10">
-              <h2 className="text-4xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">{t.home_partners_title}</h2>
+              <h2 className="text-5xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">{t.home_partners_title}</h2>
               <div className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg" dangerouslySetInnerHTML={{ __html: t.home_partners_subtitle }} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">

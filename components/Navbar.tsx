@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-fit px-4 pt-4 pb-2 md:p-0">
-        <div className="flex justify-between items-center w-full nav-blur px-5 py-3 rounded-[1.4rem] shadow-lg border border-neutral-100 md:hidden">
+        <div className="flex justify-between items-center w-full nav-blur px-5 py-3 rounded-full shadow-lg border border-neutral-100 md:hidden">
           <Link to="/" className="font-black tracking-tighter font-sans" onClick={closeMenu}>
             <DallaLogo className="h-5 w-auto" />
           </Link>
@@ -123,14 +123,14 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-md md:hidden">
-        <div className="nav-blur rounded-[1.35rem] px-2 py-2 shadow-xl border border-neutral-200">
+        <div className="nav-blur rounded-full px-2 py-2 shadow-xl border border-neutral-200">
           <div className="grid grid-cols-4 gap-1">
             {links.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`rounded-xl py-2.5 text-center text-[11px] font-sans tracking-wide transition-all ${
-                  isActive(link.path) ? "bg-black text-white" : "text-neutral-500"
+                className={`rounded-full py-2.5 text-center text-[11px] font-sans tracking-wide transition-all ${
+                  isActive(link.path) ? "bg-black text-white font-semibold" : "text-neutral-500"
                 }`}
               >
                 {link.label}

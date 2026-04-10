@@ -16,6 +16,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 const CaseDetails = lazy(() => import("./pages/CaseDetails"));
 const ProposalDetails = lazy(() => import("./pages/ProposalDetails"));
 const IdentidadeVisual = lazy(() => import("./pages/IdentidadeVisual"));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 
 const PageLoader: React.FC = () => (
   <div className="min-h-screen flex items-center justify-center bg-white">
@@ -107,9 +108,13 @@ const AppRoutes: React.FC = () => {
       />
       <Route
         path="/identidadevisual"
+        element={<Navigate to="/lp/identidadevisual" replace />}
+      />
+      <Route
+        path="/lp/:slug"
         element={
           <PublicLayout>
-            <IdentidadeVisual />
+            <LandingPage />
           </PublicLayout>
         }
       />

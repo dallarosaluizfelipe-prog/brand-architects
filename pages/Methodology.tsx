@@ -48,7 +48,7 @@ const Methodology: React.FC = () => {
           <div className="absolute inset-0 z-0 bg-black"></div>
           <div className="relative z-10 max-w-5xl w-full text-center px-6">
             <span className="uppercase tracking-[0.45em] text-white/40 mb-7 block font-sans text-[11px] md:text-sm font-normal">{t.method_header_badge}</span>
-            <h1 className="text-white text-4xl sm:text-5xl md:text-8xl leading-[0.9] mb-6 md:mb-8 font-display tracking-tight">
+            <h1 className="text-white text-[2.5rem] sm:text-5xl md:text-8xl leading-[0.9] mb-6 md:mb-8 font-display tracking-tight">
               {t.method_header_title}
             </h1>
             <div className="max-w-2xl mx-auto text-base md:text-lg text-white/60 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.method_header_subtitle }} />
@@ -64,8 +64,8 @@ const Methodology: React.FC = () => {
                   <span className="text-[11px] uppercase tracking-[0.35em] text-neutral-400 font-bold font-sans">{phase.label}</span>
                 </div>
                 <div>
-                  <h2 className="text-3xl sm:text-4xl md:text-7xl mb-6 md:mb-8 leading-[0.9] tracking-tighter font-display">{phase.title}</h2>
-                  <div className="text-base md:text-2xl text-neutral-500 font-light font-sans leading-relaxed max-w-2xl" dangerouslySetInnerHTML={{ __html: phase.desc }} />
+                  <h2 className="text-[2rem] sm:text-4xl md:text-7xl mb-6 md:mb-8 leading-[0.9] tracking-tighter font-display">{phase.title}</h2>
+                  <div className="text-lg md:text-2xl text-neutral-500 font-light font-sans leading-relaxed max-w-2xl" dangerouslySetInnerHTML={{ __html: phase.desc }} />
                   {idx < phases.length - 1 && <div className="mt-10 md:mt-24 border-b border-neutral-200"></div>}
                 </div>
               </div>

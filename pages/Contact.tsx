@@ -61,9 +61,9 @@ const Contact: React.FC = () => {
         description={t.contact_seo_description}
         keywords={t.contact_seo_keywords}
       />
-      <div className="animate-in fade-in duration-700">
+      <div className="animate-in fade-in duration-700 overflow-x-hidden">
         <header className="pt-36 md:pt-48 pb-12 md:pb-20 px-6 max-w-7xl mx-auto">
-          <h1 className="text-5xl sm:text-6xl md:text-[12rem] leading-[0.82] tracking-tighter mb-8 md:mb-24 font-display">{t.contact_header_title}</h1>
+          <h1 className="text-6xl sm:text-7xl md:text-[12rem] leading-[0.82] tracking-tighter mb-8 md:mb-24 font-display">{t.contact_header_title}</h1>
         </header>
 
         <main className="max-w-7xl mx-auto px-6 pb-24 md:pb-40">

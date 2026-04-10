@@ -308,6 +308,40 @@ Deno.serve(async (req) => {
         });
       }
 
+      case "list_lps": {
+        const { data: lps, error } = await supabase
+          .from("site_lps")
+          .select("*")
+          .order("display_order", { ascending: true });
+        if (error) throw error;
+        return new Response(JSON.stringify({ lps }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "upsert_lp": {
+        const { data: result, error } = await supabase
+          .from("site_lps")
+          .upsert({ ...data, updated_at: new Date().toISOString() })
+          .select()
+          .single();
+        if (error) throw error;
+        return new Response(JSON.stringify({ lp: result }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "delete_lp": {
+        const { error } = await supabase
+          .from("site_lps")
+          .delete()
+          .eq("id", data.id);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "list_partners": {
         const { data: partners, error } = await supabase
           .from("site_partners")

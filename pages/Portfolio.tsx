@@ -51,7 +51,7 @@ const Portfolio: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">{project.title}</h3>
+                  <h3 className="text-3xl md:text-5xl mb-3 md:mb-4">{project.title}</h3>
                   <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{project.category}</p>
                 </div>
               </Link>

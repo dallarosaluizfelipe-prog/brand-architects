@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/src/integrations/supabase/client';
 import { SiteProposal, slugify } from '../src/data/siteProposals';
+import { SiteLp, LpPhase, LpBenefitItem, LpCaseItem } from '../src/data/siteLps';
 import RichTextEditor from '../src/components/RichTextEditor';
 import { getWhatsAppUrl } from '@/src/utils/contact';
 
@@ -283,7 +284,7 @@ const PAGE_CONFIGS: PageConfig[] = [
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros'>('dashboard');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros' | 'lps'>('dashboard');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -305,6 +306,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [partners, setPartners] = useState<SitePartner[]>([]);
   const [editingPartner, setEditingPartner] = useState<SitePartner | null>(null);
   const [partnersLoading, setPartnersLoading] = useState(false);
+  const [lps, setLps] = useState<SiteLp[]>([]);
+  const [editingLp, setEditingLp] = useState<SiteLp | null>(null);
+  const [lpsLoading, setLpsLoading] = useState(false);
   const [siteTexts, setSiteTexts] = useState<Record<string, string>>({});
   const [textsLoading, setTextsLoading] = useState(false);
   const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
@@ -595,6 +599,152 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     is_visible: true,
   });
 
+  // ── LP CRUD ──
+  const normalizeLp = (item: any): SiteLp => ({
+    id: item.id,
+    slug: item.slug ?? '',
+    title: item.title ?? '',
+    is_visible: item.is_visible !== false,
+    display_order: item.display_order ?? 0,
+    hero_badge: item.hero_badge ?? '',
+    hero_title: item.hero_title ?? '',
+    hero_subtitle: item.hero_subtitle ?? '',
+    hero_cta_text: item.hero_cta_text ?? 'Solicitar proposta',
+    hero_cta_url: item.hero_cta_url ?? '/contato',
+    hero_video_desktop: item.hero_video_desktop ?? '',
+    hero_video_mobile: item.hero_video_mobile ?? '',
+    hero_poster: item.hero_poster ?? '',
+    about_badge: item.about_badge ?? '',
+    about_title: item.about_title ?? '',
+    about_paragraphs: Array.isArray(item.about_paragraphs) ? item.about_paragraphs : [],
+    about_cta_text: item.about_cta_text ?? '',
+    about_cta_url: item.about_cta_url ?? '',
+    about_video_url: item.about_video_url ?? '',
+    method_badge: item.method_badge ?? '',
+    method_title: item.method_title ?? '',
+    method_subtitle: item.method_subtitle ?? '',
+    method_phases: Array.isArray(item.method_phases) ? item.method_phases : [],
+    method_cta_text: item.method_cta_text ?? '',
+    method_cta_url: item.method_cta_url ?? '',
+    benefits_badge: item.benefits_badge ?? '',
+    benefits_title: item.benefits_title ?? '',
+    benefits_subtitle: item.benefits_subtitle ?? '',
+    benefits_items: Array.isArray(item.benefits_items) ? item.benefits_items : [],
+    benefits_cta_text: item.benefits_cta_text ?? '',
+    benefits_cta_url: item.benefits_cta_url ?? '',
+    cases_badge: item.cases_badge ?? '',
+    cases_title: item.cases_title ?? '',
+    cases_subtitle: item.cases_subtitle ?? '',
+    cases_items: Array.isArray(item.cases_items) ? item.cases_items : [],
+    cases_cta_text: item.cases_cta_text ?? '',
+    cases_cta_url: item.cases_cta_url ?? '',
+    partners_badge: item.partners_badge ?? '',
+    partners_title: item.partners_title ?? '',
+    partners_subtitle: item.partners_subtitle ?? '',
+    partners_show: item.partners_show !== false,
+    partners_cta_text: item.partners_cta_text ?? '',
+    partners_cta_url: item.partners_cta_url ?? '',
+    meta_title: item.meta_title ?? '',
+    meta_description: item.meta_description ?? '',
+    meta_keywords: item.meta_keywords ?? '',
+    created_at: item.created_at,
+    updated_at: item.updated_at,
+  });
+
+  const loadLps = async () => {
+    setLpsLoading(true);
+    const result = await apiCall('list_lps');
+    setLps((result.lps || []).map(normalizeLp));
+    setLpsLoading(false);
+  };
+
+  const saveLp = async () => {
+    if (!editingLp) return;
+    setLpsLoading(true);
+    await apiCall('upsert_lp', editingLp);
+    setEditingLp(null);
+    await loadLps();
+    showMessage('LP salva!');
+    setLpsLoading(false);
+  };
+
+  const deleteLp = async (id: string) => {
+    if (!confirm('Excluir esta LP?')) return;
+    setLpsLoading(true);
+    await apiCall('delete_lp', { id });
+    await loadLps();
+    showMessage('LP excluída!');
+    setLpsLoading(false);
+  };
+
+  const duplicateLp = (source: SiteLp) => {
+    const { id, created_at, updated_at, ...rest } = source;
+    setEditingLp({
+      ...rest,
+      slug: source.slug + '-copia',
+      title: source.title + ' (Cópia)',
+      display_order: lps.length + 1,
+    } as SiteLp);
+  };
+
+  const newLp = (): SiteLp => ({
+    slug: '',
+    title: '',
+    is_visible: true,
+    display_order: lps.length + 1,
+    hero_badge: '',
+    hero_title: '',
+    hero_subtitle: '',
+    hero_cta_text: 'Solicitar proposta',
+    hero_cta_url: '/contato',
+    hero_video_desktop: '',
+    hero_video_mobile: '',
+    hero_poster: '',
+    about_badge: 'Sobre nós',
+    about_title: '',
+    about_paragraphs: [],
+    about_cta_text: '',
+    about_cta_url: '/estudio',
+    about_video_url: '',
+    method_badge: '',
+    method_title: '',
+    method_subtitle: '',
+    method_phases: [],
+    method_cta_text: 'Ver metodologia completa',
+    method_cta_url: '/metodologia',
+    benefits_badge: 'Benefícios',
+    benefits_title: '',
+    benefits_subtitle: '',
+    benefits_items: [],
+    benefits_cta_text: '',
+    benefits_cta_url: '/contato',
+    cases_badge: '',
+    cases_title: '',
+    cases_subtitle: '',
+    cases_items: [],
+    cases_cta_text: 'Ver todos os cases',
+    cases_cta_url: '/cases',
+    partners_badge: 'Parceiros',
+    partners_title: '',
+    partners_subtitle: '',
+    partners_show: true,
+    partners_cta_text: '',
+    partners_cta_url: '/contato',
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
+  });
+
+  const updateLpField = (field: keyof SiteLp, value: any) => {
+    if (!editingLp) return;
+    setEditingLp({ ...editingLp, [field]: value });
+  };
+
+  const copyLpUrl = (slug: string) => {
+    navigator.clipboard.writeText(`${window.location.origin}/lp/${slug}`);
+    showMessage('Link copiado!');
+  };
+
   const loadTexts = async () => {
     setTextsLoading(true);
     const result = await apiCall('list_content');
@@ -703,6 +853,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     loadProposals();
     loadTags();
     loadPartners();
+    loadLps();
     loadTexts();
     loadDashboard();
     loadFormSubmissions();
@@ -840,7 +991,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
-        {(['dashboard', 'leads', 'cases', 'media', 'paginas', 'proposals', 'parceiros', 'tags'] as const).map((t) => (
+        {(['dashboard', 'leads', 'cases', 'media', 'paginas', 'proposals', 'parceiros', 'lps', 'tags'] as const).map((t) => (
           <button
             key={t}
             onClick={() => {
@@ -852,7 +1003,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Mídia' : t === 'paginas' ? 'Páginas' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : 'Tags'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Mídia' : t === 'paginas' ? 'Páginas' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : t === 'lps' ? 'LPs' : 'Tags'}
           </button>
         ))}
       </div>
@@ -1994,6 +2145,219 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                         </span>
                         <button onClick={() => setEditingPartner(p)} className="text-sm font-sans text-neutral-400 hover:text-black">Editar</button>
                         <button onClick={() => deletePartner(p.id!)} className="text-sm font-sans text-red-400 hover:text-red-600">Excluir</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {tab === 'lps' && (
+          <div>
+            {editingLp ? (
+              <div className="bg-white rounded-2xl p-6 border border-neutral-200 space-y-6">
+                <h2 className="text-lg font-sans font-bold">{editingLp.id ? 'Editar LP' : 'Nova LP'}</h2>
+
+                {/* Geral */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Geral</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-1">Título</label>
+                      <input value={editingLp.title} onChange={(e) => updateLpField('title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Ex: Identidade Visual" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-1">Slug (URL)</label>
+                      <input value={editingLp.slug} onChange={(e) => updateLpField('slug', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="identidadevisual" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans mb-1">Ordem</label>
+                      <input type="number" value={editingLp.display_order} onChange={(e) => updateLpField('display_order', Number(e.target.value))} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" />
+                    </div>
+                    <div className="flex items-end">
+                      <label className="flex items-center gap-2 font-sans text-sm"><input type="checkbox" checked={editingLp.is_visible} onChange={(e) => updateLpField('is_visible', e.target.checked)} /> Visível</label>
+                    </div>
+                    <div className="flex items-end">
+                      <label className="flex items-center gap-2 font-sans text-sm"><input type="checkbox" checked={editingLp.partners_show} onChange={(e) => updateLpField('partners_show', e.target.checked)} /> Mostrar Parceiros</label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hero */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Hero</h3>
+                  <input value={editingLp.hero_badge} onChange={(e) => updateLpField('hero_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge (ex: Identidade visual estratégica)" />
+                  <textarea value={editingLp.hero_title} onChange={(e) => updateLpField('hero_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={3} placeholder="Título principal do Hero" />
+                  <textarea value={editingLp.hero_subtitle} onChange={(e) => updateLpField('hero_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo do Hero" />
+                  <div className="grid grid-cols-2 gap-4">
+                    <input value={editingLp.hero_cta_text} onChange={(e) => updateLpField('hero_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    <input value={editingLp.hero_cta_url} onChange={(e) => updateLpField('hero_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA (ex: /contato)" />
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <input value={editingLp.hero_video_desktop} onChange={(e) => updateLpField('hero_video_desktop', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Vídeo Desktop" />
+                    <input value={editingLp.hero_video_mobile} onChange={(e) => updateLpField('hero_video_mobile', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Vídeo Mobile" />
+                    <input value={editingLp.hero_poster} onChange={(e) => updateLpField('hero_poster', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Poster/Capa" />
+                  </div>
+                </div>
+
+                {/* About */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Sobre Nós</h3>
+                  <input value={editingLp.about_badge} onChange={(e) => updateLpField('about_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />
+                  <input value={editingLp.about_title} onChange={(e) => updateLpField('about_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
+                  {editingLp.about_paragraphs.map((p, i) => (
+                    <div key={i} className="flex gap-2">
+                      <textarea value={p} onChange={(e) => { const arr = [...editingLp.about_paragraphs]; arr[i] = e.target.value; updateLpField('about_paragraphs', arr); }} className="flex-grow border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder={`Parágrafo ${i + 1}`} />
+                      <button onClick={() => { const arr = editingLp.about_paragraphs.filter((_, idx) => idx !== i); updateLpField('about_paragraphs', arr); }} className="text-red-400 hover:text-red-600 text-sm px-2">✕</button>
+                    </div>
+                  ))}
+                  <button onClick={() => updateLpField('about_paragraphs', [...editingLp.about_paragraphs, ''])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar parágrafo</button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <input value={editingLp.about_cta_text} onChange={(e) => updateLpField('about_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    <input value={editingLp.about_cta_url} onChange={(e) => updateLpField('about_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
+                  </div>
+                  <input value={editingLp.about_video_url} onChange={(e) => updateLpField('about_video_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do Vídeo" />
+                </div>
+
+                {/* Método */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Método</h3>
+                  <input value={editingLp.method_badge} onChange={(e) => updateLpField('method_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge (ex: Dalla Design Brand)" />
+                  <input value={editingLp.method_title} onChange={(e) => updateLpField('method_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
+                  <textarea value={editingLp.method_subtitle} onChange={(e) => updateLpField('method_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />
+                  {editingLp.method_phases.map((phase, i) => (
+                    <div key={i} className="bg-neutral-50 rounded-xl p-4 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">Fase {i + 1}</span>
+                        <button onClick={() => { const arr = editingLp.method_phases.filter((_, idx) => idx !== i); updateLpField('method_phases', arr); }} className="text-red-400 hover:text-red-600 text-sm">✕</button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <input value={phase.id} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], id: e.target.value }; updateLpField('method_phases', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="ID (ex: I)" />
+                        <input value={phase.label} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], label: e.target.value }; updateLpField('method_phases', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Label (ex: LANDSCAPE)" />
+                      </div>
+                      <input value={phase.title} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />
+                      <textarea value={phase.desc} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], desc: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" rows={2} placeholder="Descrição" />
+                    </div>
+                  ))}
+                  <button onClick={() => updateLpField('method_phases', [...editingLp.method_phases, { id: '', label: '', title: '', desc: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar fase</button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <input value={editingLp.method_cta_text} onChange={(e) => updateLpField('method_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    <input value={editingLp.method_cta_url} onChange={(e) => updateLpField('method_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
+                  </div>
+                </div>
+
+                {/* Benefícios */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Benefícios</h3>
+                  <input value={editingLp.benefits_badge} onChange={(e) => updateLpField('benefits_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />
+                  <input value={editingLp.benefits_title} onChange={(e) => updateLpField('benefits_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
+                  <textarea value={editingLp.benefits_subtitle} onChange={(e) => updateLpField('benefits_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />
+                  {editingLp.benefits_items.map((item, i) => (
+                    <div key={i} className="bg-neutral-50 rounded-xl p-4 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">Item {i + 1}</span>
+                        <button onClick={() => { const arr = editingLp.benefits_items.filter((_, idx) => idx !== i); updateLpField('benefits_items', arr); }} className="text-red-400 hover:text-red-600 text-sm">✕</button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <input value={item.icon} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], icon: e.target.value }; updateLpField('benefits_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Ícone (Material Symbol)" />
+                        <input value={item.title} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('benefits_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />
+                      </div>
+                      <textarea value={item.desc} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], desc: e.target.value }; updateLpField('benefits_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" rows={2} placeholder="Descrição" />
+                    </div>
+                  ))}
+                  <button onClick={() => updateLpField('benefits_items', [...editingLp.benefits_items, { icon: '', title: '', desc: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar benefício</button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <input value={editingLp.benefits_cta_text} onChange={(e) => updateLpField('benefits_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    <input value={editingLp.benefits_cta_url} onChange={(e) => updateLpField('benefits_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
+                  </div>
+                </div>
+
+                {/* Cases */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Cases</h3>
+                  <input value={editingLp.cases_badge} onChange={(e) => updateLpField('cases_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />
+                  <input value={editingLp.cases_title} onChange={(e) => updateLpField('cases_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
+                  <textarea value={editingLp.cases_subtitle} onChange={(e) => updateLpField('cases_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />
+                  {editingLp.cases_items.map((c, i) => (
+                    <div key={i} className="bg-neutral-50 rounded-xl p-4 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">Case {i + 1}</span>
+                        <button onClick={() => { const arr = editingLp.cases_items.filter((_, idx) => idx !== i); updateLpField('cases_items', arr); }} className="text-red-400 hover:text-red-600 text-sm">✕</button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <input value={c.slug} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], slug: e.target.value }; updateLpField('cases_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Slug do case (ex: yerbal)" />
+                        <input value={c.title} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('cases_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />
+                      </div>
+                      <input value={c.category} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], category: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Categoria" />
+                      <input value={c.cover_url} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], cover_url: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="URL da capa" />
+                      {c.cover_url && <img src={c.cover_url} alt="" className="h-16 rounded-lg object-cover" />}
+                    </div>
+                  ))}
+                  <button onClick={() => updateLpField('cases_items', [...editingLp.cases_items, { slug: '', title: '', category: '', cover_url: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar case</button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <input value={editingLp.cases_cta_text} onChange={(e) => updateLpField('cases_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    <input value={editingLp.cases_cta_url} onChange={(e) => updateLpField('cases_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
+                  </div>
+                </div>
+
+                {/* Parceiros */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Parceiros</h3>
+                  <input value={editingLp.partners_badge} onChange={(e) => updateLpField('partners_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />
+                  <input value={editingLp.partners_title} onChange={(e) => updateLpField('partners_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
+                  <textarea value={editingLp.partners_subtitle} onChange={(e) => updateLpField('partners_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />
+                  <div className="grid grid-cols-2 gap-4">
+                    <input value={editingLp.partners_cta_text} onChange={(e) => updateLpField('partners_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    <input value={editingLp.partners_cta_url} onChange={(e) => updateLpField('partners_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
+                  </div>
+                </div>
+
+                {/* SEO */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">SEO</h3>
+                  <input value={editingLp.meta_title} onChange={(e) => updateLpField('meta_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Meta Title" />
+                  <textarea value={editingLp.meta_description} onChange={(e) => updateLpField('meta_description', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Meta Description" />
+                  <input value={editingLp.meta_keywords} onChange={(e) => updateLpField('meta_keywords', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Meta Keywords" />
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button onClick={saveLp} disabled={lpsLoading || !editingLp.slug || !editingLp.title} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50">
+                    {lpsLoading ? 'Salvando...' : 'Salvar'}
+                  </button>
+                  <button onClick={() => setEditingLp(null)} className="border border-neutral-200 px-8 py-3 rounded-full text-sm font-sans">Cancelar</button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-sans font-bold">Landing Pages</h2>
+                  <button onClick={() => setEditingLp(newLp())} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider">
+                    + Nova LP
+                  </button>
+                </div>
+                {lpsLoading ? (
+                  <p className="text-neutral-400 font-sans text-sm">Carregando...</p>
+                ) : lps.length === 0 ? (
+                  <p className="text-neutral-400 font-sans text-sm">Nenhuma LP cadastrada.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {lps.map((lp) => (
+                      <div key={lp.id} className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-4">
+                        <div className="flex-grow min-w-0">
+                          <h3 className="font-sans font-bold text-lg truncate">{lp.title}</h3>
+                          <p className="text-xs text-neutral-400 font-sans truncate">/lp/{lp.slug}</p>
+                        </div>
+                        <span className={`text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-full ${lp.is_visible ? 'bg-green-50 text-green-600' : 'bg-neutral-100 text-neutral-400'}`}>
+                          {lp.is_visible ? 'Visível' : 'Oculta'}
+                        </span>
+                        <button onClick={() => copyLpUrl(lp.slug)} className="text-sm font-sans text-neutral-400 hover:text-black">Copiar URL</button>
+                        <button onClick={() => duplicateLp(lp)} className="text-sm font-sans text-neutral-400 hover:text-black">Duplicar</button>
+                        <button onClick={() => setEditingLp(lp)} className="text-sm font-sans text-neutral-400 hover:text-black">Editar</button>
+                        <button onClick={() => deleteLp(lp.id!)} className="text-sm font-sans text-red-400 hover:text-red-600">Excluir</button>
                       </div>
                     ))}
                   </div>
