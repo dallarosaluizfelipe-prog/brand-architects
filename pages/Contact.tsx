@@ -14,6 +14,7 @@ const Contact: React.FC = () => {
     contact_seo_title: 'Contato - Estudio Dalla',
     contact_seo_description: 'Fale com o Estudio Dalla. Estamos prontos para transformar sua marca de luxo com design estrategico.',
     contact_seo_keywords: 'contato agencia branding, contato branding SP',
+    contact_og_image: '',
     social_instagram: 'https://www.instagram.com/estudiodalla/',
     social_linkedin: '',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
@@ -60,6 +61,7 @@ const Contact: React.FC = () => {
         title={t.contact_seo_title}
         description={t.contact_seo_description}
         keywords={t.contact_seo_keywords}
+        image={t.contact_og_image || undefined}
       />
       <div className="animate-in fade-in duration-700 overflow-x-hidden">
         <header className="pt-36 md:pt-48 pb-12 md:pb-20 px-6 max-w-7xl mx-auto">

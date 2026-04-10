@@ -127,6 +127,7 @@ interface TextFieldDef {
   key: string;
   label: string;
   rich?: boolean;
+  type?: 'text' | 'image';
 }
 
 interface PageConfig {
@@ -149,6 +150,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'home_seo_title', label: 'Meta Title' },
       { key: 'home_seo_description', label: 'Meta Description' },
       { key: 'home_seo_keywords', label: 'Meta Keywords' },
+      { key: 'home_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'home_hero_badge', label: 'Badge do Hero' },
@@ -169,6 +171,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'about_seo_title', label: 'Meta Title' },
       { key: 'about_seo_description', label: 'Meta Description' },
       { key: 'about_seo_keywords', label: 'Meta Keywords' },
+      { key: 'about_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'about_header_badge', label: 'Badge do Header' },
@@ -206,6 +209,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'methodology_seo_title', label: 'Meta Title' },
       { key: 'methodology_seo_description', label: 'Meta Description' },
       { key: 'methodology_seo_keywords', label: 'Meta Keywords' },
+      { key: 'methodology_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'method_header_badge', label: 'Badge do Header' },
@@ -237,6 +241,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'portfolio_seo_title', label: 'Meta Title' },
       { key: 'portfolio_seo_description', label: 'Meta Description' },
       { key: 'portfolio_seo_keywords', label: 'Meta Keywords' },
+      { key: 'portfolio_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'portfolio_header_title', label: 'Titulo do Header' },
@@ -252,6 +257,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'contact_seo_title', label: 'Meta Title' },
       { key: 'contact_seo_description', label: 'Meta Description' },
       { key: 'contact_seo_keywords', label: 'Meta Keywords' },
+      { key: 'contact_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'contact_header_title', label: 'Titulo do Header' },
@@ -268,6 +274,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'seo_default_title', label: 'Titulo Padrao' },
       { key: 'seo_default_description', label: 'Descricao Padrao' },
       { key: 'seo_default_keywords', label: 'Keywords Padrao' },
+      { key: 'seo_default_og_image', label: 'Imagem OG Padrão (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'footer_contacts', label: 'Info de Contatos', rich: true },
@@ -2465,7 +2472,49 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   </button>
                                 )}
                               </div>
-                              {field.rich ? (
+                              {field.type === 'image' ? (
+                                <>
+                                  <input
+                                    value={siteTexts[field.key] || ''}
+                                    onChange={(e) => updateTextField(field.key, e.target.value)}
+                                    className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                                    placeholder="URL da imagem ou faça upload abaixo"
+                                  />
+                                  <div
+                                    className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                                      uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                                    }`}
+                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    onDrop={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      const file = e.dataTransfer.files?.[0];
+                                      if (file) handleImageFieldUpload(file, field.key, 'text');
+                                    }}
+                                    onClick={() => {
+                                      const input = document.createElement('input');
+                                      input.type = 'file';
+                                      input.accept = 'image/*';
+                                      input.onchange = (ev) => {
+                                        const file = (ev.target as HTMLInputElement).files?.[0];
+                                        if (file) handleImageFieldUpload(file, field.key, 'text');
+                                      };
+                                      input.click();
+                                    }}
+                                  >
+                                    <p className="text-sm text-neutral-500 font-sans">
+                                      {uploading ? 'Enviando...' : 'Arraste uma imagem aqui ou clique para enviar'}
+                                    </p>
+                                    <p className="text-[10px] text-neutral-400 font-sans mt-1">Recomendado: 1200×630px</p>
+                                  </div>
+                                  {siteTexts[field.key] && (
+                                    <img src={siteTexts[field.key]} alt="OG Preview" className="mt-3 rounded-xl max-h-40 object-cover border border-neutral-200" />
+                                  )}
+                                  {!siteTexts[field.key] && (
+                                    <p className="text-[10px] text-neutral-400 font-sans mt-2">Sem imagem definida — será usada a imagem padrão do Studio Dalla.</p>
+                                  )}
+                                </>
+                              ) : field.rich ? (
                                 <RichTextEditor
                                   value={siteTexts[field.key] || ''}
                                   onChange={(html) => updateTextField(field.key, html)}
@@ -2478,7 +2527,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   placeholder={field.label}
                                 />
                               )}
-                              {pageSubTab === 'imagens' && (
+                              {pageSubTab === 'imagens' && field.type !== 'image' && (
                                 <>
                                   <div
                                     className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${

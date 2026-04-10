@@ -31,6 +31,7 @@ const About: React.FC = () => {
     about_seo_title: 'Sobre o Estudio Dalla',
     about_seo_description: 'Conheca a filosofia, valores e visao do Estudio Dalla, referencia em branding de luxo em Sao Paulo.',
     about_seo_keywords: 'sobre estudio de branding, branding SP, agencia branding luxo',
+    about_og_image: '',
   });
 
   const expertPhotoUrl = t.about_expert_photo_url?.trim()
@@ -43,6 +44,7 @@ const About: React.FC = () => {
         title={t.about_seo_title}
         description={t.about_seo_description}
         keywords={t.about_seo_keywords}
+        image={t.about_og_image || undefined}
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-36 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">
