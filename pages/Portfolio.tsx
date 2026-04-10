@@ -14,6 +14,7 @@ const Portfolio: React.FC = () => {
     portfolio_seo_title: 'Portfolio de Cases - Estudio Dalla',
     portfolio_seo_description: 'Explore os estudos de caso do Estudio Dalla e veja como nossas identidades visuais geram resultados para marcas de luxo.',
     portfolio_seo_keywords: 'portfolio branding luxo, estudos de caso branding',
+    portfolio_og_image: '',
   });
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const Portfolio: React.FC = () => {
         title={t.portfolio_seo_title}
         description={t.portfolio_seo_description}
         keywords={t.portfolio_seo_keywords}
+        image={t.portfolio_og_image || undefined}
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-24 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">

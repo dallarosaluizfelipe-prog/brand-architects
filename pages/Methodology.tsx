@@ -26,6 +26,7 @@ const Methodology: React.FC = () => {
     methodology_seo_title: 'Metodologia de Branding Dalla',
     methodology_seo_description: 'Entenda o metodo proprietario do Estudio Dalla para criar marcas de luxo com posicionamento estrategico e estetica autoral.',
     methodology_seo_keywords: 'metodologia branding, processo de branding luxo, metodo Dalla',
+    methodology_og_image: '',
   });
 
   const phases = [
@@ -42,6 +43,7 @@ const Methodology: React.FC = () => {
         title={t.methodology_seo_title}
         description={t.methodology_seo_description}
         keywords={t.methodology_seo_keywords}
+        image={t.methodology_og_image || undefined}
       />
       <div className="animate-in fade-in duration-700">
         <header className="relative min-h-[50svh] md:h-[95vh] flex flex-col justify-start items-center overflow-hidden bg-black text-white rounded-b-[2.5rem] md:rounded-b-[6rem] pt-24 md:pt-[180px] pb-14 md:pb-0">
