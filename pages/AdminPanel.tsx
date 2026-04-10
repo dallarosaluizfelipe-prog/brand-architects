@@ -150,6 +150,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'home_seo_title', label: 'Meta Title' },
       { key: 'home_seo_description', label: 'Meta Description' },
       { key: 'home_seo_keywords', label: 'Meta Keywords' },
+      { key: 'home_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'home_hero_badge', label: 'Badge do Hero' },
@@ -170,6 +171,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'about_seo_title', label: 'Meta Title' },
       { key: 'about_seo_description', label: 'Meta Description' },
       { key: 'about_seo_keywords', label: 'Meta Keywords' },
+      { key: 'about_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'about_header_badge', label: 'Badge do Header' },
@@ -207,6 +209,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'methodology_seo_title', label: 'Meta Title' },
       { key: 'methodology_seo_description', label: 'Meta Description' },
       { key: 'methodology_seo_keywords', label: 'Meta Keywords' },
+      { key: 'methodology_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'method_header_badge', label: 'Badge do Header' },
@@ -238,6 +241,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'portfolio_seo_title', label: 'Meta Title' },
       { key: 'portfolio_seo_description', label: 'Meta Description' },
       { key: 'portfolio_seo_keywords', label: 'Meta Keywords' },
+      { key: 'portfolio_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'portfolio_header_title', label: 'Titulo do Header' },
@@ -253,6 +257,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'contact_seo_title', label: 'Meta Title' },
       { key: 'contact_seo_description', label: 'Meta Description' },
       { key: 'contact_seo_keywords', label: 'Meta Keywords' },
+      { key: 'contact_og_image', label: 'Imagem OG (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'contact_header_title', label: 'Titulo do Header' },
@@ -269,6 +274,7 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'seo_default_title', label: 'Titulo Padrao' },
       { key: 'seo_default_description', label: 'Descricao Padrao' },
       { key: 'seo_default_keywords', label: 'Keywords Padrao' },
+      { key: 'seo_default_og_image', label: 'Imagem OG Padrão (Preview ao compartilhar)', type: 'image' },
     ],
     textos: [
       { key: 'footer_contacts', label: 'Info de Contatos', rich: true },
