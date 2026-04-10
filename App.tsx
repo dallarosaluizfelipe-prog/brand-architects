@@ -107,8 +107,12 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
+        path="/identidade-visual"
+        element={<Navigate to="/lp/identidade-visual" replace />}
+      />
+      <Route
         path="/identidadevisual"
-        element={<Navigate to="/lp/identidadevisual" replace />}
+        element={<Navigate to="/identidade-visual" replace />}
       />
       <Route
         path="/lp/:slug"

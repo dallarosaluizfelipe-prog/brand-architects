@@ -166,7 +166,7 @@ const fallbackCases: SiteCase[] = [
     gallery_urls: ["/lovable-uploads/dalla-cover.gif"],
     author: "Studio Dalla",
     case_date: "2025-05-01",
-    external_url: "https://estudiodalla.com/estudio-dalla-identidadevisual",
+    external_url: "https://estudiodalla.com/estudio-dalla-identidade-visual",
     cta_text: "Quero uma marca nesse nivel",
     cta_url:
       "https://api.whatsapp.com/send/?phone=5542999153814&text=Ola%2C+quero+falar+sobre+um+projeto+de+branding&type=phone_number&app_absent=0",
