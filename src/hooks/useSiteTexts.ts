@@ -3,53 +3,70 @@ import { supabase } from '@/src/integrations/supabase/client';
 
 interface SiteContentRow {
   section_key: string;
-  title: string | null;
-  subtitle: string | null;
+  locale: string;
   body: string | null;
-  image_url: string | null;
-  video_url: string | null;
 }
 
+// Cache keyed by "{locale}:{section_key}"
 const cache = new Map<string, string>();
 
 /**
- * Fetch multiple site_content rows by keys. Returns a map of section_key -> body.
- * Falls back to provided defaults if DB value is missing.
+ * Fetch multiple site_content rows by keys for a given locale.
+ * Falls back to pt-BR, then to provided defaults.
  */
 export function useSiteTexts(
-  defaults: Record<string, string>
+  defaults: Record<string, string>,
+  locale: string = 'pt-BR'
 ): Record<string, string> {
   const keys = Object.keys(defaults);
+
   const [texts, setTexts] = useState<Record<string, string>>(() => {
-    // Initialize from cache if available
     const initial: Record<string, string> = {};
     for (const key of keys) {
-      initial[key] = cache.get(key) ?? defaults[key];
+      const cached = cache.get(`${locale}:${key}`) ?? cache.get(`pt-BR:${key}`);
+      initial[key] = cached ?? defaults[key];
     }
     return initial;
   });
 
   useEffect(() => {
-    // Check if all keys are already cached
-    const uncached = keys.filter((k) => !cache.has(k));
+    const localesToFetch = Array.from(
+      new Set([locale, ...(locale !== 'pt-BR' ? ['pt-BR'] : [])])
+    );
+
+    const uncached = keys.filter(
+      (k) => localesToFetch.some((l) => !cache.has(`${l}:${k}`))
+    );
     if (uncached.length === 0) return;
 
-    supabase
+    (supabase as any)
       .from('site_content')
-      .select('section_key, body')
+      .select('section_key, locale, body')
       .in('section_key', keys)
-      .then(({ data }) => {
+      .in('locale', localesToFetch)
+      .then(({ data }: { data: SiteContentRow[] | null }) => {
         if (!data) return;
-        const result: Record<string, string> = { ...defaults };
+
+        const byLocale: Record<string, Record<string, string>> = {};
         for (const row of data as SiteContentRow[]) {
-          if (row.body) {
-            result[row.section_key] = row.body;
-            cache.set(row.section_key, row.body);
-          }
+          if (!row.body) continue;
+          if (!byLocale[row.locale]) byLocale[row.locale] = {};
+          byLocale[row.locale][row.section_key] = row.body;
+          cache.set(`${row.locale}:${row.section_key}`, row.body);
+        }
+
+        const result: Record<string, string> = { ...defaults };
+        for (const key of keys) {
+          const val =
+            byLocale[locale]?.[key] ??
+            byLocale['pt-BR']?.[key] ??
+            defaults[key];
+          result[key] = val;
         }
         setTexts(result);
       });
-  }, [keys.join(',')]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keys.join(','), locale]);
 
   return texts;
 }

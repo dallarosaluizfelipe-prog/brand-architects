@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/src/integrations/supabase/client';
+import { useLocale } from '@/src/contexts/LocaleContext';
 
 interface SeoProps {
   title?: string;
@@ -8,6 +9,8 @@ interface SeoProps {
   image?: string;
   url?: string;
   robots?: string;
+  /** Override locale for this page (defaults to context locale) */
+  locale?: string;
 }
 
 const SITE_URL = 'https://estudiodalla.com';
@@ -64,7 +67,10 @@ export const Seo: React.FC<SeoProps> = ({
   image,
   url,
   robots,
+  locale: localeProp,
 }) => {
+  const { locale: contextLocale } = useLocale();
+  const locale = localeProp ?? contextLocale;
   const [defaults, setDefaults] = useState(seoDefaults);
 
   useEffect(() => {
@@ -128,7 +134,35 @@ export const Seo: React.FC<SeoProps> = ({
       document.head.appendChild(link);
     }
     link.setAttribute('href', canonical);
-  }, [title, description, keywords, image, url, robots, dTitle, dDescription, dKeywords]);
+
+    // hreflang tags — PT and EN
+    const upsertHreflang = (hreflang: string, href: string) => {
+      let el: HTMLLinkElement | null = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
+      if (!el) {
+        el = document.createElement('link');
+        el.setAttribute('rel', 'alternate');
+        el.setAttribute('hreflang', hreflang);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('href', href);
+    };
+
+    const currentPath = window.location.pathname;
+    const isEnPath = currentPath.startsWith('/en');
+    const ptPath = isEnPath
+      ? currentPath.replace(/^\/en/, '') || '/'
+      : currentPath;
+    const enPath = isEnPath
+      ? currentPath
+      : `/en${currentPath === '/' ? '' : currentPath}`;
+
+    upsertHreflang('pt-BR', `${SITE_URL}${ptPath}`);
+    upsertHreflang('en', `${SITE_URL}${enPath}`);
+    upsertHreflang('x-default', `${SITE_URL}/`); // PT is the default
+
+    // Set document lang
+    document.documentElement.lang = locale === 'en' ? 'en' : 'pt-BR';
+  }, [title, description, keywords, image, url, robots, locale, dTitle, dDescription, dKeywords]);
 
   return null;
 };

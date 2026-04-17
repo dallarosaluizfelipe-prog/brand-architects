@@ -6,12 +6,14 @@ import { supabase } from '@/src/integrations/supabase/client';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 import { getSiteCases, SiteCase } from '@/src/data/siteCases';
 import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
+import { useLocale } from '@/src/contexts/LocaleContext';
 
 const FALLBACK_DESKTOP = '/lovable-uploads/abertura-site.mp4';
 const FALLBACK_MOBILE = '/lovable-uploads/abertura-site-mobile.mp4';
 const FALLBACK_POSTER = '/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png';
 
 const Home: React.FC = () => {
+  const { locale } = useLocale();
   const [heroDesktop, setHeroDesktop] = useState(FALLBACK_DESKTOP);
   const [heroMobile, setHeroMobile] = useState(FALLBACK_MOBILE);
   const [heroPoster, setHeroPoster] = useState('');
@@ -31,7 +33,7 @@ const Home: React.FC = () => {
     home_seo_description: 'Poder criativo que impulsiona negocios de marcas premium. Identidades visuais estrategicamente desenvolvidas para o mercado de luxo em Sao Paulo.',
     home_seo_keywords: 'branding luxo, agencia de branding SP, identidade visual premium',
     home_og_image: '',
-  });
+  }, locale);
 
   useEffect(() => {
     supabase
@@ -52,7 +54,7 @@ const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    getSiteCases(5).then(setHomeCases);
+    getSiteCases(5, locale).then(setHomeCases);
     getSitePartners().then(setPartners);
   }, []);
   return (

@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { getProposalBySlug, SiteProposal } from '../src/data/siteProposals';
+import { useLocale } from '../src/contexts/LocaleContext';
 
 const ProposalDetails: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { locale } = useLocale();
   const [proposal, setProposal] = useState<SiteProposal | null>(null);
   const [loading, setLoading] = useState(true);
   const printRef = useRef<HTMLDivElement>(null);
@@ -13,11 +15,11 @@ const ProposalDetails: React.FC = () => {
     if (!slug) return;
     (async () => {
       setLoading(true);
-      const data = await getProposalBySlug(slug);
+      const data = await getProposalBySlug(slug, locale);
       setProposal(data);
       setLoading(false);
     })();
-  }, [slug]);
+  }, [slug, locale]);
 
   const handleDownloadPDF = async () => {
     const el = printRef.current;

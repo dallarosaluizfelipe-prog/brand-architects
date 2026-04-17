@@ -3,6 +3,7 @@ import { Link, useParams, Navigate } from 'react-router-dom';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { getLpBySlug, SiteLp, LpPhase } from '@/src/data/siteLps';
+import { useLocale } from '@/src/contexts/LocaleContext';
 import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
 
 const PHASE_DURATION = 4000;
@@ -10,6 +11,7 @@ const TICK = 50;
 
 const LandingPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { locale } = useLocale();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [lp, setLp] = useState<SiteLp | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,11 +24,11 @@ const LandingPage: React.FC = () => {
   useEffect(() => {
     if (!slug) { setNotFound(true); setLoading(false); return; }
     setLoading(true);
-    getLpBySlug(slug).then((data) => {
+    getLpBySlug(slug, locale).then((data) => {
       if (!data) { setNotFound(true); } else { setLp(data); }
       setLoading(false);
     });
-  }, [slug]);
+  }, [slug, locale]);
 
   useEffect(() => {
     if (lp?.partners_show) getSitePartners().then(setPartners);

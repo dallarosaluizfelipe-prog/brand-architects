@@ -16,6 +16,8 @@ export interface SiteCase {
   display_order: number;
   is_featured: boolean;
   is_visible: boolean;
+  locale?: string;
+  translation_group?: string;
   meta_title?: string;
   meta_description?: string;
   meta_keywords?: string;
@@ -215,11 +217,12 @@ const normalizeCase = (item: any): SiteCase => ({
   meta_keywords: item.meta_keywords ?? '',
 });
 
-export const getSiteCases = async (limit?: number): Promise<SiteCase[]> => {
-  let query = supabase
+export const getSiteCases = async (limit?: number, locale: string = 'pt-BR'): Promise<SiteCase[]> => {
+  let query = (supabase as any)
     .from("site_cases")
     .select("*")
     .eq("is_visible", true)
+    .eq("locale", locale)
     .order("display_order", { ascending: true })
     .order("created_at", { ascending: true });
 
@@ -229,24 +232,29 @@ export const getSiteCases = async (limit?: number): Promise<SiteCase[]> => {
 
   const { data, error } = await query;
   if (error || !data || data.length === 0) {
+    // fallback to pt-BR if no EN cases exist yet
+    if (locale !== 'pt-BR') {
+      return getSiteCases(limit, 'pt-BR');
+    }
     return limit ? fallbackCases.slice(0, limit) : fallbackCases;
   }
   return data.map(normalizeCase);
 };
 
-export const getSiteCaseBySlug = async (slug: string): Promise<SiteCase | null> => {
-  const { data, error } = await supabase
+export const getSiteCaseBySlug = async (slug: string, locale: string = 'pt-BR'): Promise<SiteCase | null> => {
+  const { data, error } = await (supabase as any)
     .from("site_cases")
     .select("*")
     .eq("slug", slug)
     .eq("is_visible", true)
+    .eq("locale", locale)
     .maybeSingle();
 
-  if (error) {
-    return fallbackCases.find((item) => item.slug === slug) ?? null;
-  }
-
-  if (!data) {
+  if (error || !data) {
+    // fallback to pt-BR
+    if (locale !== 'pt-BR') {
+      return getSiteCaseBySlug(slug, 'pt-BR');
+    }
     return fallbackCases.find((item) => item.slug === slug) ?? null;
   }
 

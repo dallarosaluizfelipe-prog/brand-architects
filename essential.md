@@ -2,6 +2,85 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-17 — Internacionalizacao PT-BR / EN
+
+### `src/contexts/LocaleContext.tsx` (novo)
+- Exporta: `Locale` (type), `useLocale()` (hook), `LocaleProvider` (component).
+- Deteccao de locale em ordem: pathname `/en` → `localStorage.dalla_locale` → `navigator.languages` → `'pt-BR'`.
+- `setLocale(locale)`: persiste no localStorage, navega para rota equivalente no outro idioma usando `switchLocaleHref`.
+- Redirect automatico na montagem inicial: ocorre uma unica vez por sessao (`sessionStorage.dalla_redirected`). Bots detectados via regex no `navigator.userAgent` sao excluidos do redirect.
+- Sincroniza `document.documentElement.lang` a cada mudanca de locale.
+
+### `src/utils/localeRoutes.ts` (novo)
+- `PT_TO_EN` / `EN_TO_PT`: mapas de rotas estaticas.
+- `switchLocaleHref(currentPath, targetLocale)`: converte qualquer path entre PT e EN. Suporta dinamicos (`/cases/:slug` → `/en/cases/:slug`, `/proposta/:slug` → `/en/proposal/:slug`).
+- `detectLocaleFromPath(pathname)`: retorna `'en'` se o path comecar com `/en`, `null` caso neutro.
+- `localeCanonical(locale, path)`: retorna URL canonica absoluta por locale.
+
+### `App.tsx` (atualizado)
+- `LocaleProvider` importado de `src/contexts/LocaleContext` e adicionado envolvendo `AppRoutes`.
+- Arvore de rotas EN: `/en`, `/en/studio`, `/en/methodology`, `/en/cases`, `/en/cases/:slug`, `/en/proposal/:slug`, `/en/lp/:slug`, `/en/contact` — todas com as mesmas paginas lazy-loaded das rotas PT.
+
+### `src/hooks/useSiteTexts.ts` (atualizado)
+- Assinatura: `useSiteTexts(defaults, locale?)`.
+- Cache keyed por `{locale}:{section_key}` em vez de apenas `section_key`.
+- Busca no banco por `(section_key IN [...], locale IN [locale, 'pt-BR'])`.
+- Prioridade de valor: banco locale solicitado → banco pt-BR → default hardcoded.
+- Usa `(supabase as any)` para contornar tipagem gerada que nao conhece `locale` ainda.
+
+### `src/data/siteCases.ts` (atualizado)
+- `SiteCase` interface: adicionados campos opcionais `locale?: string` e `translation_group?: string`.
+- `getSiteCases(limit?, locale?)`: filtra por `.eq('locale', locale)`, fallback recursivo para pt-BR.
+- `getSiteCaseBySlug(slug, locale?)`: filtra por `locale`, fallback recursivo para pt-BR.
+
+### `src/data/siteLps.ts` (atualizado)
+- `getLpBySlug(slug, locale?)`: tenta locale solicitado, fallback pt-BR.
+- `listLps(locale?)`: filtra por locale.
+
+### `src/data/siteProposals.ts` (atualizado)
+- `SiteProposal` interface: adicionados `locale?` e `translation_group?`.
+- `getProposalBySlug(slug, locale?)`: fallback pt-BR automatico.
+
+### `components/Navbar.tsx` (atualizado)
+- `NAV_LINKS`: objeto `{ 'pt-BR': [...], 'en': [...] }` com labels e paths por locale.
+- `useLocale()` importado para ler e alterar locale.
+- Seletor PT|EN no desktop: botoes abaixo do separador, aparencia minimal.
+- Seletor PT|EN no mobile: rodape do menu overlay, alinhado a direita dos links sociais.
+- `homePath` calculado: `/` em PT, `/en` em EN.
+- `useSiteTexts` recebe `locale` como segundo argumento.
+
+### `components/Seo.tsx` (atualizado)
+- Nova prop `locale?` (override; default = contexto via `useLocale()`).
+- Tags hreflang: gera `<link rel="alternate" hreflang="pt-BR">`, `<link rel="alternate" hreflang="en">` e `<link rel="alternate" hreflang="x-default" href="https://estudiodalla.com/">`.
+- `document.documentElement.lang` definido conforme locale em cada render.
+
+### `pages/Home.tsx`, `About.tsx`, `Methodology.tsx`, `Portfolio.tsx`, `Contact.tsx`, `CaseDetails.tsx`, `ProposalDetails.tsx`, `LandingPage.tsx` (atualizados)
+- Todos importam `useLocale()` e extraem `locale`.
+- `useSiteTexts` recebe `locale` como segundo arg.
+- Funcoes de dados (`getSiteCases`, `getSiteCaseBySlug`, `getLpBySlug`, `getProposalBySlug`) recebem `locale`.
+
+### `pages/AdminPanel.tsx` (atualizado)
+- `adminLocale: 'pt-BR' | 'en'` adicionado ao state.
+- Seletor PT/EN renderizado nas abas Paginas, Cases, Propostas, LPs (toggle com botoes arredondados no topo direito da lista de tabs).
+- `loadTexts(locale?)`, `loadCases(locale?)`: aceitam locale como parametro.
+- `saveTextField`, `saveAllTexts`, `saveCase`: passam `locale: adminLocale` no payload.
+- Interface local `SiteCase` recebeu campos `locale?` e `translation_group?`.
+- `normalizeCase` inclui `locale` e `translation_group` normalizados.
+
+### `supabase/functions/admin/index.ts` (atualizado)
+- `list_cases`: aceita `data.locale` opcional, aplica filtro `.eq('locale', locale)` quando presente.
+- `list_content`: aceita `data.locale` opcional, filtra por locale.
+- `upsert_content`: inclui `locale` no payload (default `'pt-BR'`) e usa `onConflict: 'section_key,locale'`.
+
+### `api/sitemap.xml.js` (atualizado)
+- 10 rotas EN estaticas adicionadas a `STATIC_PAGES`.
+- `buildXml` atualizado: `xmlns:xhtml` adicionado ao urlset. Cada entrada de case e LP gera `<xhtml:link rel="alternate" hreflang>` para PT e EN.
+
+### Migrations novas
+- `20260417120000_add_locale_to_site_content.sql`: locale + unique (section_key, locale).
+- `20260417120001_add_locale_to_cases_lps_proposals.sql`: locale + translation_group em site_cases, site_lps, site_proposals.
+- `20260417120002_seed_en_site_content.sql`: seed EN de chaves SEO, paginas e redes sociais.
+
 ## 2026-04-09 — Otimizacao de Performance
 
 ### `App.tsx` (atualizado)

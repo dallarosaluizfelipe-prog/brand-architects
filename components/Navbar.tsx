@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useLocale } from '@/src/contexts/LocaleContext';
 
 const DallaLogo = ({ className = "" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 1278 294.92" xmlns="http://www.w3.org/2000/svg">
@@ -12,14 +13,25 @@ const DallaLogo = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const NavLinks: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
-  const { pathname } = useLocation();
-  const links = [
+const NAV_LINKS = {
+  'pt-BR': [
     { label: "Estúdio", path: "/estudio" },
     { label: "Método", path: "/metodologia" },
     { label: "Cases", path: "/cases" },
     { label: "Contatos", path: "/contato" },
-  ];
+  ],
+  en: [
+    { label: "Studio", path: "/en/studio" },
+    { label: "Method", path: "/en/methodology" },
+    { label: "Cases", path: "/en/cases" },
+    { label: "Contact", path: "/en/contact" },
+  ],
+};
+
+const NavLinks: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
+  const { pathname } = useLocation();
+  const { locale } = useLocale();
+  const links = NAV_LINKS[locale] ?? NAV_LINKS['pt-BR'];
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
   return (
@@ -36,20 +48,18 @@ const NavLinks: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
+  const { locale, setLocale } = useLocale();
   const t = useSiteTexts({
     social_instagram: 'https://www.instagram.com/estudiodalla/',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
-  });
+  }, locale);
 
-  const links = [
-    { label: "Estúdio", path: "/estudio" },
-    { label: "Método", path: "/metodologia" },
-    { label: "Cases", path: "/cases" },
-    { label: "Contatos", path: "/contato" },
-  ];
+  const links = NAV_LINKS[locale] ?? NAV_LINKS['pt-BR'];
 
   const closeMenu = () => setIsMenuOpen(false);
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
+
+  const homePath = locale === 'en' ? '/en' : '/';
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -66,7 +76,7 @@ const Navbar: React.FC = () => {
     <>
       <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-fit px-4 pt-4 pb-2 md:p-0">
         <div className="flex justify-between items-center w-full nav-blur px-5 py-3 rounded-full shadow-lg border border-neutral-100 md:hidden">
-          <Link to="/" className="font-black tracking-tighter font-sans" onClick={closeMenu}>
+          <Link to={homePath} className="font-black tracking-tighter font-sans" onClick={closeMenu}>
             <DallaLogo className="h-5 w-auto" />
           </Link>
           <button
@@ -82,11 +92,25 @@ const Navbar: React.FC = () => {
 
         {/* Desktop navigation bar */}
         <div className="hidden md:flex nav-blur px-10 py-4 rounded-full items-center shadow-lg gap-10">
-          <Link to="/" className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity">
+          <Link to={homePath} className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity">
             <DallaLogo className="h-5 w-auto" />
           </Link>
           <div className="flex gap-10 text-[16px] font-normal font-sans text-black">
             <NavLinks />
+          </div>
+          {/* Language switcher — desktop */}
+          <div className="flex items-center gap-1 text-[12px] font-sans font-semibold tracking-wider border-l border-neutral-200 pl-6">
+            <button
+              onClick={() => setLocale('pt-BR')}
+              className={`transition-opacity ${locale === 'pt-BR' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+              aria-label="Português"
+            >PT</button>
+            <span className="text-neutral-300">|</span>
+            <button
+              onClick={() => setLocale('en')}
+              className={`transition-opacity ${locale === 'en' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+              aria-label="English"
+            >EN</button>
           </div>
         </div>
       </nav>
@@ -114,9 +138,25 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="px-6 py-10 border-t border-neutral-100">
-            <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-              {t.social_instagram && <a href={t.social_instagram} target="_blank" rel="noreferrer">Instagram</a>}
-              {t.social_behance && <a href={t.social_behance} target="_blank" rel="noreferrer">Behance</a>}
+            <div className="flex items-center justify-between">
+              <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+                {t.social_instagram && <a href={t.social_instagram} target="_blank" rel="noreferrer">Instagram</a>}
+                {t.social_behance && <a href={t.social_behance} target="_blank" rel="noreferrer">Behance</a>}
+              </div>
+              {/* Language switcher — mobile */}
+              <div className="flex items-center gap-2 text-[11px] font-bold font-sans tracking-widest">
+                <button
+                  onClick={() => { setLocale('pt-BR'); closeMenu(); }}
+                  className={`transition-opacity ${locale === 'pt-BR' ? 'text-black' : 'text-neutral-300'}`}
+                  aria-label="Português"
+                >PT</button>
+                <span className="text-neutral-200">|</span>
+                <button
+                  onClick={() => { setLocale('en'); closeMenu(); }}
+                  className={`transition-opacity ${locale === 'en' ? 'text-black' : 'text-neutral-300'}`}
+                  aria-label="English"
+                >EN</button>
+              </div>
             </div>
           </div>
         </div>

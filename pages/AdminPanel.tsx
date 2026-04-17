@@ -26,6 +26,8 @@ interface SiteCase {
   display_order: number;
   is_featured: boolean;
   is_visible: boolean;
+  locale?: string;
+  translation_group?: string;
   meta_title: string;
   meta_description: string;
   meta_keywords: string;
@@ -292,6 +294,7 @@ const PAGE_CONFIGS: PageConfig[] = [
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros' | 'lps'>('dashboard');
+  const [adminLocale, setAdminLocale] = useState<'pt-BR' | 'en'>('pt-BR');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(false);
@@ -360,14 +363,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     display_order: item.display_order ?? 0,
     is_featured: !!item.is_featured,
     is_visible: item.is_visible !== false,
+    locale: item.locale ?? 'pt-BR',
+    translation_group: item.translation_group ?? undefined,
     meta_title: item.meta_title ?? '',
     meta_description: item.meta_description ?? '',
     meta_keywords: item.meta_keywords ?? '',
   });
 
-  const loadCases = async () => {
+  const loadCases = async (locale?: string) => {
+    const loc = locale ?? adminLocale;
     setLoading(true);
-    const result = await apiCall('list_cases');
+    const result = await apiCall('list_cases', { locale: loc });
     const mapped = (result.cases || []).map(normalizeCase);
     setCases(mapped);
     setLoading(false);
@@ -752,9 +758,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     showMessage('Link copiado!');
   };
 
-  const loadTexts = async () => {
+  const loadTexts = async (locale?: string) => {
+    const loc = locale ?? adminLocale;
     setTextsLoading(true);
-    const result = await apiCall('list_content');
+    const result = await apiCall('list_content', { locale: loc });
     const items: any[] = result.content || [];
     const map: Record<string, string> = {};
     for (const item of items) {
@@ -777,6 +784,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     await apiCall('upsert_content', {
       section_key: key,
       title: key,
+      locale: adminLocale,
       body: siteTexts[key] || '',
     });
     setTextsDirty((prev) => {
@@ -796,6 +804,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       await apiCall('upsert_content', {
         section_key: key,
         title: key,
+        locale: adminLocale,
         body: siteTexts[key] || '',
       });
     }
@@ -861,7 +870,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     loadTags();
     loadPartners();
     loadLps();
-    loadTexts();
+    loadTexts(adminLocale);
     loadDashboard();
     loadFormSubmissions();
   }, []);
@@ -876,6 +885,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setLoading(true);
     const payload = {
       ...editingCase,
+      locale: editingCase.locale ?? adminLocale,
       gallery_urls: editingCase.gallery_urls.filter(Boolean),
     };
     await apiCall('upsert_case', payload);
@@ -997,7 +1007,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
         </div>
       )}
 
-      <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap">
+      <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap items-center">
         {(['dashboard', 'leads', 'cases', 'media', 'paginas', 'proposals', 'parceiros', 'lps', 'tags'] as const).map((t) => (
           <button
             key={t}
@@ -1013,6 +1023,25 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
             {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Mídia' : t === 'paginas' ? 'Páginas' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : t === 'lps' ? 'LPs' : 'Tags'}
           </button>
         ))}
+
+        {/* Locale selector — visible in content tabs */}
+        {(['paginas', 'cases', 'proposals', 'lps'].includes(tab)) && (
+          <div className="ml-auto flex items-center gap-1 border border-neutral-200 rounded-full px-3 py-1">
+            <span className="text-[10px] text-neutral-400 font-sans uppercase tracking-widest mr-1">Idioma:</span>
+            {(['pt-BR', 'en'] as const).map((loc) => (
+              <button
+                key={loc}
+                onClick={() => {
+                  setAdminLocale(loc);
+                  loadTexts(loc);
+                }}
+                className={`text-xs font-bold font-sans px-2 py-0.5 rounded-full transition-colors ${adminLocale === loc ? 'bg-black text-white' : 'text-neutral-400 hover:text-black'}`}
+              >
+                {loc === 'pt-BR' ? 'PT' : 'EN'}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="px-6 pb-20 max-w-5xl mx-auto">

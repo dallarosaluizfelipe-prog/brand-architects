@@ -2,8 +2,10 @@
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useLocale } from '@/src/contexts/LocaleContext';
 
 const Methodology: React.FC = () => {
+  const { locale } = useLocale();
   const t = useSiteTexts({
     method_header_badge: 'Dalla Design Brand',
     method_header_title: 'Estetica e consequencia. Posicionamento e decisao.',
@@ -27,7 +29,7 @@ const Methodology: React.FC = () => {
     methodology_seo_description: 'Entenda o metodo proprietario do Estudio Dalla para criar marcas de luxo com posicionamento estrategico e estetica autoral.',
     methodology_seo_keywords: 'metodologia branding, processo de branding luxo, metodo Dalla',
     methodology_og_image: '',
-  });
+  }, locale);
 
   const phases = [
     { id: 'I', label: t.method_phase1_label, title: t.method_phase1_title, desc: t.method_phase1_desc },

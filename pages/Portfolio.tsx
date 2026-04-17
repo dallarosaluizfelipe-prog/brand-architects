@@ -4,8 +4,10 @@ import ContactSection from '../components/ContactSection';
 import { getSiteCases, type SiteCase } from '@/src/data/siteCases';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useLocale } from '@/src/contexts/LocaleContext';
 
 const Portfolio: React.FC = () => {
+  const { locale } = useLocale();
   const [projects, setProjects] = useState<SiteCase[]>([]);
 
   const t = useSiteTexts({
@@ -15,11 +17,11 @@ const Portfolio: React.FC = () => {
     portfolio_seo_description: 'Explore os estudos de caso do Estudio Dalla e veja como nossas identidades visuais geram resultados para marcas de luxo.',
     portfolio_seo_keywords: 'portfolio branding luxo, estudos de caso branding',
     portfolio_og_image: '',
-  });
+  }, locale);
 
   useEffect(() => {
     const loadProjects = async () => {
-      const data = await getSiteCases();
+      const data = await getSiteCases(undefined, locale);
       setProjects(data);
     };
 

@@ -63,10 +63,14 @@ Deno.serve(async (req) => {
 
     switch (action) {
       case "list_cases": {
-        const { data: cases } = await supabase
+        let query = supabase
           .from("site_cases")
           .select("*")
           .order("display_order", { ascending: true });
+        if (data?.locale) {
+          query = query.eq("locale", data.locale);
+        }
+        const { data: cases } = await query;
         return new Response(JSON.stringify({ cases }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -96,18 +100,22 @@ Deno.serve(async (req) => {
       }
 
       case "list_content": {
-        const { data: content } = await supabase
-          .from("site_content")
-          .select("*");
+        let query = supabase.from("site_content").select("*");
+        if (data?.locale) {
+          query = query.eq("locale", data.locale);
+        }
+        const { data: content } = await query;
         return new Response(JSON.stringify({ content }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
       case "upsert_content": {
+        const locale = data.locale ?? 'pt-BR';
+        const contentPayload = { ...data, locale, updated_at: new Date().toISOString() };
         const { data: result, error } = await supabase
           .from("site_content")
-          .upsert({ ...data, updated_at: new Date().toISOString() }, { onConflict: "section_key" })
+          .upsert(contentPayload, { onConflict: "section_key,locale" })
           .select()
           .single();
         if (error) throw error;

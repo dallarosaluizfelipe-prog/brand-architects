@@ -2,8 +2,10 @@
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useLocale } from '@/src/contexts/LocaleContext';
 
 const About: React.FC = () => {
+  const { locale } = useLocale();
   const t = useSiteTexts({
     about_header_badge: 'Nossa identidade',
     about_header_title: 'This is Dalla.',
@@ -32,7 +34,7 @@ const About: React.FC = () => {
     about_seo_description: 'Conheca a filosofia, valores e visao do Estudio Dalla, referencia em branding de luxo em Sao Paulo.',
     about_seo_keywords: 'sobre estudio de branding, branding SP, agencia branding luxo',
     about_og_image: '',
-  });
+  }, locale);
 
   const expertPhotoUrl = t.about_expert_photo_url?.trim()
     ? encodeURI(t.about_expert_photo_url.trim())

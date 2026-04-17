@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useLocale } from '@/src/contexts/LocaleContext';
 import { CONTACT_PHONE_DISPLAY, getWhatsAppUrl } from '@/src/utils/contact';
 import { trackFormSubmission, pushToDataLayer } from '@/src/hooks/useAnalytics';
 import { supabase } from '@/src/integrations/supabase/client';
 
 const Contact: React.FC = () => {
+  const { locale } = useLocale();
   const t = useSiteTexts({
     contact_header_title: "Let's talk.",
     contact_info: `CURITIBA / BR / PR<br />TEL <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="hover:opacity-60 transition-opacity">${CONTACT_PHONE_DISPLAY}</a>`,
@@ -18,7 +20,7 @@ const Contact: React.FC = () => {
     social_instagram: 'https://www.instagram.com/estudiodalla/',
     social_linkedin: '',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
-  });
+  }, locale);
 
   const [form, setForm] = useState({
     name: '',

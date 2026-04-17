@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import ContactSection from "../components/ContactSection";
 import { Seo } from '../components/Seo';
 import { getSiteCaseBySlug, type SiteCase } from "@/src/data/siteCases";
+import { useLocale } from '@/src/contexts/LocaleContext';
 
 const formatDate = (value: string): string => {
   if (!value) return "";
@@ -17,19 +18,20 @@ const formatDate = (value: string): string => {
 
 const CaseDetails: React.FC = () => {
   const { slug = "" } = useParams();
+  const { locale } = useLocale();
   const [project, setProject] = useState<SiteCase | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadCase = async () => {
       setLoading(true);
-      const item = await getSiteCaseBySlug(slug);
+      const item = await getSiteCaseBySlug(slug, locale);
       setProject(item);
       setLoading(false);
     };
 
     loadCase();
-  }, [slug]);
+  }, [slug, locale]);
 
   if (loading) {
     return (

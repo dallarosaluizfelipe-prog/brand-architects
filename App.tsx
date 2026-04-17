@@ -6,6 +6,7 @@ import WhatsAppFloatingButton from "./components/WhatsAppFloatingButton";
 import Home from "./pages/Home";
 import TrackingScripts from "./components/TrackingScripts";
 import { useAnalytics } from "./src/hooks/useAnalytics";
+import { LocaleProvider } from "./src/contexts/LocaleContext";
 
 // Lazy-loaded pages — carregam apenas quando a rota é acessada
 const About = lazy(() => import("./pages/About"));
@@ -135,6 +136,73 @@ const AppRoutes: React.FC = () => {
       <Route path="/methodology" element={<Navigate to="/metodologia" replace />} />
       <Route path="/portfolio" element={<Navigate to="/cases" replace />} />
       <Route path="/contact" element={<Navigate to="/contato" replace />} />
+
+      {/* === English routes === */}
+      <Route
+        path="/en"
+        element={
+          <PublicLayout>
+            <Home />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/en/studio"
+        element={
+          <PublicLayout>
+            <About />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/en/methodology"
+        element={
+          <PublicLayout>
+            <Methodology />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/en/cases"
+        element={
+          <PublicLayout>
+            <Portfolio />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/en/cases/:slug"
+        element={
+          <PublicLayout>
+            <CaseDetails />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/en/proposal/:slug"
+        element={
+          <PublicLayout>
+            <ProposalDetails />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/en/lp/:slug"
+        element={
+          <PublicLayout>
+            <LandingPage />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/en/contact"
+        element={
+          <PublicLayout>
+            <Contact />
+          </PublicLayout>
+        }
+      />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>
@@ -146,7 +214,9 @@ const AppRoutes: React.FC = () => {
 const App: React.FC = () => (
   <BrowserRouter>
     <TrackingScripts />
-    <AppRoutes />
+    <LocaleProvider>
+      <AppRoutes />
+    </LocaleProvider>
   </BrowserRouter>
 );
 

@@ -6,11 +6,17 @@ const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '';
 
 /** Static public routes — admin and redirect aliases are intentionally excluded */
 const STATIC_PAGES = [
-  { path: '/',            priority: '1.0', changefreq: 'weekly'  },
-  { path: '/estudio',     priority: '0.8', changefreq: 'monthly' },
-  { path: '/metodologia', priority: '0.8', changefreq: 'monthly' },
-  { path: '/cases',       priority: '0.9', changefreq: 'weekly'  },
-  { path: '/contato',     priority: '0.7', changefreq: 'monthly' },
+  { path: '/',              priority: '1.0', changefreq: 'weekly'  },
+  { path: '/estudio',       priority: '0.8', changefreq: 'monthly' },
+  { path: '/metodologia',   priority: '0.8', changefreq: 'monthly' },
+  { path: '/cases',         priority: '0.9', changefreq: 'weekly'  },
+  { path: '/contato',       priority: '0.7', changefreq: 'monthly' },
+  // English routes
+  { path: '/en',            priority: '0.9', changefreq: 'weekly'  },
+  { path: '/en/studio',     priority: '0.7', changefreq: 'monthly' },
+  { path: '/en/methodology',priority: '0.7', changefreq: 'monthly' },
+  { path: '/en/cases',      priority: '0.8', changefreq: 'weekly'  },
+  { path: '/en/contact',    priority: '0.6', changefreq: 'monthly' },
 ];
 
 /** Fallback slugs used when Supabase is unreachable */
@@ -28,8 +34,14 @@ const FALLBACK_LPS = [
 ];
 
 function buildXml(staticPages, caseEntries, lpEntries, today) {
-  const urlBlock = (loc, lastmod, changefreq, priority) =>
-    `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+  const alt = (hreflang, loc) => `      <xhtml:link rel="alternate" hreflang="${hreflang}" href="${loc}"/>`;
+
+  const urlBlock = (loc, lastmod, changefreq, priority, ptLoc, enLoc) => {
+    const alternates = ptLoc && enLoc
+      ? `\n${alt('pt-BR', ptLoc)}\n${alt('en', enLoc)}\n${alt('x-default', `${SITE_URL}/`)}`
+      : '';
+    return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>${alternates}\n  </url>`;
+  };
 
   const staticUrls = staticPages.map(p =>
     urlBlock(`${SITE_URL}${p.path}`, today, p.changefreq, p.priority)
@@ -38,17 +50,21 @@ function buildXml(staticPages, caseEntries, lpEntries, today) {
   const caseUrls = caseEntries.map(c => {
     const lastmod = c.updated_at ? c.updated_at.split('T')[0] : today;
     const priority = c.is_featured ? '0.9' : '0.7';
-    return urlBlock(`${SITE_URL}/cases/${c.slug}`, lastmod, 'monthly', priority);
+    const ptLoc = `${SITE_URL}/cases/${c.slug}`;
+    const enLoc = `${SITE_URL}/en/cases/${c.slug}`;
+    return urlBlock(ptLoc, lastmod, 'monthly', priority, ptLoc, enLoc);
   });
 
   const lpUrls = lpEntries.map(l => {
     const lastmod = l.updated_at ? l.updated_at.split('T')[0] : today;
-    return urlBlock(`${SITE_URL}/lp/${l.slug}`, lastmod, 'monthly', '0.8');
+    const ptLoc = `${SITE_URL}/lp/${l.slug}`;
+    const enLoc = `${SITE_URL}/en/lp/${l.slug}`;
+    return urlBlock(ptLoc, lastmod, 'monthly', '0.8', ptLoc, enLoc);
   });
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     ...staticUrls,
     ...caseUrls,
     ...lpUrls,

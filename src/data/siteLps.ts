@@ -138,14 +138,30 @@ const normalizeLp = (item: any): SiteLp => ({
   updated_at: item.updated_at,
 });
 
-export const getLpBySlug = async (slug: string): Promise<SiteLp | null> => {
+export const getLpBySlug = async (slug: string, locale: string = 'pt-BR'): Promise<SiteLp | null> => {
   try {
-    const { data, error } = await (supabase as any)
+    let data: any = null;
+    let error: any = null;
+
+    // Try requested locale first
+    ({ data, error } = await (supabase as any)
       .from('site_lps')
       .select('*')
       .eq('slug', slug)
       .eq('is_visible', true)
-      .single();
+      .eq('locale', locale)
+      .single());
+
+    // Fallback to pt-BR if not found
+    if ((error || !data) && locale !== 'pt-BR') {
+      ({ data, error } = await (supabase as any)
+        .from('site_lps')
+        .select('*')
+        .eq('slug', slug)
+        .eq('is_visible', true)
+        .eq('locale', 'pt-BR')
+        .single());
+    }
 
     if (error || !data) return null;
     return normalizeLp(data);
@@ -154,12 +170,13 @@ export const getLpBySlug = async (slug: string): Promise<SiteLp | null> => {
   }
 };
 
-export const listLps = async (): Promise<SiteLp[]> => {
+export const listLps = async (locale: string = 'pt-BR'): Promise<SiteLp[]> => {
   try {
     const { data, error } = await (supabase as any)
       .from('site_lps')
       .select('*')
       .eq('is_visible', true)
+      .eq('locale', locale)
       .order('display_order', { ascending: true });
 
     if (error || !data) return [];

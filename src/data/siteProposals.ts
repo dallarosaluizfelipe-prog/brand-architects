@@ -13,6 +13,8 @@ export interface SiteProposal {
   about: string;
   footer_links: { label: string; url: string }[];
   is_public: boolean;
+  locale?: string;
+  translation_group?: string;
   meta_title?: string;
   meta_description?: string;
   meta_keywords?: string;
@@ -42,14 +44,25 @@ const normalizeProposal = (item: any): SiteProposal => ({
   updated_at: item.updated_at,
 });
 
-export const getProposalBySlug = async (slug: string): Promise<SiteProposal | null> => {
+export const getProposalBySlug = async (slug: string, locale: string = 'pt-BR'): Promise<SiteProposal | null> => {
   try {
-    const { data, error } = await (supabase as any)
+    let { data, error } = await (supabase as any)
       .from('site_proposals')
       .select('*')
       .eq('slug', slug)
       .eq('is_public', true)
+      .eq('locale', locale)
       .single();
+
+    if ((error || !data) && locale !== 'pt-BR') {
+      ({ data, error } = await (supabase as any)
+        .from('site_proposals')
+        .select('*')
+        .eq('slug', slug)
+        .eq('is_public', true)
+        .eq('locale', 'pt-BR')
+        .single());
+    }
 
     if (error || !data) return null;
     return normalizeProposal(data);

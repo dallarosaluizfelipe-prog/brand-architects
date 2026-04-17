@@ -2,6 +2,37 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-17 — Implementacao completa de internacionalizacao PT-BR / EN:**
+  - **Motivacao:** Expansao do site para publico internacional. Usuario solicitou versao em ingles com rotas `/en/`, mantendo portugues como idioma padrao, modelo de dados extensivel, Admin multilingual e SEO internacional completo.
+  - **Arquitetura geral:** URLs separadas (`/` = pt-BR, `/en/*` = en). Modelo por linha com coluna `locale` em todas as tabelas dinamicas (sem colunas `_en` hardcoded). Extensivel para novos idiomas.
+  - **Fase 0 — Infraestrutura de Locale:**
+    - `src/contexts/LocaleContext.tsx` (novo): Provider + hook `useLocale()`. Logica de deteccao: locale na URL -> localStorage `dalla_locale` -> `navigator.languages` -> `pt-BR`. Redirect automatico unico por sessao (sessionStorage), bots detectados pelo user-agent e excluidos. Atualiza `document.documentElement.lang` automaticamente.
+    - `src/utils/localeRoutes.ts` (novo): Mapa bidirecional pt <-> en de paths, funcao `switchLocaleHref(path, locale)`, `detectLocaleFromPath(pathname)`, `localeCanonical(locale, path)`. Suporta rotas dinamicas `/cases/:slug`, `/lp/:slug`, `/proposta/:slug`.
+    - `App.tsx`: `LocaleProvider` adicionado envolvendo `AppRoutes`. Arvore de rotas `/en/*` criada com todas as paginas publicas (Home, About, Methodology, Portfolio, CaseDetails, Contact, LandingPage, ProposalDetails).
+  - **Fase 1 — Migrations:**
+    - `20260417120000_add_locale_to_site_content.sql`: ADD COLUMN `locale TEXT DEFAULT 'pt-BR'`, DROP UNIQUE `section_key`, ADD UNIQUE `(section_key, locale)`, INDEX.
+    - `20260417120001_add_locale_to_cases_lps_proposals.sql`: ADD `locale` + `translation_group UUID` em `site_cases`, `site_lps`, `site_proposals`. Dados existentes atualizados para `pt-BR`, cada row recebe `translation_group` unico.
+    - `20260417120002_seed_en_site_content.sql`: Seed de versoes EN das chaves criticas de SEO, paginas e redes sociais. Tom premium de negocios.
+  - **Fase 2 — Camada de dados:**
+    - `src/hooks/useSiteTexts.ts`: Aceita `locale` como segundo parametro. Busca por `(section_key, locale)`. Fallback automatico pt-BR -> default hardcoded. Cache keyed por `{locale}:{section_key}`. Usa `(supabase as any)` para contornar tipagem do schema gerado.
+    - `src/data/siteCases.ts`: `getSiteCases(limit, locale)` e `getSiteCaseBySlug(slug, locale)` com filtro `.eq('locale', locale)` e fallback automatico para pt-BR.
+    - `src/data/siteLps.ts`: `getLpBySlug(slug, locale)` e `listLps(locale)` com mesmo padrao de fallback.
+    - `src/data/siteProposals.ts`: `getProposalBySlug(slug, locale)` com fallback pt-BR.
+    - Interfaces `SiteCase` e `SiteProposal` receberam campos opcionais `locale` e `translation_group`.
+  - **Fase 3 — Roteamento e Navbar:**
+    - `components/Navbar.tsx`: `NAV_LINKS` agora e um objeto keyed por locale com labels e paths corretos (PT e EN). Seletor PT|EN adicionado no desktop (separador vertical) e mobile (rodape do menu). `useLocale()` importado. `homePath` calculado conforme locale atual. `useSiteTexts` recebe `locale` como segundo arg.
+  - **Fase 4 — Paginas publicas:**
+    - `Home.tsx`, `About.tsx`, `Methodology.tsx`, `Portfolio.tsx`, `Contact.tsx`, `CaseDetails.tsx`, `ProposalDetails.tsx`, `LandingPage.tsx`: Todas importam `useLocale()` e passam `locale` para `useSiteTexts` e funcoes de dados.
+  - **Fase 5 — Admin multilingual:**
+    - `pages/AdminPanel.tsx`: State `adminLocale: 'pt-BR' | 'en'` adicionado. Seletor PT/EN aparece nas abas Paginas, Cases, Propostas, LPs (toggle com botoes estilizados). `loadTexts(locale)`, `loadCases(locale)` aceitam locale. `saveTextField`, `saveAllTexts` e `saveCase` passam `locale` para o backend. Interface local `SiteCase` recebeu `locale?` e `translation_group?`.
+    - `supabase/functions/admin/index.ts`: `list_cases` aceita `data.locale` para filtrar. `list_content` aceita `data.locale`. `upsert_content` agora usa `onConflict: 'section_key,locale'` e inclui `locale` no payload.
+  - **Fase 6 — SEO internacional:**
+    - `components/Seo.tsx`: Prop `locale` adicionada (opcional, fallback para contexto). Gera tags `<link rel="alternate" hreflang>` para pt-BR, en e x-default (`/`). Canonical correto por locale. `document.documentElement.lang` atualizado conforme locale.
+    - `api/sitemap.xml.js`: Rotas EN estaticas adicionadas. `buildXml` agora gera `<xhtml:link rel="alternate">` em cada URL de case e LP apontando para PT e EN. `xmlns:xhtml` adicionado ao urlset.
+  - **Validacao:**
+    - `npx tsc --noEmit`: zero erros.
+    - `npm run build`: sucesso. Chunks identicos ao ciclo anterior (sem regressao de performance).
+
 - **2026-04-09 — Otimizacao de performance: code splitting, lazy loading e tracking nao-bloqueante:**
   - **Motivacao:** Auditoria de performance identificou bundle inicial massivo (TipTap 460KB + jsPDF/html2canvas 700KB+ carregados para todos os usuarios), zero code splitting nas rotas e scripts de rastreamento competindo com o render inicial.
   - **Alteracoes aplicadas:**
