@@ -49,7 +49,7 @@ const NavLinks: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
-  const { locale, setLocale } = useLocale();
+  const { locale } = useLocale();
   const t = useSiteTexts({
     social_instagram: 'https://www.instagram.com/estudiodalla/',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
