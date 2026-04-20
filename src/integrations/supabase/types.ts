@@ -84,11 +84,13 @@ export type Database = {
           id: string
           is_featured: boolean
           is_visible: boolean
+          locale: string
           meta_description: string | null
           meta_keywords: string | null
           meta_title: string | null
           slug: string | null
           title: string
+          translation_group: string
           updated_at: string
         }
         Insert: {
@@ -106,11 +108,13 @@ export type Database = {
           id?: string
           is_featured?: boolean
           is_visible?: boolean
+          locale?: string
           meta_description?: string | null
           meta_keywords?: string | null
           meta_title?: string | null
           slug?: string | null
           title: string
+          translation_group?: string
           updated_at?: string
         }
         Update: {
@@ -128,11 +132,13 @@ export type Database = {
           id?: string
           is_featured?: boolean
           is_visible?: boolean
+          locale?: string
           meta_description?: string | null
           meta_keywords?: string | null
           meta_title?: string | null
           slug?: string | null
           title?: string
+          translation_group?: string
           updated_at?: string
         }
         Relationships: []
@@ -142,6 +148,7 @@ export type Database = {
           body: string | null
           id: string
           image_url: string | null
+          locale: string
           section_key: string
           subtitle: string | null
           title: string | null
@@ -152,6 +159,7 @@ export type Database = {
           body?: string | null
           id?: string
           image_url?: string | null
+          locale?: string
           section_key: string
           subtitle?: string | null
           title?: string | null
@@ -162,6 +170,7 @@ export type Database = {
           body?: string | null
           id?: string
           image_url?: string | null
+          locale?: string
           section_key?: string
           subtitle?: string | null
           title?: string | null
@@ -265,6 +274,7 @@ export type Database = {
           hero_video_mobile: string
           id: string
           is_visible: boolean
+          locale: string
           meta_description: string
           meta_keywords: string
           meta_title: string
@@ -282,6 +292,7 @@ export type Database = {
           partners_title: string
           slug: string
           title: string
+          translation_group: string
           updated_at: string
         }
         Insert: {
@@ -315,6 +326,7 @@ export type Database = {
           hero_video_mobile?: string
           id?: string
           is_visible?: boolean
+          locale?: string
           meta_description?: string
           meta_keywords?: string
           meta_title?: string
@@ -332,6 +344,7 @@ export type Database = {
           partners_title?: string
           slug: string
           title?: string
+          translation_group?: string
           updated_at?: string
         }
         Update: {
@@ -365,6 +378,7 @@ export type Database = {
           hero_video_mobile?: string
           id?: string
           is_visible?: boolean
+          locale?: string
           meta_description?: string
           meta_keywords?: string
           meta_title?: string
@@ -382,6 +396,7 @@ export type Database = {
           partners_title?: string
           slug?: string
           title?: string
+          translation_group?: string
           updated_at?: string
         }
         Relationships: []
@@ -465,6 +480,7 @@ export type Database = {
           footer_links: Json | null
           id: string
           is_public: boolean | null
+          locale: string
           meta_description: string | null
           meta_keywords: string | null
           meta_robots: string | null
@@ -474,6 +490,7 @@ export type Database = {
           subtitle: string | null
           timeline: string | null
           title: string
+          translation_group: string
           updated_at: string | null
         }
         Insert: {
@@ -485,6 +502,7 @@ export type Database = {
           footer_links?: Json | null
           id?: string
           is_public?: boolean | null
+          locale?: string
           meta_description?: string | null
           meta_keywords?: string | null
           meta_robots?: string | null
@@ -494,6 +512,7 @@ export type Database = {
           subtitle?: string | null
           timeline?: string | null
           title?: string
+          translation_group?: string
           updated_at?: string | null
         }
         Update: {
@@ -505,6 +524,7 @@ export type Database = {
           footer_links?: Json | null
           id?: string
           is_public?: boolean | null
+          locale?: string
           meta_description?: string | null
           meta_keywords?: string | null
           meta_robots?: string | null
@@ -514,6 +534,7 @@ export type Database = {
           subtitle?: string | null
           timeline?: string | null
           title?: string
+          translation_group?: string
           updated_at?: string | null
         }
         Relationships: []

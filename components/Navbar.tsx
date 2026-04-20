@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 import { useLocale } from '@/src/contexts/LocaleContext';
+import LocaleFlagSwitcher from './LocaleFlagSwitcher';
 
 const DallaLogo = ({ className = "" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 1278 294.92" xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +49,7 @@ const NavLinks: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
-  const { locale, setLocale } = useLocale();
+  const { locale } = useLocale();
   const t = useSiteTexts({
     social_instagram: 'https://www.instagram.com/estudiodalla/',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
@@ -79,15 +80,18 @@ const Navbar: React.FC = () => {
           <Link to={homePath} className="font-black tracking-tighter font-sans" onClick={closeMenu}>
             <DallaLogo className="h-5 w-auto" />
           </Link>
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="flex flex-col gap-1.5 p-3 -m-2 rounded-xl"
-            aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
-          >
-            <span className={`block w-6 h-0.5 bg-black transition-transform duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
-            <span className={`block w-6 h-0.5 bg-black transition-opacity duration-300 ${isMenuOpen ? "opacity-0" : ""}`}></span>
-            <span className={`block w-6 h-0.5 bg-black transition-transform duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
-          </button>
+          <div className="flex items-center gap-3">
+            <LocaleFlagSwitcher />
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="flex flex-col gap-1.5 p-3 -m-2 rounded-xl"
+              aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+            >
+              <span className={`block w-6 h-0.5 bg-black transition-transform duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
+              <span className={`block w-6 h-0.5 bg-black transition-opacity duration-300 ${isMenuOpen ? "opacity-0" : ""}`}></span>
+              <span className={`block w-6 h-0.5 bg-black transition-transform duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
+            </button>
+          </div>
         </div>
 
         {/* Desktop navigation bar */}
@@ -99,18 +103,8 @@ const Navbar: React.FC = () => {
             <NavLinks />
           </div>
           {/* Language switcher — desktop */}
-          <div className="flex items-center gap-1 text-[12px] font-sans font-semibold tracking-wider border-l border-neutral-200 pl-6">
-            <button
-              onClick={() => setLocale('pt-BR')}
-              className={`transition-opacity ${locale === 'pt-BR' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-              aria-label="Português"
-            >PT</button>
-            <span className="text-neutral-300">|</span>
-            <button
-              onClick={() => setLocale('en')}
-              className={`transition-opacity ${locale === 'en' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-              aria-label="English"
-            >EN</button>
+          <div className="flex items-center border-l border-neutral-200 pl-6">
+            <LocaleFlagSwitcher size="md" />
           </div>
         </div>
       </nav>
@@ -143,20 +137,8 @@ const Navbar: React.FC = () => {
                 {t.social_instagram && <a href={t.social_instagram} target="_blank" rel="noreferrer">Instagram</a>}
                 {t.social_behance && <a href={t.social_behance} target="_blank" rel="noreferrer">Behance</a>}
               </div>
-              {/* Language switcher — mobile */}
-              <div className="flex items-center gap-2 text-[11px] font-bold font-sans tracking-widest">
-                <button
-                  onClick={() => { setLocale('pt-BR'); closeMenu(); }}
-                  className={`transition-opacity ${locale === 'pt-BR' ? 'text-black' : 'text-neutral-300'}`}
-                  aria-label="Português"
-                >PT</button>
-                <span className="text-neutral-200">|</span>
-                <button
-                  onClick={() => { setLocale('en'); closeMenu(); }}
-                  className={`transition-opacity ${locale === 'en' ? 'text-black' : 'text-neutral-300'}`}
-                  aria-label="English"
-                >EN</button>
-              </div>
+              {/* Language switcher — mobile (inside open menu) */}
+              <LocaleFlagSwitcher size="md" onSwitch={closeMenu} />
             </div>
           </div>
         </div>
