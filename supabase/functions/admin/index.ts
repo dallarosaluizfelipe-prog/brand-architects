@@ -137,10 +137,14 @@ Deno.serve(async (req) => {
       }
 
       case "list_proposals": {
-        const { data: proposals } = await supabase
+        let query = supabase
           .from("site_proposals")
           .select("*")
           .order("created_at", { ascending: false });
+        if (data?.locale) {
+          query = query.eq("locale", data.locale);
+        }
+        const { data: proposals } = await query;
         return new Response(JSON.stringify({ proposals }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -317,10 +321,14 @@ Deno.serve(async (req) => {
       }
 
       case "list_lps": {
-        const { data: lps, error } = await supabase
+        let query = supabase
           .from("site_lps")
           .select("*")
           .order("display_order", { ascending: true });
+        if (data?.locale) {
+          query = query.eq("locale", data.locale);
+        }
+        const { data: lps, error } = await query;
         if (error) throw error;
         return new Response(JSON.stringify({ lps }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -56,7 +56,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     getSiteCases(5, locale).then(setHomeCases);
     getSitePartners().then(setPartners);
-  }, []);
+  }, [locale]);
   return (
     <>
       <Seo

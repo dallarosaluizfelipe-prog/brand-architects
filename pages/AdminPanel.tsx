@@ -434,9 +434,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     updated_at: item.updated_at,
   });
 
-  const loadProposals = async () => {
+  const loadProposals = async (locale?: string) => {
+    const loc = locale ?? adminLocale;
     setProposalsLoading(true);
-    const result = await apiCall('list_proposals');
+    const result = await apiCall('list_proposals', { locale: loc });
     const mapped = (result.proposals || []).map(normalizeProposal);
     setProposals(mapped);
     setProposalsLoading(false);
@@ -445,7 +446,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const saveProposal = async () => {
     if (!editingProposal) return;
     setProposalsLoading(true);
-    await apiCall('upsert_proposal', editingProposal);
+    const payload = {
+      ...editingProposal,
+      locale: (editingProposal as any).locale ?? adminLocale,
+    };
+    await apiCall('upsert_proposal', payload);
     setEditingProposal(null);
     await loadProposals();
     showMessage('Proposta salva!');
@@ -664,9 +669,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     updated_at: item.updated_at,
   });
 
-  const loadLps = async () => {
+  const loadLps = async (locale?: string) => {
+    const loc = locale ?? adminLocale;
     setLpsLoading(true);
-    const result = await apiCall('list_lps');
+    const result = await apiCall('list_lps', { locale: loc });
     setLps((result.lps || []).map(normalizeLp));
     setLpsLoading(false);
   };
@@ -674,7 +680,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const saveLp = async () => {
     if (!editingLp) return;
     setLpsLoading(true);
-    await apiCall('upsert_lp', editingLp);
+    const payload = {
+      ...editingLp,
+      locale: (editingLp as any).locale ?? adminLocale,
+    };
+    await apiCall('upsert_lp', payload);
     setEditingLp(null);
     await loadLps();
     showMessage('LP salva!');
@@ -1034,6 +1044,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 onClick={() => {
                   setAdminLocale(loc);
                   loadTexts(loc);
+                  loadCases(loc);
+                  loadProposals(loc);
+                  loadLps(loc);
                 }}
                 className={`text-xs font-bold font-sans px-2 py-0.5 rounded-full transition-colors ${adminLocale === loc ? 'bg-black text-white' : 'text-neutral-400 hover:text-black'}`}
               >

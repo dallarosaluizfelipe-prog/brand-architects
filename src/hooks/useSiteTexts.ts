@@ -7,8 +7,9 @@ interface SiteContentRow {
   body: string | null;
 }
 
-// Cache keyed by "{locale}:{section_key}"
-const cache = new Map<string, string>();
+// Cache keyed by "{locale}:{section_key}" with TTL
+const CACHE_TTL_MS = 60_000; // 60 seconds
+const cache = new Map<string, { value: string; ts: number }>();
 
 /**
  * Fetch multiple site_content rows by keys for a given locale.
@@ -22,9 +23,10 @@ export function useSiteTexts(
 
   const [texts, setTexts] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};
+    const now = Date.now();
     for (const key of keys) {
-      const cached = cache.get(`${locale}:${key}`) ?? cache.get(`pt-BR:${key}`);
-      initial[key] = cached ?? defaults[key];
+      const entry = cache.get(`${locale}:${key}`) ?? cache.get(`pt-BR:${key}`);
+      initial[key] = (entry && now - entry.ts < CACHE_TTL_MS) ? entry.value : defaults[key];
     }
     return initial;
   });
@@ -34,8 +36,12 @@ export function useSiteTexts(
       new Set([locale, ...(locale !== 'pt-BR' ? ['pt-BR'] : [])])
     );
 
+    const now = Date.now();
     const uncached = keys.filter(
-      (k) => localesToFetch.some((l) => !cache.has(`${l}:${k}`))
+      (k) => localesToFetch.some((l) => {
+        const entry = cache.get(`${l}:${k}`);
+        return !entry || now - entry.ts >= CACHE_TTL_MS;
+      })
     );
     if (uncached.length === 0) return;
 
@@ -52,7 +58,7 @@ export function useSiteTexts(
           if (!row.body) continue;
           if (!byLocale[row.locale]) byLocale[row.locale] = {};
           byLocale[row.locale][row.section_key] = row.body;
-          cache.set(`${row.locale}:${row.section_key}`, row.body);
+          cache.set(`${row.locale}:${row.section_key}`, { value: row.body, ts: Date.now() });
         }
 
         const result: Record<string, string> = { ...defaults };
