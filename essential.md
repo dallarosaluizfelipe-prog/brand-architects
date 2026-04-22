@@ -662,3 +662,13 @@ This document captures details of components, pages, functions, and any code add
 
 ### Validação
 - Build de produção executado com sucesso: `npm run build`.
+
+---
+## Atualização — Edição multi-locale no Admin (Páginas)
+- **`pages/AdminPanel.tsx`**:
+  - `loadHero(locale?)` agora aceita locale e filtra `list_content` por idioma.
+  - `saveHero` envia `locale: adminLocale` em ambos os `upsert_content` (desktop + mobile).
+  - Switcher de idioma (linha ~1045) chama `loadHero(loc)` adicionalmente.
+  - Badge visual "Editando: PT" / "Editing: EN" no header da página em edição.
+- Resultado: ao trocar para EN, todos os campos (SEO, OG image, textos, hero) carregam a versão EN; ao salvar, gravam na linha EN sem afetar PT.
+- Constraint única `(section_key, locale)` em `site_content` garante o upsert correto.

@@ -364,3 +364,14 @@ This file records a chronological history of changes, requests, and reasoning fo
     - Migration SQL criada para seed inicial da tag Clarity (`20260329120000_seed_clarity_tag.sql`).
     - Lógica garante que o script não será injetado mais de uma vez, mesmo que existam múltiplas tags ou seeds repetidos.
   - **Validação:** Não há duplicidade de script Clarity no site. Documentação atualizada em essential.md.
+
+---
+## 2026-04-22 14:06 — Fix: Edição de conteúdo em EN não persistia
+**Pedido:** Ao trocar para EN no admin (aba Páginas) e editar campos, as alterações não eram salvas.
+**Causa:** `loadHero` e `saveHero` não passavam o locale (sempre liam/gravavam pt-BR). O switcher de idioma também não recarregava o Hero.
+**Fix:**
+- `loadHero(locale)` e `saveHero` agora propagam `adminLocale` em todas as chamadas `upsert_content` / `list_content`.
+- Switcher de idioma chama `loadHero(loc)` ao trocar.
+- Adicionado badge "Editando: PT" / "Editing: EN" no header da página em edição para deixar claro qual versão está sendo salva.
+- Edge function `admin/upsert_content` já usava `onConflict: section_key,locale` (constraint única adicionada na migration anterior).
+- Cobre todas as páginas (Home, Estúdio, Método, Portfolio, Contato, Geral) pois usam o mesmo handler `saveTextField`/`saveAllTexts` que já incluía locale.
