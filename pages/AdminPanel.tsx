@@ -2461,6 +2461,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{currentPage.icon}</span>
                         <h2 className="text-lg font-sans font-bold">{currentPage.label}</h2>
+                        <span className="ml-2 text-[10px] font-sans font-bold uppercase tracking-widest bg-black text-white px-2.5 py-1 rounded-full">
+                          {adminLocale === 'pt-BR' ? 'Editando: PT' : 'Editing: EN'}
+                        </span>
                       </div>
                     </div>
                     {pageDirtyCount > 0 && (
