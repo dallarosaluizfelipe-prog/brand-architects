@@ -1,50 +1,62 @@
 
 
-## Problem
-When editing content in the Admin panel with locale switched to EN, changes don't persist. Root cause: the admin upsert flow ignores the current locale selector — it always writes to `pt-BR` rows (or fails silently because the upsert key doesn't include locale properly).
+## Objetivo
+Otimizar `robots.txt` e `sitemap.xml` para SEO + GEO (busca generativa), bloquear toda a área `/admin` e variações, e entregar um sitemap perfeito para o Google Search Console com `hreflang` correto em todas as URLs (PT + EN).
 
-## Investigation Plan
-Before writing code, I need to confirm exactly where the locale is dropped. I'll inspect:
+## 1. `public/robots.txt` — versão otimizada
 
-1. `pages/AdminPanel.tsx` — how the locale selector state is wired into save handlers for the "Páginas" tab (Home, About, Methodology, Portfolio, Contact, General SEO).
-2. `supabase/functions/admin/index.ts` — the `upsert_content` action: does it accept and use a `locale` parameter, and does the upsert `onConflict` target `(section_key, locale)`?
-3. `src/hooks/useSiteTexts.ts` — already locale-aware on read (good), so the fix is purely on write.
-4. The unique constraint added in the last migration (`site_content_section_key_locale_unique`) — confirm it exists so upsert with `onConflict: 'section_key,locale'` works.
+- **Bloquear** rotas administrativas e técnicas: `/admin`, `/admin/*`, `/#admin` (hash não é rastreado, mas mantemos consistência), `/api/`, `/proposta/`, `/proposal/` (propostas são `noindex` por padrão e privadas), e parâmetros UTM via `Disallow: /*?utm_*`.
+- **Permitir** explicitamente: `/`, assets estáticos (`*.css`, `*.js`, `*.svg`, `*.png`, `*.jpg`, `*.webp`, `*.mp4`, `*.mov`) — Google precisa renderizar.
+- **Bots de busca tradicionais** (Googlebot, Bingbot, Slurp, DuckDuckBot, Yandex): mesmas regras do default.
+- **Bots de IA / GEO** (GPTBot, ChatGPT-User, OAI-SearchBot, anthropic-ai, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, Gemini, GoogleOther, Applebot-Extended, YouBot, cohere-ai, meta-externalagent, Amazonbot, Bytespider, DiffBot): **Allow `/`** + **Disallow `/admin`** e `/proposta`. Garante visibilidade em respostas generativas (estratégia GEO) preservando privacidade.
+- **Bloquear bots agressivos / scrapers irrelevantes**: AhrefsBot, SemrushBot, MJ12bot, DotBot (`Disallow: /`).
+- **Crawl-delay**: omitido para Google/Bing (eles ignoram); aplicado apenas para bots agressivos quando aplicável.
+- **Host** + **Sitemap** no rodapé:
+  ```
+  Host: https://estudiodalla.com
+  Sitemap: https://estudiodalla.com/sitemap.xml
+  ```
 
-## Fix Plan
+## 2. `api/sitemap.xml.js` — versão ideal para Search Console
 
-### 1. Admin Panel (`pages/AdminPanel.tsx`)
-- Ensure the **locale selector** in the "Páginas" tab is read by every save handler for site content (hero, sections, SEO fields, OG image).
-- Pass `locale` explicitly in every `upsert_content` payload sent to the edge function.
-- When the user switches locale in the admin, **reload the form fields** for that locale (fetching the matching rows from `site_content` filtered by `locale`), so they edit the right version instead of overwriting PT values.
-- Show a clear visual indicator ("Editando: Português" / "Editing: English") on each page card so the user knows which version they're saving.
+Correções e melhorias:
 
-### 2. Edge Function (`supabase/functions/admin/index.ts`)
-- Update `upsert_content` to:
-  - Accept `locale` in the payload (default `'pt-BR'` only if missing).
-  - Validate locale is one of `'pt-BR' | 'en'`.
-  - Upsert with `onConflict: 'section_key,locale'` — relies on the unique constraint added previously.
-- Apply the same fix to any related actions (e.g. `upsert_seo`, `upsert_og_image`) that touch `site_content`.
+**a. URLs estáticas alinhadas ao roteador real**
+- Remover entrada legada e adicionar todas as rotas reais (PT + EN) com `hreflang` recíproco em **todas** elas, não só nos cases:
+  - `/` ↔ `/en`
+  - `/estudio` ↔ `/en/studio`
+  - `/metodologia` ↔ `/en/methodology`
+  - `/cases` ↔ `/en/cases`
+  - `/contato` ↔ `/en/contact`
+- `x-default` apontando sempre para a versão PT (mercado primário SP/Brasil).
 
-### 3. Coverage across all pages
-The same `upsert_content` path is used by every "Páginas" sub-tab (Home, Estúdio, Método, Portfolio, Contato, Geral, plus SEO and OG image fields). Fixing the handler centrally makes EN editing work for **all of them at once**. I'll verify by listing every save call site in `AdminPanel.tsx` and confirming each forwards `locale`.
+**b. Cases dinâmicos**
+- Buscar do Supabase agrupados por `translation_group` para parear PT↔EN corretamente quando a tradução existir; quando não existir, listar só a versão PT com `hreflang` apontando só para si + `x-default`.
+- `lastmod` em formato ISO completo `YYYY-MM-DD` (Search Console exige).
+- `priority` 0.9 para featured, 0.7 para demais.
 
-### 4. LPs and Cases (bonus consistency check)
-`site_lps` and `site_cases` already have a `locale` column + `translation_group`. I'll verify their admin save handlers also forward the active locale (they likely do, since these tables were designed with locale from the start), and patch any that don't.
+**c. LPs dinâmicas**
+- Mesmo tratamento por `translation_group`.
+- Atualizar fallback: `identidadevisual` → `identidade-visual` (slug atual conforme correção anterior).
 
-### 5. Validation
-- Switch admin to EN, edit a Home hero title, save → reload `/en` and confirm the new EN title appears.
-- Switch back to PT, confirm PT version is untouched.
-- Repeat for: About, Methodology, Portfolio, Contact, OG image upload, SEO meta fields.
+**d. Validade XML para o Search Console**
+- Escapar caracteres especiais (`&`, `<`, `>`, `'`, `"`) em todas as URLs antes de inserir.
+- Garantir uma URL única por `<loc>` (evitar duplicatas PT/EN no mesmo bloco).
+- Cada URL aparece **uma única vez** como `<loc>`, com seus `<xhtml:link rel="alternate">` para todas as variantes.
+- Header `Content-Type: application/xml; charset=utf-8` (mantido) + `X-Robots-Tag: noindex` removido (não há).
+- Cache: `s-maxage=3600, stale-while-revalidate=86400` (mantido).
 
-## Technical details
-- Table `site_content` has unique `(section_key, locale)` — already in place from last migration.
-- Read path (`useSiteTexts`) already falls back EN → PT → defaults, so partial EN translations degrade gracefully.
-- No schema changes needed; this is purely a client + edge function wiring fix.
-- No data migration needed; existing PT rows stay; new EN rows are created on first save per key.
+**e. Excluir do sitemap**
+- Qualquer rota administrativa, propostas (`/proposta/*`, `/en/proposal/*`), `/links`, `/admin*`, `/api/*`.
 
-## Files to modify
-- `pages/AdminPanel.tsx` — wire locale into every save + reload form on locale switch + add "Editing: <locale>" indicator.
-- `supabase/functions/admin/index.ts` — accept and use `locale` in `upsert_content` (and related actions).
-- `context.md` + `essential.md` — log the fix per project rules.
+## 3. Validação
+
+- Buscar `https://estudiodalla.com/sitemap.xml` localmente após deploy → validar XML em https://www.xml-sitemaps.com/validate-xml-sitemap.html.
+- Submeter no Google Search Console (`Sitemaps` → `sitemap.xml`).
+- Testar `robots.txt` com o Tester do Search Console: `/admin` deve dar `Bloqueado`; `/cases/yerbal` deve dar `Permitido`.
+
+## Arquivos a modificar
+- `public/robots.txt`
+- `api/sitemap.xml.js`
+- `context.md` + `essential.md` (registro obrigatório conforme regras do projeto)
 
