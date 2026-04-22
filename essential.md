@@ -2,6 +2,109 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-22 - Consolidacao da documentacao tecnica do projeto
+
+### Estado atual do produto
+- Aplicacao institucional e comercial do Studio Dalla, com conteudo dinamico, portfolio, landing pages, propostas e painel administrativo.
+- Stack confirmado: React 19, TypeScript 5.8, Vite 6, React Router 7, Supabase, Vercel, TipTap, jsPDF/html2canvas-pro e Microsoft Clarity.
+- Deploy orientado a Vercel com fallback SPA e sitemap dinamico servido por API.
+
+### Arquitetura global
+
+### `App.tsx`
+- Compoe `BrowserRouter`, `TrackingScripts`, `LocaleProvider` e `AppRoutes`.
+- Mantem `Home` sincrona por ser a pagina critica de entrada e carrega as demais rotas publicas com `React.lazy()` e `Suspense`.
+- Separa o tratamento visual da rota `/admin`, que nao usa `Navbar`, `Footer` nem botao flutuante de WhatsApp.
+- Possui redirects de rotas legadas PT e arvore completa para rotas EN.
+
+### `src/contexts/LocaleContext.tsx`
+- Define o tipo `Locale = 'pt-BR' | 'en'`.
+- Resolve locale por ordem de prioridade entre URL, `localStorage` e idiomas do navegador.
+- `setLocale()` persiste a preferencia e navega para a rota equivalente no outro idioma via `switchLocaleHref`.
+- Executa redirecionamento automatico de primeira visita para ingles quando apropriado, exceto para bots.
+- Mantem `document.documentElement.lang` sincronizado com o idioma atual.
+
+### `src/utils/localeRoutes.ts`
+- Centraliza o mapa de equivalencia entre rotas PT e EN.
+- Suporta rotas estaticas e dinamicas de cases, landing pages e propostas.
+- Serve como base para alternancia de idioma, canonical e sitemap internacional.
+
+### Dados e CMS operacional
+
+### `src/hooks/useSiteTexts.ts`
+- Continua sendo a principal camada de leitura de conteudo textual e de midia em `site_content`.
+- Trabalha com cache por locale e fallback em cascata: locale solicitado -> `pt-BR` -> defaults hardcoded.
+- Usa cast amplo no cliente Supabase para contornar tipos desatualizados quando o schema muda antes da regeneracao dos tipos.
+
+### `src/data/siteCases.ts`, `src/data/siteLps.ts`, `src/data/siteProposals.ts`, `src/data/sitePartners.ts`
+- Organizam a leitura dos modulos de conteudo dinamico do site.
+- Cases, LPs e propostas ja respeitam locale e fallback para `pt-BR`.
+- Parceiros seguem sem coluna de locale no schema atual.
+
+### Admin, integracoes e backend operacional
+
+### `pages/Admin.tsx`, `pages/AdminLogin.tsx`, `pages/AdminPanel.tsx`
+- `Admin.tsx` controla o estado da sessao administrativa.
+- `AdminLogin.tsx` entrega a interface de PIN.
+- `AdminPanel.tsx` concentra CRUD de paginas, cases, propostas, LPs, parceiros, tags, leads e analytics.
+- O painel permite editar conteudo de `pt-BR` e `en`, mas sua interface segue apenas em portugues.
+
+### `supabase/functions/admin/index.ts`
+- Edge Function principal para autenticacao administrativa e operacoes de CRUD.
+- Valida PIN com hash SHA-256 em todas as actions alem de `verify`.
+- Actions confirmadas na auditoria: `verify`, `list_cases`, `upsert_case`, `delete_case`, `list_content`, `upsert_content`, `change_pin`, `list_proposals`, `upsert_proposal`, `delete_proposal`, `list_tags`, `upsert_tag`, `delete_tag`, `analytics_summary`, `list_form_submissions`, `list_emails`, `list_lps`, `upsert_lp`, `delete_lp`, `list_partners`, `upsert_partner`, `delete_partner`.
+- Opera com `SUPABASE_SERVICE_ROLE_KEY`, portanto a seguranca depende criticamente do fluxo de PIN e do ambiente de deploy.
+
+### `api/track.js`
+- Endpoint serverless da Vercel para gravacao de `pageview`, `event` e `form_submission`.
+- Injeta geodados quando os headers da Vercel existem.
+- Usa `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` no ambiente do deploy.
+
+### `supabase/functions/send-contact/index.ts` e `supabase/functions/receive-email/index.ts`
+- `send-contact` integra envio de email transacional via Resend.
+- `receive-email` persiste emails recebidos em `admin_emails`.
+- O fluxo de webhook inbound precisa continuar tratado como superficie sensivel enquanto a validacao de assinatura nao estiver claramente documentada e auditada.
+
+### SEO, analytics e marketing
+
+### `components/Seo.tsx`
+- Centraliza `title`, descriptions, keywords, Open Graph, canonical e `hreflang`.
+- Trabalha com locale vindo do contexto e aceita override por props.
+- E peca estrutural para o objetivo do projeto de rankeamento organico e descoberta por mecanismos de busca com IA.
+
+### `components/TrackingScripts.tsx`
+- Carrega scripts dinamicos com base nas tags ativas em `site_tags`.
+- Sustenta GTM, GA4, Facebook Pixel, Google Ads e Microsoft Clarity sem hardcode fixo no HTML para cada integracao.
+
+### `src/hooks/useAnalytics.ts`
+- Registra page views em `site_page_views` fora da area admin.
+- Escuta cliques em links de WhatsApp, grava `whatsapp_click` e publica `dalla_whatsapp_click` em `dataLayer`.
+- Exporta `trackFormSubmission()` para formularios e `pushToDataLayer()` para integracoes de marketing.
+
+### `api/sitemap.xml.js`
+- Gera sitemap dinamico com alternates PT/EN e cobre rotas estaticas e dinamicas principais.
+- Trabalha em conjunto com `vercel.json`, que protege `/sitemap.xml` do fallback generico da SPA.
+
+### Infraestrutura e build
+
+### `vite.config.ts`
+- Sobe o servidor local em `0.0.0.0:8080`.
+- Expoe `GEMINI_API_KEY` no build via `define`.
+- Define alias `@` para a raiz do projeto.
+- Separa chunks `vendor`, `supabase`, `tiptap` e `pdf` para reduzir o custo inicial de carregamento.
+
+### `vercel.json`
+- Reescreve `/sitemap.xml` para `/api/sitemap.xml`.
+- Mantem fallback SPA sem capturar paths de API nem arquivos com extensao.
+
+### Lacunas e riscos conhecidos apos a auditoria
+- O projeto nao possui `.env.example` e depende de documentacao manual do ambiente.
+- O PIN administrativo historico do projeto foi `1234`; isso deve ser tratado como risco se reaproveitado em qualquer ambiente real.
+- Nao foi encontrado rate limiting documentado para `admin` nem para `api/track.js`.
+- O fallback multilingual privilegia disponibilidade, nao completude editorial.
+- `site_partners` e `site_tags` ainda nao seguem o mesmo modelo de locale das demais tabelas dinamicas.
+- Tipos gerados do Supabase podem ficar atrasados em relacao a migrations recentes.
+
 ## 2026-04-17 — Internacionalizacao PT-BR / EN
 
 ### `src/contexts/LocaleContext.tsx` (novo)

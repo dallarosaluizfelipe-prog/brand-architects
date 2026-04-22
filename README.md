@@ -1,47 +1,226 @@
 # Studio Dalla
 
-## 🚀 Overview
+## Visao Geral
 
-**PROIBIDO o uso de tipografias diferentes as Nunito Sans (textos) e Instrumet Serif (títulos e frases de efeito)(evitar usos em itálico e da Instrument nunca usar em CapsLock)**
+O projeto e o site institucional e comercial do Studio Dalla, com foco em branding, rebranding, identidade visual e posicionamento de marcas premium. A experiencia precisa transmitir autoridade, clareza estrategica e seguranca para empresas medias e grandes, com forte orientacao a conversao organica e comercial.
 
-- **Cerne/Propósito:** Ao entrar no site, o cliente deve sentir impacto imediato e segurança. A sensação é de estar diante de um estúdio sólido, experiente e estrategicamente preparado para lidar com marcas de grande escala.
-Ele não percebe apenas estética bem executada, mas estrutura, método e visão de longo prazo. O site transmite autoridade, clareza de posicionamento e maturidade de mercado.
-Mais do que admirar o design, o visitante sente confiança, tendo a certeza de que está falando com um parceiro capaz de construir marcas relevantes, consistentes e competitivas.
+Hoje a aplicacao funciona como um site React com conteudo dinamico vindo do Supabase, painel administrativo com autenticacao por PIN, rotas publicas em portugues e ingles, sitemap dinamico, tracking proprio e integracoes de marketing.
 
+## Objetivo de Produto
 
-## 🔗 Quick Links
+Ao entrar no site, o cliente deve sentir impacto imediato e confianca. O produto nao deve comunicar apenas apelo visual, mas tambem metodo, maturidade e capacidade de operar marcas em escala. Toda decisao de design, navegacao, copy e SEO deve reforcar esse posicionamento.
 
-- **AI Studio Project**: [View in AI Studio](https://ai.studio/apps/drive/1-5qJIsZZ5GWHtQ-8-K5wpK_XSIRX08rA)
-- **Instagram**: https://www.instagram.com/estudiodalla?igsh=dmgzbnRud2NvNnF6&utm_source=qr
-- **Behance**: https://www.behance.net/luizfedalla-r
+## Stack Atual
 
+- Frontend: React 19 + TypeScript + Vite 6
+- Roteamento: React Router DOM 7
+- Backend de dados: Supabase (Postgres, Storage e Edge Functions)
+- Deploy: Vercel
+- Editor rich text no admin: TipTap
+- Exportacao de proposta: jsPDF + html2canvas-pro
+- Analytics e tracking: Microsoft Clarity, dataLayer/GTM e tracking proprio em Supabase
+- Build optimization: code splitting manual em chunks `vendor`, `supabase`, `tiptap` e `pdf`
 
-## Development Rules:
+## Arquitetura em Alto Nivel
 
-- é obrigatório usar o bash como NPM
-- Toda alteração de layout, navegabilidade e UI/UX deve ser pensada como mobile-first antes de mais nada. Sempre pensando em entregar a navegabilidade perfeita ao dispositivo mobile, então cada nova função ou pedido deve se basear nisso.
-- Existe um arquivo chamado context.md, esse arquivo deve conter resumos que qualquer agente de ia execute detalhando as alterações o pedido do user, incluir também data e hora do ataque
-- Sempre que for solicitado uma nova alteração, os agentes acessem o context.md e leiam as alterações, entendam o contexto e só então estruturem seus próximos passo
-- A leitura do README.md é obrigatória sempre que receber um comando
-- O registro em context é obrigatório.
-- Todas as alterações devem obrigatóriamente apresentar antes de ser executada um plano para o user, e só então com as considerações e confirmações do usuário, atacadas e executadas
-- É obrigatório que o design system seja respeitado em toda e qlq página nova ou elemento, caso de alguma forma fuja do padrão, deve ser sinalizado ao usuário
-- Tudo que for feito por IA deve ser documentado em essential.md , nesse arquivo, deve sempre existir o detalhamento de funções, componentes, páginas e outras coisas adicionadas ou alteradas por IA, sempre revisando no final de cada ciclo de atualização o que temos aqui.
-- É estritamente obrigatório que toda a aplicação tenha alto potencial de rankeamento orgânico em resultados de pesquisa do Google e de IAS como Gemini, modo de pesquisa de IA do Google, Perplexity, e Chat GPT, focando muito nesse rankeamento, usando boas práticas e termos que convertam com a estratégia de posicionamento do studio, a ideia de estratégia de posicionamento é que grandes e médias empresas do ramo de luxo de SP acessem em busca de apoio com brand, rebranding, identidade de marca e identidade visual e entendam que o Studio Dalla é um studio de confiança e queiram fechar negócio com o studio, com isso, todo o site deve ter uma estrutura SEO pensanda para converter clientes orgânicos e pagos.
-- Toda alteração ao final deve ser testada garantindo que a solicitação do usuário tenha sido efetiva.
+- `App.tsx` monta `BrowserRouter`, `TrackingScripts`, `LocaleProvider` e a arvore de rotas.
+- As paginas publicas usam `PublicLayout` com `Navbar`, `Footer`, `Suspense` e botao global de WhatsApp.
+- O idioma e determinado por URL (`/` e `/en/*`), preferencia persistida em `localStorage` e autodeteccao por idioma do navegador.
+- O conteudo principal e lido do Supabase por hooks e modulos em `src/data` e `src/hooks`.
+- O painel admin usa a Edge Function `supabase/functions/admin` para verificar PIN e executar CRUD de conteudos, cases, propostas, LPs, parceiros, tags e analytics.
+- A API `api/track.js` grava page views, eventos e envios de formulario em tabelas de analytics no Supabase.
+- A API `api/sitemap.xml.js` gera sitemap XML dinamico com alternates PT/EN.
 
-## Stack
+## Rotas Publicas e Administrativas
 
-Em resumo, é um projeto web moderno construído com React + TypeScript + Vite, usando um plugin oficial de React e um pacote adicional (lovable-tagger).
-iniciado na lovable e no Google IA Studio, mas que não ficará restrito a novas tecnologias   
+### Portugues
 
-## 📂 Project Structure
+- `/` - Home
+- `/estudio` - About
+- `/metodologia` - Methodology
+- `/cases` - Portfolio
+- `/cases/:slug` - detalhe de case
+- `/lp/:slug` - landing page dinamica
+- `/proposta/:slug` - proposta dinamica
+- `/identidade-visual` - redirect para `/lp/identidade-visual`
+- `/contato` - contato
+- `/admin` - painel administrativo
 
-- `src/pages`: Main application views.
-- `src/components`: Reusable UI components.
-- `public`: Static assets and metadata.
-- `Context.md`: "histórico" de alterações e ajustes por parte de qualquer IA, em resumo, a documentação do código é essa
-- `essential.md`: Arquivo onde agentes de IA documentam todas as funções, componentes, páginas e qualquer trecho de código atualizado ou criado por ia
+### Ingles
+
+- `/en` - Home
+- `/en/studio` - About
+- `/en/methodology` - Methodology
+- `/en/cases` - Portfolio
+- `/en/cases/:slug` - detalhe de case
+- `/en/lp/:slug` - landing page dinamica
+- `/en/proposal/:slug` - proposta dinamica
+- `/en/contact` - contato
+
+### Redirects legados
+
+- `/about` -> `/estudio`
+- `/methodology` -> `/metodologia`
+- `/portfolio` -> `/cases`
+- `/contact` -> `/contato`
+- `*` -> `/`
+
+## Estrutura Relevante do Repositorio
+
+- `App.tsx`: composicao global, layouts, lazy loading e roteamento
+- `components/`: navegacao, SEO, tracking, footer, CTA e componentes globais
+- `pages/`: paginas publicas, pagina admin e painel de gestao
+- `src/contexts/LocaleContext.tsx`: estado global de locale e redirect inicial
+- `src/hooks/`: analytics, textos dinamicos e hooks de apoio
+- `src/data/`: leitura de cases, landing pages, propostas e parceiros
+- `src/integrations/supabase/`: cliente e tipos do Supabase
+- `api/`: serverless functions do deploy Vercel
+- `supabase/functions/`: edge functions do Supabase
+- `supabase/migrations/`: schema e seeds do banco
+- `public/`: manifestos, robots e uploads publicos
+- `context.md`: historico cronologico das alteracoes
+- `essential.md`: referencia tecnica mantida por IA
+
+## Setup Local
+
+### Frontend
+
+1. Instale dependencias com `npm install`.
+2. Configure as variaveis de ambiente necessarias.
+3. Rode `npm run dev`.
+4. O servidor Vite sobe em `http://0.0.0.0:8080`.
+
+### Scripts disponiveis
+
+- `npm run dev`: ambiente local com Vite
+- `npm run build`: build de producao
+- `npm run build:dev`: build usando modo development
+- `npm run preview`: preview local do build
+
+### Supabase
+
+O projeto depende de tabelas, policies, storage e Edge Functions definidas em `supabase/`. Para reproduzir backend e dados dinamicos localmente, a operacao esperada e:
+
+1. Iniciar o ambiente local do Supabase CLI.
+2. Aplicar as migrations da pasta `supabase/migrations/`.
+3. Publicar ou rodar localmente as Edge Functions `admin`, `send-contact` e `receive-email`.
+4. Garantir que o frontend aponte para a URL e chave corretas do projeto local ou remoto.
+
+O repositorio nao possui hoje um `.env.example`, entao as variaveis abaixo devem ser conferidas diretamente no ambiente em uso.
+
+## Variaveis de Ambiente Conhecidas
+
+### Frontend / Vite
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `VITE_SUPABASE_PROJECT_ID`
+- `GEMINI_API_KEY`
+
+Observacao: `vite.config.ts` expoe `GEMINI_API_KEY` como `process.env.API_KEY` e `process.env.GEMINI_API_KEY` no build.
+
+### Vercel / APIs serverless
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `SITE_URL` para canonical, sitemap e links absolutos quando aplicavel
+
+### Supabase Edge Functions
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `RESEND_API_KEY` para `send-contact`
+
+## Conteudo Dinamico e Modelo Operacional
+
+- `site_content`: textos, imagens, videos e chaves SEO por secao/pagina, agora com locale
+- `site_cases`: portfolio e detalhes de case
+- `site_lps`: landing pages dinamicas
+- `site_proposals`: propostas dinamicas
+- `site_partners`: logos e links de parceiros
+- `site_tags`: tags de tracking e integracoes
+- `site_page_views`, `site_events`, `site_form_submissions`: analytics e conversao
+- `admin_settings`: hash do PIN administrativo
+- `admin_emails`: caixa de entrada persistida via webhook
+
+O frontend usa fallback agressivo para preservar renderizacao: locale solicitado -> `pt-BR` -> defaults hardcoded. Isso reduz quebra de tela, mas tambem pode expor conteudo em portugues quando a traducao em ingles nao existir.
+
+## Painel Admin
+
+O painel administrativo esta centralizado em `/admin` e depende da Edge Function `admin`.
+
+- Autenticacao: PIN validado por hash SHA-256 contra `admin_settings`
+- Persistencia de sessao no frontend: `sessionStorage`
+- Escopos atuais do painel: paginas/textos, cases, propostas, LPs, parceiros, tags, leads e dashboard de analytics
+- Edicao multilingual: o admin nao tem versao EN, mas permite editar conteudos por locale `pt-BR` e `en`
+
+### Fluxo resumido
+
+1. O usuario informa o PIN na tela admin.
+2. O frontend chama `action = verify` na Edge Function.
+3. Em caso de sucesso, novas actions usam o mesmo PIN para CRUD e leitura administrativa.
+4. O backend valida o PIN em todas as requests antes de operar com service role.
+
+## SEO, Internacionalizacao e Analytics
+
+### SEO
+
+- `components/Seo.tsx` atualiza `title`, `meta`, canonical e Open Graph dinamicamente.
+- O projeto usa chaves SEO dinamicas por pagina, case e proposta.
+- `api/sitemap.xml.js` gera sitemap dinamico com `hreflang` PT/EN.
+- O foco do produto exige copy, estrutura e taxonomia voltadas para descoberta organica e conversao.
+
+### Internacionalizacao
+
+- Locale suportado hoje: `pt-BR` e `en`
+- Estrategia: URLs separadas, sem sufixos `_en` no schema
+- Deteccao inicial: rota -> preferencia salva -> idioma do navegador
+- Primeira visita pode redirecionar automaticamente para `/en` quando o idioma preferido for ingles
+
+### Analytics
+
+- `src/hooks/useAnalytics.ts` grava page views no Supabase e eventos de clique no WhatsApp
+- `pushToDataLayer` publica eventos como `dalla_whatsapp_click` e `dalla_lead_form_submit`
+- `api/track.js` suporta `pageview`, `event` e `form_submission`
+- O dashboard administrativo consolida `site_page_views` e eventos `page_view`
+- Clarity e outras tags dinamicas sao injetadas por `components/TrackingScripts.tsx`
+
+## Deploy
+
+- O deploy principal esta configurado para Vercel.
+- `vercel.json` define rewrite para `/sitemap.xml` e fallback SPA sem interceptar arquivos com extensao.
+- O frontend depende de envs de Supabase tambem no ambiente Vercel.
+- Sempre valide `npm run build` antes de publicar alteracoes de codigo.
+
+## Riscos, Lacunas e Pendencias Documentadas
+
+- Nao existe hoje `.env.example`, o que aumenta atrito de onboarding.
+- O PIN administrativo inicial historico do projeto foi `1234`; em producao ele deve ser alterado imediatamente.
+- `api/track.js` e a Edge Function `admin` nao documentam rate limiting.
+- `receive-email` precisa de validacao de assinatura do webhook se for exposto publicamente.
+- `site_partners` e `site_tags` nao seguem hoje o mesmo modelo multilingual das demais tabelas.
+- Os tipos gerados do Supabase podem ficar desatualizados em relacao a migrations recentes, especialmente as colunas de locale.
+- O fallback de traducao privilegia resiliencia, nao integridade editorial.
+- O geotracking depende de headers da Vercel e tende a ficar vazio fora de producao.
+
+## Convencoes Operacionais do Repositorio
+
+- A leitura deste README e obrigatoria antes de qualquer alteracao.
+- Toda alteracao deve considerar mobile-first como requisito primario.
+- `context.md` deve ser lido antes de trabalhar e atualizado ao fim de cada ciclo relevante.
+- `essential.md` deve registrar tudo que for criado ou alterado por IA em nivel tecnico.
+- Sempre apresente um plano ao usuario antes de executar alteracoes substanciais, salvo quando ele pedir execucao direta.
+- Toda implementacao deve respeitar o design system e sinalizar qualquer desvio.
+- O projeto deve manter alto potencial de rankeamento organico para Google e mecanismos de busca com IA.
+- Toda alteracao precisa de validacao ao final.
+- Tipografia obrigatoria: Nunito Sans para textos e Instrument Serif para titulos e frases de efeito. Evitar italico e nunca usar Instrument Serif em caps lock.
+
+## Quick Links
+
+- AI Studio Project: https://ai.studio/apps/drive/1-5qJIsZZ5GWHtQ-8-K5wpK_XSIRX08rA
+- Instagram: https://www.instagram.com/estudiodalla?igsh=dmgzbnRud2NvNnF6&utm_source=qr
+- Behance: https://www.behance.net/luizfedalla-r
 
 ---
-*Maintained and synchronized across Studio Dalla repositories.*
+
+Mantido como fonte principal de onboarding e operacao do projeto. Para historico detalhado, consultar `context.md`. Para detalhamento tecnico incremental, consultar `essential.md`.

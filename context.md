@@ -2,6 +2,15 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-22 - Auditoria completa do projeto e atualizacao da documentacao principal:**
+  - **Motivacao:** Usuario solicitou leitura do README, verificacao ampla do projeto e atualizacao da documentacao existente antes de novas instrucoes.
+  - **Escopo auditado:** `README.md`, `essential.md`, `context.md`, `package.json`, `App.tsx`, `vite.config.ts`, `vercel.json`, `src/contexts/LocaleContext.tsx`, `src/hooks/useAnalytics.ts`, `api/track.js`, `api/sitemap.xml.js` e `supabase/functions/admin/index.ts`, alem da estrutura geral do workspace.
+  - **Constatacoes principais:** O README anterior estava centrado em regras operacionais, mas nao documentava setup, rotas, arquitetura, i18n, Supabase, analytics, deploy nem riscos conhecidos. O codigo atual opera como site React + TypeScript + Vite com backend de dados no Supabase, rotas PT/EN, painel admin por PIN, sitemap dinamico, tracking proprio e deploy em Vercel.
+  - **Atualizacao executada em `README.md`:** Reestruturado para servir como documentacao operacional do projeto. Foram adicionadas secoes de visao geral, objetivo do produto, stack, arquitetura, rotas, estrutura do repositorio, setup local, variaveis de ambiente conhecidas, modelo de conteudo dinamico, funcionamento do admin, SEO, internacionalizacao, analytics, deploy, riscos/lacunas e convencoes operacionais preservadas.
+  - **Atualizacao executada em `essential.md`:** Inserida nova secao de consolidacao tecnica da documentacao em 2026-04-22, resumindo arquitetura atual, fluxos centrais e lacunas conhecidas para manter a referencia tecnica alinhada ao estado real do codigo.
+  - **Achados documentados:** Ausencia de `.env.example`, PIN administrativo inicial historico inseguro, falta aparente de rate limiting, webhook de e-mail sem validacao descrita, possivel defasagem de tipos gerados do Supabase e comportamento de fallback multilingual que pode exibir conteudo PT em rotas EN quando a traducao nao existir.
+  - **Validacao prevista:** Conferencia manual da documentacao revisada contra os arquivos-fonte do projeto e revisao de diff para garantir consistencia textual.
+
 - **2026-04-17 — Implementacao completa de internacionalizacao PT-BR / EN:**
   - **Motivacao:** Expansao do site para publico internacional. Usuario solicitou versao em ingles com rotas `/en/`, mantendo portugues como idioma padrao, modelo de dados extensivel, Admin multilingual e SEO internacional completo.
   - **Arquitetura geral:** URLs separadas (`/` = pt-BR, `/en/*` = en). Modelo por linha com coluna `locale` em todas as tabelas dinamicas (sem colunas `_en` hardcoded). Extensivel para novos idiomas.
