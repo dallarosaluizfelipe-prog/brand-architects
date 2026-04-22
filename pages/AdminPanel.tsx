@@ -1050,6 +1050,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   loadCases(loc);
                   loadProposals(loc);
                   loadLps(loc);
+                  loadHero(loc);
                 }}
                 className={`text-xs font-bold font-sans px-2 py-0.5 rounded-full transition-colors ${adminLocale === loc ? 'bg-black text-white' : 'text-neutral-400 hover:text-black'}`}
               >
