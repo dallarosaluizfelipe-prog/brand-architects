@@ -2,6 +2,26 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-22 — SEO/GEO: robots.txt + sitemap.xml
+
+### `public/robots.txt` (reescrito)
+- Default `User-agent: *`: Allow `/` + allow-list de assets estaticos; Disallow `/admin`, `/admin/`, `/api/`, `/proposta`, `/proposta/`, `/proposal`, `/proposal/`, `/en/proposal`, `/en/proposal/`, e padroes `?utm_*`, `?fbclid=`, `?gclid=`.
+- Blocos especificos para Googlebot, Googlebot-Image, Bingbot, Slurp, DuckDuckBot, Yandex.
+- Bots de IA / GEO permitidos para `/` mas bloqueados em `/admin*` e `/proposta*`: GPTBot, ChatGPT-User, OAI-SearchBot, anthropic-ai, ClaudeBot, Claude-SearchBot, Claude-Web, PerplexityBot, Google-Extended, Gemini, GoogleOther, Applebot, Applebot-Extended, YouBot, cohere-ai, meta-externalagent, Amazonbot, Bytespider, DiffBot.
+- Scrapers bloqueados integralmente: AhrefsBot, SemrushBot, MJ12bot, DotBot, BLEXBot.
+- Diretivas finais: `Host: https://estudiodalla.com` e `Sitemap: https://estudiodalla.com/sitemap.xml`.
+
+### `api/sitemap.xml.js` (reescrito)
+- `STATIC_PAIRS`: lista de pares `{ pt, en, priority, changefreq }` para emitir reciprocamente as duas URLs com hreflang `pt-BR`, `en` e `x-default` (sempre PT).
+- `xmlEscape(str)`: helper que escapa `& < > " '` antes de inserir em `<loc>` ou `href`.
+- `isoDate(value, fallback)`: normaliza `updated_at` para `YYYY-MM-DD`; retorna o `today` quando ausente/invalido.
+- `groupByTranslation(rows)`: agrupa rows dinamicas por `translation_group`, separando `pt` e `en`.
+- `renderUrl({ loc, lastmod, changefreq, priority, alternates })`: monta um `<url>` com `<xhtml:link rel="alternate">` para cada idioma disponivel + `x-default`.
+- `buildXml({ staticPairs, caseGroups, lpGroups, today })`: gera o XML completo. Cases featured recebem `priority 0.9` e demais `0.7`; LPs recebem `0.8`. Quando so existe versao PT, hreflang aponta apenas para PT + `x-default`.
+- Handler busca de `site_cases` e `site_lps` (`is_visible = true`) os campos `slug, updated_at, locale, translation_group` (+ `is_featured` para cases). Em caso de falha, usa `FALLBACK_CASES` e `FALLBACK_LPS` (com slug `identidade-visual` corrigido).
+- Headers: `Content-Type: application/xml; charset=utf-8`, `Cache-Control: s-maxage=3600, stale-while-revalidate=86400`.
+- Excluidos do sitemap: `/admin*`, `/api/*`, `/proposta*`, `/en/proposal*`, `/links`.
+
 ## 2026-04-17 — Internacionalizacao PT-BR / EN
 
 ### `src/contexts/LocaleContext.tsx` (novo)

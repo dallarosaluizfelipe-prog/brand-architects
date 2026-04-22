@@ -2,6 +2,11 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-22 — SEO/GEO: robots.txt e sitemap.xml otimizados:**
+  - **Motivacao:** Garantir indexacao ideal no Google Search Console e visibilidade em motores generativos (GPT, Gemini, Claude, Perplexity), bloqueando area administrativa e propostas privadas.
+  - **`public/robots.txt`:** Reescrito. Bloqueia `/admin*`, `/api/`, `/proposta*`, `/proposal*` e parametros UTM/fbclid/gclid. Allow-list para assets estaticos (css/js/svg/png/jpg/webp/mp4/woff). Regras explicitas para Googlebot, Bingbot, Slurp, DuckDuckBot, Yandex e bots de IA/GEO (GPTBot, ChatGPT-User, OAI-SearchBot, anthropic-ai, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, Gemini, GoogleOther, Applebot, Applebot-Extended, YouBot, cohere-ai, meta-externalagent, Amazonbot, Bytespider, DiffBot). Bloqueio total para scrapers agressivos (AhrefsBot, SemrushBot, MJ12bot, DotBot, BLEXBot). Diretivas `Host` e `Sitemap` no rodape.
+  - **`api/sitemap.xml.js`:** Reescrito. URLs estaticas alinhadas ao roteador real (PT ↔ EN: `/`↔`/en`, `/estudio`↔`/en/studio`, `/metodologia`↔`/en/methodology`, `/cases`↔`/en/cases`, `/contato`↔`/en/contact`). Cases e LPs agrupados por `translation_group` para emitir hreflang reciprocos PT/EN + `x-default` apontando para PT. Caracteres XML escapados via `xmlEscape`. `lastmod` em formato `YYYY-MM-DD`. Fallback de LPs atualizado para slug `identidade-visual`. Propostas, `/links`, `/admin*` e `/api/*` excluidos do sitemap. Cache `s-maxage=3600, stale-while-revalidate=86400` mantido.
+
 - **2026-04-17 — Implementacao completa de internacionalizacao PT-BR / EN:**
   - **Motivacao:** Expansao do site para publico internacional. Usuario solicitou versao em ingles com rotas `/en/`, mantendo portugues como idioma padrao, modelo de dados extensivel, Admin multilingual e SEO internacional completo.
   - **Arquitetura geral:** URLs separadas (`/` = pt-BR, `/en/*` = en). Modelo por linha com coluna `locale` em todas as tabelas dinamicas (sem colunas `_en` hardcoded). Extensivel para novos idiomas.
