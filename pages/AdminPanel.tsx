@@ -384,8 +384,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setMediaFiles((data || []).map((f) => f.name));
   };
 
-  const loadHero = async () => {
-    const result = await apiCall('list_content');
+  const loadHero = async (locale?: string) => {
+    const loc = locale ?? adminLocale;
+    const result = await apiCall('list_content', { locale: loc });
     const items = result.content || [];
     const desktop = items.find((c: any) => c.section_key === 'hero_video_desktop');
     const mobile = items.find((c: any) => c.section_key === 'hero_video_mobile');
@@ -401,12 +402,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     await apiCall('upsert_content', {
       section_key: 'hero_video_desktop',
       title: 'Hero Video Desktop',
+      locale: adminLocale,
       video_url: hero.desktopVideoUrl,
       image_url: hero.posterUrl,
     });
     await apiCall('upsert_content', {
       section_key: 'hero_video_mobile',
       title: 'Hero Video Mobile',
+      locale: adminLocale,
       video_url: hero.mobileVideoUrl,
     });
     showMessage('Hero atualizado!');
