@@ -1,14 +1,47 @@
 # Studio Dalla — robots.txt
 # https://estudiodalla.com
+# Optimized for SEO + GEO (Generative Engine Optimization)
 
-# ── Default: allow all crawlers ──────────────────────────────────────────────
+# ── Default: allow all crawlers, block private areas ─────────────────────────
 User-agent: *
+Allow: /
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.svg$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.webp$
+Allow: /*.gif$
+Allow: /*.mp4$
+Allow: /*.mov$
+Allow: /*.woff$
+Allow: /*.woff2$
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /proposta
+Disallow: /proposta/
+Disallow: /proposal
+Disallow: /proposal/
+Disallow: /en/proposal
+Disallow: /en/proposal/
+Disallow: /*?utm_*
+Disallow: /*?fbclid=
+Disallow: /*?gclid=
+
+# ── Traditional search engines ───────────────────────────────────────────────
+User-agent: Googlebot
 Allow: /
 Disallow: /admin
 Disallow: /admin/
+Disallow: /api/
+Disallow: /proposta
+Disallow: /proposta/
+Disallow: /proposal
+Disallow: /proposal/
 
-# ── Search engines ────────────────────────────────────────────────────────────
-User-agent: Googlebot
+User-agent: Googlebot-Image
 Allow: /
 Disallow: /admin
 Disallow: /admin/
@@ -17,45 +50,187 @@ User-agent: Bingbot
 Allow: /
 Disallow: /admin
 Disallow: /admin/
+Disallow: /api/
+Disallow: /proposta
+Disallow: /proposta/
+Disallow: /proposal
+Disallow: /proposal/
 
 User-agent: Slurp
 Allow: /
 Disallow: /admin
 Disallow: /admin/
+Disallow: /api/
+Disallow: /proposta
+Disallow: /proposta/
 
-# ── AI assistants & research crawlers (allowed — benefits brand discovery) ───
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /proposta
+Disallow: /proposta/
+
+User-agent: Yandex
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /proposta
+Disallow: /proposta/
+
+# ── AI / GEO crawlers (allowed for brand visibility in generative search) ────
 User-agent: GPTBot
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: Gemini
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: GoogleOther
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
+
+User-agent: Applebot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: YouBot
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: cohere-ai
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
 User-agent: meta-externalagent
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
 
-# ── Sitemap ───────────────────────────────────────────────────────────────────
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
+
+User-agent: Bytespider
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
+
+User-agent: DiffBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /proposta
+Disallow: /proposta/
+
+# ── Aggressive SEO scrapers (blocked entirely) ───────────────────────────────
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# ── Host & Sitemap ───────────────────────────────────────────────────────────
+Host: https://estudiodalla.com
 Sitemap: https://estudiodalla.com/sitemap.xml

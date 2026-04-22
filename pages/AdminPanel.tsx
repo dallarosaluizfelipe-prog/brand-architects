@@ -384,8 +384,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setMediaFiles((data || []).map((f) => f.name));
   };
 
-  const loadHero = async () => {
-    const result = await apiCall('list_content');
+  const loadHero = async (locale?: string) => {
+    const loc = locale ?? adminLocale;
+    const result = await apiCall('list_content', { locale: loc });
     const items = result.content || [];
     const desktop = items.find((c: any) => c.section_key === 'hero_video_desktop');
     const mobile = items.find((c: any) => c.section_key === 'hero_video_mobile');
@@ -401,12 +402,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     await apiCall('upsert_content', {
       section_key: 'hero_video_desktop',
       title: 'Hero Video Desktop',
+      locale: adminLocale,
       video_url: hero.desktopVideoUrl,
       image_url: hero.posterUrl,
     });
     await apiCall('upsert_content', {
       section_key: 'hero_video_mobile',
       title: 'Hero Video Mobile',
+      locale: adminLocale,
       video_url: hero.mobileVideoUrl,
     });
     showMessage('Hero atualizado!');
@@ -1047,6 +1050,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   loadCases(loc);
                   loadProposals(loc);
                   loadLps(loc);
+                  loadHero(loc);
                 }}
                 className={`text-xs font-bold font-sans px-2 py-0.5 rounded-full transition-colors ${adminLocale === loc ? 'bg-black text-white' : 'text-neutral-400 hover:text-black'}`}
               >
@@ -2457,6 +2461,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{currentPage.icon}</span>
                         <h2 className="text-lg font-sans font-bold">{currentPage.label}</h2>
+                        <span className="ml-2 text-[10px] font-sans font-bold uppercase tracking-widest bg-black text-white px-2.5 py-1 rounded-full">
+                          {adminLocale === 'pt-BR' ? 'Editando: PT' : 'Editing: EN'}
+                        </span>
                       </div>
                     </div>
                     {pageDirtyCount > 0 && (

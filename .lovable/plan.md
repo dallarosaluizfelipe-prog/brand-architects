@@ -1,40 +1,62 @@
 
 
-## Plano: Remover aba E-mail + Corrigir Dashboard
+## Objetivo
+Otimizar `robots.txt` e `sitemap.xml` para SEO + GEO (busca generativa), bloquear toda a área `/admin` e variações, e entregar um sitemap perfeito para o Google Search Console com `hreflang` correto em todas as URLs (PT + EN).
 
-### 1. Remover aba "E-mail" do AdminPanel
+## 1. `public/robots.txt` — versão otimizada
 
-**Alteracoes em `AdminPanel.tsx`:**
-- Remover `'emails'` do tipo do state `tab` e do array de tabs renderizado (linha 728)
-- Remover state de emails: `adminEmails`, `emailsLoading`, `selectedEmail`, interface `AdminEmail` (linhas 269-281)
-- Remover funcao `loadEmails` (linhas 604-609)
-- Remover chamada `if (t === 'emails') loadEmails()` no click handler (linha 734)
-- Remover todo o bloco `{tab === 'emails' && (...)}` (linhas 1088-1149)
+- **Bloquear** rotas administrativas e técnicas: `/admin`, `/admin/*`, `/#admin` (hash não é rastreado, mas mantemos consistência), `/api/`, `/proposta/`, `/proposal/` (propostas são `noindex` por padrão e privadas), e parâmetros UTM via `Disallow: /*?utm_*`.
+- **Permitir** explicitamente: `/`, assets estáticos (`*.css`, `*.js`, `*.svg`, `*.png`, `*.jpg`, `*.webp`, `*.mp4`, `*.mov`) — Google precisa renderizar.
+- **Bots de busca tradicionais** (Googlebot, Bingbot, Slurp, DuckDuckBot, Yandex): mesmas regras do default.
+- **Bots de IA / GEO** (GPTBot, ChatGPT-User, OAI-SearchBot, anthropic-ai, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, Gemini, GoogleOther, Applebot-Extended, YouBot, cohere-ai, meta-externalagent, Amazonbot, Bytespider, DiffBot): **Allow `/`** + **Disallow `/admin`** e `/proposta`. Garante visibilidade em respostas generativas (estratégia GEO) preservando privacidade.
+- **Bloquear bots agressivos / scrapers irrelevantes**: AhrefsBot, SemrushBot, MJ12bot, DotBot (`Disallow: /`).
+- **Crawl-delay**: omitido para Google/Bing (eles ignoram); aplicado apenas para bots agressivos quando aplicável.
+- **Host** + **Sitemap** no rodapé:
+  ```
+  Host: https://estudiodalla.com
+  Sitemap: https://estudiodalla.com/sitemap.xml
+  ```
 
-**Manter intactos** (nao excluir — podem ser uteis no futuro):
-- Tabela `admin_emails` no banco
-- Edge Function `receive-email/index.ts`
-- Action `list_emails` na Edge Function `admin/index.ts`
+## 2. `api/sitemap.xml.js` — versão ideal para Search Console
 
-### 2. Corrigir gráfico do Dashboard que nao atualiza
+Correções e melhorias:
 
-**Problema real identificado:** Ao trocar o periodo, o `loadDashboard` chama `setDashData(null)` e depois `setDashData(result)`. O React re-renderiza, porem o grafico SVG (area chart) pode nao parecer diferente se os dados sao similares ou se ha problemas de cache visual do SVG.
+**a. URLs estáticas alinhadas ao roteador real**
+- Remover entrada legada e adicionar todas as rotas reais (PT + EN) com `hreflang` recíproco em **todas** elas, não só nos cases:
+  - `/` ↔ `/en`
+  - `/estudio` ↔ `/en/studio`
+  - `/metodologia` ↔ `/en/methodology`
+  - `/cases` ↔ `/en/cases`
+  - `/contato` ↔ `/en/contact`
+- `x-default` apontando sempre para a versão PT (mercado primário SP/Brasil).
 
-**Correcao:**
-- Adicionar uma `key` dinamica ao container do grafico baseada no `period_label` + timestamp, forcando React a destruir e recriar o SVG quando os dados mudam
-- Adicionar um indicador visual (overlay de loading com opacity) sobre os dados existentes durante o carregamento, em vez de apenas remover tudo com `setDashData(null)` — isso dara feedback mais claro ao usuario
-- Alterar a abordagem: em vez de `setDashData(null)`, manter dados antigos visiveis com um overlay de "Atualizando..." semi-transparente, e so substituir quando os novos dados chegarem
+**b. Cases dinâmicos**
+- Buscar do Supabase agrupados por `translation_group` para parear PT↔EN corretamente quando a tradução existir; quando não existir, listar só a versão PT com `hreflang` apontando só para si + `x-default`.
+- `lastmod` em formato ISO completo `YYYY-MM-DD` (Search Console exige).
+- `priority` 0.9 para featured, 0.7 para demais.
 
-**Mudanca especifica:**
-- Remover `setDashData(null)` do inicio de `loadDashboard`
-- No bloco de renderizacao do dashboard (linha 795), trocar a condicao `dashLoading && !dashData` para mostrar overlay quando `dashLoading` e `true` (independente de `dashData`)
-- Adicionar `key={dashData?.period_label}` no wrapper do grafico SVG
+**c. LPs dinâmicas**
+- Mesmo tratamento por `translation_group`.
+- Atualizar fallback: `identidadevisual` → `identidade-visual` (slug atual conforme correção anterior).
 
-### 3. Documentacao
-- Atualizar `context.md` e `essential.md`
+**d. Validade XML para o Search Console**
+- Escapar caracteres especiais (`&`, `<`, `>`, `'`, `"`) em todas as URLs antes de inserir.
+- Garantir uma URL única por `<loc>` (evitar duplicatas PT/EN no mesmo bloco).
+- Cada URL aparece **uma única vez** como `<loc>`, com seus `<xhtml:link rel="alternate">` para todas as variantes.
+- Header `Content-Type: application/xml; charset=utf-8` (mantido) + `X-Robots-Tag: noindex` removido (não há).
+- Cache: `s-maxage=3600, stale-while-revalidate=86400` (mantido).
 
-### Arquivos modificados
-- `pages/AdminPanel.tsx` — remover aba emails + fix dashboard
-- `context.md`
-- `essential.md`
+**e. Excluir do sitemap**
+- Qualquer rota administrativa, propostas (`/proposta/*`, `/en/proposal/*`), `/links`, `/admin*`, `/api/*`.
+
+## 3. Validação
+
+- Buscar `https://estudiodalla.com/sitemap.xml` localmente após deploy → validar XML em https://www.xml-sitemaps.com/validate-xml-sitemap.html.
+- Submeter no Google Search Console (`Sitemaps` → `sitemap.xml`).
+- Testar `robots.txt` com o Tester do Search Console: `/admin` deve dar `Bloqueado`; `/cases/yerbal` deve dar `Permitido`.
+
+## Arquivos a modificar
+- `public/robots.txt`
+- `api/sitemap.xml.js`
+- `context.md` + `essential.md` (registro obrigatório conforme regras do projeto)
 

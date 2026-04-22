@@ -2,6 +2,11 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-22 — SEO/GEO: robots.txt e sitemap.xml otimizados:**
+  - **Motivacao:** Garantir indexacao ideal no Google Search Console e visibilidade em motores generativos (GPT, Gemini, Claude, Perplexity), bloqueando area administrativa e propostas privadas.
+  - **`public/robots.txt`:** Reescrito. Bloqueia `/admin*`, `/api/`, `/proposta*`, `/proposal*` e parametros UTM/fbclid/gclid. Allow-list para assets estaticos (css/js/svg/png/jpg/webp/mp4/woff). Regras explicitas para Googlebot, Bingbot, Slurp, DuckDuckBot, Yandex e bots de IA/GEO (GPTBot, ChatGPT-User, OAI-SearchBot, anthropic-ai, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, Gemini, GoogleOther, Applebot, Applebot-Extended, YouBot, cohere-ai, meta-externalagent, Amazonbot, Bytespider, DiffBot). Bloqueio total para scrapers agressivos (AhrefsBot, SemrushBot, MJ12bot, DotBot, BLEXBot). Diretivas `Host` e `Sitemap` no rodape.
+  - **`api/sitemap.xml.js`:** Reescrito. URLs estaticas alinhadas ao roteador real (PT ↔ EN: `/`↔`/en`, `/estudio`↔`/en/studio`, `/metodologia`↔`/en/methodology`, `/cases`↔`/en/cases`, `/contato`↔`/en/contact`). Cases e LPs agrupados por `translation_group` para emitir hreflang reciprocos PT/EN + `x-default` apontando para PT. Caracteres XML escapados via `xmlEscape`. `lastmod` em formato `YYYY-MM-DD`. Fallback de LPs atualizado para slug `identidade-visual`. Propostas, `/links`, `/admin*` e `/api/*` excluidos do sitemap. Cache `s-maxage=3600, stale-while-revalidate=86400` mantido.
+
 - **2026-04-22 - Auditoria completa do projeto e atualizacao da documentacao principal:**
   - **Motivacao:** Usuario solicitou leitura do README, verificacao ampla do projeto e atualizacao da documentacao existente antes de novas instrucoes.
   - **Escopo auditado:** `README.md`, `essential.md`, `context.md`, `package.json`, `App.tsx`, `vite.config.ts`, `vercel.json`, `src/contexts/LocaleContext.tsx`, `src/hooks/useAnalytics.ts`, `api/track.js`, `api/sitemap.xml.js` e `supabase/functions/admin/index.ts`, alem da estrutura geral do workspace.
@@ -373,3 +378,14 @@ This file records a chronological history of changes, requests, and reasoning fo
     - Migration SQL criada para seed inicial da tag Clarity (`20260329120000_seed_clarity_tag.sql`).
     - Lógica garante que o script não será injetado mais de uma vez, mesmo que existam múltiplas tags ou seeds repetidos.
   - **Validação:** Não há duplicidade de script Clarity no site. Documentação atualizada em essential.md.
+
+---
+## 2026-04-22 14:06 — Fix: Edição de conteúdo em EN não persistia
+**Pedido:** Ao trocar para EN no admin (aba Páginas) e editar campos, as alterações não eram salvas.
+**Causa:** `loadHero` e `saveHero` não passavam o locale (sempre liam/gravavam pt-BR). O switcher de idioma também não recarregava o Hero.
+**Fix:**
+- `loadHero(locale)` e `saveHero` agora propagam `adminLocale` em todas as chamadas `upsert_content` / `list_content`.
+- Switcher de idioma chama `loadHero(loc)` ao trocar.
+- Adicionado badge "Editando: PT" / "Editing: EN" no header da página em edição para deixar claro qual versão está sendo salva.
+- Edge function `admin/upsert_content` já usava `onConflict: section_key,locale` (constraint única adicionada na migration anterior).
+- Cobre todas as páginas (Home, Estúdio, Método, Portfolio, Contato, Geral) pois usam o mesmo handler `saveTextField`/`saveAllTexts` que já incluía locale.
