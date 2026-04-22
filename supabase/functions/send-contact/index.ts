@@ -41,16 +41,121 @@ serve(async (req) => {
       });
     }
 
-    const htmlBody = `
-      <h2>Novo contato via site — Estudio Dalla</h2>
-      <table style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
-        <tr><td style="padding:8px 16px 8px 0;font-weight:bold;">Nome</td><td style="padding:8px 0;">${name}</td></tr>
-        <tr><td style="padding:8px 16px 8px 0;font-weight:bold;">Número</td><td style="padding:8px 0;">${phone || "—"}</td></tr>
-        <tr><td style="padding:8px 16px 8px 0;font-weight:bold;">Email</td><td style="padding:8px 0;">${email}</td></tr>
-        <tr><td style="padding:8px 16px 8px 0;font-weight:bold;">Empresa</td><td style="padding:8px 0;">${company || "—"}</td></tr>
-        <tr><td style="padding:8px 16px 8px 0;font-weight:bold;">Precisa de</td><td style="padding:8px 0;">${serviceLabel}</td></tr>
+    const htmlBody = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NEW LEAD | ESTUDIO DALLA</title>
+</head>
+<body style="margin:0;padding:0;background-color:#F2F2F2;font-family:Arial,Helvetica,sans-serif;">
+
+<!-- Outer wrapper -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F2F2F2;">
+  <tr>
+    <td align="center" style="padding:48px 24px;">
+
+      <!-- Container -->
+      <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+
+        <!-- ═══════════ HEADER ═══════════ -->
+        <tr>
+          <td style="background-color:#000000;padding:44px 52px 36px 52px;">
+
+            <!-- Studio label -->
+            <p style="margin:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;font-weight:bold;letter-spacing:3px;color:#666666;text-transform:uppercase;">ESTUDIO DALLA</p>
+
+            <!-- Main title -->
+            <h1 style="margin:0 0 24px 0;font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:normal;color:#FFFFFF;line-height:1.1;letter-spacing:-0.5px;">NEW LEAD</h1>
+
+            <!-- Accent line (table-based for Outlook) -->
+            <table cellpadding="0" cellspacing="0" border="0"><tr><td width="40" height="1" bgcolor="#444444" style="font-size:0;line-height:0;">&nbsp;</td></tr></table>
+
+          </td>
+        </tr>
+
+        <!-- ═══════════ BODY ═══════════ -->
+        <tr>
+          <td style="background-color:#FFFFFF;padding:44px 52px;">
+
+            <!-- Subtitle -->
+            <p style="margin:0 0 36px 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2.5px;color:#BBBBBB;text-transform:uppercase;">Novo contato recebido via site</p>
+
+            <!-- NOME -->
+            <p style="margin:0 0 4px 0;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:2px;color:#CCCCCC;text-transform:uppercase;">Nome</p>
+            <p style="margin:0 0 20px 0;font-family:Georgia,'Times New Roman',serif;font-size:22px;color:#000000;font-weight:normal;">${name}</p>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;"><tr><td height="1" bgcolor="#F0F0F0" style="font-size:0;line-height:0;">&nbsp;</td></tr></table>
+
+            <!-- TELEFONE + EMAIL -->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
+              <tr valign="top">
+                <td width="48%" style="padding-right:4%;">
+                  <p style="margin:0 0 4px 0;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:2px;color:#CCCCCC;text-transform:uppercase;">Telefone</p>
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#000000;">${phone || "—"}</p>
+                </td>
+                <td width="48%">
+                  <p style="margin:0 0 4px 0;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:2px;color:#CCCCCC;text-transform:uppercase;">Email</p>
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#000000;word-break:break-all;">${email}</p>
+                </td>
+              </tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;"><tr><td height="1" bgcolor="#F0F0F0" style="font-size:0;line-height:0;">&nbsp;</td></tr></table>
+
+            <!-- EMPRESA -->
+            <p style="margin:0 0 4px 0;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:2px;color:#CCCCCC;text-transform:uppercase;">Empresa</p>
+            <p style="margin:0 0 20px 0;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:#000000;font-weight:normal;">${company || "—"}</p>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;"><tr><td height="1" bgcolor="#F0F0F0" style="font-size:0;line-height:0;">&nbsp;</td></tr></table>
+
+            <!-- INTERESSE -->
+            <p style="margin:0 0 12px 0;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:2px;color:#CCCCCC;text-transform:uppercase;">Interesse</p>
+            <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background-color:#000000;padding:11px 22px;">
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:1.5px;color:#FFFFFF;text-transform:uppercase;">${serviceLabel}</p>
+                </td>
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+
+        <!-- ═══════════ REPLY CTA ═══════════ -->
+        <tr>
+          <td style="background-color:#F8F8F8;padding:32px 52px;border-top:1px solid #EFEFEF;">
+            <p style="margin:0 0 20px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#555555;line-height:1.6;">Responda diretamente a este email para entrar em contato com <strong style="color:#000000;">${name}</strong>.</p>
+            <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background-color:#000000;">
+                  <a href="mailto:${email}" style="display:inline-block;padding:13px 28px;font-family:Arial,Helvetica,sans-serif;font-size:10px;font-weight:bold;letter-spacing:2px;color:#FFFFFF;text-decoration:none;text-transform:uppercase;">Responder agora</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ═══════════ FOOTER ═══════════ -->
+        <tr>
+          <td style="background-color:#000000;padding:22px 52px;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr valign="middle">
+                <td>
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:2px;color:#444444;text-transform:uppercase;">ESTUDIO DALLA &mdash; estudiodalla.com</p>
+                </td>
+                <td align="right">
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:9px;color:#333333;">Notificação automática</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
       </table>
-    `;
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>`;
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -61,8 +166,9 @@ serve(async (req) => {
       body: JSON.stringify({
         from: "Estudio Dalla Site <noreply@estudiodalla.com>",
         to: [TO_EMAIL],
+        cc: ["kauan@iasin.dev.br"],
         reply_to: email,
-        subject: `Novo contato: ${name} — ${serviceLabel}`,
+        subject: `NEW LEAD | ${name} — ${serviceLabel}`,
         html: htmlBody,
       }),
     });
