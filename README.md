@@ -20,11 +20,13 @@ Ao entrar no site, o cliente deve sentir impacto imediato e confianca. O produto
 - Exportacao de proposta: jsPDF + html2canvas-pro
 - Analytics e tracking: Microsoft Clarity, dataLayer/GTM e tracking proprio em Supabase
 - Build optimization: code splitting manual em chunks `vendor`, `supabase`, `tiptap` e `pdf`
+- Plugin de dev: `lovable-tagger` (componentTagger ativo apenas no modo development via Vite)
+- Dependencia de producao presente: `claude` ^0.1.1 (origem/proposito a confirmar)
 
 ## Arquitetura em Alto Nivel
 
 - `App.tsx` monta `BrowserRouter`, `TrackingScripts`, `LocaleProvider` e a arvore de rotas.
-- As paginas publicas usam `PublicLayout` com `Navbar`, `Footer`, `Suspense` e botao global de WhatsApp.
+- As paginas publicas usam `PublicLayout` com `Navbar`, `Footer` e `Suspense`. O `WhatsAppFloatingButton` e montado fora do `PublicLayout`, diretamente em `AppRoutes`, e suprimido em rotas que comecem com `/admin` (condicional `!isAdminRoute`).
 - O idioma e determinado por URL (`/` e `/en/*`), preferencia persistida em `localStorage` e autodeteccao por idioma do navegador.
 - O conteudo principal e lido do Supabase por hooks e modulos em `src/data` e `src/hooks`.
 - O painel admin usa a Edge Function `supabase/functions/admin` para verificar PIN e executar CRUD de conteudos, cases, propostas, LPs, parceiros, tags e analytics.
@@ -43,6 +45,7 @@ Ao entrar no site, o cliente deve sentir impacto imediato e confianca. O produto
 - `/lp/:slug` - landing page dinamica
 - `/proposta/:slug` - proposta dinamica
 - `/identidade-visual` - redirect para `/lp/identidade-visual`
+- `/identidadevisual` - redirect para `/identidade-visual` (alias legado sem hifen)
 - `/contato` - contato
 - `/admin` - painel administrativo
 
@@ -63,13 +66,14 @@ Ao entrar no site, o cliente deve sentir impacto imediato e confianca. O produto
 - `/methodology` -> `/metodologia`
 - `/portfolio` -> `/cases`
 - `/contact` -> `/contato`
+- `/identidadevisual` -> `/identidade-visual` (alias sem hifen, redirecionado antes do redirect de `/identidade-visual`)
 - `*` -> `/`
 
 ## Estrutura Relevante do Repositorio
 
 - `App.tsx`: composicao global, layouts, lazy loading e roteamento
 - `components/`: navegacao, SEO, tracking, footer, CTA e componentes globais
-- `pages/`: paginas publicas, pagina admin e painel de gestao
+- `pages/`: paginas publicas, pagina admin e painel de gestao. `pages/CaseStudy.tsx` e um arquivo legado sem rota ativa em `App.tsx` — nao e utilizado em producao
 - `src/contexts/LocaleContext.tsx`: estado global de locale e redirect inicial
 - `src/hooks/`: analytics, textos dinamicos e hooks de apoio
 - `src/data/`: leitura de cases, landing pages, propostas e parceiros
@@ -150,7 +154,7 @@ O frontend usa fallback agressivo para preservar renderizacao: locale solicitado
 O painel administrativo esta centralizado em `/admin` e depende da Edge Function `admin`.
 
 - Autenticacao: PIN validado por hash SHA-256 contra `admin_settings`
-- Persistencia de sessao no frontend: `sessionStorage`
+- Persistencia de sessao no frontend: `sessionStorage`, com expiração de 30 minutos. A sessao e armazenada como `{ pin, expires }` e validada a cada carregamento; expirada, e removida automaticamente e o usuario retorna a tela de login
 - Escopos atuais do painel: paginas/textos, cases, propostas, LPs, parceiros, tags, leads e dashboard de analytics
 - Edicao multilingual: o admin nao tem versao EN, mas permite editar conteudos por locale `pt-BR` e `en`
 
@@ -179,9 +183,20 @@ O painel administrativo esta centralizado em `/admin` e depende da Edge Function
 
 ### Analytics
 
-- `src/hooks/useAnalytics.ts` grava page views no Supabase e eventos de clique no WhatsApp
+O projeto possui dois mecanismos de tracking paralelos e complementares:
+
+**Client-side direto (Supabase JS):**
+- `src/hooks/useAnalytics.ts` escreve diretamente nas tabelas Supabase via cliente JS no browser
+- Grava page views em `site_page_views` e eventos de clique em `site_events` a cada mudanca de rota
+- Intercepta cliques em links de WhatsApp e dispara `dalla_whatsapp_click` no dataLayer
 - `pushToDataLayer` publica eventos como `dalla_whatsapp_click` e `dalla_lead_form_submit`
-- `api/track.js` suporta `pageview`, `event` e `form_submission`
+
+**Serverless via Vercel (api/track.js):**
+- Endpoint POST alternativo/complementar que tambem grava em `site_page_views`, `site_events` e `site_form_submissions`
+- Suporta os tipos `pageview`, `event` e `form_submission`
+- Captura dados geograficos via headers exclusivos da Vercel: `x-vercel-ip-country`, `x-vercel-ip-region` e `x-vercel-ip-city`, armazenados nas colunas `country`, `region` e `city` de `site_page_views`. Esses campos ficam nulos fora do ambiente Vercel (local/dev)
+
+**Outras integrações:**
 - O dashboard administrativo consolida `site_page_views` e eventos `page_view`
 - Clarity e outras tags dinamicas sao injetadas por `components/TrackingScripts.tsx`
 
