@@ -112,13 +112,39 @@ Deno.serve(async (req) => {
 
       case "upsert_content": {
         const locale = data.locale ?? 'pt-BR';
-        const contentPayload = { ...data, locale, updated_at: new Date().toISOString() };
-        const { data: result, error } = await supabase
+        const sectionKey = data.section_key;
+
+        // Manual upsert: não depende de ON CONFLICT para evitar erro quando a
+        // constraint unique (section_key, locale) ainda não existe no banco remoto.
+        const { data: existing, error: findError } = await supabase
           .from("site_content")
-          .upsert(contentPayload, { onConflict: "section_key,locale" })
-          .select()
-          .single();
-        if (error) throw error;
+          .select("id")
+          .eq("section_key", sectionKey)
+          .eq("locale", locale)
+          .maybeSingle();
+
+        if (findError) throw findError;
+
+        const payload = { ...data, locale, updated_at: new Date().toISOString() };
+        let result: any;
+        let writeError: any;
+
+        if (existing?.id) {
+          ({ data: result, error: writeError } = await supabase
+            .from("site_content")
+            .update(payload)
+            .eq("id", existing.id)
+            .select()
+            .single());
+        } else {
+          ({ data: result, error: writeError } = await supabase
+            .from("site_content")
+            .insert(payload)
+            .select()
+            .single());
+        }
+
+        if (writeError) throw writeError;
         return new Response(JSON.stringify({ content: result }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });

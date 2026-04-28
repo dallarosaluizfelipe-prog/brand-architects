@@ -104,8 +104,8 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Language toggle flutuante — apenas desktop, canto superior direito */}
-        <div className="hidden md:block fixed top-8 right-6 z-50 py-[14px]">
+        {/* Language toggle flutuante — apenas desktop, canto superior direito, mesma altura do header */}
+        <div className="hidden md:flex fixed top-8 right-6 z-50 py-4 items-center">
           <LocaleFlagSwitcher size="md" />
         </div>
       </nav>
