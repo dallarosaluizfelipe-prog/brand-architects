@@ -102,10 +102,11 @@ const Navbar: React.FC = () => {
           <div className="flex gap-10 text-[16px] font-normal font-sans text-black">
             <NavLinks />
           </div>
-          {/* Language switcher — desktop */}
-          <div className="flex items-center border-l border-neutral-200 pl-6">
-            <LocaleFlagSwitcher size="md" />
-          </div>
+        </div>
+
+        {/* Language toggle flutuante — apenas desktop, canto superior direito */}
+        <div className="hidden md:block fixed top-8 right-6 z-50 py-[14px]">
+          <LocaleFlagSwitcher size="md" />
         </div>
       </nav>
 

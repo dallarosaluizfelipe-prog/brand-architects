@@ -399,19 +399,29 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
   const saveHero = async () => {
     setHeroLoading(true);
-    await apiCall('upsert_content', {
+    const r1 = await apiCall('upsert_content', {
       section_key: 'hero_video_desktop',
       title: 'Hero Video Desktop',
       locale: adminLocale,
       video_url: hero.desktopVideoUrl,
       image_url: hero.posterUrl,
     });
-    await apiCall('upsert_content', {
+    if (r1?.error) {
+      showMessage(`Erro ao salvar hero desktop: ${r1.error}`);
+      setHeroLoading(false);
+      return;
+    }
+    const r2 = await apiCall('upsert_content', {
       section_key: 'hero_video_mobile',
       title: 'Hero Video Mobile',
       locale: adminLocale,
       video_url: hero.mobileVideoUrl,
     });
+    if (r2?.error) {
+      showMessage(`Erro ao salvar hero mobile: ${r2.error}`);
+      setHeroLoading(false);
+      return;
+    }
     showMessage('Hero atualizado!');
     setHeroLoading(false);
   };
@@ -778,8 +788,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     const items: any[] = result.content || [];
     const map: Record<string, string> = {};
     for (const item of items) {
-      if (item.section_key && item.body != null) {
-        map[item.section_key] = item.body;
+      if (item.section_key) {
+        // Inclui campos com body null como string vazia para permitir edição
+        map[item.section_key] = item.body ?? '';
       }
     }
     setSiteTexts(map);
@@ -794,12 +805,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
   const saveTextField = async (key: string) => {
     setTextsLoading(true);
-    await apiCall('upsert_content', {
+    const result = await apiCall('upsert_content', {
       section_key: key,
       title: key,
       locale: adminLocale,
       body: siteTexts[key] || '',
     });
+    if (result?.error) {
+      showMessage(`Erro ao salvar: ${result.error}`);
+      setTextsLoading(false);
+      return;
+    }
     setTextsDirty((prev) => {
       const next = new Set(prev);
       next.delete(key);
@@ -813,16 +829,27 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     const dirty = Array.from(textsDirty);
     if (dirty.length === 0) return;
     setTextsLoading(true);
+    let failedKey: string | null = null;
+    let failedError = '';
     for (const key of dirty) {
-      await apiCall('upsert_content', {
+      const result = await apiCall('upsert_content', {
         section_key: key,
         title: key,
         locale: adminLocale,
         body: siteTexts[key] || '',
       });
+      if (result?.error) {
+        failedKey = key;
+        failedError = result.error;
+        break;
+      }
     }
-    setTextsDirty(new Set());
-    showMessage(`${dirty.length} texto(s) salvo(s)!`);
+    if (failedKey) {
+      showMessage(`Erro ao salvar "${failedKey}": ${failedError}`);
+    } else {
+      setTextsDirty(new Set());
+      showMessage(`${dirty.length} texto(s) salvo(s)!`);
+    }
     setTextsLoading(false);
   };
 
