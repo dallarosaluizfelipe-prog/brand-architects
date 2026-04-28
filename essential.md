@@ -2,6 +2,19 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-28 - Correcao de layout do toggle de idioma no desktop
+
+### `components/Navbar.tsx` (atualizado)
+- O toggle de idioma desktop (`LocaleFlagSwitcher size="md"`) foi removido de dentro do `nav` central e renderizado como bloco separado no nivel superior do componente.
+- Causa corrigida: o `nav` desktop usa `md:left-1/2 md:-translate-x-1/2`; manter o toggle `fixed` como descendente desse ancestral podia gerar referencia de posicionamento inconsistente e sobreposicao visual.
+- Novo posicionamento do toggle desktop: `fixed top-8 right-6 z-50`, alinhado na mesma altura do header e isolado no canto superior direito da viewport.
+- Separacao visual reforcada com container proprio (`nav-blur`, borda e sombra), mantendo identidade do design system sem impactar o fluxo mobile.
+- Comportamento mobile preservado: switcher continua no header mobile e no menu fullscreen mobile, sem alteracao funcional.
+
+### Validacao
+- `get_errors` em `components/Navbar.tsx`: sem erros.
+- `npm run build`: sucesso.
+
 ## 2026-04-22 — SEO/GEO: robots.txt + sitemap.xml
 
 ### `public/robots.txt` (reescrito)

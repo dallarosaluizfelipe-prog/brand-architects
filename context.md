@@ -2,6 +2,13 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-28 — Header desktop: correcao de posicionamento do toggle de idioma:**
+  - **Motivacao:** Toggle de idioma estava sobrepondo visualmente o header desktop. Solicitacao: manter na mesma altura, mas separado no canto superior direito.
+  - **`components/Navbar.tsx`:** O bloco desktop do `LocaleFlagSwitcher` foi removido de dentro do `nav` central (que usa `md:-translate-x-1/2`) e renderizado como elemento irmao no nivel superior do componente.
+  - **Ajuste tecnico aplicado:** Mantido `fixed top-8 right-6` apenas no toggle desktop, agora fora do ancestral transformado para evitar conflito de referencia de posicionamento (`position: fixed` + `transform`).
+  - **Separacao visual:** Toggle desktop recebeu container proprio com `nav-blur`, borda e sombra para ficar visualmente isolado do header principal.
+  - **Validacao:** `get_errors` sem erros em `Navbar.tsx` e `npm run build` concluido com sucesso.
+
 - **2026-04-22 — SEO/GEO: robots.txt e sitemap.xml otimizados:**
   - **Motivacao:** Garantir indexacao ideal no Google Search Console e visibilidade em motores generativos (GPT, Gemini, Claude, Perplexity), bloqueando area administrativa e propostas privadas.
   - **`public/robots.txt`:** Reescrito. Bloqueia `/admin*`, `/api/`, `/proposta*`, `/proposal*` e parametros UTM/fbclid/gclid. Allow-list para assets estaticos (css/js/svg/png/jpg/webp/mp4/woff). Regras explicitas para Googlebot, Bingbot, Slurp, DuckDuckBot, Yandex e bots de IA/GEO (GPTBot, ChatGPT-User, OAI-SearchBot, anthropic-ai, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, Gemini, GoogleOther, Applebot, Applebot-Extended, YouBot, cohere-ai, meta-externalagent, Amazonbot, Bytespider, DiffBot). Bloqueio total para scrapers agressivos (AhrefsBot, SemrushBot, MJ12bot, DotBot, BLEXBot). Diretivas `Host` e `Sitemap` no rodape.

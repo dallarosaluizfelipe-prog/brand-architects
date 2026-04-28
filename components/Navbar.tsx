@@ -103,12 +103,14 @@ const Navbar: React.FC = () => {
             <NavLinks />
           </div>
         </div>
+      </nav>
 
-        {/* Language toggle flutuante — apenas desktop, canto superior direito, mesma altura do header */}
-        <div className="hidden md:flex fixed top-8 right-6 z-50 py-4 items-center">
+      {/* Language toggle desktop separado do nav para evitar conflito com transform do header central */}
+      <div className="hidden md:flex fixed top-8 right-6 z-50 items-center">
+        <div className="nav-blur rounded-full px-2 py-2 shadow-lg border border-neutral-100">
           <LocaleFlagSwitcher size="md" />
         </div>
-      </nav>
+      </div>
 
       <div className={`fixed inset-0 z-[60] bg-white transition-transform duration-500 ease-in-out md:hidden ${isMenuOpen ? "translate-y-0" : "-translate-y-full"}`}>
         <div className="flex flex-col h-full pt-safe">
