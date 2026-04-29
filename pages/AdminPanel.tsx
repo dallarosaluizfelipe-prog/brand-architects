@@ -652,6 +652,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     about_cta_url: item.about_cta_url ?? '',
     about_video_url: item.about_video_url ?? '',
     institutional_video_url: item.institutional_video_url ?? '',
+    institutional_video_mobile_url: item.institutional_video_mobile_url ?? '',
     method_badge: item.method_badge ?? '',
     method_title: item.method_title ?? '',
     method_subtitle: item.method_subtitle ?? '',
@@ -744,6 +745,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     about_cta_url: '/estudio',
     about_video_url: '',
     institutional_video_url: '',
+    institutional_video_mobile_url: '',
     method_badge: '',
     method_title: '',
     method_subtitle: '',
@@ -2308,12 +2310,20 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 {/* Vídeo Institucional */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Vídeo Institucional</h3>
-                  <input
-                    value={editingLp.institutional_video_url}
-                    onChange={(e) => updateLpField('institutional_video_url', e.target.value)}
-                    className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                    placeholder="URL do vídeo institucional (bloco entre Hero e conteúdo)"
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      value={editingLp.institutional_video_url}
+                      onChange={(e) => updateLpField('institutional_video_url', e.target.value)}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                      placeholder="URL vídeo institucional Desktop"
+                    />
+                    <input
+                      value={editingLp.institutional_video_mobile_url}
+                      onChange={(e) => updateLpField('institutional_video_mobile_url', e.target.value)}
+                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
+                      placeholder="URL vídeo institucional Mobile"
+                    />
+                  </div>
                 </div>
 
                 {/* Método */}

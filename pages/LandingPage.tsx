@@ -36,6 +36,9 @@ const LandingPage: React.FC = () => {
 
   const phases: LpPhase[] = lp?.method_phases ?? [];
   const institutionalVideoLabel = locale === 'en' ? 'Institutional Video' : 'Video Institucional';
+  const institutionalDesktopVideo = lp?.institutional_video_url ?? '';
+  const institutionalMobileVideo = lp?.institutional_video_mobile_url || institutionalDesktopVideo;
+  const hasInstitutionalVideo = Boolean(institutionalDesktopVideo || institutionalMobileVideo);
 
   const handlePhaseClick = useCallback((idx: number) => {
     setActivePhase(idx);
@@ -105,18 +108,27 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* ── VÍDEO INSTITUCIONAL ── */}
-        {lp.institutional_video_url && (
+        {hasInstitutionalVideo && (
           <section className="px-6 py-8 md:py-12">
+              <span className="text-[10px] md:text-[11px] uppercase tracking-[0.35em] text-neutral-500 font-sans font-bold mb-4 block text-center">
+                {institutionalVideoLabel}
+              </span>
               <div className="rounded-[1.4rem] md:rounded-[2rem] overflow-hidden bg-black aspect-video">
                 <video
-                  src={lp.institutional_video_url}
                   autoPlay
                   loop
                   muted
                   playsInline
                   preload="metadata"
                   className="w-full h-full object-cover"
-                />
+                >
+                  {institutionalMobileVideo && (
+                    <source media="(max-width: 767px)" src={institutionalMobileVideo} />
+                  )}
+                  {institutionalDesktopVideo && (
+                    <source src={institutionalDesktopVideo} />
+                  )}
+                </video>
               </div>
           </section>
         )}

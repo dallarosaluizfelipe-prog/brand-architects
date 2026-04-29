@@ -273,6 +273,7 @@ export type Database = {
           hero_video_desktop: string
           hero_video_mobile: string
           id: string
+          institutional_video_mobile_url: string
           institutional_video_url: string
           is_visible: boolean
           locale: string
@@ -326,6 +327,7 @@ export type Database = {
           hero_video_desktop?: string
           hero_video_mobile?: string
           id?: string
+          institutional_video_mobile_url?: string
           institutional_video_url?: string
           is_visible?: boolean
           locale?: string
@@ -379,6 +381,7 @@ export type Database = {
           hero_video_desktop?: string
           hero_video_mobile?: string
           id?: string
+          institutional_video_mobile_url?: string
           institutional_video_url?: string
           is_visible?: boolean
           locale?: string

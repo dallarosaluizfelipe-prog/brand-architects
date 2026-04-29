@@ -8,33 +8,38 @@ This document captures details of components, pages, functions, and any code add
 - Adiciona a coluna `institutional_video_url` em `site_lps` com `text not null default ''`.
 - Compatibilidade retroativa preservada: LPs existentes continuam funcionais com valor vazio.
 
+### `supabase/migrations/20260429160000_add_institutional_video_mobile_url_to_site_lps.sql` (novo)
+- Adiciona a coluna `institutional_video_mobile_url` em `site_lps` com `text not null default ''`.
+- Permite definir uma fonte dedicada para mobile no mesmo bloco institucional.
+
 ### `src/data/siteLps.ts` (atualizado)
-- Interface `SiteLp` recebeu o novo campo `institutional_video_url: string`.
-- `normalizeLp()` passa a normalizar `institutional_video_url` com fallback para string vazia.
+- Interface `SiteLp` recebeu os campos `institutional_video_url: string` e `institutional_video_mobile_url: string`.
+- `normalizeLp()` passa a normalizar os dois campos com fallback para string vazia.
 - Impacto: qualquer consumo de LP no front/admin passa a ter o campo disponivel de forma tipada.
 
 ### `src/integrations/supabase/types.ts` (atualizado)
-- Tipos de `site_lps` atualizados para incluir `institutional_video_url` em:
+- Tipos de `site_lps` atualizados para incluir `institutional_video_url` e `institutional_video_mobile_url` em:
   - `Row`
   - `Insert`
   - `Update`
 
 ### `pages/AdminPanel.tsx` (atualizado)
 - LP CRUD:
-  - `normalizeLp` inclui `institutional_video_url`.
-  - `newLp()` inicializa `institutional_video_url` com `''`.
+  - `normalizeLp` inclui `institutional_video_url` e `institutional_video_mobile_url`.
+  - `newLp()` inicializa ambos com `''`.
 - Formulario da aba LPs:
-  - Nova secao "Video Institucional" com input para URL do video.
+  - Secao "Video Institucional" com inputs de URL desktop e mobile.
   - Campo salvo no mesmo fluxo existente de `saveLp` (`upsert_lp`), sem alterar actions do backend.
 
 ### `pages/LandingPage.tsx` (atualizado)
 - Nova secao condicional "Video Institucional" inserida entre Hero e primeiro conteudo (`Quem Somos`).
-- Renderiza apenas quando `lp.institutional_video_url` estiver preenchido.
+- Renderiza quando existir URL desktop ou mobile.
 - Estilo do bloco:
   - fundo proprio (`bg-[#f5f5f6]`), borda e sombra para separacao visual
   - container com `aspect-video` e cantos arredondados
 - Configuracao de video:
   - `autoPlay`, `loop`, `muted`, `playsInline`, `preload="metadata"`, `object-cover`
+  - suporte a `<source media="(max-width: 767px)">` para mobile, com fallback automatico para desktop
 - Label do bloco internacionalizada por locale atual (`en` -> "Institutional Video", demais -> "Video Institucional").
 
 ### Validacao

@@ -43,6 +43,7 @@ export interface SiteLp {
   about_cta_url: string;
   about_video_url: string;
   institutional_video_url: string;
+  institutional_video_mobile_url: string;
 
   method_badge: string;
   method_title: string;
@@ -103,6 +104,7 @@ const normalizeLp = (item: any): SiteLp => ({
   about_cta_url: item.about_cta_url ?? '',
   about_video_url: item.about_video_url ?? '',
   institutional_video_url: item.institutional_video_url ?? '',
+  institutional_video_mobile_url: item.institutional_video_mobile_url ?? '',
 
   method_badge: item.method_badge ?? '',
   method_title: item.method_title ?? '',
