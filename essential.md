@@ -2,6 +2,49 @@
 
 This document captures details of components, pages, functions, and any code added or modified by AI. It is updated at the end of each cycle of changes.
 
+## 2026-04-29 - LPs com bloco de video institucional editavel no Admin
+
+### `supabase/migrations/20260429153000_add_institutional_video_url_to_site_lps.sql` (novo)
+- Adiciona a coluna `institutional_video_url` em `site_lps` com `text not null default ''`.
+- Compatibilidade retroativa preservada: LPs existentes continuam funcionais com valor vazio.
+
+### `src/data/siteLps.ts` (atualizado)
+- Interface `SiteLp` recebeu o novo campo `institutional_video_url: string`.
+- `normalizeLp()` passa a normalizar `institutional_video_url` com fallback para string vazia.
+- Impacto: qualquer consumo de LP no front/admin passa a ter o campo disponivel de forma tipada.
+
+### `src/integrations/supabase/types.ts` (atualizado)
+- Tipos de `site_lps` atualizados para incluir `institutional_video_url` em:
+  - `Row`
+  - `Insert`
+  - `Update`
+
+### `pages/AdminPanel.tsx` (atualizado)
+- LP CRUD:
+  - `normalizeLp` inclui `institutional_video_url`.
+  - `newLp()` inicializa `institutional_video_url` com `''`.
+- Formulario da aba LPs:
+  - Nova secao "Video Institucional" com input para URL do video.
+  - Campo salvo no mesmo fluxo existente de `saveLp` (`upsert_lp`), sem alterar actions do backend.
+
+### `pages/LandingPage.tsx` (atualizado)
+- Nova secao condicional "Video Institucional" inserida entre Hero e primeiro conteudo (`Quem Somos`).
+- Renderiza apenas quando `lp.institutional_video_url` estiver preenchido.
+- Estilo do bloco:
+  - fundo proprio (`bg-[#f5f5f6]`), borda e sombra para separacao visual
+  - container com `aspect-video` e cantos arredondados
+- Configuracao de video:
+  - `autoPlay`, `loop`, `muted`, `playsInline`, `preload="metadata"`, `object-cover`
+- Label do bloco internacionalizada por locale atual (`en` -> "Institutional Video", demais -> "Video Institucional").
+
+### Validacao
+- `get_errors` sem erros em:
+  - `pages/LandingPage.tsx`
+  - `pages/AdminPanel.tsx`
+  - `src/data/siteLps.ts`
+  - `src/integrations/supabase/types.ts`
+- `npm run build` executado com sucesso apos as alteracoes.
+
 ## 2026-04-28 - Correcao de layout do toggle de idioma no desktop
 
 ### `components/Navbar.tsx` (atualizado)

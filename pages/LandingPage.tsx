@@ -35,6 +35,7 @@ const LandingPage: React.FC = () => {
   }, [lp?.partners_show]);
 
   const phases: LpPhase[] = lp?.method_phases ?? [];
+  const institutionalVideoLabel = locale === 'en' ? 'Institutional Video' : 'Video Institucional';
 
   const handlePhaseClick = useCallback((idx: number) => {
     setActivePhase(idx);
@@ -102,6 +103,28 @@ const LandingPage: React.FC = () => {
             <div />
           </div>
         </section>
+
+        {/* ── VÍDEO INSTITUCIONAL ── */}
+        {lp.institutional_video_url && (
+          <section className="px-6 py-8 md:py-12">
+            <div className="max-w-5xl mx-auto bg-[#f5f5f6] border border-black/10 rounded-[2rem] md:rounded-[3rem] p-4 md:p-6 shadow-[0_16px_50px_rgba(0,0,0,0.08)]">
+              <span className="text-[10px] md:text-[11px] uppercase tracking-[0.35em] text-neutral-500 font-sans font-bold mb-4 block text-center">
+                {institutionalVideoLabel}
+              </span>
+              <div className="rounded-[1.4rem] md:rounded-[2rem] overflow-hidden bg-black aspect-video">
+                <video
+                  src={lp.institutional_video_url}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── QUEM SOMOS ── */}
         <section className="py-20 md:py-32 px-6 bg-[#efeff0] rounded-[2.5rem] md:rounded-[5rem]">

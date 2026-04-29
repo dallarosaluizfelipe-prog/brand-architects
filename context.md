@@ -2,6 +2,16 @@
 
 This file records a chronological history of changes, requests, and reasoning for any AI agents interacting with the project. Entries should include date, time, and a brief summary of the action or request.
 
+- **2026-04-29 — LPs: bloco de video institucional entre Hero e primeiro conteudo + edicao no Admin:**
+  - **Motivacao:** Usuario solicitou um bloco destacado com video institucional entre o Hero e o primeiro conteudo da LP, com configuracao editavel no painel administrativo.
+  - **Escopo definido com o usuario:** Aplicar em todas as LPs (nao apenas `identidade-visual`), com edicao por URL (sem upload) e com fundo proprio separado da secao seguinte.
+  - **Banco (`site_lps`):** Nova migration `20260429153000_add_institutional_video_url_to_site_lps.sql` adiciona `institutional_video_url text not null default ''`.
+  - **Tipagem e dados:** `src/integrations/supabase/types.ts` e `src/data/siteLps.ts` atualizados para incluir `institutional_video_url` em tipos/interfaces e normalizacao.
+  - **Admin (`pages/AdminPanel.tsx`):** Campo `institutional_video_url` adicionado em `normalizeLp`, `newLp` e no formulario da aba LPs (secao "Video Institucional"). Persistencia aproveita `saveLp` existente via `upsert_lp`.
+  - **Frontend (`pages/LandingPage.tsx`):** Nova secao condicional "Video Institucional" inserida imediatamente apos o Hero e antes da secao "Quem Somos". O bloco usa fundo proprio, borda, sombra e `aspect-video`, com `<video>` configurado com `autoPlay`, `loop`, `muted`, `playsInline` e `preload="metadata"`.
+  - **Locale:** Label do bloco no front respeita idioma atual (`en`/`pt-BR`) e o valor da URL permanece por LP/locale conforme modelo atual de `site_lps`.
+  - **Validacao:** `get_errors` sem erros nos arquivos alterados e `npm run build` concluido com sucesso.
+
 - **2026-04-28 — Header desktop: correcao de posicionamento do toggle de idioma:**
   - **Motivacao:** Toggle de idioma estava sobrepondo visualmente o header desktop. Solicitacao: manter na mesma altura, mas separado no canto superior direito.
   - **`components/Navbar.tsx`:** O bloco desktop do `LocaleFlagSwitcher` foi removido de dentro do `nav` central (que usa `md:-translate-x-1/2`) e renderizado como elemento irmao no nivel superior do componente.
