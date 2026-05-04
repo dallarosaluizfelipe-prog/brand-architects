@@ -1,0 +1,1 @@
+UPDATE site_lps SET institutional_video_url='https://huzpprlxmgouysznjhfi.supabase.co/storage/v1/object/public/media/dalla-institucional-lp.mp4', institutional_video_mobile_url='https://huzpprlxmgouysznjhfi.supabase.co/storage/v1/object/public/media/dalla-institucional-lp.mp4' WHERE slug='identidade-visual';
