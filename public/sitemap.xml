@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://estudiodalla.com/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://estudiodalla.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://estudiodalla.com/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://estudiodalla.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://estudiodalla.com/estudio</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://estudiodalla.com/estudio"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://estudiodalla.com/en/studio"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://estudiodalla.com/metodologia</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://estudiodalla.com/metodologia"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://estudiodalla.com/en/methodology"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://estudiodalla.com/cases</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://estudiodalla.com/cases"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://estudiodalla.com/en/cases"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://estudiodalla.com/contato</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://estudiodalla.com/contato"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://estudiodalla.com/en/contact"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://estudiodalla.com/lp/identidade-visual</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
