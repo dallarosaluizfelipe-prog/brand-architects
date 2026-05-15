@@ -89,7 +89,7 @@ const CaseDetails: React.FC = () => {
             <div className="flex flex-col gap-5 md:gap-8">
               {project.gallery_urls.map((url, index) => (
                 <div key={`${url}-${index}`} className="rounded-3xl overflow-hidden bg-neutral-100 shadow-sm">
-                  <img src={url} alt={`${project.title} ${index + 1}`} className="w-full object-contain" loading="lazy" />
+                  <img src={url} alt={`${project.title} — imagem ${index + 1} do projeto de branding`} className="w-full object-contain" loading="lazy" />
                 </div>
               ))}
             </div>
@@ -111,6 +111,29 @@ const CaseDetails: React.FC = () => {
         </section>
 
         <ContactSection />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Article',
+              headline: project.title,
+              description: project.description || project.meta_description || undefined,
+              image: project.cover_url,
+              author: project.author
+                ? { '@type': 'Person', name: project.author }
+                : { '@type': 'Organization', name: 'Studio Dalla' },
+              publisher: {
+                '@type': 'Organization',
+                name: 'Studio Dalla',
+                logo: { '@type': 'ImageObject', url: 'https://estudiodalla.com/og-default.png' },
+              },
+              datePublished: project.case_date || undefined,
+              mainEntityOfPage: typeof window !== 'undefined' ? window.location.href : `https://estudiodalla.com/cases/${slug}`,
+              about: project.category,
+            }),
+          }}
+        />
       </div>
     </>
   );

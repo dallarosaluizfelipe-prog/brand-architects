@@ -43,12 +43,13 @@ const Portfolio: React.FC = () => {
         </header>
 
         <section className="pb-24 md:pb-40 px-6 max-w-7xl mx-auto">
+          <h2 className="sr-only">Portfólio de cases de branding</h2>
           <div className="grid md:grid-cols-2 gap-10 md:gap-12">
             {projects.map((project) => (
               <Link key={project.slug || project.title} className="group cursor-pointer" to={`/cases/${project.slug}`}>
                 <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-6 md:mb-8 shadow-lg">
                   <img
-                    alt={project.title}
+                    alt={`Case ${project.title} — ${project.category}`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                     src={project.cover_url}
                     loading="lazy"
@@ -62,6 +63,26 @@ const Portfolio: React.FC = () => {
             ))}
           </div>
         </section>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'CollectionPage',
+              name: t.portfolio_seo_title,
+              description: t.portfolio_seo_description,
+              url: typeof window !== 'undefined' ? window.location.href : 'https://estudiodalla.com/cases',
+              hasPart: projects.map((p) => ({
+                '@type': 'CreativeWork',
+                name: p.title,
+                url: `https://estudiodalla.com/cases/${p.slug}`,
+                image: p.cover_url,
+                genre: p.category,
+              })),
+            }),
+          }}
+        />
 
         <ContactSection />
       </div>

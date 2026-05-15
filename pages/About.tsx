@@ -111,15 +111,15 @@ const About: React.FC = () => {
           </div>
           <div className="grid md:grid-cols-3 gap-10 md:gap-16">
             <div className="space-y-5 md:space-y-6">
-              <div className="text-[2rem] md:text-4xl font-display">{t.about_pillar1_title}</div>
+              <h3 className="text-[2rem] md:text-4xl font-display">{t.about_pillar1_title}</h3>
               <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar1_desc }} />
             </div>
             <div className="space-y-5 md:space-y-6">
-              <div className="text-[2rem] md:text-4xl font-display">{t.about_pillar2_title}</div>
+              <h3 className="text-[2rem] md:text-4xl font-display">{t.about_pillar2_title}</h3>
               <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar2_desc }} />
             </div>
             <div className="space-y-5 md:space-y-6">
-              <div className="text-[2rem] md:text-4xl font-display">{t.about_pillar3_title}</div>
+              <h3 className="text-[2rem] md:text-4xl font-display">{t.about_pillar3_title}</h3>
               <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar3_desc }} />
             </div>
           </div>
@@ -127,7 +127,7 @@ const About: React.FC = () => {
 
         <section className="px-6 mb-24 md:mb-40">
           <div className="max-w-[1440px] mx-auto rounded-[2rem] md:rounded-[3rem] overflow-hidden aspect-[16/10] md:aspect-[21/9] shadow-2xl bg-neutral-100">
-            <img alt="Wide studio view" className="w-full h-full object-cover" src={t.about_bottom_image_url} loading="lazy" />
+            <img alt="Vista panorâmica do Studio Dalla — branding e identidade visual" className="w-full h-full object-cover" src={t.about_bottom_image_url} loading="lazy" />
           </div>
         </section>
 

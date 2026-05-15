@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
     <>
       <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-fit px-4 pt-4 pb-2 md:p-0">
         <div className="flex justify-between items-center w-full nav-blur px-5 py-3 rounded-full shadow-lg border border-neutral-100 md:hidden">
-          <Link to={homePath} className="font-black tracking-tighter font-sans" onClick={closeMenu}>
+          <Link to={homePath} className="font-black tracking-tighter font-sans" onClick={closeMenu} aria-label="Studio Dalla — Home">
             <DallaLogo className="h-5 w-auto" />
           </Link>
           <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
 
         {/* Desktop navigation bar */}
         <div className="hidden md:flex nav-blur px-10 py-4 rounded-full items-center shadow-lg gap-10">
-          <Link to={homePath} className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity">
+          <Link to={homePath} className="text-[13px] font-black tracking-tighter border-r border-neutral-300 pr-8 font-sans hover:opacity-70 transition-opacity" aria-label="Studio Dalla — Home">
             <DallaLogo className="h-5 w-auto" />
           </Link>
           <div className="flex gap-10 text-[16px] font-normal font-sans text-black">

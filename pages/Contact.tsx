@@ -74,15 +74,15 @@ const Contact: React.FC = () => {
           <div className="grid md:grid-cols-12 gap-12 md:gap-32">
             <div className="md:col-span-4 space-y-12 md:space-y-20 font-sans">
               <section>
-                <h5 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Contatos</h5>
+                <h2 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Contatos</h2>
                 <div className="font-light leading-relaxed uppercase tracking-[0.22em] text-neutral-800 text-sm md:text-lg" dangerouslySetInnerHTML={{ __html: t.contact_info }} />
               </section>
               <section>
-                <h5 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Email</h5>
+                <h2 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Email</h2>
                 <div className="font-light tracking-[0.15em] text-neutral-800 text-xs md:text-lg break-words" dangerouslySetInnerHTML={{ __html: t.contact_emails }} />
               </section>
               <section>
-                <h5 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Redes</h5>
+                <h2 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Redes</h2>
                 <ul className="font-light space-y-3 md:space-y-4 uppercase tracking-[0.2em] text-neutral-800 text-sm md:text-lg">
                   {t.social_instagram && <li><a className="hover:underline" href={t.social_instagram} target="_blank" rel="noreferrer">Instagram</a></li>}
                   {t.social_linkedin && <li><a className="hover:underline" href={t.social_linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>}
@@ -104,11 +104,11 @@ const Contact: React.FC = () => {
                 </div>
               ) : (
               <form className="space-y-9 md:space-y-12 font-sans" onSubmit={handleSubmit}>
-                <input name="name" value={form.name} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Nome *" type="text" required />
-                <input name="phone" value={form.phone} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Telefone *" type="tel" required />
-                <input name="email" value={form.email} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Email *" type="email" required />
-                <input name="company" value={form.company} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Nome da empresa" type="text" />
-                <select name="service" value={form.service} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light text-neutral-300 appearance-none">
+                <input aria-label="Nome" name="name" value={form.name} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Nome *" type="text" required />
+                <input aria-label="Telefone" name="phone" value={form.phone} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Telefone *" type="tel" required />
+                <input aria-label="Email" name="email" value={form.email} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Email *" type="email" required />
+                <input aria-label="Nome da empresa" name="company" value={form.company} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light placeholder:text-neutral-300" placeholder="Nome da empresa" type="text" />
+                <select aria-label="Serviço de interesse" name="service" value={form.service} onChange={handleChange} className="block w-full border-0 border-b border-neutral-200 bg-transparent px-0 py-5 md:py-6 focus:ring-0 focus:border-black text-lg md:text-2xl font-light text-neutral-300 appearance-none">
                   <option value="">Estou buscando...</option>
                   <option value="estrategia" className="text-black">Estratégia de marca (posicionamento e conceito)</option>
                   <option value="identidade_visual" className="text-black">Identidade visual (logo, cores, tipografia)</option>
