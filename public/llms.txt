@@ -1,0 +1,22 @@
+# Studio Dalla
+
+> High-end branding studio em São Paulo, especializado em branding, rebranding e identidade visual para marcas de luxo médias e grandes.
+
+Studio Dalla é uma consultoria de branding focada em método, maturidade estratégica e visão de longo prazo para marcas premium. Atendemos empresas de luxo de São Paulo e do Brasil em projetos de identidade de marca, identidade visual e reposicionamento.
+
+## Pages
+
+- [Home](/): Visão geral do estúdio, cases em destaque e proposta de valor.
+- [Estúdio](/estudio): Sobre o fundador, posicionamento e abordagem do Studio Dalla.
+- [Metodologia](/metodologia): As 5 fases do nosso método de branding.
+- [Cases](/cases): Portfólio completo de projetos de branding e identidade visual.
+- [Identidade Visual](/lp/identidade-visual): Landing page do serviço de identidade visual.
+- [Contato](/contato): Fale com o estúdio para iniciar um projeto.
+
+## English
+
+- [Home (EN)](/en): Overview in English.
+- [Studio (EN)](/en/studio): About the studio.
+- [Methodology (EN)](/en/methodology): Our 5-phase branding method.
+- [Cases (EN)](/en/cases): Full portfolio.
+- [Contact (EN)](/en/contact): Get in touch.
