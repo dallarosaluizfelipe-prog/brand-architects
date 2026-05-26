@@ -1,62 +1,113 @@
+# Termômetro de Marca
 
+Feature completa: questionário bipolar full-screen acessível por link único, gerenciado por nova aba no admin, com envio de e-mail dual (admin + cliente) ao concluir.
 
-## Objetivo
-Otimizar `robots.txt` e `sitemap.xml` para SEO + GEO (busca generativa), bloquear toda a área `/admin` e variações, e entregar um sitemap perfeito para o Google Search Console com `hreflang` correto em todas as URLs (PT + EN).
+## 1. Banco de dados (Supabase)
 
-## 1. `public/robots.txt` — versão otimizada
+Nova migration criando 4 tabelas + bucket dedicado:
 
-- **Bloquear** rotas administrativas e técnicas: `/admin`, `/admin/*`, `/#admin` (hash não é rastreado, mas mantemos consistência), `/api/`, `/proposta/`, `/proposal/` (propostas são `noindex` por padrão e privadas), e parâmetros UTM via `Disallow: /*?utm_*`.
-- **Permitir** explicitamente: `/`, assets estáticos (`*.css`, `*.js`, `*.svg`, `*.png`, `*.jpg`, `*.webp`, `*.mp4`, `*.mov`) — Google precisa renderizar.
-- **Bots de busca tradicionais** (Googlebot, Bingbot, Slurp, DuckDuckBot, Yandex): mesmas regras do default.
-- **Bots de IA / GEO** (GPTBot, ChatGPT-User, OAI-SearchBot, anthropic-ai, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, Gemini, GoogleOther, Applebot-Extended, YouBot, cohere-ai, meta-externalagent, Amazonbot, Bytespider, DiffBot): **Allow `/`** + **Disallow `/admin`** e `/proposta`. Garante visibilidade em respostas generativas (estratégia GEO) preservando privacidade.
-- **Bloquear bots agressivos / scrapers irrelevantes**: AhrefsBot, SemrushBot, MJ12bot, DotBot (`Disallow: /`).
-- **Crawl-delay**: omitido para Google/Bing (eles ignoram); aplicado apenas para bots agressivos quando aplicável.
-- **Host** + **Sitemap** no rodapé:
-  ```
-  Host: https://estudiodalla.com
-  Sitemap: https://estudiodalla.com/sitemap.xml
-  ```
+**`thermometers`**
+- `id` uuid PK, `slug` text único, `client_name`, `client_logo_url`, `accent_color` (hex, default `#000000`), `admin_email` (default `lipe@estudiodalla.com`), `welcome_title` text, `is_active` bool default true, `created_at`, `updated_at`.
 
-## 2. `api/sitemap.xml.js` — versão ideal para Search Console
+**`thermometer_questions`**
+- `id` uuid PK, `thermometer_id` FK → thermometers (cascade), `order_index` int, `question_text`, `left_label`, `left_icon` (nome Lucide ou emoji), `right_label`, `right_icon`.
 
-Correções e melhorias:
+**`thermometer_responses`**
+- `id` uuid PK, `thermometer_id` FK, `client_email`, `client_name` (opcional, futuro), `completed_at` default now().
 
-**a. URLs estáticas alinhadas ao roteador real**
-- Remover entrada legada e adicionar todas as rotas reais (PT + EN) com `hreflang` recíproco em **todas** elas, não só nos cases:
-  - `/` ↔ `/en`
-  - `/estudio` ↔ `/en/studio`
-  - `/metodologia` ↔ `/en/methodology`
-  - `/cases` ↔ `/en/cases`
-  - `/contato` ↔ `/en/contact`
-- `x-default` apontando sempre para a versão PT (mercado primário SP/Brasil).
+**`thermometer_answers`**
+- `id` uuid PK, `response_id` FK (cascade), `question_id` FK, `value` int (1–10).
 
-**b. Cases dinâmicos**
-- Buscar do Supabase agrupados por `translation_group` para parear PT↔EN corretamente quando a tradução existir; quando não existir, listar só a versão PT com `hreflang` apontando só para si + `x-default`.
-- `lastmod` em formato ISO completo `YYYY-MM-DD` (Search Console exige).
-- `priority` 0.9 para featured, 0.7 para demais.
+**RLS** (seguindo padrão do projeto — admin opera via PIN/Edge Function service-role; público lê só termômetros ativos e insere respostas):
+- `thermometers`: SELECT público quando `is_active = true`.
+- `thermometer_questions`: SELECT público (sem filtro — visíveis para qualquer termômetro listado).
+- `thermometer_responses` e `thermometer_answers`: INSERT público (anon); sem SELECT/UPDATE/DELETE público.
+- Sem políticas de UPDATE/DELETE/INSERT públicas em `thermometers`/`thermometer_questions` — admin grava via Edge Function nova.
 
-**c. LPs dinâmicas**
-- Mesmo tratamento por `translation_group`.
-- Atualizar fallback: `identidadevisual` → `identidade-visual` (slug atual conforme correção anterior).
+**Bucket `media`** já existe e é público → reutilizar para logos do cliente (pasta `thermometers/`).
 
-**d. Validade XML para o Search Console**
-- Escapar caracteres especiais (`&`, `<`, `>`, `'`, `"`) em todas as URLs antes de inserir.
-- Garantir uma URL única por `<loc>` (evitar duplicatas PT/EN no mesmo bloco).
-- Cada URL aparece **uma única vez** como `<loc>`, com seus `<xhtml:link rel="alternate">` para todas as variantes.
-- Header `Content-Type: application/xml; charset=utf-8` (mantido) + `X-Robots-Tag: noindex` removido (não há).
-- Cache: `s-maxage=3600, stale-while-revalidate=86400` (mantido).
+## 2. Edge Functions
 
-**e. Excluir do sitemap**
-- Qualquer rota administrativa, propostas (`/proposta/*`, `/en/proposal/*`), `/links`, `/admin*`, `/api/*`.
+### `supabase/functions/thermometer-admin/index.ts` (nova)
+- Protegida por PIN (mesmo padrão da function `admin` atual).
+- Ações: `list`, `get`, `upsert` (cria/edita termômetro + substitui perguntas em transação), `delete`, `duplicate`, `responses` (lista respostas com detalhes).
+- Usa service-role para bypassar RLS.
 
-## 3. Validação
+### `supabase/functions/thermometer-submit/index.ts` (nova, pública, `verify_jwt = false`)
+- Recebe `{ slug, client_email, answers: [{question_id, value}] }`.
+- Valida slug ativo, valida email (zod), busca termômetro + perguntas.
+- Insere `thermometer_responses` + `thermometer_answers` via service-role.
+- Dispara 2 e-mails Resend:
+  1. Para `admin_email` do termômetro.
+  2. Para `client_email` informado.
+- Template HTML inline reaproveitando o estilo do `send-contact` (header preto, corpo branco, serif Georgia para títulos), com: logo do cliente, nome do termômetro, data/hora, lista pergunta + escala visual + valor.
 
-- Buscar `https://estudiodalla.com/sitemap.xml` localmente após deploy → validar XML em https://www.xml-sitemaps.com/validate-xml-sitemap.html.
-- Submeter no Google Search Console (`Sitemaps` → `sitemap.xml`).
-- Testar `robots.txt` com o Tester do Search Console: `/admin` deve dar `Bloqueado`; `/cases/yerbal` deve dar `Permitido`.
+`supabase/config.toml` recebe blocos `verify_jwt = false` para as duas novas functions.
 
-## Arquivos a modificar
-- `public/robots.txt`
-- `api/sitemap.xml.js`
-- `context.md` + `essential.md` (registro obrigatório conforme regras do projeto)
+## 3. Rota pública `/termometro/:slug`
 
+Nova página `pages/Termometro.tsx` (lazy-loaded em `App.tsx`, **fora** do `PublicLayout` — sem Navbar/Footer/WhatsApp, igual ao padrão `/admin` e `/links`).
+
+Estados (controle local, sem persistir rascunho):
+1. **Tela 0 — Boas-vindas**: logo do cliente + nome + botão "Começar".
+2. **Telas de pergunta** (1 por tela, `h-[100dvh]`, sem scroll):
+   - Header minúsculo: `2 / 6`.
+   - Pergunta em Instrument Serif grande.
+   - Slider bipolar 1–10 (input range estilizado + 10 dots clicáveis) com ícones Lucide nos extremos (resolvidos dinamicamente via `lucide-react`; fallback para emoji se string não for ícone válido).
+   - Botão "Próxima" aparece após interação; última pergunta → "Continuar".
+   - Transição: classe Tailwind controlando `opacity` + `translate-y-4` via state `isTransitioning` (300ms).
+3. **Tela final — e-mail**: input + botão "Receber meu resultado" → chama `thermometer-submit`.
+4. **Tela celebração**: `canvas-confetti` (nova dep) disparando confetes dourados + brilho via CSS; mensagem central "Parabéns! Agora você está a um passo de ter uma marca de impacto."
+
+Cor de destaque (`accent_color`) aplicada via CSS variable inline no container raiz (`--thermo-accent`), usada nos dots ativos, slider track e botões.
+
+Mobile-first; em telas largas o conteúdo fica centralizado com `max-w-2xl`.
+
+`useAnalytics` já ignora rotas não-admin; manter pageview normal (não bloquear).
+
+## 4. Painel admin — nova aba "Termômetros"
+
+Em `pages/AdminPanel.tsx`:
+- Adicionar `'termometros'` ao union `tab` e ao array de abas renderizado em `line 1064`.
+- Novo bloco `{tab === 'termometros' && (...)}` com:
+  - **Listagem**: grid de cards (nome, mini-logo, contagem de respostas, link `/termometro/<slug>`, botões Editar / Duplicar / Excluir / Copiar Link).
+  - **Editor** (modal/painel inline): campos cliente (nome, upload logo no bucket `media/thermometers/`, color picker `accent_color`, `admin_email`, `welcome_title`), lista de perguntas com drag-and-drop simples (botões ↑/↓ — sem nova dep) entre 3 e 12, cada pergunta com texto, label/ícone esquerdo, label/ícone direito (campo texto livre — aceita nome Lucide como "Sparkles" ou emoji).
+  - Botão "Salvar" → chama `thermometer-admin` ação `upsert`.
+  - Botão "Ver respostas" → modal listando respostas (e-mail, data, médias) via ação `responses`.
+
+Todas chamadas passam `pin` (mesmo padrão das outras chamadas admin já presentes).
+
+## 5. Dependências
+
+- Adicionar `canvas-confetti` + `@types/canvas-confetti` (única dep nova permitida — animação requerida pela spec).
+- `lucide-react` já instalado (resolução dinâmica `(LucideIcons as any)[name]`).
+
+## 6. SEO / Rastreamento
+
+- `/termometro/:slug` indexado normalmente; adicionar `<Seo>` com `client_name + " | Termômetro de Marca"` na própria página.
+- Bloquear `/termometro/admin*` não se aplica (rota é só por slug); robots permanece como está.
+
+## 7. Documentação obrigatória
+
+- Atualizar `context.md` com data/hora e resumo desta feature.
+- Atualizar `essential.md` listando: tabelas novas, edge functions novas, página `Termometro.tsx`, aba admin "Termômetros", dependência `canvas-confetti`.
+
+## Arquivos a criar
+- `supabase/migrations/<timestamp>_thermometer.sql`
+- `supabase/functions/thermometer-admin/index.ts`
+- `supabase/functions/thermometer-submit/index.ts`
+- `pages/Termometro.tsx`
+- `components/admin/ThermometersTab.tsx` (extraído para não inchar AdminPanel.tsx)
+
+## Arquivos a editar
+- `App.tsx` (rota lazy `/termometro/:slug` fora do PublicLayout)
+- `pages/AdminPanel.tsx` (aba + render)
+- `supabase/config.toml` (verify_jwt das duas functions)
+- `package.json` (canvas-confetti)
+- `context.md`, `essential.md`
+
+## Restrições respeitadas
+- Nenhuma rota/funcionalidade existente alterada.
+- Design herda tokens atuais (Instrument Serif títulos, Nunito Sans corpo, preto/branco + accent dinâmica do cliente).
+- Apenas 1 nova dep (`canvas-confetti`), justificada pela spec.
+- Estrutura de pastas mantida (pages/, components/, supabase/functions/).

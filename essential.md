@@ -856,3 +856,17 @@ This document captures details of components, pages, functions, and any code add
   - Badge visual "Editando: PT" / "Editing: EN" no header da página em edição.
 - Resultado: ao trocar para EN, todos os campos (SEO, OG image, textos, hero) carregam a versão EN; ao salvar, gravam na linha EN sem afetar PT.
 - Constraint única `(section_key, locale)` em `site_content` garante o upsert correto.
+
+
+---
+
+## Termômetro de Marca
+- **Tabelas Supabase**: `thermometers`, `thermometer_questions`, `thermometer_responses`, `thermometer_answers`.
+- **Edge Functions**: 
+  - `thermometer-admin` — CRUD protegido por PIN (ações: list, get, upsert, delete, duplicate, responses).
+  - `thermometer-submit` — endpoint público que valida slug, insere resposta/notas e dispara 2 e-mails Resend.
+- **Página pública**: `pages/Termometro.tsx` em `/termometro/:slug`, mobile-first, com tela de boas-vindas, perguntas full-screen com slider 1–10, coleta de e-mail e celebração (canvas-confetti).
+- **Componente admin**: `components/admin/ThermometersTab.tsx` (nova aba 'Termômetros' em AdminPanel).
+- **Dependência adicionada**: `canvas-confetti` + `@types/canvas-confetti`.
+- **Rotas**: nova rota lazy `/termometro/:slug` em `App.tsx`, fora do PublicLayout; WhatsApp button desabilitado nesta rota.
+

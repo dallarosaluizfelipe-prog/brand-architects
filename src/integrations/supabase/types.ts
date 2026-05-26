@@ -575,6 +575,160 @@ export type Database = {
         }
         Relationships: []
       }
+      thermometer_answers: {
+        Row: {
+          created_at: string
+          id: string
+          question_id: string
+          response_id: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question_id: string
+          response_id: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question_id?: string
+          response_id?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thermometer_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "thermometer_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "thermometer_answers_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "thermometer_responses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      thermometer_questions: {
+        Row: {
+          created_at: string
+          id: string
+          left_icon: string
+          left_label: string
+          order_index: number
+          question_text: string
+          right_icon: string
+          right_label: string
+          thermometer_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          left_icon?: string
+          left_label?: string
+          order_index?: number
+          question_text?: string
+          right_icon?: string
+          right_label?: string
+          thermometer_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          left_icon?: string
+          left_label?: string
+          order_index?: number
+          question_text?: string
+          right_icon?: string
+          right_label?: string
+          thermometer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thermometer_questions_thermometer_id_fkey"
+            columns: ["thermometer_id"]
+            isOneToOne: false
+            referencedRelation: "thermometers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      thermometer_responses: {
+        Row: {
+          client_email: string
+          client_name: string
+          completed_at: string
+          id: string
+          thermometer_id: string
+        }
+        Insert: {
+          client_email: string
+          client_name?: string
+          completed_at?: string
+          id?: string
+          thermometer_id: string
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          completed_at?: string
+          id?: string
+          thermometer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thermometer_responses_thermometer_id_fkey"
+            columns: ["thermometer_id"]
+            isOneToOne: false
+            referencedRelation: "thermometers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      thermometers: {
+        Row: {
+          accent_color: string
+          admin_email: string
+          client_logo_url: string
+          client_name: string
+          created_at: string
+          id: string
+          is_active: boolean
+          slug: string
+          updated_at: string
+          welcome_title: string
+        }
+        Insert: {
+          accent_color?: string
+          admin_email?: string
+          client_logo_url?: string
+          client_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          slug: string
+          updated_at?: string
+          welcome_title?: string
+        }
+        Update: {
+          accent_color?: string
+          admin_email?: string
+          client_logo_url?: string
+          client_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          slug?: string
+          updated_at?: string
+          welcome_title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

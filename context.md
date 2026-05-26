@@ -408,3 +408,14 @@ This file records a chronological history of changes, requests, and reasoning fo
 - Adicionado badge "Editando: PT" / "Editing: EN" no header da página em edição para deixar claro qual versão está sendo salva.
 - Edge function `admin/upsert_content` já usava `onConflict: section_key,locale` (constraint única adicionada na migration anterior).
 - Cobre todas as páginas (Home, Estúdio, Método, Portfolio, Contato, Geral) pois usam o mesmo handler `saveTextField`/`saveAllTexts` que já incluía locale.
+
+
+---
+
+## 2026-05-26 — Termômetro de Marca (feature completa)
+- Criadas tabelas: thermometers, thermometer_questions, thermometer_responses, thermometer_answers (com RLS: leitura pública de termômetros ativos + perguntas; insert público para respostas; edição via Edge Function protegida por PIN).
+- Edge Functions novas: 'thermometer-admin' (CRUD admin protegido) e 'thermometer-submit' (envio público de respostas + e-mail dual via Resend para admin e cliente).
+- Página pública: /termometro/:slug (sem Navbar/Footer/WhatsApp), questionário full-screen mobile-first com slider 1–10, fade entre perguntas, tela de e-mail e celebração com confetes dourados (canvas-confetti).
+- Nova aba 'Termômetros' no admin (components/admin/ThermometersTab.tsx): criar/editar/duplicar/excluir, upload de logo, color picker, perguntas (3–12) com reordenação, ícones por emoji, listagem de respostas.
+- Configurado verify_jwt=false para ambas as functions em supabase/config.toml.
+

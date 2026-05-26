@@ -1,1 +1,7 @@
 project_id = "huzpprlxmgouysznjhfi"
+
+[functions.thermometer-admin]
+verify_jwt = false
+
+[functions.thermometer-submit]
+verify_jwt = false
