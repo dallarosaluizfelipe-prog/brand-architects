@@ -18,6 +18,7 @@ const CaseDetails = lazy(() => import("./pages/CaseDetails"));
 const ProposalDetails = lazy(() => import("./pages/ProposalDetails"));
 const IdentidadeVisual = lazy(() => import("./pages/IdentidadeVisual"));
 const LandingPage = lazy(() => import("./pages/LandingPage"));
+const Termometro = lazy(() => import("./pages/Termometro"));
 
 const PageLoader: React.FC = () => (
   <div className="min-h-screen flex items-center justify-center bg-white">
@@ -42,6 +43,7 @@ const AppRoutes: React.FC = () => {
   useAnalytics();
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isTermometroRoute = location.pathname.startsWith('/termometro');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -58,6 +60,7 @@ const AppRoutes: React.FC = () => {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/admin" element={<Admin />} />
+          <Route path="/termometro/:slug" element={<Termometro />} />
 
       <Route
         path="/"
@@ -206,7 +209,7 @@ const AppRoutes: React.FC = () => {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>
-      {!isAdminRoute && <WhatsAppFloatingButton />}
+      {!isAdminRoute && !isTermometroRoute && <WhatsAppFloatingButton />}
     </>
   );
 };
