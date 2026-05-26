@@ -97,7 +97,7 @@ async function sendEmail(to: string, subject: string, html: string) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "Studio Dalla <contato@notify.estudiodalla.com>",
+      from: "Estudio Dalla Site <noreply@estudiodalla.com>",
       to: [to],
       subject,
       html,
