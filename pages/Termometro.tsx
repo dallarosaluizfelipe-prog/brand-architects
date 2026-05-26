@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import confetti from 'canvas-confetti';
-import * as LucideIcons from 'lucide-react';
 import { supabase } from '@/src/integrations/supabase/client';
-import Seo from '@/components/Seo';
+import { Seo } from '@/components/Seo';
 
 interface Thermometer {
   id: string;
@@ -29,12 +28,6 @@ type Step = 'welcome' | 'question' | 'email' | 'celebration' | 'notfound';
 function IconRender({ name, className }: { name: string; className?: string }) {
   if (!name) return null;
   const trimmed = name.trim();
-  // Lucide?
-  const Comp = (LucideIcons as any)[trimmed];
-  if (Comp && typeof Comp === 'object') {
-    return <Comp className={className} strokeWidth={1.4} />;
-  }
-  // fallback: emoji / text
   return <span className={className} style={{ fontSize: '1.5em', lineHeight: 1 }}>{trimmed}</span>;
 }
 
