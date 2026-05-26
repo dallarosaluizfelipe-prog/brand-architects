@@ -4,6 +4,7 @@ import { SiteProposal, slugify } from '../src/data/siteProposals';
 import { SiteLp, LpPhase, LpBenefitItem, LpCaseItem } from '../src/data/siteLps';
 import RichTextEditor from '../src/components/RichTextEditor';
 import { getWhatsAppUrl } from '@/src/utils/contact';
+import ThermometersTab from '../components/admin/ThermometersTab';
 
 interface AdminPanelProps {
   pin: string;
@@ -293,7 +294,7 @@ const PAGE_CONFIGS: PageConfig[] = [
 ];
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
-  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros' | 'lps'>('dashboard');
+  const [tab, setTab] = useState<'dashboard' | 'cases' | 'media' | 'paginas' | 'proposals' | 'tags' | 'leads' | 'parceiros' | 'lps' | 'termometros'>('dashboard');
   const [adminLocale, setAdminLocale] = useState<'pt-BR' | 'en'>('pt-BR');
   const [cases, setCases] = useState<SiteCase[]>([]);
   const [editingCase, setEditingCase] = useState<SiteCase | null>(null);
@@ -1052,7 +1053,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       )}
 
       <div className="px-6 py-4 flex gap-2 max-w-5xl mx-auto flex-wrap items-center">
-        {(['dashboard', 'leads', 'cases', 'media', 'paginas', 'proposals', 'parceiros', 'lps', 'tags'] as const).map((t) => (
+        {(['dashboard', 'leads', 'cases', 'media', 'paginas', 'proposals', 'parceiros', 'lps', 'termometros', 'tags'] as const).map((t) => (
           <button
             key={t}
             onClick={() => {
@@ -1064,7 +1065,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
               tab === t ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Mídia' : t === 'paginas' ? 'Páginas' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : t === 'lps' ? 'LPs' : 'Tags'}
+            {t === 'dashboard' ? 'Dashboard' : t === 'leads' ? 'Leads' : t === 'cases' ? 'Cases' : t === 'media' ? 'Mídia' : t === 'paginas' ? 'Páginas' : t === 'proposals' ? 'Propostas' : t === 'parceiros' ? 'Parceiros' : t === 'lps' ? 'LPs' : t === 'termometros' ? 'Termômetros' : 'Tags'}
           </button>
         ))}
 
