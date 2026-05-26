@@ -2728,6 +2728,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
             })()}
           </div>
         )}
+
+        {tab === 'termometros' && (
+          <ThermometersTab pin={pin} onMessage={setMessage} />
+        )}
       </div>
     </div>
   );
