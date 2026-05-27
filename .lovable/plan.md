@@ -1,113 +1,52 @@
-# Termômetro de Marca
+## Parte 1 — E-mail opcional ao concluir o Termômetro
 
-Feature completa: questionário bipolar full-screen acessível por link único, gerenciado por nova aba no admin, com envio de e-mail dual (admin + cliente) ao concluir.
+### UX (pages/Termometro.tsx)
+Tela `email`:
+- Campo de e-mail deixa de ser `required`.
+- Dois botões empilhados:
+  1. **"Receber meu resultado"** (primário, `accent`) — habilita só com e-mail válido.
+  2. **"Pular e finalizar"** (secundário, link discreto `text-neutral-500 underline`) — envia sem e-mail.
+- Ambos chamam `submit(sendEmail: boolean)` e seguem para `celebration` com confete.
 
-## 1. Banco de dados (Supabase)
+### Payload
+- Envia `client_email: string | null` e novo flag `send_email: boolean`.
+- Valida formato de e-mail só quando `send_email = true`.
 
-Nova migration criando 4 tabelas + bucket dedicado:
+### Edge Function (supabase/functions/thermometer-submit/index.ts)
+- Aceitar `client_email` opcional e `send_email` booleano.
+- Se `send_email = false` ou e-mail vazio: salva `thermometer_responses` (`client_email = ''`) + `thermometer_answers` e **não dispara nenhum e-mail** (nem admin nem cliente).
+- Se `send_email = true`: comportamento atual (valida, salva, envia admin + cliente).
 
-**`thermometers`**
-- `id` uuid PK, `slug` text único, `client_name`, `client_logo_url`, `accent_color` (hex, default `#000000`), `admin_email` (default `lipe@estudiodalla.com`), `welcome_title` text, `is_active` bool default true, `created_at`, `updated_at`.
+## Parte 2 — Detalhamento das respostas no admin
 
-**`thermometer_questions`**
-- `id` uuid PK, `thermometer_id` FK → thermometers (cascade), `order_index` int, `question_text`, `left_label`, `left_icon` (nome Lucide ou emoji), `right_label`, `right_icon`.
+### Hoje
+`ThermometersTab.tsx` em "Ver respostas" mostra apenas linha por resposta com e-mail, data e **média**. Sem detalhes das perguntas/notas.
 
-**`thermometer_responses`**
-- `id` uuid PK, `thermometer_id` FK, `client_email`, `client_name` (opcional, futuro), `completed_at` default now().
+### Mudanças (components/admin/ThermometersTab.tsx)
+- Cada linha de resposta vira um **card expansível** (acordeão controlado por estado local `expandedId`).
+- Cabeçalho do card mantém: e-mail (ou "Anônimo" quando vazio), data formatada, média.
+- Ao expandir, lista por pergunta na ordem original:
+  - Texto da pergunta (Instrument Serif).
+  - Linha bipolar: `left_label  ←  [barra fina com bolinha na posição value/10]  →  right_label` usando a `accent_color` do termômetro.
+  - Nota `X / 10` à direita.
+- Perguntas sem resposta exibem "—".
+- Botão "Exportar CSV" no topo, gerando arquivo com colunas: e-mail, data, média, e uma coluna por pergunta.
 
-**`thermometer_answers`**
-- `id` uuid PK, `response_id` FK (cascade), `question_id` FK, `value` int (1–10).
+### Edge Function (supabase/functions/thermometer-admin/index.ts)
+- Ação `responses` precisa retornar também as **perguntas do termômetro** (id, order_index, question_text, left_label, right_label) para o admin renderizar nomes. Se já retorna, apenas confirmar; se não, adicionar `questions` no payload junto com `responses` e `answers`.
 
-**RLS** (seguindo padrão do projeto — admin opera via PIN/Edge Function service-role; público lê só termômetros ativos e insere respostas):
-- `thermometers`: SELECT público quando `is_active = true`.
-- `thermometer_questions`: SELECT público (sem filtro — visíveis para qualquer termômetro listado).
-- `thermometer_responses` e `thermometer_answers`: INSERT público (anon); sem SELECT/UPDATE/DELETE público.
-- Sem políticas de UPDATE/DELETE/INSERT públicas em `thermometers`/`thermometer_questions` — admin grava via Edge Function nova.
+## Restrições
+- Sem novas dependências.
+- Sem mudanças de schema/RLS.
+- Admin segue só com Nunito Sans; corpo das perguntas no detalhe usa Instrument Serif apenas para o texto da pergunta (permitido no admin? — manter Nunito Sans para respeitar memória: tudo no admin em Nunito Sans).
+- Mobile-first preservado em ambas as telas.
 
-**Bucket `media`** já existe e é público → reutilizar para logos do cliente (pasta `thermometers/`).
-
-## 2. Edge Functions
-
-### `supabase/functions/thermometer-admin/index.ts` (nova)
-- Protegida por PIN (mesmo padrão da function `admin` atual).
-- Ações: `list`, `get`, `upsert` (cria/edita termômetro + substitui perguntas em transação), `delete`, `duplicate`, `responses` (lista respostas com detalhes).
-- Usa service-role para bypassar RLS.
-
-### `supabase/functions/thermometer-submit/index.ts` (nova, pública, `verify_jwt = false`)
-- Recebe `{ slug, client_email, answers: [{question_id, value}] }`.
-- Valida slug ativo, valida email (zod), busca termômetro + perguntas.
-- Insere `thermometer_responses` + `thermometer_answers` via service-role.
-- Dispara 2 e-mails Resend:
-  1. Para `admin_email` do termômetro.
-  2. Para `client_email` informado.
-- Template HTML inline reaproveitando o estilo do `send-contact` (header preto, corpo branco, serif Georgia para títulos), com: logo do cliente, nome do termômetro, data/hora, lista pergunta + escala visual + valor.
-
-`supabase/config.toml` recebe blocos `verify_jwt = false` para as duas novas functions.
-
-## 3. Rota pública `/termometro/:slug`
-
-Nova página `pages/Termometro.tsx` (lazy-loaded em `App.tsx`, **fora** do `PublicLayout` — sem Navbar/Footer/WhatsApp, igual ao padrão `/admin` e `/links`).
-
-Estados (controle local, sem persistir rascunho):
-1. **Tela 0 — Boas-vindas**: logo do cliente + nome + botão "Começar".
-2. **Telas de pergunta** (1 por tela, `h-[100dvh]`, sem scroll):
-   - Header minúsculo: `2 / 6`.
-   - Pergunta em Instrument Serif grande.
-   - Slider bipolar 1–10 (input range estilizado + 10 dots clicáveis) com ícones Lucide nos extremos (resolvidos dinamicamente via `lucide-react`; fallback para emoji se string não for ícone válido).
-   - Botão "Próxima" aparece após interação; última pergunta → "Continuar".
-   - Transição: classe Tailwind controlando `opacity` + `translate-y-4` via state `isTransitioning` (300ms).
-3. **Tela final — e-mail**: input + botão "Receber meu resultado" → chama `thermometer-submit`.
-4. **Tela celebração**: `canvas-confetti` (nova dep) disparando confetes dourados + brilho via CSS; mensagem central "Parabéns! Agora você está a um passo de ter uma marca de impacto."
-
-Cor de destaque (`accent_color`) aplicada via CSS variable inline no container raiz (`--thermo-accent`), usada nos dots ativos, slider track e botões.
-
-Mobile-first; em telas largas o conteúdo fica centralizado com `max-w-2xl`.
-
-`useAnalytics` já ignora rotas não-admin; manter pageview normal (não bloquear).
-
-## 4. Painel admin — nova aba "Termômetros"
-
-Em `pages/AdminPanel.tsx`:
-- Adicionar `'termometros'` ao union `tab` e ao array de abas renderizado em `line 1064`.
-- Novo bloco `{tab === 'termometros' && (...)}` com:
-  - **Listagem**: grid de cards (nome, mini-logo, contagem de respostas, link `/termometro/<slug>`, botões Editar / Duplicar / Excluir / Copiar Link).
-  - **Editor** (modal/painel inline): campos cliente (nome, upload logo no bucket `media/thermometers/`, color picker `accent_color`, `admin_email`, `welcome_title`), lista de perguntas com drag-and-drop simples (botões ↑/↓ — sem nova dep) entre 3 e 12, cada pergunta com texto, label/ícone esquerdo, label/ícone direito (campo texto livre — aceita nome Lucide como "Sparkles" ou emoji).
-  - Botão "Salvar" → chama `thermometer-admin` ação `upsert`.
-  - Botão "Ver respostas" → modal listando respostas (e-mail, data, médias) via ação `responses`.
-
-Todas chamadas passam `pin` (mesmo padrão das outras chamadas admin já presentes).
-
-## 5. Dependências
-
-- Adicionar `canvas-confetti` + `@types/canvas-confetti` (única dep nova permitida — animação requerida pela spec).
-- `lucide-react` já instalado (resolução dinâmica `(LucideIcons as any)[name]`).
-
-## 6. SEO / Rastreamento
-
-- `/termometro/:slug` indexado normalmente; adicionar `<Seo>` com `client_name + " | Termômetro de Marca"` na própria página.
-- Bloquear `/termometro/admin*` não se aplica (rota é só por slug); robots permanece como está.
-
-## 7. Documentação obrigatória
-
-- Atualizar `context.md` com data/hora e resumo desta feature.
-- Atualizar `essential.md` listando: tabelas novas, edge functions novas, página `Termometro.tsx`, aba admin "Termômetros", dependência `canvas-confetti`.
-
-## Arquivos a criar
-- `supabase/migrations/<timestamp>_thermometer.sql`
-- `supabase/functions/thermometer-admin/index.ts`
-- `supabase/functions/thermometer-submit/index.ts`
+## Arquivos alterados
 - `pages/Termometro.tsx`
-- `components/admin/ThermometersTab.tsx` (extraído para não inchar AdminPanel.tsx)
-
-## Arquivos a editar
-- `App.tsx` (rota lazy `/termometro/:slug` fora do PublicLayout)
-- `pages/AdminPanel.tsx` (aba + render)
-- `supabase/config.toml` (verify_jwt das duas functions)
-- `package.json` (canvas-confetti)
+- `supabase/functions/thermometer-submit/index.ts`
+- `supabase/functions/thermometer-admin/index.ts` (se necessário incluir `questions`)
+- `components/admin/ThermometersTab.tsx`
 - `context.md`, `essential.md`
 
-## Restrições respeitadas
-- Nenhuma rota/funcionalidade existente alterada.
-- Design herda tokens atuais (Instrument Serif títulos, Nunito Sans corpo, preto/branco + accent dinâmica do cliente).
-- Apenas 1 nova dep (`canvas-confetti`), justificada pela spec.
-- Estrutura de pastas mantida (pages/, components/, supabase/functions/).
+## Confirmação
+Quando o cliente **pular o e-mail**, o admin **também não recebe** notificação por e-mail (a resposta fica apenas registrada e visível em "Ver respostas"). Confirma?
