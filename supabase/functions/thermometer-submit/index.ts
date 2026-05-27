@@ -118,14 +118,15 @@ Deno.serve(async (req) => {
   );
 
   try {
-    const { slug, client_email, answers } = await req.json();
-    if (!slug || !client_email || !Array.isArray(answers) || !answers.length) {
+    const { slug, client_email, answers, send_email } = await req.json();
+    const wantsEmail = send_email !== false && !!client_email;
+    if (!slug || !Array.isArray(answers) || !answers.length) {
       return new Response(JSON.stringify({ error: "invalid payload" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client_email)) {
+    if (wantsEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client_email)) {
       return new Response(JSON.stringify({ error: "invalid email" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -156,7 +157,7 @@ Deno.serve(async (req) => {
     // insert response
     const { data: resp, error: rErr } = await supabase
       .from("thermometer_responses")
-      .insert({ thermometer_id: thermo.id, client_email })
+      .insert({ thermometer_id: thermo.id, client_email: wantsEmail ? client_email : "" })
       .select()
       .single();
     if (rErr) throw rErr;
@@ -185,6 +186,12 @@ Deno.serve(async (req) => {
 
     const receivedAt = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 
+    if (!wantsEmail) {
+      return new Response(JSON.stringify({ ok: true, emailed: false }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const adminHtml = buildEmail({
       clientName: thermo.client_name,
       clientLogoUrl: thermo.client_logo_url,
@@ -211,7 +218,7 @@ Deno.serve(async (req) => {
       sendEmail(client_email, `Seu resultado — Termômetro de Marca ${thermo.client_name}`, clientHtml),
     ]);
 
-    return new Response(JSON.stringify({ ok: true }), {
+    return new Response(JSON.stringify({ ok: true, emailed: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e: any) {
