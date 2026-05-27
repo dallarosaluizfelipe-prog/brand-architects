@@ -74,6 +74,7 @@ const ThermometersTab: React.FC<Props> = ({ pin, onMessage }) => {
   const [saving, setSaving] = useState(false);
   const [viewingResponses, setViewingResponses] = useState<any | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [expandedRespId, setExpandedRespId] = useState<string | null>(null);
 
   async function load() {
     setLoading(true);
@@ -174,6 +175,7 @@ const ThermometersTab: React.FC<Props> = ({ pin, onMessage }) => {
     try {
       const r = await call(pin, 'responses', { id: item.id });
       setViewingResponses({ item, ...r });
+      setExpandedRespId(null);
     } catch (e: any) {
       onMessage(e.message);
     }
@@ -448,17 +450,56 @@ const ThermometersTab: React.FC<Props> = ({ pin, onMessage }) => {
   }
 
   if (viewingResponses) {
-    const { item, responses, answers } = viewingResponses;
+    const { item, responses, answers, questions = [] } = viewingResponses;
+    const accent = item.accent_color || '#000000';
+
+    function exportCsv() {
+      const header = ['Email', 'Data', 'Média', ...questions.map((q: any) => q.question_text)];
+      const lines = [header.map(csvCell).join(',')];
+      for (const r of responses) {
+        const ras = answers.filter((a: any) => a.response_id === r.id);
+        const avg =
+          ras.length > 0 ? (ras.reduce((s: number, a: any) => s + a.value, 0) / ras.length).toFixed(2) : '';
+        const row = [
+          r.client_email || 'Anônimo',
+          new Date(r.completed_at).toLocaleString('pt-BR'),
+          avg,
+          ...questions.map((q: any) => {
+            const a = ras.find((x: any) => x.question_id === q.id);
+            return a ? String(a.value) : '';
+          }),
+        ];
+        lines.push(row.map(csvCell).join(','));
+      }
+      const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `termometro-${item.slug}-respostas.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
     return (
       <div className="font-sans">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-medium">Respostas — {item.client_name}</h2>
-          <button
-            onClick={() => setViewingResponses(null)}
-            className="px-4 py-2 text-sm border border-neutral-300 rounded-full hover:bg-neutral-50"
-          >
-            ← Voltar
-          </button>
+          <div className="flex gap-2">
+            {responses.length > 0 && (
+              <button
+                onClick={exportCsv}
+                className="px-4 py-2 text-sm border border-neutral-300 rounded-full hover:bg-neutral-50"
+              >
+                Exportar CSV
+              </button>
+            )}
+            <button
+              onClick={() => setViewingResponses(null)}
+              className="px-4 py-2 text-sm border border-neutral-300 rounded-full hover:bg-neutral-50"
+            >
+              ← Voltar
+            </button>
+          </div>
         </div>
         {responses.length === 0 ? (
           <p className="text-sm text-neutral-500">Nenhuma resposta ainda.</p>
@@ -468,18 +509,67 @@ const ThermometersTab: React.FC<Props> = ({ pin, onMessage }) => {
               const ras = answers.filter((a: any) => a.response_id === r.id);
               const avg =
                 ras.length > 0 ? (ras.reduce((s: number, a: any) => s + a.value, 0) / ras.length).toFixed(1) : '—';
+              const isOpen = expandedRespId === r.id;
               return (
-                <div key={r.id} className="border border-neutral-200 rounded p-3 flex justify-between text-sm">
-                  <div>
-                    <div className="font-medium">{r.client_email}</div>
-                    <div className="text-xs text-neutral-500">
-                      {new Date(r.completed_at).toLocaleString('pt-BR')}
+                <div key={r.id} className="border border-neutral-200 rounded">
+                  <button
+                    type="button"
+                    onClick={() => setExpandedRespId(isOpen ? null : r.id)}
+                    className="w-full p-3 flex justify-between items-center text-sm text-left hover:bg-neutral-50"
+                  >
+                    <div>
+                      <div className="font-medium">{r.client_email || 'Anônimo'}</div>
+                      <div className="text-xs text-neutral-500">
+                        {new Date(r.completed_at).toLocaleString('pt-BR')}
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs text-neutral-500">Média</div>
-                    <div className="font-medium">{avg}</div>
-                  </div>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <div className="text-xs text-neutral-500">Média</div>
+                        <div className="font-medium">{avg}</div>
+                      </div>
+                      <span className="text-neutral-400 text-xs">{isOpen ? '▲' : '▼'}</span>
+                    </div>
+                  </button>
+                  {isOpen && (
+                    <div className="border-t border-neutral-200 p-4 space-y-4 bg-neutral-50/40">
+                      {questions.length === 0 ? (
+                        <p className="text-xs text-neutral-500">Sem perguntas para exibir.</p>
+                      ) : (
+                        questions.map((q: any) => {
+                          const a = ras.find((x: any) => x.question_id === q.id);
+                          const val = a?.value;
+                          const pct = val ? ((val - 1) / 9) * 100 : 0;
+                          return (
+                            <div key={q.id} className="text-sm">
+                              <div className="mb-2 text-neutral-800">{q.question_text}</div>
+                              <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-neutral-500 mb-1">
+                                <span>{q.left_label}</span>
+                                <span>{q.right_label}</span>
+                              </div>
+                              <div className="relative h-1.5 bg-neutral-200 rounded-full">
+                                {val !== undefined && (
+                                  <>
+                                    <div
+                                      className="absolute inset-y-0 left-0 rounded-full"
+                                      style={{ width: `${pct}%`, background: accent }}
+                                    />
+                                    <div
+                                      className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-white shadow"
+                                      style={{ left: `calc(${pct}% - 6px)`, background: accent }}
+                                    />
+                                  </>
+                                )}
+                              </div>
+                              <div className="mt-1 text-right text-xs text-neutral-600">
+                                {val !== undefined ? `${val} / 10` : '—'}
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -571,3 +661,9 @@ const ThermometersTab: React.FC<Props> = ({ pin, onMessage }) => {
 };
 
 export default ThermometersTab;
+
+function csvCell(v: any): string {
+  const s = String(v ?? '');
+  if (/[",\n;]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+  return s;
+}
