@@ -221,7 +221,12 @@ Deno.serve(async (req) => {
             .in("response_id", respIds);
           answers = ans || [];
         }
-        return json({ responses: responses || [], answers });
+        const { data: questions } = await supabase
+          .from("thermometer_questions")
+          .select("*")
+          .eq("thermometer_id", id)
+          .order("order_index", { ascending: true });
+        return json({ responses: responses || [], answers, questions: questions || [] });
       }
     }
 
