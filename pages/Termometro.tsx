@@ -110,8 +110,12 @@ const Termometro: React.FC = () => {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    await submit(true);
+  }
+
+  async function submit(sendEmail: boolean) {
     setErrorMsg('');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (sendEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setErrorMsg('Informe um e-mail válido.');
       return;
     }
@@ -119,7 +123,8 @@ const Termometro: React.FC = () => {
     try {
       const payload = {
         slug: thermo?.slug,
-        client_email: email,
+        client_email: sendEmail ? email : '',
+        send_email: sendEmail,
         answers: questions.map((q) => ({ question_id: q.id, value: answers[q.id] ?? 5 })),
       };
       const { data, error } = await supabase.functions.invoke('thermometer-submit', { body: payload });
@@ -319,7 +324,6 @@ const Termometro: React.FC = () => {
             </h2>
             <input
               type="email"
-              required
               aria-label="Seu e-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -334,6 +338,14 @@ const Termometro: React.FC = () => {
               style={{ background: accent }}
             >
               {submitting ? 'Enviando…' : 'Receber meu resultado'}
+            </button>
+            <button
+              type="button"
+              onClick={() => submit(false)}
+              disabled={submitting}
+              className="mt-5 text-xs tracking-[0.2em] uppercase text-neutral-500 underline underline-offset-4 hover:text-black transition-colors disabled:opacity-50"
+            >
+              Pular e finalizar sem e-mail
             </button>
           </form>
         )}
