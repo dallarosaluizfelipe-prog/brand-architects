@@ -3,6 +3,7 @@ import { supabase } from '@/src/integrations/supabase/client';
 import { SiteProposal, slugify } from '../src/data/siteProposals';
 import { SiteLp, LpPhase, LpBenefitItem, LpCaseItem } from '../src/data/siteLps';
 import RichTextEditor from '../src/components/RichTextEditor';
+import { invalidateSiteTextsCache } from '../src/hooks/useSiteTexts';
 import { getWhatsAppUrl } from '@/src/utils/contact';
 import ThermometersTab from '../components/admin/ThermometersTab';
 
