@@ -1,8 +1,10 @@
 ﻿import React from 'react';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useLocale } from '@/src/contexts/LocaleContext';
 import { CONTACT_PHONE_DISPLAY, getWhatsAppUrl } from '@/src/utils/contact';
 
 const Footer: React.FC = () => {
+  const { locale } = useLocale();
   const t = useSiteTexts({
     footer_contacts: `CURITIBA / PARANA / BR<br />TEL <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="hover:opacity-60 transition-opacity">${CONTACT_PHONE_DISPLAY}</a>`,
     footer_copyright: '© 2026 Studio Dalla. All rights reserved.',
@@ -10,7 +12,7 @@ const Footer: React.FC = () => {
     social_instagram: 'https://www.instagram.com/estudiodalla/',
     social_linkedin: '',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
-  });
+  }, locale);
 
   return (
     <footer className="bg-black pt-10 md:pt-32 pb-28 md:pb-16 px-6 text-white">

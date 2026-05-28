@@ -419,3 +419,10 @@ This file records a chronological history of changes, requests, and reasoning fo
 - Nova aba 'Termômetros' no admin (components/admin/ThermometersTab.tsx): criar/editar/duplicar/excluir, upload de logo, color picker, perguntas (3–12) com reordenação, ícones por emoji, listagem de respostas.
 - Configurado verify_jwt=false para ambas as functions em supabase/config.toml.
 
+
+## 2026-05-28 — Revisão completa do sistema de idiomas (PT/EN)
+- `Footer.tsx` e `ContactSection.tsx` agora consomem `useLocale()` e passam o `locale` ativo ao `useSiteTexts`, eliminando bloqueio que travava esses blocos em PT.
+- `useSiteTexts` ganhou `invalidateSiteTextsCache()` + listener de evento `site-content:invalidate` para forçar refetch após edição no admin.
+- Edge function `admin` (`list_content`): quando o admin solicita `locale='en'`, agora devolve a união de todas as chaves PT + EN com `_pt_reference` (texto PT) para tradução, eliminando o problema de "chaves somem ao trocar para EN".
+- Edge function `admin` (`upsert_content`): payload sanitizado para apenas colunas reais e validação explícita de `section_key`.
+- `AdminPanel.tsx`: armazena `siteTextsPtRef`, exibe a referência PT abaixo de cada campo em modo EN e dispara invalidação de cache após save/save-all.

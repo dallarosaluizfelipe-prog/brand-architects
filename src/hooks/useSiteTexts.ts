@@ -11,6 +11,16 @@ interface SiteContentRow {
 const CACHE_TTL_MS = 60_000; // 60 seconds
 const cache = new Map<string, { value: string; ts: number }>();
 
+export const SITE_CONTENT_INVALIDATE_EVENT = 'site-content:invalidate';
+
+/** Invalidate the in-memory cache so the next render refetches fresh values. */
+export function invalidateSiteTextsCache() {
+  cache.clear();
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent(SITE_CONTENT_INVALIDATE_EVENT));
+  }
+}
+
 /**
  * Fetch multiple site_content rows by keys for a given locale.
  * Falls back to pt-BR, then to provided defaults.
@@ -31,6 +41,15 @@ export function useSiteTexts(
     return initial;
   });
 
+  const [refreshTick, setRefreshTick] = useState(0);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handler = () => setRefreshTick((n) => n + 1);
+    window.addEventListener(SITE_CONTENT_INVALIDATE_EVENT, handler);
+    return () => window.removeEventListener(SITE_CONTENT_INVALIDATE_EVENT, handler);
+  }, []);
+
   useEffect(() => {
     const localesToFetch = Array.from(
       new Set([locale, ...(locale !== 'pt-BR' ? ['pt-BR'] : [])])
@@ -43,7 +62,7 @@ export function useSiteTexts(
         return !entry || now - entry.ts >= CACHE_TTL_MS;
       })
     );
-    if (uncached.length === 0) return;
+    if (uncached.length === 0 && refreshTick === 0) return;
 
     (supabase as any)
       .from('site_content')
@@ -72,7 +91,7 @@ export function useSiteTexts(
         setTexts(result);
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keys.join(','), locale]);
+  }, [keys.join(','), locale, refreshTick]);
 
   return texts;
 }
