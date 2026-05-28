@@ -870,3 +870,11 @@ This document captures details of components, pages, functions, and any code add
 - **Dependência adicionada**: `canvas-confetti` + `@types/canvas-confetti`.
 - **Rotas**: nova rota lazy `/termometro/:slug` em `App.tsx`, fora do PublicLayout; WhatsApp button desabilitado nesta rota.
 
+
+## Sistema de idiomas (PT/EN) — revisão 2026-05-28
+- **components/Footer.tsx, components/ContactSection.tsx**: agora reativos ao `locale` (useLocale + useSiteTexts).
+- **src/hooks/useSiteTexts.ts**: exporta `invalidateSiteTextsCache()` e `SITE_CONTENT_INVALIDATE_EVENT`. Cache em memória limpo via CustomEvent quando admin salva.
+- **supabase/functions/admin/index.ts**:
+  - `list_content` com `locale='en'` mescla chaves PT (cada item recebe `_pt_reference`) — admin sempre vê todos os campos para traduzir.
+  - `upsert_content` valida `section_key` e só persiste colunas reais (`section_key, locale, title, subtitle, body, image_url, video_url`).
+- **pages/AdminPanel.tsx**: novo state `siteTextsPtRef`, exibe referência PT abaixo de cada campo em modo EN, invalida cache após salvar.
