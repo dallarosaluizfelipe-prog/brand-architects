@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useLocale } from '@/src/contexts/LocaleContext';
 import { trackFormSubmission, pushToDataLayer } from '@/src/hooks/useAnalytics';
 import { supabase } from '@/src/integrations/supabase/client';
 
 const ContactSection: React.FC = () => {
+  const { locale } = useLocale();
   const t = useSiteTexts({
     cta_section_title: 'Pronto para transformar sua marca?',
-  });
+  }, locale);
 
   const [form, setForm] = useState({
     name: '',
