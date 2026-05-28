@@ -322,6 +322,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [editingLp, setEditingLp] = useState<SiteLp | null>(null);
   const [lpsLoading, setLpsLoading] = useState(false);
   const [siteTexts, setSiteTexts] = useState<Record<string, string>>({});
+  const [siteTextsPtRef, setSiteTextsPtRef] = useState<Record<string, string>>({});
   const [textsLoading, setTextsLoading] = useState(false);
   const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
@@ -793,13 +794,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     const result = await apiCall('list_content', { locale: loc });
     const items: any[] = result.content || [];
     const map: Record<string, string> = {};
+    const ptRef: Record<string, string> = {};
     for (const item of items) {
       if (item.section_key) {
         // Inclui campos com body null como string vazia para permitir edição
         map[item.section_key] = item.body ?? '';
+        if (typeof item._pt_reference === 'string') {
+          ptRef[item.section_key] = item._pt_reference;
+        }
       }
     }
     setSiteTexts(map);
+    setSiteTextsPtRef(ptRef);
     setTextsDirty(new Set());
     setTextsLoading(false);
   };
@@ -828,6 +834,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       return next;
     });
     showMessage('Texto salvo!');
+    invalidateSiteTextsCache();
     setTextsLoading(false);
   };
 
@@ -855,6 +862,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     } else {
       setTextsDirty(new Set());
       showMessage(`${dirty.length} texto(s) salvo(s)!`);
+      invalidateSiteTextsCache();
     }
     setTextsLoading(false);
   };
