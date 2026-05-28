@@ -100,12 +100,53 @@ Deno.serve(async (req) => {
       }
 
       case "list_content": {
-        let query = supabase.from("site_content").select("*");
-        if (data?.locale) {
-          query = query.eq("locale", data.locale);
+        const locale = data?.locale;
+        if (!locale || locale === 'pt-BR') {
+          let query = supabase.from("site_content").select("*");
+          if (locale) query = query.eq("locale", locale);
+          const { data: content } = await query;
+          return new Response(JSON.stringify({ content }), {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
         }
-        const { data: content } = await query;
-        return new Response(JSON.stringify({ content }), {
+
+        // For non-PT locales (e.g. 'en') we want to expose EVERY key that
+        // exists in pt-BR so the admin can translate it — even when no row
+        // exists yet in the target locale. We merge: target rows override,
+        // missing ones come back as virtual rows with body='' and a
+        // _pt_reference field with the PT body.
+        const [{ data: ptRows }, { data: locRows }] = await Promise.all([
+          supabase.from("site_content").select("*").eq("locale", "pt-BR"),
+          supabase.from("site_content").select("*").eq("locale", locale),
+        ]);
+        const locByKey = new Map<string, any>();
+        for (const r of locRows || []) locByKey.set(r.section_key, r);
+        const merged: any[] = [];
+        const seen = new Set<string>();
+        for (const pt of ptRows || []) {
+          seen.add(pt.section_key);
+          const existing = locByKey.get(pt.section_key);
+          if (existing) {
+            merged.push({ ...existing, _pt_reference: pt.body ?? '' });
+          } else {
+            merged.push({
+              id: null,
+              section_key: pt.section_key,
+              locale,
+              title: '',
+              subtitle: '',
+              body: '',
+              image_url: '',
+              video_url: '',
+              _pt_reference: pt.body ?? '',
+            });
+          }
+        }
+        // Include any locale-only rows that have no PT counterpart
+        for (const r of locRows || []) {
+          if (!seen.has(r.section_key)) merged.push({ ...r, _pt_reference: '' });
+        }
+        return new Response(JSON.stringify({ content: merged }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
@@ -113,6 +154,13 @@ Deno.serve(async (req) => {
       case "upsert_content": {
         const locale = data.locale ?? 'pt-BR';
         const sectionKey = data.section_key;
+
+        if (!sectionKey) {
+          return new Response(JSON.stringify({ error: 'section_key is required' }), {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
 
         // Manual upsert: não depende de ON CONFLICT para evitar erro quando a
         // constraint unique (section_key, locale) ainda não existe no banco remoto.
@@ -125,7 +173,18 @@ Deno.serve(async (req) => {
 
         if (findError) throw findError;
 
-        const payload = { ...data, locale, updated_at: new Date().toISOString() };
+        // Only allow real columns into the payload to avoid silent insert failures.
+        const payload: Record<string, unknown> = {
+          section_key: sectionKey,
+          locale,
+          updated_at: new Date().toISOString(),
+        };
+        if (typeof data.title === 'string') payload.title = data.title;
+        if (typeof data.subtitle === 'string') payload.subtitle = data.subtitle;
+        if (typeof data.body === 'string') payload.body = data.body;
+        if (typeof data.image_url === 'string') payload.image_url = data.image_url;
+        if (typeof data.video_url === 'string') payload.video_url = data.video_url;
+
         let result: any;
         let writeError: any;
 
