@@ -2673,6 +2673,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   )}
                                 </>
                               )}
+                              {adminLocale === 'en' && siteTextsPtRef[field.key] && (
+                                <p
+                                  className="mt-2 text-[11px] text-neutral-400 font-sans leading-snug"
+                                  title={siteTextsPtRef[field.key]}
+                                >
+                                  <span className="font-bold uppercase tracking-widest mr-1">PT:</span>
+                                  {siteTextsPtRef[field.key].length > 220
+                                    ? `${siteTextsPtRef[field.key].slice(0, 220)}…`
+                                    : siteTextsPtRef[field.key]}
+                                </p>
+                              )}
                             </div>
                           ))}
 
