@@ -107,7 +107,7 @@
                         surface: "#F2F2F2",
                     },
                     fontFamily: {
-                        display: ["Instrument Serif", "serif"],
+                        display: ["Nunito Sans", "sans-serif"],
                         sans: ["Nunito Sans", "sans-serif"],
                     },
                 },
@@ -118,10 +118,16 @@
         @layer base {
             body {
                 @apply font-sans font-light bg-white text-black transition-colors duration-300;
+                letter-spacing: -0.04em;
             }
             h1, h2, h3, h4 {
-                @apply font-display;
+                @apply font-display font-light;
+                letter-spacing: -0.06em;
             }
+        }
+        /* Override: projeto agora usa Sentence case em todo o site */
+        .uppercase {
+            text-transform: none !important;
         }
         @layer components {
             .nav-blur {
