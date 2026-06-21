@@ -4,6 +4,7 @@ import ContactSection from "../components/ContactSection";
 import { Seo } from '../components/Seo';
 import { getSiteCaseBySlug, type SiteCase } from "@/src/data/siteCases";
 import { useLocale } from '@/src/contexts/LocaleContext';
+import { getFieldStyle } from '@/src/utils/textStyles';
 
 const formatDate = (value: string): string => {
   if (!value) return "";
@@ -63,10 +64,18 @@ const CaseDetails: React.FC = () => {
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-32 md:pt-40 pb-12 md:pb-16 px-6 max-w-7xl mx-auto">
-          <p className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans mb-5 md:mb-6 opacity-50">{project.category}</p>
-          <h1 className="text-4xl sm:text-5xl md:text-8xl tracking-tighter leading-[0.9] mb-7 md:mb-8">{project.title}</h1>
+          <p
+            className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans mb-5 md:mb-6 opacity-50"
+            style={getFieldStyle(project.text_styles, 'category')}
+          >{project.category}</p>
+          <h1
+            className="text-4xl sm:text-5xl md:text-8xl tracking-tighter leading-[0.9] mb-7 md:mb-8"
+            style={getFieldStyle(project.text_styles, 'title')}
+          >{project.title}</h1>
           <div className="flex flex-wrap gap-4 md:gap-6 text-sm text-neutral-500 font-sans">
-            {project.author && <span>Autor: {project.author}</span>}
+            {project.author && (
+              <span style={getFieldStyle(project.text_styles, 'author')}>Autor: {project.author}</span>
+            )}
             {project.case_date && <span>Data: {formatDate(project.case_date)}</span>}
             {project.external_url && (
               <a href={project.external_url} target="_blank" rel="noreferrer" className="underline underline-offset-4">
@@ -82,7 +91,10 @@ const CaseDetails: React.FC = () => {
           </div>
 
           {project.description && (
-            <p className="text-base md:text-2xl text-neutral-600 leading-relaxed max-w-4xl mb-12 md:mb-16">{project.description}</p>
+            <p
+              className="text-base md:text-2xl text-neutral-600 leading-relaxed max-w-4xl mb-12 md:mb-16"
+              style={getFieldStyle(project.text_styles, 'description')}
+            >{project.description}</p>
           )}
 
           {project.gallery_urls.length > 0 && (
