@@ -2596,7 +2596,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                 <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">
                                   {field.label}
                                 </label>
-                                {textsDirty.has(field.key) && (
+                                <div className="flex items-center gap-2">
+                                  {field.type !== 'image' && (
+                                    <TextStyleControl
+                                      field="default"
+                                      styles={siteTextStyles[field.key]}
+                                      onChange={(next) => updateTextStyleField(field.key, next)}
+                                      label={field.label}
+                                    />
+                                  )}
+                                  {textsDirty.has(field.key) && (
                                   <button
                                     onClick={() => saveTextField(field.key)}
                                     disabled={textsLoading}
@@ -2604,7 +2613,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   >
                                     Salvar
                                   </button>
-                                )}
+                                  )}
+                                </div>
                               </div>
                               {field.type === 'image' ? (
                                 <>
