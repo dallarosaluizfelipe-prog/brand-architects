@@ -6,6 +6,9 @@ import RichTextEditor from '../src/components/RichTextEditor';
 import { invalidateSiteTextsCache } from '../src/hooks/useSiteTexts';
 import { getWhatsAppUrl } from '@/src/utils/contact';
 import ThermometersTab from '../components/admin/ThermometersTab';
+import TextStyleControl from '../src/components/TextStyleControl';
+import EntityStylesPanel, { StyleField } from '../src/components/EntityStylesPanel';
+import type { TextStylesMap } from '../src/utils/textStyles';
 
 interface AdminPanelProps {
   pin: string;
@@ -33,6 +36,7 @@ interface SiteCase {
   meta_title: string;
   meta_description: string;
   meta_keywords: string;
+  text_styles?: TextStylesMap;
 }
 
 interface HeroSettings {
@@ -56,6 +60,7 @@ interface SitePartner {
   link_url: string;
   display_order: number;
   is_visible: boolean;
+  text_styles?: TextStylesMap;
 }
 
 const TAG_TYPES = [
@@ -323,6 +328,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [lpsLoading, setLpsLoading] = useState(false);
   const [siteTexts, setSiteTexts] = useState<Record<string, string>>({});
   const [siteTextsPtRef, setSiteTextsPtRef] = useState<Record<string, string>>({});
+  const [siteTextStyles, setSiteTextStyles] = useState<Record<string, TextStylesMap>>({});
   const [textsLoading, setTextsLoading] = useState(false);
   const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
@@ -371,6 +377,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_title: item.meta_title ?? '',
     meta_description: item.meta_description ?? '',
     meta_keywords: item.meta_keywords ?? '',
+    text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
   });
 
   const loadCases = async (locale?: string) => {
@@ -498,6 +505,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_description: '',
     meta_keywords: '',
     meta_robots: 'noindex, nofollow',
+    text_styles: {},
   });
 
   const updateProposalField = (field: keyof SiteProposal, value: any) => {
@@ -596,6 +604,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     link_url: item.link_url ?? '/cases',
     display_order: item.display_order ?? 0,
     is_visible: item.is_visible !== false,
+    text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
   });
 
   const loadPartners = async () => {
@@ -631,6 +640,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     link_url: '/cases',
     display_order: partners.length + 1,
     is_visible: true,
+    text_styles: {},
   });
 
   // ── LP CRUD ──
@@ -683,6 +693,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_title: item.meta_title ?? '',
     meta_description: item.meta_description ?? '',
     meta_keywords: item.meta_keywords ?? '',
+    text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
     created_at: item.created_at,
     updated_at: item.updated_at,
   });
@@ -776,6 +787,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_title: '',
     meta_description: '',
     meta_keywords: '',
+    text_styles: {},
   });
 
   const updateLpField = (field: keyof SiteLp, value: any) => {
@@ -795,6 +807,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     const items: any[] = result.content || [];
     const map: Record<string, string> = {};
     const ptRef: Record<string, string> = {};
+    const stylesMap: Record<string, TextStylesMap> = {};
     for (const item of items) {
       if (item.section_key) {
         // Inclui campos com body null como string vazia para permitir edição
@@ -802,16 +815,25 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
         if (typeof item._pt_reference === 'string') {
           ptRef[item.section_key] = item._pt_reference;
         }
+        if (item.text_styles && typeof item.text_styles === 'object') {
+          stylesMap[item.section_key] = item.text_styles;
+        }
       }
     }
     setSiteTexts(map);
     setSiteTextsPtRef(ptRef);
+    setSiteTextStyles(stylesMap);
     setTextsDirty(new Set());
     setTextsLoading(false);
   };
 
   const updateTextField = (key: string, value: string) => {
     setSiteTexts((prev) => ({ ...prev, [key]: value }));
+    setTextsDirty((prev) => new Set(prev).add(key));
+  };
+
+  const updateTextStyleField = (key: string, next: TextStylesMap) => {
+    setSiteTextStyles((prev) => ({ ...prev, [key]: next }));
     setTextsDirty((prev) => new Set(prev).add(key));
   };
 
@@ -822,6 +844,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       title: key,
       locale: adminLocale,
       body: siteTexts[key] || '',
+      text_styles: siteTextStyles[key] || {},
     });
     if (result?.error) {
       showMessage(`Erro ao salvar: ${result.error}`);
@@ -850,6 +873,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
         title: key,
         locale: adminLocale,
         body: siteTexts[key] || '',
+        text_styles: siteTextStyles[key] || {},
       });
       if (result?.error) {
         failedKey = key;
@@ -1044,6 +1068,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_title: '',
     meta_description: '',
     meta_keywords: '',
+    text_styles: {},
   });
 
   return (
@@ -1720,6 +1745,22 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </div>
                 </div>
 
+                <div className="mt-6">
+                  <EntityStylesPanel
+                    fields={[
+                      { key: 'title', label: 'Título' },
+                      { key: 'category', label: 'Categoria' },
+                      { key: 'description', label: 'Descrição' },
+                      { key: 'author', label: 'Autor' },
+                      { key: 'cta_text', label: 'Texto do CTA' },
+                      { key: 'meta_title', label: 'Meta Title' },
+                      { key: 'meta_description', label: 'Meta Description' },
+                    ]}
+                    styles={editingCase.text_styles}
+                    onChange={(next) => setEditingCase({ ...editingCase, text_styles: next })}
+                  />
+                </div>
+
                 <div className="flex gap-3 mt-8">
                   <button
                     onClick={saveCase}
@@ -1992,6 +2033,22 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </div>
                 </div>
 
+                <EntityStylesPanel
+                  fields={[
+                    { key: 'title', label: 'Título' },
+                    { key: 'subtitle', label: 'Subtítulo' },
+                    { key: 'client_name', label: 'Cliente' },
+                    { key: 'client_contact', label: 'Contato do cliente' },
+                    { key: 'scope', label: 'Escopo' },
+                    { key: 'timeline', label: 'Cronograma' },
+                    { key: 'about', label: 'Sobre' },
+                    { key: 'meta_title', label: 'Meta Title' },
+                    { key: 'meta_description', label: 'Meta Description' },
+                  ]}
+                  styles={editingProposal.text_styles}
+                  onChange={(next) => setEditingProposal({ ...editingProposal, text_styles: next })}
+                />
+
                 <div className="flex gap-3 mt-8">
                   <button
                     onClick={saveProposal}
@@ -2210,6 +2267,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </button>
                   <button onClick={() => setEditingPartner(null)} className="border border-neutral-200 px-8 py-3 rounded-full text-sm font-sans">Cancelar</button>
                 </div>
+                <EntityStylesPanel
+                  fields={[{ key: 'name', label: 'Nome do parceiro' }]}
+                  styles={editingPartner.text_styles}
+                  onChange={(next) => setEditingPartner({ ...editingPartner, text_styles: next })}
+                />
               </div>
             ) : (
               <>
@@ -2437,6 +2499,42 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   <input value={editingLp.meta_keywords} onChange={(e) => updateLpField('meta_keywords', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Meta Keywords" />
                 </div>
 
+                <EntityStylesPanel
+                  fields={[
+                    { key: 'title', label: 'Título da LP' },
+                    { key: 'hero_badge', label: 'Hero — Badge' },
+                    { key: 'hero_title', label: 'Hero — Título' },
+                    { key: 'hero_subtitle', label: 'Hero — Subtítulo' },
+                    { key: 'hero_cta_text', label: 'Hero — CTA' },
+                    { key: 'about_badge', label: 'Sobre — Badge' },
+                    { key: 'about_title', label: 'Sobre — Título' },
+                    { key: 'about_paragraphs', label: 'Sobre — Parágrafos' },
+                    { key: 'about_cta_text', label: 'Sobre — CTA' },
+                    { key: 'method_badge', label: 'Método — Badge' },
+                    { key: 'method_title', label: 'Método — Título' },
+                    { key: 'method_subtitle', label: 'Método — Subtítulo' },
+                    { key: 'method_phases', label: 'Método — Fases' },
+                    { key: 'method_cta_text', label: 'Método — CTA' },
+                    { key: 'benefits_badge', label: 'Benefícios — Badge' },
+                    { key: 'benefits_title', label: 'Benefícios — Título' },
+                    { key: 'benefits_subtitle', label: 'Benefícios — Subtítulo' },
+                    { key: 'benefits_items', label: 'Benefícios — Itens' },
+                    { key: 'benefits_cta_text', label: 'Benefícios — CTA' },
+                    { key: 'cases_badge', label: 'Cases — Badge' },
+                    { key: 'cases_title', label: 'Cases — Título' },
+                    { key: 'cases_subtitle', label: 'Cases — Subtítulo' },
+                    { key: 'cases_cta_text', label: 'Cases — CTA' },
+                    { key: 'partners_badge', label: 'Parceiros — Badge' },
+                    { key: 'partners_title', label: 'Parceiros — Título' },
+                    { key: 'partners_subtitle', label: 'Parceiros — Subtítulo' },
+                    { key: 'partners_cta_text', label: 'Parceiros — CTA' },
+                    { key: 'meta_title', label: 'Meta Title' },
+                    { key: 'meta_description', label: 'Meta Description' },
+                  ]}
+                  styles={editingLp.text_styles}
+                  onChange={(next) => updateLpField('text_styles' as keyof SiteLp, next)}
+                />
+
                 <div className="flex gap-3 pt-4">
                   <button onClick={saveLp} disabled={lpsLoading || !editingLp.slug || !editingLp.title} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50">
                     {lpsLoading ? 'Salvando...' : 'Salvar'}
@@ -2571,7 +2669,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                 <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">
                                   {field.label}
                                 </label>
-                                {textsDirty.has(field.key) && (
+                                <div className="flex items-center gap-2">
+                                  {field.type !== 'image' && (
+                                    <TextStyleControl
+                                      field="default"
+                                      styles={siteTextStyles[field.key]}
+                                      onChange={(next) => updateTextStyleField(field.key, next)}
+                                      label={field.label}
+                                    />
+                                  )}
+                                  {textsDirty.has(field.key) && (
                                   <button
                                     onClick={() => saveTextField(field.key)}
                                     disabled={textsLoading}
@@ -2579,7 +2686,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   >
                                     Salvar
                                   </button>
-                                )}
+                                  )}
+                                </div>
                               </div>
                               {field.type === 'image' ? (
                                 <>

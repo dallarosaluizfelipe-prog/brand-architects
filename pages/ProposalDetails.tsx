@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { getProposalBySlug, SiteProposal } from '../src/data/siteProposals';
 import { useLocale } from '../src/contexts/LocaleContext';
+import { getFieldStyle } from '../src/utils/textStyles';
 
 const ProposalDetails: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -105,11 +106,17 @@ const ProposalDetails: React.FC = () => {
             <div className="w-full aspect-[16/7] md:aspect-[21/7] bg-neutral-900" />
           )}
           <div className="px-6 md:px-16 lg:px-24 py-10 md:py-16">
-            <h1 className="font-display text-3xl md:text-5xl lg:text-6xl text-black leading-tight">
+            <h1
+              className="font-display text-3xl md:text-5xl lg:text-6xl text-black leading-tight"
+              style={getFieldStyle(proposal.text_styles, 'title')}
+            >
               {proposal.title}
             </h1>
             {proposal.subtitle && (
-              <p className="font-sans text-base md:text-lg text-neutral-600 mt-3 md:mt-4 max-w-2xl">
+              <p
+                className="font-sans text-base md:text-lg text-neutral-600 mt-3 md:mt-4 max-w-2xl"
+                style={getFieldStyle(proposal.text_styles, 'subtitle')}
+              >
                 {proposal.subtitle}
               </p>
             )}
@@ -122,10 +129,16 @@ const ProposalDetails: React.FC = () => {
             <h2 className="font-display text-xl md:text-2xl text-black mb-4">Cliente</h2>
             <div className="space-y-1">
               {proposal.client_name && (
-                <p className="font-sans text-base md:text-lg text-neutral-800">{proposal.client_name}</p>
+                <p
+                  className="font-sans text-base md:text-lg text-neutral-800"
+                  style={getFieldStyle(proposal.text_styles, 'client_name')}
+                >{proposal.client_name}</p>
               )}
               {proposal.client_contact && (
-                <p className="font-sans text-sm text-neutral-500">{proposal.client_contact}</p>
+                <p
+                  className="font-sans text-sm text-neutral-500"
+                  style={getFieldStyle(proposal.text_styles, 'client_contact')}
+                >{proposal.client_contact}</p>
               )}
             </div>
           </section>
@@ -135,7 +148,10 @@ const ProposalDetails: React.FC = () => {
         {proposal.scope && (
           <section className="px-6 md:px-16 lg:px-24 py-8 md:py-12 border-t border-neutral-100">
             <h2 className="font-display text-xl md:text-2xl text-black mb-4">Escopo</h2>
-            <p className="font-sans text-sm md:text-base text-neutral-700 leading-relaxed whitespace-pre-line max-w-3xl">
+            <p
+              className="font-sans text-sm md:text-base text-neutral-700 leading-relaxed whitespace-pre-line max-w-3xl"
+              style={getFieldStyle(proposal.text_styles, 'scope')}
+            >
               {proposal.scope}
             </p>
           </section>
@@ -145,7 +161,10 @@ const ProposalDetails: React.FC = () => {
         {proposal.timeline && (
           <section className="px-6 md:px-16 lg:px-24 py-8 md:py-12 border-t border-neutral-100">
             <h2 className="font-display text-xl md:text-2xl text-black mb-4">Cronograma</h2>
-            <p className="font-sans text-sm md:text-base text-neutral-700 leading-relaxed whitespace-pre-line max-w-3xl">
+            <p
+              className="font-sans text-sm md:text-base text-neutral-700 leading-relaxed whitespace-pre-line max-w-3xl"
+              style={getFieldStyle(proposal.text_styles, 'timeline')}
+            >
               {proposal.timeline}
             </p>
           </section>
@@ -155,7 +174,10 @@ const ProposalDetails: React.FC = () => {
         {proposal.about && (
           <section className="px-6 md:px-16 lg:px-24 py-8 md:py-12 border-t border-neutral-100">
             <h2 className="font-display text-xl md:text-2xl text-black mb-4">Sobre</h2>
-            <p className="font-sans text-sm md:text-base text-neutral-700 leading-relaxed whitespace-pre-line max-w-3xl">
+            <p
+              className="font-sans text-sm md:text-base text-neutral-700 leading-relaxed whitespace-pre-line max-w-3xl"
+              style={getFieldStyle(proposal.text_styles, 'about')}
+            >
               {proposal.about}
             </p>
           </section>

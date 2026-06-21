@@ -89,6 +89,7 @@ export type Database = {
           meta_keywords: string | null
           meta_title: string | null
           slug: string | null
+          text_styles: Json
           title: string
           translation_group: string
           updated_at: string
@@ -113,6 +114,7 @@ export type Database = {
           meta_keywords?: string | null
           meta_title?: string | null
           slug?: string | null
+          text_styles?: Json
           title: string
           translation_group?: string
           updated_at?: string
@@ -137,6 +139,7 @@ export type Database = {
           meta_keywords?: string | null
           meta_title?: string | null
           slug?: string | null
+          text_styles?: Json
           title?: string
           translation_group?: string
           updated_at?: string
@@ -151,6 +154,7 @@ export type Database = {
           locale: string
           section_key: string
           subtitle: string | null
+          text_styles: Json
           title: string | null
           updated_at: string
           video_url: string | null
@@ -162,6 +166,7 @@ export type Database = {
           locale?: string
           section_key: string
           subtitle?: string | null
+          text_styles?: Json
           title?: string | null
           updated_at?: string
           video_url?: string | null
@@ -173,6 +178,7 @@ export type Database = {
           locale?: string
           section_key?: string
           subtitle?: string | null
+          text_styles?: Json
           title?: string | null
           updated_at?: string
           video_url?: string | null
@@ -293,6 +299,7 @@ export type Database = {
           partners_subtitle: string
           partners_title: string
           slug: string
+          text_styles: Json
           title: string
           translation_group: string
           updated_at: string
@@ -347,6 +354,7 @@ export type Database = {
           partners_subtitle?: string
           partners_title?: string
           slug: string
+          text_styles?: Json
           title?: string
           translation_group?: string
           updated_at?: string
@@ -401,6 +409,7 @@ export type Database = {
           partners_subtitle?: string
           partners_title?: string
           slug?: string
+          text_styles?: Json
           title?: string
           translation_group?: string
           updated_at?: string
@@ -452,6 +461,7 @@ export type Database = {
           link_url: string
           logo_url: string
           name: string
+          text_styles: Json
           updated_at: string
         }
         Insert: {
@@ -462,6 +472,7 @@ export type Database = {
           link_url?: string
           logo_url?: string
           name?: string
+          text_styles?: Json
           updated_at?: string
         }
         Update: {
@@ -472,6 +483,7 @@ export type Database = {
           link_url?: string
           logo_url?: string
           name?: string
+          text_styles?: Json
           updated_at?: string
         }
         Relationships: []
@@ -494,6 +506,7 @@ export type Database = {
           scope: string | null
           slug: string
           subtitle: string | null
+          text_styles: Json
           timeline: string | null
           title: string
           translation_group: string
@@ -516,6 +529,7 @@ export type Database = {
           scope?: string | null
           slug: string
           subtitle?: string | null
+          text_styles?: Json
           timeline?: string | null
           title?: string
           translation_group?: string
@@ -538,6 +552,7 @@ export type Database = {
           scope?: string | null
           slug?: string
           subtitle?: string | null
+          text_styles?: Json
           timeline?: string | null
           title?: string
           translation_group?: string

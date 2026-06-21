@@ -1,4 +1,5 @@
 import { supabase } from "@/src/integrations/supabase/client";
+import type { TextStylesMap } from '../utils/textStyles';
 
 export interface SiteCase {
   id?: string;
@@ -21,6 +22,7 @@ export interface SiteCase {
   meta_title?: string;
   meta_description?: string;
   meta_keywords?: string;
+  text_styles?: TextStylesMap;
 }
 
 const fallbackCases: SiteCase[] = [
@@ -215,6 +217,7 @@ const normalizeCase = (item: any): SiteCase => ({
   meta_title: item.meta_title ?? '',
   meta_description: item.meta_description ?? '',
   meta_keywords: item.meta_keywords ?? '',
+  text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
 });
 
 export const getSiteCases = async (limit?: number, locale: string = 'pt-BR'): Promise<SiteCase[]> => {

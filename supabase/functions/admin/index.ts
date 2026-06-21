@@ -184,6 +184,9 @@ Deno.serve(async (req) => {
         if (typeof data.body === 'string') payload.body = data.body;
         if (typeof data.image_url === 'string') payload.image_url = data.image_url;
         if (typeof data.video_url === 'string') payload.video_url = data.video_url;
+        if (data.text_styles && typeof data.text_styles === 'object') {
+          payload.text_styles = data.text_styles;
+        }
 
         let result: any;
         let writeError: any;
