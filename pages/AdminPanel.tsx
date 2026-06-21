@@ -787,6 +787,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_title: '',
     meta_description: '',
     meta_keywords: '',
+    text_styles: {},
   });
 
   const updateLpField = (field: keyof SiteLp, value: any) => {
