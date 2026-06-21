@@ -2494,6 +2494,42 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   <input value={editingLp.meta_keywords} onChange={(e) => updateLpField('meta_keywords', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Meta Keywords" />
                 </div>
 
+                <EntityStylesPanel
+                  fields={[
+                    { key: 'title', label: 'Título da LP' },
+                    { key: 'hero_badge', label: 'Hero — Badge' },
+                    { key: 'hero_title', label: 'Hero — Título' },
+                    { key: 'hero_subtitle', label: 'Hero — Subtítulo' },
+                    { key: 'hero_cta_text', label: 'Hero — CTA' },
+                    { key: 'about_badge', label: 'Sobre — Badge' },
+                    { key: 'about_title', label: 'Sobre — Título' },
+                    { key: 'about_paragraphs', label: 'Sobre — Parágrafos' },
+                    { key: 'about_cta_text', label: 'Sobre — CTA' },
+                    { key: 'method_badge', label: 'Método — Badge' },
+                    { key: 'method_title', label: 'Método — Título' },
+                    { key: 'method_subtitle', label: 'Método — Subtítulo' },
+                    { key: 'method_phases', label: 'Método — Fases' },
+                    { key: 'method_cta_text', label: 'Método — CTA' },
+                    { key: 'benefits_badge', label: 'Benefícios — Badge' },
+                    { key: 'benefits_title', label: 'Benefícios — Título' },
+                    { key: 'benefits_subtitle', label: 'Benefícios — Subtítulo' },
+                    { key: 'benefits_items', label: 'Benefícios — Itens' },
+                    { key: 'benefits_cta_text', label: 'Benefícios — CTA' },
+                    { key: 'cases_badge', label: 'Cases — Badge' },
+                    { key: 'cases_title', label: 'Cases — Título' },
+                    { key: 'cases_subtitle', label: 'Cases — Subtítulo' },
+                    { key: 'cases_cta_text', label: 'Cases — CTA' },
+                    { key: 'partners_badge', label: 'Parceiros — Badge' },
+                    { key: 'partners_title', label: 'Parceiros — Título' },
+                    { key: 'partners_subtitle', label: 'Parceiros — Subtítulo' },
+                    { key: 'partners_cta_text', label: 'Parceiros — CTA' },
+                    { key: 'meta_title', label: 'Meta Title' },
+                    { key: 'meta_description', label: 'Meta Description' },
+                  ]}
+                  styles={editingLp.text_styles}
+                  onChange={(next) => updateLpField('text_styles' as keyof SiteLp, next)}
+                />
+
                 <div className="flex gap-3 pt-4">
                   <button onClick={saveLp} disabled={lpsLoading || !editingLp.slug || !editingLp.title} className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50">
                     {lpsLoading ? 'Salvando...' : 'Salvar'}
