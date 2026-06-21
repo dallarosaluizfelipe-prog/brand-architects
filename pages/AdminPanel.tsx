@@ -804,6 +804,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     const items: any[] = result.content || [];
     const map: Record<string, string> = {};
     const ptRef: Record<string, string> = {};
+    const stylesMap: Record<string, TextStylesMap> = {};
     for (const item of items) {
       if (item.section_key) {
         // Inclui campos com body null como string vazia para permitir edição
@@ -811,16 +812,25 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
         if (typeof item._pt_reference === 'string') {
           ptRef[item.section_key] = item._pt_reference;
         }
+        if (item.text_styles && typeof item.text_styles === 'object') {
+          stylesMap[item.section_key] = item.text_styles;
+        }
       }
     }
     setSiteTexts(map);
     setSiteTextsPtRef(ptRef);
+    setSiteTextStyles(stylesMap);
     setTextsDirty(new Set());
     setTextsLoading(false);
   };
 
   const updateTextField = (key: string, value: string) => {
     setSiteTexts((prev) => ({ ...prev, [key]: value }));
+    setTextsDirty((prev) => new Set(prev).add(key));
+  };
+
+  const updateTextStyleField = (key: string, next: TextStylesMap) => {
+    setSiteTextStyles((prev) => ({ ...prev, [key]: next }));
     setTextsDirty((prev) => new Set(prev).add(key));
   };
 
@@ -831,6 +841,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       title: key,
       locale: adminLocale,
       body: siteTexts[key] || '',
+      text_styles: siteTextStyles[key] || {},
     });
     if (result?.error) {
       showMessage(`Erro ao salvar: ${result.error}`);
@@ -859,6 +870,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
         title: key,
         locale: adminLocale,
         body: siteTexts[key] || '',
+        text_styles: siteTextStyles[key] || {},
       });
       if (result?.error) {
         failedKey = key;
