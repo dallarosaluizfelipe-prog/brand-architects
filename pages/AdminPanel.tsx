@@ -2033,6 +2033,22 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </div>
                 </div>
 
+                <EntityStylesPanel
+                  fields={[
+                    { key: 'title', label: 'Título' },
+                    { key: 'subtitle', label: 'Subtítulo' },
+                    { key: 'client_name', label: 'Cliente' },
+                    { key: 'client_contact', label: 'Contato do cliente' },
+                    { key: 'scope', label: 'Escopo' },
+                    { key: 'timeline', label: 'Cronograma' },
+                    { key: 'about', label: 'Sobre' },
+                    { key: 'meta_title', label: 'Meta Title' },
+                    { key: 'meta_description', label: 'Meta Description' },
+                  ]}
+                  styles={editingProposal.text_styles}
+                  onChange={(next) => setEditingProposal({ ...editingProposal, text_styles: next })}
+                />
+
                 <div className="flex gap-3 mt-8">
                   <button
                     onClick={saveProposal}
