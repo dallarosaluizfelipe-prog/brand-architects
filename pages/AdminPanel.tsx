@@ -640,6 +640,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     link_url: '/cases',
     display_order: partners.length + 1,
     is_visible: true,
+    text_styles: {},
   });
 
   // ── LP CRUD ──
