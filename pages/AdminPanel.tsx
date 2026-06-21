@@ -603,6 +603,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     link_url: item.link_url ?? '/cases',
     display_order: item.display_order ?? 0,
     is_visible: item.is_visible !== false,
+    text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
   });
 
   const loadPartners = async () => {
