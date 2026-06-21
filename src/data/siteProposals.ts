@@ -1,4 +1,5 @@
 import { supabase } from '../integrations/supabase/client';
+import type { TextStylesMap } from '../utils/textStyles';
 
 export interface SiteProposal {
   id?: string;
@@ -19,6 +20,7 @@ export interface SiteProposal {
   meta_description?: string;
   meta_keywords?: string;
   meta_robots?: string;
+  text_styles?: TextStylesMap;
   created_at?: string;
   updated_at?: string;
 }
@@ -40,6 +42,7 @@ const normalizeProposal = (item: any): SiteProposal => ({
   meta_description: item.meta_description ?? '',
   meta_keywords: item.meta_keywords ?? '',
   meta_robots: item.meta_robots ?? 'noindex, nofollow',
+  text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
   created_at: item.created_at,
   updated_at: item.updated_at,
 });
