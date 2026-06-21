@@ -2267,6 +2267,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </button>
                   <button onClick={() => setEditingPartner(null)} className="border border-neutral-200 px-8 py-3 rounded-full text-sm font-sans">Cancelar</button>
                 </div>
+                <EntityStylesPanel
+                  fields={[{ key: 'name', label: 'Nome do parceiro' }]}
+                  styles={editingPartner.text_styles}
+                  onChange={(next) => setEditingPartner({ ...editingPartner, text_styles: next })}
+                />
               </div>
             ) : (
               <>
