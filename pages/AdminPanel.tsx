@@ -6,6 +6,9 @@ import RichTextEditor from '../src/components/RichTextEditor';
 import { invalidateSiteTextsCache } from '../src/hooks/useSiteTexts';
 import { getWhatsAppUrl } from '@/src/utils/contact';
 import ThermometersTab from '../components/admin/ThermometersTab';
+import TextStyleControl from '../src/components/TextStyleControl';
+import EntityStylesPanel, { StyleField } from '../src/components/EntityStylesPanel';
+import type { TextStylesMap } from '../src/utils/textStyles';
 
 interface AdminPanelProps {
   pin: string;
@@ -33,6 +36,7 @@ interface SiteCase {
   meta_title: string;
   meta_description: string;
   meta_keywords: string;
+  text_styles?: TextStylesMap;
 }
 
 interface HeroSettings {
@@ -56,6 +60,7 @@ interface SitePartner {
   link_url: string;
   display_order: number;
   is_visible: boolean;
+  text_styles?: TextStylesMap;
 }
 
 const TAG_TYPES = [
