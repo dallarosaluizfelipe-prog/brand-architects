@@ -691,6 +691,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_title: item.meta_title ?? '',
     meta_description: item.meta_description ?? '',
     meta_keywords: item.meta_keywords ?? '',
+    text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
     created_at: item.created_at,
     updated_at: item.updated_at,
   });
