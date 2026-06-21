@@ -1,4 +1,5 @@
 import { supabase } from '../integrations/supabase/client';
+import type { TextStylesMap } from '../utils/textStyles';
 
 export interface LpPhase {
   id: string;
@@ -77,6 +78,8 @@ export interface SiteLp {
   meta_description: string;
   meta_keywords: string;
 
+  text_styles?: TextStylesMap;
+
   created_at?: string;
   updated_at?: string;
 }
@@ -137,6 +140,8 @@ const normalizeLp = (item: any): SiteLp => ({
   meta_title: item.meta_title ?? '',
   meta_description: item.meta_description ?? '',
   meta_keywords: item.meta_keywords ?? '',
+
+  text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
 
   created_at: item.created_at,
   updated_at: item.updated_at,
