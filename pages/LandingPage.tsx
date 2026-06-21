@@ -5,6 +5,7 @@ import { Seo } from '../components/Seo';
 import { getLpBySlug, SiteLp, LpPhase } from '@/src/data/siteLps';
 import { useLocale } from '@/src/contexts/LocaleContext';
 import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
+import { getFieldStyle } from '@/src/utils/textStyles';
 
 const PHASE_DURATION = 4000;
 const TICK = 50;
@@ -84,20 +85,24 @@ const LandingPage: React.FC = () => {
           <div className="relative z-10 flex flex-col items-center justify-between min-h-[100svh] md:min-h-screen text-center px-6 pt-28 md:pt-32 pb-28 md:pb-32">
             <div />
             <div className="flex flex-col items-center">
-              <span className="uppercase tracking-[0.45em] text-black/40 mb-4 block font-sans text-[11px] md:text-sm">
+              <span
+                className="uppercase tracking-[0.45em] text-black/40 mb-4 block font-sans text-[11px] md:text-sm"
+                style={getFieldStyle(lp.text_styles, 'hero_badge')}
+              >
                 {lp.hero_badge}
               </span>
               <h1 className="text-black text-4xl sm:text-5xl md:text-8xl leading-[0.9] tracking-tight max-w-5xl font-display mb-6 md:mb-8"
-                  style={{ whiteSpace: 'pre-line' }}>
+                  style={{ whiteSpace: 'pre-line', ...getFieldStyle(lp.text_styles, 'hero_title') }}>
                 {lp.hero_title}
               </h1>
               <p className="text-black/50 font-sans font-light text-base md:text-lg max-w-2xl mb-10 leading-relaxed"
-                 style={{ whiteSpace: 'pre-line' }}>
+                 style={{ whiteSpace: 'pre-line', ...getFieldStyle(lp.text_styles, 'hero_subtitle') }}>
                 {lp.hero_subtitle}
               </p>
               <Link
                 to={lp.hero_cta_url}
                 className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
+                style={getFieldStyle(lp.text_styles, 'hero_cta_text')}
               >
                 {lp.hero_cta_text}
               </Link>
