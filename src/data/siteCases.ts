@@ -1,4 +1,5 @@
 import { supabase } from "@/src/integrations/supabase/client";
+import type { TextStylesMap } from '../utils/textStyles';
 
 export interface SiteCase {
   id?: string;
@@ -21,6 +22,7 @@ export interface SiteCase {
   meta_title?: string;
   meta_description?: string;
   meta_keywords?: string;
+  text_styles?: TextStylesMap;
 }
 
 const fallbackCases: SiteCase[] = [
