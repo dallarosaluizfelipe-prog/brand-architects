@@ -1745,6 +1745,22 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </div>
                 </div>
 
+                <div className="mt-6">
+                  <EntityStylesPanel
+                    fields={[
+                      { key: 'title', label: 'Título' },
+                      { key: 'category', label: 'Categoria' },
+                      { key: 'description', label: 'Descrição' },
+                      { key: 'author', label: 'Autor' },
+                      { key: 'cta_text', label: 'Texto do CTA' },
+                      { key: 'meta_title', label: 'Meta Title' },
+                      { key: 'meta_description', label: 'Meta Description' },
+                    ]}
+                    styles={editingCase.text_styles}
+                    onChange={(next) => setEditingCase({ ...editingCase, text_styles: next })}
+                  />
+                </div>
+
                 <div className="flex gap-3 mt-8">
                   <button
                     onClick={saveCase}
