@@ -505,6 +505,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_description: '',
     meta_keywords: '',
     meta_robots: 'noindex, nofollow',
+    text_styles: {},
   });
 
   const updateProposalField = (field: keyof SiteProposal, value: any) => {
