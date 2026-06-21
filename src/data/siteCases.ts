@@ -217,6 +217,7 @@ const normalizeCase = (item: any): SiteCase => ({
   meta_title: item.meta_title ?? '',
   meta_description: item.meta_description ?? '',
   meta_keywords: item.meta_keywords ?? '',
+  text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
 });
 
 export const getSiteCases = async (limit?: number, locale: string = 'pt-BR'): Promise<SiteCase[]> => {
