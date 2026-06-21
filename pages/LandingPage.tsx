@@ -138,15 +138,21 @@ const LandingPage: React.FC = () => {
         <section className="py-20 md:py-32 px-6 bg-[#efeff0] rounded-[2.5rem] md:rounded-[5rem]">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             <div>
-              <span className="text-[11px] uppercase tracking-[0.4em] text-neutral-400 font-sans font-bold mb-6 block">
+              <span
+                className="text-[11px] uppercase tracking-[0.4em] text-neutral-400 font-sans font-bold mb-6 block"
+                style={getFieldStyle(lp.text_styles, 'about_badge')}
+              >
                 {lp.about_badge}
               </span>
-              <h2 className="text-3xl sm:text-4xl md:text-6xl leading-[0.9] tracking-tight font-display mb-6">
+              <h2
+                className="text-3xl sm:text-4xl md:text-6xl leading-[0.9] tracking-tight font-display mb-6"
+                style={getFieldStyle(lp.text_styles, 'about_title')}
+              >
                 {lp.about_title}
               </h2>
               {lp.about_paragraphs.map((p, i) => (
                 <p key={i} className="text-neutral-500 font-sans font-light text-base md:text-lg leading-relaxed mb-4"
-                   style={{ whiteSpace: 'pre-line' }}>
+                   style={{ whiteSpace: 'pre-line', ...getFieldStyle(lp.text_styles, 'about_paragraphs') }}>
                   {p}
                 </p>
               ))}
@@ -177,13 +183,22 @@ const LandingPage: React.FC = () => {
           <section className="py-20 md:py-40 px-6">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16 md:mb-24">
-                <span className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm font-bold">
+                <span
+                  className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm font-bold"
+                  style={getFieldStyle(lp.text_styles, 'method_badge')}
+                >
                   {lp.method_badge}
                 </span>
-                <h2 className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6">
+                <h2
+                  className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6"
+                  style={getFieldStyle(lp.text_styles, 'method_title')}
+                >
                   {lp.method_title}
                 </h2>
-                <p className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-2xl mx-auto">
+                <p
+                  className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-2xl mx-auto"
+                  style={getFieldStyle(lp.text_styles, 'method_subtitle')}
+                >
                   {lp.method_subtitle}
                 </p>
               </div>
@@ -273,13 +288,22 @@ const LandingPage: React.FC = () => {
           <section className="py-20 md:py-32 px-6 bg-black text-white rounded-[2.5rem] md:rounded-[5rem]">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16 md:mb-20">
-                <span className="uppercase tracking-[0.45em] text-white/40 mb-6 block font-sans text-[11px] md:text-sm font-bold">
+                <span
+                  className="uppercase tracking-[0.45em] text-white/40 mb-6 block font-sans text-[11px] md:text-sm font-bold"
+                  style={getFieldStyle(lp.text_styles, 'benefits_badge')}
+                >
                   {lp.benefits_badge}
                 </span>
-                <h2 className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6">
+                <h2
+                  className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6"
+                  style={getFieldStyle(lp.text_styles, 'benefits_title')}
+                >
                   {lp.benefits_title}
                 </h2>
-                <p className="text-white/50 font-sans font-light text-base md:text-xl max-w-2xl mx-auto">
+                <p
+                  className="text-white/50 font-sans font-light text-base md:text-xl max-w-2xl mx-auto"
+                  style={getFieldStyle(lp.text_styles, 'benefits_subtitle')}
+                >
                   {lp.benefits_subtitle}
                 </p>
               </div>
@@ -313,13 +337,22 @@ const LandingPage: React.FC = () => {
           <section className="py-20 md:py-32 px-6">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12 md:mb-16">
-                <span className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm font-bold">
+                <span
+                  className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm font-bold"
+                  style={getFieldStyle(lp.text_styles, 'cases_badge')}
+                >
                   {lp.cases_badge}
                 </span>
-                <h2 className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6">
+                <h2
+                  className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6"
+                  style={getFieldStyle(lp.text_styles, 'cases_title')}
+                >
                   {lp.cases_title}
                 </h2>
-                <p className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-2xl mx-auto">
+                <p
+                  className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-2xl mx-auto"
+                  style={getFieldStyle(lp.text_styles, 'cases_subtitle')}
+                >
                   {lp.cases_subtitle}
                 </p>
               </div>
@@ -355,10 +388,16 @@ const LandingPage: React.FC = () => {
           <section className="py-20 md:py-32 px-6">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12 md:mb-20">
-                <span className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm font-bold">
+                <span
+                  className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm font-bold"
+                  style={getFieldStyle(lp.text_styles, 'partners_badge')}
+                >
                   {lp.partners_badge}
                 </span>
-                <h2 className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6">
+                <h2
+                  className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6"
+                  style={getFieldStyle(lp.text_styles, 'partners_title')}
+                >
                   {lp.partners_title}
                 </h2>
                 <p className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-xl mx-auto">
