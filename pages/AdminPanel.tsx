@@ -328,6 +328,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   const [lpsLoading, setLpsLoading] = useState(false);
   const [siteTexts, setSiteTexts] = useState<Record<string, string>>({});
   const [siteTextsPtRef, setSiteTextsPtRef] = useState<Record<string, string>>({});
+  const [siteTextStyles, setSiteTextStyles] = useState<Record<string, TextStylesMap>>({});
   const [textsLoading, setTextsLoading] = useState(false);
   const [textsDirty, setTextsDirty] = useState<Set<string>>(new Set());
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
@@ -376,6 +377,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     meta_title: item.meta_title ?? '',
     meta_description: item.meta_description ?? '',
     meta_keywords: item.meta_keywords ?? '',
+    text_styles: (item.text_styles && typeof item.text_styles === 'object') ? item.text_styles : {},
   });
 
   const loadCases = async (locale?: string) => {
