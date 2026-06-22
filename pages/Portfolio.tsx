@@ -4,6 +4,7 @@ import ContactSection from '../components/ContactSection';
 import { getSiteCases, type SiteCase } from '@/src/data/siteCases';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useSiteTextStyles } from '@/src/hooks/useSiteTextStyles';
 import { useLocale } from '@/src/contexts/LocaleContext';
 
 const Portfolio: React.FC = () => {
@@ -18,6 +19,8 @@ const Portfolio: React.FC = () => {
     portfolio_seo_keywords: 'portfolio branding luxo, estudos de caso branding',
     portfolio_og_image: '',
   }, locale);
+
+  const s = useSiteTextStyles(['portfolio_header_title','portfolio_header_subtitle'], locale);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -38,8 +41,8 @@ const Portfolio: React.FC = () => {
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-24 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">
-          <h1 className="text-5xl sm:text-6xl md:text-8xl leading-[0.82] tracking-tighter font-display mb-7 md:mb-10">{t.portfolio_header_title}</h1>
-          <div className="text-base md:text-xl text-neutral-400 max-w-2xl font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: t.portfolio_header_subtitle }} />
+          <h1 className="text-5xl sm:text-6xl md:text-8xl leading-[0.82] tracking-tighter font-display mb-7 md:mb-10" style={s.portfolio_header_title}>{t.portfolio_header_title}</h1>
+          <div className="text-base md:text-xl text-neutral-400 max-w-2xl font-light leading-relaxed" style={s.portfolio_header_subtitle} dangerouslySetInnerHTML={{ __html: t.portfolio_header_subtitle }} />
         </header>
 
         <section className="pb-24 md:pb-40 px-6 max-w-7xl mx-auto">
