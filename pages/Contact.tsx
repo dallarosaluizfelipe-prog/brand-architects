@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useSiteTextStyles } from '@/src/hooks/useSiteTextStyles';
 import { useLocale } from '@/src/contexts/LocaleContext';
 import { CONTACT_PHONE_DISPLAY, getWhatsAppUrl } from '@/src/utils/contact';
 import { trackFormSubmission, pushToDataLayer } from '@/src/hooks/useAnalytics';
@@ -21,6 +22,8 @@ const Contact: React.FC = () => {
     social_linkedin: '',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
   }, locale);
+
+  const s = useSiteTextStyles(['contact_header_title','contact_info','contact_emails'], locale);
 
   const [form, setForm] = useState({
     name: '',
@@ -67,7 +70,7 @@ const Contact: React.FC = () => {
       />
       <div className="animate-in fade-in duration-700 overflow-x-hidden">
         <header className="pt-36 md:pt-48 pb-12 md:pb-20 px-6 max-w-7xl mx-auto">
-          <h1 className="text-6xl sm:text-7xl md:text-[12rem] leading-[0.82] tracking-tighter mb-8 md:mb-24 font-display">{t.contact_header_title}</h1>
+          <h1 className="text-6xl sm:text-7xl md:text-[12rem] leading-[0.82] tracking-tighter mb-8 md:mb-24 font-display" style={s.contact_header_title}>{t.contact_header_title}</h1>
         </header>
 
         <main className="max-w-7xl mx-auto px-6 pb-24 md:pb-40">
@@ -75,11 +78,11 @@ const Contact: React.FC = () => {
             <div className="md:col-span-4 space-y-12 md:space-y-20 font-sans">
               <section>
                 <h2 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Contatos</h2>
-                <div className="font-light leading-relaxed uppercase tracking-[0.22em] text-neutral-800 text-sm md:text-lg" dangerouslySetInnerHTML={{ __html: t.contact_info }} />
+                <div className="font-light leading-relaxed uppercase tracking-[0.22em] text-neutral-800 text-sm md:text-lg" style={s.contact_info} dangerouslySetInnerHTML={{ __html: t.contact_info }} />
               </section>
               <section>
                 <h2 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Email</h2>
-                <div className="font-light tracking-[0.15em] text-neutral-800 text-xs md:text-lg break-words" dangerouslySetInnerHTML={{ __html: t.contact_emails }} />
+                <div className="font-light tracking-[0.15em] text-neutral-800 text-xs md:text-lg break-words" style={s.contact_emails} dangerouslySetInnerHTML={{ __html: t.contact_emails }} />
               </section>
               <section>
                 <h2 className="text-[10px] font-bold mb-6 md:mb-8 uppercase tracking-[0.4em] opacity-40">Redes</h2>

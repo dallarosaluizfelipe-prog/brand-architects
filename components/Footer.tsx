@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useSiteTextStyles } from '@/src/hooks/useSiteTextStyles';
 import { useLocale } from '@/src/contexts/LocaleContext';
 import { CONTACT_PHONE_DISPLAY, getWhatsAppUrl } from '@/src/utils/contact';
 
@@ -13,6 +14,7 @@ const Footer: React.FC = () => {
     social_linkedin: '',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
   }, locale);
+  const s = useSiteTextStyles(['footer_contacts','footer_copyright'], locale);
 
   return (
     <footer className="bg-black pt-10 md:pt-32 pb-28 md:pb-16 px-6 text-white">
@@ -20,7 +22,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-14 md:mb-20 font-sans">
           <div>
             <h5 className="text-[10px] font-bold mb-5 md:mb-6 uppercase tracking-widest opacity-40">Contatos</h5>
-            <div className="text-xs md:text-sm font-light opacity-80 leading-relaxed uppercase tracking-[0.2em]" dangerouslySetInnerHTML={{ __html: t.footer_contacts }} />
+            <div className="text-xs md:text-sm font-light opacity-80 leading-relaxed uppercase tracking-[0.2em]" style={s.footer_contacts} dangerouslySetInnerHTML={{ __html: t.footer_contacts }} />
           </div>
           <div>
             <h5 className="text-[10px] font-bold mb-5 md:mb-6 uppercase tracking-widest opacity-40">Redes</h5>
@@ -38,7 +40,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           <div className="md:text-right flex flex-col justify-between">
-            <span className="text-[10px] opacity-40 uppercase tracking-[0.2em]">{t.footer_copyright}</span>
+            <span className="text-[10px] opacity-40 uppercase tracking-[0.2em]" style={s.footer_copyright}>{t.footer_copyright}</span>
             <a
               href="https://iasin.dev.br"
               target="_blank"

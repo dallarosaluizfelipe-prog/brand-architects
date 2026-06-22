@@ -2,6 +2,7 @@
 import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useSiteTextStyles } from '@/src/hooks/useSiteTextStyles';
 import { useLocale } from '@/src/contexts/LocaleContext';
 
 const About: React.FC = () => {
@@ -36,6 +37,11 @@ const About: React.FC = () => {
     about_og_image: '',
   }, locale);
 
+  const s = useSiteTextStyles(
+    ['about_header_badge','about_header_title','about_header_subtitle','about_vision_title','about_vision_p1','about_vision_p2','about_expert_badge','about_expert_title','about_expert_p1','about_expert_p2','about_expert_p3','about_pillars_badge','about_pillars_title','about_pillar1_title','about_pillar1_desc','about_pillar2_title','about_pillar2_desc','about_pillar3_title','about_pillar3_desc'],
+    locale,
+  );
+
   const expertPhotoUrl = t.about_expert_photo_url?.trim()
     ? encodeURI(t.about_expert_photo_url.trim())
     : '';
@@ -50,18 +56,18 @@ const About: React.FC = () => {
       />
       <div className="animate-in fade-in duration-700">
         <header className="pt-36 md:pt-48 pb-14 md:pb-20 px-6 max-w-7xl mx-auto">
-          <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-6 md:mb-8 opacity-40">{t.about_header_badge}</p>
-          <h1 className="text-5xl sm:text-6xl md:text-[12rem] leading-[0.82] tracking-tighter font-display mb-7 md:mb-10">{t.about_header_title}</h1>
-          <div className="text-base md:text-2xl text-neutral-500 max-w-3xl font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_header_subtitle }} />
+          <p className="text-[10px] uppercase tracking-[0.5em] font-bold font-sans mb-6 md:mb-8 opacity-40" style={s.about_header_badge}>{t.about_header_badge}</p>
+          <h1 className="text-5xl sm:text-6xl md:text-[12rem] leading-[0.82] tracking-tighter font-display mb-7 md:mb-10" style={s.about_header_title}>{t.about_header_title}</h1>
+          <div className="text-base md:text-2xl text-neutral-500 max-w-3xl font-light leading-relaxed" style={s.about_header_subtitle} dangerouslySetInnerHTML={{ __html: t.about_header_subtitle }} />
         </header>
 
         <section className="py-20 md:py-40 px-6 bg-neutral-50">
           <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-10 md:gap-16">
             <div className="md:col-span-7">
-              <h2 className="text-[2.5rem] md:text-7xl mb-8 md:mb-12 leading-[0.9] tracking-tighter">{t.about_vision_title}</h2>
+              <h2 className="text-[2.5rem] md:text-7xl mb-8 md:mb-12 leading-[0.9] tracking-tighter" style={s.about_vision_title}>{t.about_vision_title}</h2>
               <div className="space-y-6 md:space-y-8 text-base md:text-xl text-neutral-600 font-light leading-relaxed font-sans">
-                <div dangerouslySetInnerHTML={{ __html: t.about_vision_p1 }} />
-                <div dangerouslySetInnerHTML={{ __html: t.about_vision_p2 }} />
+                <div style={s.about_vision_p1} dangerouslySetInnerHTML={{ __html: t.about_vision_p1 }} />
+                <div style={s.about_vision_p2} dangerouslySetInnerHTML={{ __html: t.about_vision_p2 }} />
               </div>
             </div>
             <div className="md:col-span-5">
@@ -93,34 +99,34 @@ const About: React.FC = () => {
             </div>
 
             <div className="md:col-span-7">
-              <h2 className="text-3xl sm:text-4xl md:text-6xl font-display leading-[0.92] tracking-tight mb-6">{t.about_expert_badge}</h2>
-              <p className="text-xl sm:text-2xl md:text-3xl font-sans font-black mb-1">{t.about_expert_title?.split(' Designer')[0] || 'Lipe Dalla-Rosa'}</p>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-display leading-[0.92] tracking-tight mb-6" style={s.about_expert_badge}>{t.about_expert_badge}</h2>
+              <p className="text-xl sm:text-2xl md:text-3xl font-sans font-black mb-1" style={s.about_expert_title}>{t.about_expert_title?.split(' Designer')[0] || 'Lipe Dalla-Rosa'}</p>
               <p className="text-sm sm:text-base md:text-lg font-sans font-normal text-neutral-400 mb-8">{t.about_expert_role}</p>
               <div className="space-y-5 text-sm sm:text-base md:text-lg text-neutral-200 font-light leading-relaxed font-sans max-w-3xl">
-                <div dangerouslySetInnerHTML={{ __html: t.about_expert_p1 }} />
-                <div dangerouslySetInnerHTML={{ __html: t.about_expert_p2 }} />
-                <div dangerouslySetInnerHTML={{ __html: t.about_expert_p3 }} />
+                <div style={s.about_expert_p1} dangerouslySetInnerHTML={{ __html: t.about_expert_p1 }} />
+                <div style={s.about_expert_p2} dangerouslySetInnerHTML={{ __html: t.about_expert_p2 }} />
+                <div style={s.about_expert_p3} dangerouslySetInnerHTML={{ __html: t.about_expert_p3 }} />
               </div>
             </div>
           </div>
         </section>
         <section className="py-20 md:py-40 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-14 md:mb-32">
-            <span className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans opacity-40">{t.about_pillars_badge}</span>
-            <h2 className="text-5xl sm:text-5xl md:text-8xl mt-6 md:mt-8 tracking-tighter">{t.about_pillars_title}</h2>
+            <span className="text-[10px] uppercase tracking-[0.4em] font-bold font-sans opacity-40" style={s.about_pillars_badge}>{t.about_pillars_badge}</span>
+            <h2 className="text-5xl sm:text-5xl md:text-8xl mt-6 md:mt-8 tracking-tighter" style={s.about_pillars_title}>{t.about_pillars_title}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-10 md:gap-16">
             <div className="space-y-5 md:space-y-6">
-              <h3 className="text-[2rem] md:text-4xl font-display">{t.about_pillar1_title}</h3>
-              <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar1_desc }} />
+              <h3 className="text-[2rem] md:text-4xl font-display" style={s.about_pillar1_title}>{t.about_pillar1_title}</h3>
+              <div className="text-neutral-500 font-light font-sans leading-relaxed" style={s.about_pillar1_desc} dangerouslySetInnerHTML={{ __html: t.about_pillar1_desc }} />
             </div>
             <div className="space-y-5 md:space-y-6">
-              <h3 className="text-[2rem] md:text-4xl font-display">{t.about_pillar2_title}</h3>
-              <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar2_desc }} />
+              <h3 className="text-[2rem] md:text-4xl font-display" style={s.about_pillar2_title}>{t.about_pillar2_title}</h3>
+              <div className="text-neutral-500 font-light font-sans leading-relaxed" style={s.about_pillar2_desc} dangerouslySetInnerHTML={{ __html: t.about_pillar2_desc }} />
             </div>
             <div className="space-y-5 md:space-y-6">
-              <h3 className="text-[2rem] md:text-4xl font-display">{t.about_pillar3_title}</h3>
-              <div className="text-neutral-500 font-light font-sans leading-relaxed" dangerouslySetInnerHTML={{ __html: t.about_pillar3_desc }} />
+              <h3 className="text-[2rem] md:text-4xl font-display" style={s.about_pillar3_title}>{t.about_pillar3_title}</h3>
+              <div className="text-neutral-500 font-light font-sans leading-relaxed" style={s.about_pillar3_desc} dangerouslySetInnerHTML={{ __html: t.about_pillar3_desc }} />
             </div>
           </div>
         </section>

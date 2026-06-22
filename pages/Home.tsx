@@ -4,6 +4,7 @@ import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { supabase } from '@/src/integrations/supabase/client';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+import { useSiteTextStyles } from '@/src/hooks/useSiteTextStyles';
 import { getSiteCases, SiteCase } from '@/src/data/siteCases';
 import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
 import { useLocale } from '@/src/contexts/LocaleContext';
@@ -34,6 +35,11 @@ const Home: React.FC = () => {
     home_seo_keywords: 'branding luxo, agencia de branding SP, identidade visual premium',
     home_og_image: '',
   }, locale);
+
+  const s = useSiteTextStyles(
+    ['home_hero_badge','home_hero_title','home_hero_subtitle','home_cases_title','home_cases_subtitle','home_partners_title','home_partners_subtitle'],
+    locale,
+  );
 
   useEffect(() => {
     supabase
@@ -83,13 +89,13 @@ const Home: React.FC = () => {
         </section>
 
         <section className="py-14 md:py-24 px-6 max-w-4xl mx-auto">
-          <span className="inline-block text-[11px] uppercase tracking-[0.24em] text-neutral-500 font-sans mb-6">
+          <span className="inline-block text-[11px] uppercase tracking-[0.24em] text-neutral-500 font-sans mb-6" style={s.home_hero_badge}>
             {t.home_hero_badge}
           </span>
-          <h1 className="text-[clamp(2.5rem,10vw,5.5rem)] leading-[0.9] tracking-tight mb-5">
+          <h1 className="text-[clamp(2.5rem,10vw,5.5rem)] leading-[0.9] tracking-tight mb-5" style={s.home_hero_title}>
             {t.home_hero_title}
           </h1>
-          <div className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8" dangerouslySetInnerHTML={{ __html: t.home_hero_subtitle }} />
+          <div className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8" style={s.home_hero_subtitle} dangerouslySetInnerHTML={{ __html: t.home_hero_subtitle }} />
           <div className="flex flex-col sm:flex-row gap-3">
             <Link to="/cases" className="bg-black text-white px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center flex-1 sm:flex-none sm:min-w-[200px]">
               Ver cases
@@ -103,8 +109,8 @@ const Home: React.FC = () => {
         <section className="py-14 md:py-16 px-6 bg-[#efeff0]" id="work">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-5xl sm:text-5xl md:text-8xl mb-6 md:mb-8 tracking-tighter">{t.home_cases_title}</h2>
-              <div className="text-base md:text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: t.home_cases_subtitle }} />
+              <h2 className="text-5xl sm:text-5xl md:text-8xl mb-6 md:mb-8 tracking-tighter" style={s.home_cases_title}>{t.home_cases_title}</h2>
+              <div className="text-base md:text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed" style={s.home_cases_subtitle} dangerouslySetInnerHTML={{ __html: t.home_cases_subtitle }} />
             </div>
 
             <div className="grid md:grid-cols-2 gap-10 md:gap-12">
@@ -162,8 +168,8 @@ const Home: React.FC = () => {
         <section className="py-20 md:py-40 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8 md:gap-10">
-              <h2 className="text-5xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl">{t.home_partners_title}</h2>
-              <div className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg" dangerouslySetInnerHTML={{ __html: t.home_partners_subtitle }} />
+              <h2 className="text-5xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl" style={s.home_partners_title}>{t.home_partners_title}</h2>
+              <div className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg" style={s.home_partners_subtitle} dangerouslySetInnerHTML={{ __html: t.home_partners_subtitle }} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">
               {partners.map((p) => (
