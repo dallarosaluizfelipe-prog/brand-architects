@@ -142,6 +142,27 @@ const TextStyleControl: React.FC<Props> = ({ field, styles, onChange, label }) =
             />
           </div>
 
+          {/* Font size */}
+          <div>
+            <label className="block text-[10px] font-sans text-neutral-500 mb-1">
+              Tamanho da fonte (rem)
+            </label>
+            <input
+              type="number"
+              step={0.05}
+              min={0}
+              value={current.fontSize ?? ''}
+              onChange={(e) =>
+                apply({
+                  fontSize: e.target.value === '' ? undefined : Number(e.target.value),
+                })
+              }
+              placeholder="ex: 1.25"
+              className="w-full border border-neutral-200 rounded-lg px-2 py-1.5 text-xs font-sans"
+            />
+            <p className="text-[10px] text-neutral-400 font-sans mt-1">1rem ≈ 16px. Deixe vazio para usar o padrão.</p>
+          </div>
+
           <p className="text-[10px] text-neutral-400 font-sans leading-snug">
             Sobrescreve o estilo global apenas deste campo. Salve a edição para aplicar.
           </p>
