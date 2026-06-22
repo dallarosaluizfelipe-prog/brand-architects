@@ -26,8 +26,13 @@ const Home: React.FC = () => {
     home_hero_badge: 'branding e posicionamento',
     home_hero_title: 'Marcas de alto valor com estrategia que vira percepcao.',
     home_hero_subtitle: 'O Studio Dalla une direcao estrategica e identidade visual para empresas que precisam de autoridade imediata.',
+    home_hero_cta_primary: 'Ver cases',
+    home_hero_cta_secondary: 'Falar com o estúdio',
     home_cases_title: 'Conheca Nossos Cases',
     home_cases_subtitle: 'Marcas que carregam estrategia na essencia, e validaram o nosso metodo.',
+    home_cases_cta: 'ver todo os cases',
+    home_case_card_title: '',
+    home_case_card_category: '',
     home_partners_title: 'Nossos Parceiros',
     home_partners_subtitle: 'Parceiros estrategicos que colocam a marca em acao por meio do design.',
     home_seo_title: 'Estudio de Branding de Luxo em Sao Paulo',
@@ -37,7 +42,7 @@ const Home: React.FC = () => {
   }, locale);
 
   const s = useSiteTextStyles(
-    ['home_hero_badge','home_hero_title','home_hero_subtitle','home_cases_title','home_cases_subtitle','home_partners_title','home_partners_subtitle'],
+    ['home_hero_badge','home_hero_title','home_hero_subtitle','home_hero_cta_primary','home_hero_cta_secondary','home_cases_title','home_cases_subtitle','home_cases_cta','home_case_card_title','home_case_card_category','home_partners_title','home_partners_subtitle'],
     locale,
   );
 
@@ -97,11 +102,11 @@ const Home: React.FC = () => {
           </h1>
           <div className="max-w-xl text-neutral-500 text-base md:text-xl leading-relaxed font-sans mb-8" style={s.home_hero_subtitle} dangerouslySetInnerHTML={{ __html: t.home_hero_subtitle }} />
           <div className="flex flex-col sm:flex-row gap-3">
-            <Link to="/cases" className="bg-black text-white px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center flex-1 sm:flex-none sm:min-w-[200px]">
-              Ver cases
+            <Link to="/cases" style={s.home_hero_cta_primary} className="bg-black text-white px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center flex-1 sm:flex-none sm:min-w-[200px]">
+              {t.home_hero_cta_primary}
             </Link>
-            <Link to="/contato" className="border border-black/40 text-black px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center flex-1 sm:flex-none sm:min-w-[200px]">
-              Falar com o estúdio
+            <Link to="/contato" style={s.home_hero_cta_secondary} className="border border-black/40 text-black px-10 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all active:scale-95 text-center flex-1 sm:flex-none sm:min-w-[200px]">
+              {t.home_hero_cta_secondary}
             </Link>
           </div>
         </section>
@@ -120,8 +125,8 @@ const Home: React.FC = () => {
                     <img alt={c.title} className="w-full h-full object-cover" src={c.cover_url} loading="lazy" />
                   </div>
                   <div>
-                    <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
-                    <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
+                    <h3 style={s.home_case_card_title} className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
+                    <p style={s.home_case_card_category} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
                   </div>
                 </Link>
               ))}
@@ -134,8 +139,8 @@ const Home: React.FC = () => {
                     <img alt={homeCases[2].title} className="w-full h-full object-cover" src={homeCases[2].cover_url} loading="lazy" />
                   </div>
                   <div>
-                    <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">{homeCases[2].title}</h3>
-                    <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{homeCases[2].category}</p>
+                    <h3 style={s.home_case_card_title} className="text-2xl md:text-5xl mb-3 md:mb-4">{homeCases[2].title}</h3>
+                    <p style={s.home_case_card_category} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{homeCases[2].category}</p>
                   </div>
                 </Link>
               </div>
@@ -149,8 +154,8 @@ const Home: React.FC = () => {
                       <img alt={c.title} className="w-full h-full object-cover" src={c.cover_url} loading="lazy" />
                     </div>
                     <div>
-                      <h3 className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
-                      <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
+                      <h3 style={s.home_case_card_title} className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
+                      <p style={s.home_case_card_category} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
                     </div>
                   </Link>
                 ))}
@@ -158,8 +163,8 @@ const Home: React.FC = () => {
             )}
 
             <div className="mt-12 md:mt-16 text-center">
-              <Link to="/cases" className="inline-block border border-black px-10 md:px-16 py-4 md:py-6 rounded-full font-bold uppercase tracking-[0.18em] hover:bg-black hover:text-white transition-all font-sans text-xs md:text-sm">
-                ver todo os cases
+              <Link to="/cases" style={s.home_cases_cta} className="inline-block border border-black px-10 md:px-16 py-4 md:py-6 rounded-full font-bold uppercase tracking-[0.18em] hover:bg-black hover:text-white transition-all font-sans text-xs md:text-sm">
+                {t.home_cases_cta}
               </Link>
             </div>
           </div>
