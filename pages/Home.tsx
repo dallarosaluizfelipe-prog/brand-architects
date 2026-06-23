@@ -5,6 +5,7 @@ import { Seo } from '../components/Seo';
 import { supabase } from '@/src/integrations/supabase/client';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 import { useSiteTextStyles } from '@/src/hooks/useSiteTextStyles';
+import { getFieldStyle } from '@/src/utils/textStyles';
 import { getSiteCases, SiteCase } from '@/src/data/siteCases';
 import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
 import { useLocale } from '@/src/contexts/LocaleContext';
@@ -125,8 +126,8 @@ const Home: React.FC = () => {
                     <img alt={c.title} className="w-full h-full object-cover" src={c.cover_url} loading="lazy" />
                   </div>
                   <div>
-                    <h3 style={s.home_case_card_title} className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
-                    <p style={s.home_case_card_category} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
+                    <h3 style={{ ...s.home_case_card_title, ...getFieldStyle(c.text_styles, 'title') }} className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
+                    <p style={{ ...s.home_case_card_category, ...getFieldStyle(c.text_styles, 'category') }} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
                   </div>
                 </Link>
               ))}
@@ -139,8 +140,8 @@ const Home: React.FC = () => {
                     <img alt={homeCases[2].title} className="w-full h-full object-cover" src={homeCases[2].cover_url} loading="lazy" />
                   </div>
                   <div>
-                    <h3 style={s.home_case_card_title} className="text-2xl md:text-5xl mb-3 md:mb-4">{homeCases[2].title}</h3>
-                    <p style={s.home_case_card_category} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{homeCases[2].category}</p>
+                    <h3 style={{ ...s.home_case_card_title, ...getFieldStyle(homeCases[2].text_styles, 'title') }} className="text-2xl md:text-5xl mb-3 md:mb-4">{homeCases[2].title}</h3>
+                    <p style={{ ...s.home_case_card_category, ...getFieldStyle(homeCases[2].text_styles, 'category') }} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{homeCases[2].category}</p>
                   </div>
                 </Link>
               </div>
@@ -154,8 +155,8 @@ const Home: React.FC = () => {
                       <img alt={c.title} className="w-full h-full object-cover" src={c.cover_url} loading="lazy" />
                     </div>
                     <div>
-                      <h3 style={s.home_case_card_title} className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
-                      <p style={s.home_case_card_category} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
+                      <h3 style={{ ...s.home_case_card_title, ...getFieldStyle(c.text_styles, 'title') }} className="text-2xl md:text-5xl mb-3 md:mb-4">{c.title}</h3>
+                      <p style={{ ...s.home_case_card_category, ...getFieldStyle(c.text_styles, 'category') }} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
                     </div>
                   </Link>
                 ))}

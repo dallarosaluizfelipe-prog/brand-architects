@@ -5,6 +5,7 @@ import { getSiteCases, type SiteCase } from '@/src/data/siteCases';
 import { Seo } from '../components/Seo';
 import { useSiteTexts } from '@/src/hooks/useSiteTexts';
 import { useSiteTextStyles } from '@/src/hooks/useSiteTextStyles';
+import { getFieldStyle } from '@/src/utils/textStyles';
 import { useLocale } from '@/src/contexts/LocaleContext';
 
 const Portfolio: React.FC = () => {
@@ -59,8 +60,8 @@ const Portfolio: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <h3 className="text-3xl md:text-5xl mb-3 md:mb-4">{project.title}</h3>
-                  <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{project.category}</p>
+                  <h3 style={getFieldStyle(project.text_styles, 'title')} className="text-3xl md:text-5xl mb-3 md:mb-4">{project.title}</h3>
+                  <p style={getFieldStyle(project.text_styles, 'category')} className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{project.category}</p>
                 </div>
               </Link>
             ))}
