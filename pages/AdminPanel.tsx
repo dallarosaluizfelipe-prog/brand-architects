@@ -245,7 +245,13 @@ const PAGE_CONFIGS: PageConfig[] = [
       { key: 'method_phase5_title', label: 'Fase V - Titulo' },
       { key: 'method_phase5_desc', label: 'Fase V - Descricao', rich: true },
     ],
-    imagens: [],
+    imagens: [
+      { key: 'method_phase1_image', label: 'Fase I - Imagem' },
+      { key: 'method_phase2_image', label: 'Fase II - Imagem' },
+      { key: 'method_phase3_image', label: 'Fase III - Imagem' },
+      { key: 'method_phase4_image', label: 'Fase IV - Imagem' },
+      { key: 'method_phase5_image', label: 'Fase V - Imagem' },
+    ],
   },
   {
     id: 'portfolio',

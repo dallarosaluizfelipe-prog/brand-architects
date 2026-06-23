@@ -30,6 +30,11 @@ const Methodology: React.FC = () => {
     methodology_seo_description: 'Entenda o metodo proprietario do Estudio Dalla para criar marcas de luxo com posicionamento estrategico e estetica autoral.',
     methodology_seo_keywords: 'metodologia branding, processo de branding luxo, metodo Dalla',
     methodology_og_image: '',
+    method_phase1_image: '',
+    method_phase2_image: '',
+    method_phase3_image: '',
+    method_phase4_image: '',
+    method_phase5_image: '',
   }, locale);
 
   const s = useSiteTextStyles(
@@ -38,11 +43,11 @@ const Methodology: React.FC = () => {
   );
 
   const phases = [
-    { id: 'I', label: t.method_phase1_label, title: t.method_phase1_title, desc: t.method_phase1_desc, titleStyle: s.method_phase1_title, descStyle: s.method_phase1_desc },
-    { id: 'II', label: t.method_phase2_label, title: t.method_phase2_title, desc: t.method_phase2_desc, titleStyle: s.method_phase2_title, descStyle: s.method_phase2_desc },
-    { id: 'III', label: t.method_phase3_label, title: t.method_phase3_title, desc: t.method_phase3_desc, titleStyle: s.method_phase3_title, descStyle: s.method_phase3_desc },
-    { id: 'IV', label: t.method_phase4_label, title: t.method_phase4_title, desc: t.method_phase4_desc, titleStyle: s.method_phase4_title, descStyle: s.method_phase4_desc },
-    { id: 'V', label: t.method_phase5_label, title: t.method_phase5_title, desc: t.method_phase5_desc, titleStyle: s.method_phase5_title, descStyle: s.method_phase5_desc },
+    { id: 'I', label: t.method_phase1_label, title: t.method_phase1_title, desc: t.method_phase1_desc, titleStyle: s.method_phase1_title, descStyle: s.method_phase1_desc, image: t.method_phase1_image },
+    { id: 'II', label: t.method_phase2_label, title: t.method_phase2_title, desc: t.method_phase2_desc, titleStyle: s.method_phase2_title, descStyle: s.method_phase2_desc, image: t.method_phase2_image },
+    { id: 'III', label: t.method_phase3_label, title: t.method_phase3_title, desc: t.method_phase3_desc, titleStyle: s.method_phase3_title, descStyle: s.method_phase3_desc, image: t.method_phase3_image },
+    { id: 'IV', label: t.method_phase4_label, title: t.method_phase4_title, desc: t.method_phase4_desc, titleStyle: s.method_phase4_title, descStyle: s.method_phase4_desc, image: t.method_phase4_image },
+    { id: 'V', label: t.method_phase5_label, title: t.method_phase5_title, desc: t.method_phase5_desc, titleStyle: s.method_phase5_title, descStyle: s.method_phase5_desc, image: t.method_phase5_image },
   ];
 
   return (
@@ -68,16 +73,30 @@ const Methodology: React.FC = () => {
         <section className="py-20 md:py-40 px-6 max-w-6xl mx-auto">
           <div className="space-y-16 md:space-y-48">
             {phases.map((phase, idx) => (
-              <div key={idx} className="grid md:grid-cols-[180px_1fr] gap-6 md:gap-16 items-start">
-                <div className="flex flex-col gap-2 pt-2">
-                  <span className="text-3xl md:text-5xl font-display tracking-tight leading-none">{phase.id}</span>
-                  <span className="text-[11px] uppercase tracking-[0.35em] text-neutral-400 font-bold font-sans">{phase.label}</span>
+              <div key={idx}>
+                <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+                  <div className="order-1 md:order-1">
+                    {phase.image ? (
+                      <img
+                        src={phase.image}
+                        alt={phase.title}
+                        className="w-full aspect-[4/5] object-cover rounded-[2rem] md:rounded-[3rem]"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full aspect-[4/5] bg-neutral-100 rounded-[2rem] md:rounded-[3rem]" />
+                    )}
+                  </div>
+                  <div className="order-2 md:order-2">
+                    <div className="flex flex-col gap-2 mb-6 md:mb-8">
+                      <span className="text-3xl md:text-5xl font-display tracking-tight leading-none">{phase.id}</span>
+                      <span className="text-[11px] uppercase tracking-[0.35em] text-neutral-400 font-bold font-sans">{phase.label}</span>
+                    </div>
+                    <h2 className="text-[2rem] sm:text-4xl md:text-6xl mb-6 md:mb-8 leading-[0.9] tracking-tighter font-display" style={phase.titleStyle}>{phase.title}</h2>
+                    <div className="text-lg md:text-xl text-neutral-500 font-light font-sans leading-relaxed" style={phase.descStyle} dangerouslySetInnerHTML={{ __html: phase.desc }} />
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-[2rem] sm:text-4xl md:text-7xl mb-6 md:mb-8 leading-[0.9] tracking-tighter font-display" style={phase.titleStyle}>{phase.title}</h2>
-                  <div className="text-lg md:text-2xl text-neutral-500 font-light font-sans leading-relaxed max-w-2xl" style={phase.descStyle} dangerouslySetInnerHTML={{ __html: phase.desc }} />
-                  {idx < phases.length - 1 && <div className="mt-10 md:mt-24 border-b border-neutral-200"></div>}
-                </div>
+                {idx < phases.length - 1 && <div className="mt-10 md:mt-24 border-b border-neutral-200"></div>}
               </div>
             ))}
           </div>
