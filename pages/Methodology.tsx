@@ -74,17 +74,17 @@ const Methodology: React.FC = () => {
           <div className="space-y-16 md:space-y-48">
             {phases.map((phase, idx) => (
               <div key={idx}>
-                <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-                  <div className="order-1 md:order-1">
+                <div className="grid md:grid-cols-[40%_1fr] gap-8 md:gap-16 items-center">
+                  <div className="order-1 md:order-1 max-w-sm">
                     {phase.image ? (
                       <img
                         src={phase.image}
                         alt={phase.title}
-                        className="w-full aspect-[4/5] object-cover rounded-[2rem] md:rounded-[3rem]"
+                        className="w-full aspect-[4/5] object-cover rounded-[1.5rem] md:rounded-[2rem]"
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-full aspect-[4/5] bg-neutral-100 rounded-[2rem] md:rounded-[3rem]" />
+                      <div className="w-full aspect-[4/5] bg-neutral-100 rounded-[1.5rem] md:rounded-[2rem]" />
                     )}
                   </div>
                   <div className="order-2 md:order-2">
