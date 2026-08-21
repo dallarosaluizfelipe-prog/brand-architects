@@ -2899,6 +2899,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                     className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
                                     placeholder="https://... ou /lovable-uploads/abertura-site.mp4"
                                   />
+                                  <button
+                                    type="button"
+                                    disabled={uploading || heroLoading}
+                                    onClick={() => pickFile('video/*', (file) => replaceHeroMedia(file, 'desktop'))}
+                                    className="mt-2 text-[10px] font-sans bg-black text-white px-3 py-1.5 rounded-full font-medium disabled:opacity-50"
+                                  >
+                                    {uploading ? 'Enviando...' : 'Substituir vídeo desktop'}
+                                  </button>
                                   {hero.desktopVideoUrl && (
                                     <video src={hero.desktopVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
                                   )}
@@ -2911,6 +2919,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                     className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
                                     placeholder="https://... ou /lovable-uploads/abertura-site-mobile.mp4"
                                   />
+                                  <button
+                                    type="button"
+                                    disabled={uploading || heroLoading}
+                                    onClick={() => pickFile('video/*', (file) => replaceHeroMedia(file, 'mobile'))}
+                                    className="mt-2 text-[10px] font-sans bg-black text-white px-3 py-1.5 rounded-full font-medium disabled:opacity-50"
+                                  >
+                                    {uploading ? 'Enviando...' : 'Substituir vídeo mobile'}
+                                  </button>
                                   {hero.mobileVideoUrl && (
                                     <video src={hero.mobileVideoUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
                                   )}
@@ -2923,6 +2939,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                     className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
                                     placeholder="https://... ou /lovable-uploads/poster.png"
                                   />
+                                  <button
+                                    type="button"
+                                    disabled={uploading || heroLoading}
+                                    onClick={() => pickFile('image/*', (file) => replaceHeroMedia(file, 'poster'))}
+                                    className="mt-2 text-[10px] font-sans bg-black text-white px-3 py-1.5 rounded-full font-medium disabled:opacity-50"
+                                  >
+                                    {uploading ? 'Enviando...' : 'Substituir poster'}
+                                  </button>
                                   {hero.posterUrl && (
                                     <img src={hero.posterUrl} alt="Poster preview" className="mt-3 rounded-xl max-h-40 object-cover" />
                                   )}
