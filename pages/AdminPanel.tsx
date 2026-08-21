@@ -418,14 +418,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     });
   };
 
-  const saveHero = async () => {
+  const saveHero = async (override?: HeroSettings) => {
+    const current = override ?? hero;
     setHeroLoading(true);
     const r1 = await apiCall('upsert_content', {
       section_key: 'hero_video_desktop',
       title: 'Hero Video Desktop',
       locale: adminLocale,
-      video_url: hero.desktopVideoUrl,
-      image_url: hero.posterUrl,
+      video_url: current.desktopVideoUrl,
+      image_url: current.posterUrl,
     });
     if (r1?.error) {
       showMessage(`Erro ao salvar hero desktop: ${r1.error}`);
@@ -436,7 +437,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       section_key: 'hero_video_mobile',
       title: 'Hero Video Mobile',
       locale: adminLocale,
-      video_url: hero.mobileVideoUrl,
+      video_url: current.mobileVideoUrl,
     });
     if (r2?.error) {
       showMessage(`Erro ao salvar hero mobile: ${r2.error}`);
@@ -444,7 +445,39 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
       return;
     }
     showMessage('Hero atualizado!');
+    invalidateSiteTextsCache();
     setHeroLoading(false);
+  };
+
+  /** Faz upload de um arquivo e substitui um campo do hero, salvando na hora. */
+  const replaceHeroMedia = async (file: File, target: 'desktop' | 'mobile' | 'poster') => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      const next: HeroSettings = {
+        ...hero,
+        ...(target === 'desktop' ? { desktopVideoUrl: url } : {}),
+        ...(target === 'mobile' ? { mobileVideoUrl: url } : {}),
+        ...(target === 'poster' ? { posterUrl: url } : {}),
+      };
+      setHero(next);
+      await saveHero(next);
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
+  /** Abre o seletor de arquivos e devolve o arquivo escolhido. */
+  const pickFile = (accept: string, onPick: (file: File) => void) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = accept;
+    input.onchange = (ev) => {
+      const file = (ev.target as HTMLInputElement).files?.[0];
+      if (file) onPick(file);
+    };
+    input.click();
   };
 
   const normalizeProposal = (item: any): SiteProposal => ({
