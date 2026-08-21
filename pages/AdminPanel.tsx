@@ -2805,43 +2805,74 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                                   placeholder={field.label}
                                 />
                               )}
-                              {pageSubTab === 'imagens' && field.type !== 'image' && (
-                                <>
-                                  <div
-                                    className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
-                                      uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
-                                    }`}
-                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                    onDrop={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      const file = e.dataTransfer.files?.[0];
-                                      if (file) handleImageFieldUpload(file, field.key, 'text');
-                                    }}
-                                    onClick={() => {
-                                      const input = document.createElement('input');
-                                      input.type = 'file';
-                                      input.accept = 'image/*,video/*';
-                                      input.onchange = (ev) => {
-                                        const file = (ev.target as HTMLInputElement).files?.[0];
-                                        if (file) handleImageFieldUpload(file, field.key, 'text');
-                                      };
-                                      input.click();
-                                    }}
-                                  >
-                                    <p className="text-sm text-neutral-500 font-sans">
-                                      {uploading ? 'Enviando...' : 'Arraste um arquivo aqui ou clique para enviar'}
-                                    </p>
-                                  </div>
-                                  {siteTexts[field.key] && (
-                                    /\.(mp4|mov|webm)$/i.test(siteTexts[field.key]) || field.key.includes('video') ? (
-                                      <video src={siteTexts[field.key]} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
-                                    ) : (
-                                      <img src={siteTexts[field.key]} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />
-                                    )
-                                  )}
-                                </>
-                              )}
+                              {pageSubTab === 'imagens' && field.type !== 'image' && (() => {
+                                const currentUrl = siteTexts[field.key] || '';
+                                const isVideo = /\.(mp4|mov|webm)$/i.test(currentUrl) || field.key.includes('video');
+                                const accept = currentUrl
+                                  ? (isVideo ? 'video/*' : 'image/*')
+                                  : 'image/*,video/*';
+                                return (
+                                  <>
+                                    <div
+                                      className={`mt-3 border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+                                        uploading ? 'opacity-50 pointer-events-none' : 'border-neutral-300 hover:border-black hover:bg-neutral-50'
+                                      }`}
+                                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                      onDrop={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        const file = e.dataTransfer.files?.[0];
+                                        if (file) replaceFieldMedia(file, field.key);
+                                      }}
+                                      onClick={() => pickFile(accept, (file) => replaceFieldMedia(file, field.key))}
+                                    >
+                                      <p className="text-sm text-neutral-500 font-sans">
+                                        {uploading
+                                          ? 'Enviando...'
+                                          : currentUrl
+                                            ? `Arraste um novo ${isVideo ? 'vídeo' : 'arquivo'} aqui ou clique para substituir`
+                                            : 'Arraste um arquivo aqui ou clique para enviar'}
+                                      </p>
+                                      <p className="text-[10px] text-neutral-400 font-sans mt-1">
+                                        {currentUrl
+                                          ? `Mantém o mesmo formato (${isVideo ? 'vídeo' : 'imagem'}) e publica automaticamente.`
+                                          : 'Imagem ou vídeo. Publica automaticamente.'}
+                                      </p>
+                                    </div>
+                                    {currentUrl && (
+                                      <>
+                                        {isVideo ? (
+                                          <video src={currentUrl} className="mt-3 rounded-xl max-h-40 w-full object-cover" controls muted />
+                                        ) : (
+                                          <img src={currentUrl} alt="Preview" className="mt-3 rounded-xl max-h-40 object-cover" />
+                                        )}
+                                        <div className="mt-2 flex items-center gap-2">
+                                          <button
+                                            type="button"
+                                            disabled={uploading}
+                                            onClick={() => pickFile(accept, (file) => replaceFieldMedia(file, field.key))}
+                                            className="text-[10px] font-sans bg-black text-white px-3 py-1.5 rounded-full font-medium disabled:opacity-50"
+                                          >
+                                            {uploading ? 'Enviando...' : `Substituir ${isVideo ? 'vídeo' : 'imagem'}`}
+                                          </button>
+                                          <button
+                                            type="button"
+                                            disabled={uploading}
+                                            onClick={async () => {
+                                              if (!confirm('Remover esta mídia da página?')) return;
+                                              updateTextField(field.key, '');
+                                              await saveTextField(field.key, '');
+                                            }}
+                                            className="text-[10px] font-sans border border-neutral-200 px-3 py-1.5 rounded-full text-neutral-500 disabled:opacity-50"
+                                          >
+                                            Remover
+                                          </button>
+                                        </div>
+                                      </>
+                                    )}
+                                  </>
+                                );
+                              })()}
                               {adminLocale === 'en' && siteTextsPtRef[field.key] && (
                                 <p
                                   className="mt-2 text-[11px] text-neutral-400 font-sans leading-snug"
