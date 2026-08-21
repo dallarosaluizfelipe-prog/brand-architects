@@ -2882,7 +2882,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                               </div>
                               <div className="mt-6">
                                 <button
-                                  onClick={saveHero}
+                                  onClick={() => saveHero()}
                                   disabled={heroLoading}
                                   className="bg-black text-white px-8 py-3 rounded-full text-sm font-sans font-bold uppercase tracking-wider disabled:opacity-50"
                                 >
