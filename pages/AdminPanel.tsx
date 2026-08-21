@@ -881,13 +881,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setTextsDirty((prev) => new Set(prev).add(key));
   };
 
-  const saveTextField = async (key: string) => {
+  const saveTextField = async (key: string, overrideValue?: string) => {
     setTextsLoading(true);
     const result = await apiCall('upsert_content', {
       section_key: key,
       title: key,
       locale: adminLocale,
-      body: siteTexts[key] || '',
+      body: overrideValue ?? siteTexts[key] ?? '',
       text_styles: siteTextStyles[key] || {},
     });
     if (result?.error) {
@@ -903,6 +903,23 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     showMessage('Texto salvo!');
     invalidateSiteTextsCache();
     setTextsLoading(false);
+  };
+
+  /**
+   * Substitui a mídia (imagem ou vídeo) de um campo da aba Páginas > Imagens:
+   * faz o upload, atualiza o campo e já salva — a página do site reflete na hora.
+   */
+  const replaceFieldMedia = async (file: File, fieldKey: string) => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      updateTextField(fieldKey, url);
+      await saveTextField(fieldKey, url);
+      showMessage('Mídia substituída e publicada!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
   };
 
   const saveAllTexts = async () => {
