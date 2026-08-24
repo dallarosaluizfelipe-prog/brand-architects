@@ -10,8 +10,8 @@ import { getSiteCases, SiteCase } from '@/src/data/siteCases';
 import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
 import { useLocale } from '@/src/contexts/LocaleContext';
 
-const FALLBACK_DESKTOP = '/lovable-uploads/abertura-site.mp4';
-const FALLBACK_MOBILE = '/lovable-uploads/abertura-site-mobile.mp4';
+const FALLBACK_DESKTOP = 'https://huzpprlxmgouysznjhfi.supabase.co/storage/v1/object/public/media/hero-bubbles-desktop-1755800000.mp4';
+const FALLBACK_MOBILE = 'https://huzpprlxmgouysznjhfi.supabase.co/storage/v1/object/public/media/hero-bubbles-mobile-1755800000.mp4';
 const FALLBACK_POSTER = '/lovable-uploads/2fdb741b-7706-4fa8-b5f2-dda301d0572d.png';
 
 const Home: React.FC = () => {
