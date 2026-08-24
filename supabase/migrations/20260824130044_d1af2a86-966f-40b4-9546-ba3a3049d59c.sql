@@ -1,0 +1,2 @@
+UPDATE public.site_content SET video_url = 'https://huzpprlxmgouysznjhfi.supabase.co/storage/v1/object/public/media/hero-bubbles-desktop-1755800000.mp4', updated_at = now() WHERE section_key = 'hero_video_desktop';
+UPDATE public.site_content SET video_url = 'https://huzpprlxmgouysznjhfi.supabase.co/storage/v1/object/public/media/hero-bubbles-mobile-1755800000.mp4', updated_at = now() WHERE section_key = 'hero_video_mobile';
