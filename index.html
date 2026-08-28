@@ -107,25 +107,30 @@
                         surface: "#F2F2F2",
                     },
                     fontFamily: {
-                        display: ["Nunito Sans", "sans-serif"],
-                        sans: ["Nunito Sans", "sans-serif"],
+                        display: ["'Instrument Serif'", "Georgia", "serif"],
+                        serif: ["'Instrument Serif'", "Georgia", "serif"],
+                        sans: ["'Nunito Sans'", "sans-serif"],
                     },
                 },
             },
         };
     </script>
     <style type="text/tailwindcss">
+        :root {
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-sans: 'Nunito Sans', sans-serif;
+        }
         @layer base {
             body {
                 @apply font-sans font-light bg-white text-black transition-colors duration-300;
                 letter-spacing: -0.04em;
             }
             h1, h2, h3, h4 {
-                @apply font-display font-light;
-                letter-spacing: -0.06em;
+                @apply font-serif font-light;
+                letter-spacing: -0.04em;
             }
             button, .btn, [role="button"] {
-                font-family: "Nunito Sans", sans-serif;
+                font-family: var(--font-sans), "Nunito Sans", sans-serif;
                 font-weight: 300;
                 letter-spacing: normal;
             }
