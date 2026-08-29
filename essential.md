@@ -878,3 +878,9 @@ This document captures details of components, pages, functions, and any code add
   - `list_content` com `locale='en'` mescla chaves PT (cada item recebe `_pt_reference`) — admin sempre vê todos os campos para traduzir.
   - `upsert_content` valida `section_key` e só persiste colunas reais (`section_key, locale, title, subtitle, body, image_url, video_url`).
 - **pages/AdminPanel.tsx**: novo state `siteTextsPtRef`, exibe referência PT abaixo de cada campo em modo EN, invalida cache após salvar.
+
+### pages/LpIdentidadeVisual.tsx (IA — 2026-08-28)
+Landing page de conversão para Google Ads. Componentes internos: Eyebrow, Cta (scroll suave para `#proposta`).
+Eventos dataLayer: `dalla_cta_click`, `dalla_form_start`, `dalla_lead_form_submit`, `dalla_scroll_depth`.
+Formulário qualificador (nome, empresa, WhatsApp, e-mail, site/instagram, atuação, necessidade, investimento, prazo)
+enviado para a function `send-contact`. Rotas registradas em App.tsx; Navbar/Footer/WhatsApp global ocultos nessa rota.

@@ -426,3 +426,13 @@ This file records a chronological history of changes, requests, and reasoning fo
 - Edge function `admin` (`list_content`): quando o admin solicita `locale='en'`, agora devolve a união de todas as chaves PT + EN com `_pt_reference` (texto PT) para tradução, eliminando o problema de "chaves somem ao trocar para EN".
 - Edge function `admin` (`upsert_content`): payload sanitizado para apenas colunas reais e validação explícita de `section_key`.
 - `AdminPanel.tsx`: armazena `siteTextsPtRef`, exibe a referência PT abaixo de cada campo em modo EN e dispara invalidação de cache após save/save-all.
+
+## 2026-08-28 14:35 UTC — Landing page /lp/identidade-visual (Google Ads)
+Pedido: recriar a LP de Identidade Visual como página comercial premium de altíssima conversão.
+Feito: `pages/LpIdentidadeVisual.tsx` (rota dedicada em `/lp/identidade-visual` e `/en/lp/identidade-visual`,
+fora do PublicLayout, com header minimalista próprio, CTA fixo mobile e rodapé enxuto).
+Seções: hero com motion de apresentação de projeto, prova de marcas, problema, método Dalla (5 etapas),
+cases (Lummina, Nuts O'Clock, Kuma), Lipe/estúdio, entrega, para quem é, investimento (a partir de R$ 7.000),
+como funciona, depoimentos (placeholders), FAQ accordion, CTA final + formulário qualificador.
+Tracking: dataLayer para cliques de CTA, form start, form submit e scroll 25/50/75/90.
+Envio via edge function `send-contact` + `trackFormSubmission`.
