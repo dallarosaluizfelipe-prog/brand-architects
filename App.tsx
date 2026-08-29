@@ -18,7 +18,6 @@ const CaseDetails = lazy(() => import("./pages/CaseDetails"));
 const ProposalDetails = lazy(() => import("./pages/ProposalDetails"));
 const IdentidadeVisual = lazy(() => import("./pages/IdentidadeVisual"));
 const LandingPage = lazy(() => import("./pages/LandingPage"));
-const LpIdentidadeVisual = lazy(() => import("./pages/LpIdentidadeVisual"));
 const Termometro = lazy(() => import("./pages/Termometro"));
 
 const PageLoader: React.FC = () => (
@@ -45,11 +44,6 @@ const AppRoutes: React.FC = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isTermometroRoute = location.pathname.startsWith('/termometro');
-  const isLpIdentidadeVisualRoute =
-    location.pathname === '/lp/identidade-visual' ||
-    location.pathname === '/en/lp/identidade-visual' ||
-    location.pathname === '/identidade-visual' ||
-    location.pathname === '/identidadevisual';
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -68,9 +62,6 @@ const AppRoutes: React.FC = () => {
           <Route path="/admin" element={<Admin />} />
           <Route path="/termometro/:slug" element={<Termometro />} />
 
-          {/* Dedicated High-Converting Landing Page for Google Ads */}
-          <Route path="/lp/identidade-visual" element={<LpIdentidadeVisual />} />
-          <Route path="/en/lp/identidade-visual" element={<LpIdentidadeVisual />} />
           <Route
             path="/identidade-visual"
             element={<Navigate to="/lp/identidade-visual" replace />}
@@ -219,7 +210,7 @@ const AppRoutes: React.FC = () => {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>
-      {!isAdminRoute && !isTermometroRoute && !isLpIdentidadeVisualRoute && <WhatsAppFloatingButton />}
+      {!isAdminRoute && !isTermometroRoute && <WhatsAppFloatingButton />}
     </>
   );
 };
