@@ -436,3 +436,11 @@ cases (Lummina, Nuts O'Clock, Kuma), Lipe/estúdio, entrega, para quem é, inves
 como funciona, depoimentos (placeholders), FAQ accordion, CTA final + formulário qualificador.
 Tracking: dataLayer para cliques de CTA, form start, form submit e scroll 25/50/75/90.
 Envio via edge function `send-contact` + `trackFormSubmission`.
+
+## 2026-08-29 01:30 UTC — LP editável 100% pela central admin
+Pedido: colocar todos os parâmetros de edição da LP no admin (textos, imagens/vídeos, tipografia, cores, entrelinha e espaçamento de letras).
+Feito:
+- `src/utils/textStyles.ts` + `TextStyleControl`: novo parâmetro `lineHeight` (espaçamento entre linhas).
+- Admin › LPs: uploads reais (enviar/substituir/remover + preview) para vídeo Hero desktop/mobile, poster, vídeo Sobre, vídeos institucionais desktop/mobile e capas dos cases.
+- `EntityStylesPanel` da LP ampliado: fases do método (numeral, label, título, descrição), itens de benefícios (título/descrição), cards de cases (título/categoria) e todos os CTAs.
+- `pages/LandingPage.tsx`: aplica os estilos configurados em todos esses elementos.

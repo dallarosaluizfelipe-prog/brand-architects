@@ -839,6 +839,80 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setEditingLp({ ...editingLp, [field]: value });
   };
 
+  const uploadLpMedia = async (file: File, field: keyof SiteLp) => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      setEditingLp((prev) => (prev ? ({ ...prev, [field]: url } as SiteLp) : prev));
+      showMessage('Arquivo enviado!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
+  const uploadLpCaseCover = async (file: File, index: number) => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      setEditingLp((prev) => {
+        if (!prev) return prev;
+        const items = [...prev.cases_items];
+        items[index] = { ...items[index], cover_url: url };
+        return { ...prev, cases_items: items };
+      });
+      showMessage('Imagem enviada!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
+
+  const renderLpMedia = (field: keyof SiteLp, label: string, kind: 'image' | 'video') => {
+    if (!editingLp) return null;
+    const value = (editingLp as any)[field] as string;
+    const accept = kind === 'image' ? 'image/*' : 'video/*';
+    return (
+      <div className="border border-neutral-200 rounded-xl p-4 space-y-3">
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-sans">{label}</label>
+        <input
+          value={value || ''}
+          onChange={(e) => updateLpField(field, e.target.value)}
+          className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm font-sans"
+          placeholder={kind === 'image' ? 'URL da imagem ou envie um arquivo' : 'URL do vídeo ou envie um arquivo'}
+        />
+        {value && (
+          kind === 'image' ? (
+            <img src={value} alt={label} className="w-full max-h-40 object-contain rounded-lg bg-neutral-50" />
+          ) : (
+            <video src={value} muted playsInline controls className="w-full max-h-40 rounded-lg bg-black object-contain" />
+          )
+        )}
+        <div className="flex gap-2">
+          <button
+            type="button"
+            disabled={uploading}
+            onClick={() => pickFile(accept, (file) => uploadLpMedia(file, field))}
+            className="text-[11px] font-sans px-3 py-1.5 rounded-full bg-black text-white disabled:opacity-50"
+          >
+            {uploading ? 'Enviando...' : value ? 'Substituir' : 'Enviar arquivo'}
+          </button>
+          {value && (
+            <button
+              type="button"
+              onClick={() => updateLpField(field, '')}
+              className="text-[11px] font-sans px-3 py-1.5 rounded-full border border-neutral-200 text-neutral-500 hover:text-red-500"
+            >
+              Remover
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+
   const copyLpUrl = (slug: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/lp/${slug}`);
     showMessage('Link copiado!');
@@ -2414,10 +2488,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     <input value={editingLp.hero_cta_text} onChange={(e) => updateLpField('hero_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
                     <input value={editingLp.hero_cta_url} onChange={(e) => updateLpField('hero_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA (ex: /contato)" />
                   </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <input value={editingLp.hero_video_desktop} onChange={(e) => updateLpField('hero_video_desktop', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Vídeo Desktop" />
-                    <input value={editingLp.hero_video_mobile} onChange={(e) => updateLpField('hero_video_mobile', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Vídeo Mobile" />
-                    <input value={editingLp.hero_poster} onChange={(e) => updateLpField('hero_poster', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Poster/Capa" />
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {renderLpMedia('hero_video_desktop', 'Vídeo Hero — Desktop', 'video')}
+                    {renderLpMedia('hero_video_mobile', 'Vídeo Hero — Mobile', 'video')}
+                    {renderLpMedia('hero_poster', 'Poster / Capa do Hero', 'image')}
                   </div>
                 </div>
 
@@ -2437,25 +2511,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     <input value={editingLp.about_cta_text} onChange={(e) => updateLpField('about_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
                     <input value={editingLp.about_cta_url} onChange={(e) => updateLpField('about_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
                   </div>
-                  <input value={editingLp.about_video_url} onChange={(e) => updateLpField('about_video_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do Vídeo" />
+                  {renderLpMedia('about_video_url', 'Vídeo da seção Sobre', 'video')}
                 </div>
 
                 {/* Vídeo Institucional */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Vídeo Institucional</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      value={editingLp.institutional_video_url}
-                      onChange={(e) => updateLpField('institutional_video_url', e.target.value)}
-                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                      placeholder="URL vídeo institucional Desktop"
-                    />
-                    <input
-                      value={editingLp.institutional_video_mobile_url}
-                      onChange={(e) => updateLpField('institutional_video_mobile_url', e.target.value)}
-                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                      placeholder="URL vídeo institucional Mobile"
-                    />
+                    {renderLpMedia('institutional_video_url', 'Vídeo institucional — Desktop', 'video')}
+                    {renderLpMedia('institutional_video_mobile_url', 'Vídeo institucional — Mobile', 'video')}
                   </div>
                 </div>
 
@@ -2531,6 +2595,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       <input value={c.category} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], category: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Categoria" />
                       <input value={c.cover_url} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], cover_url: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="URL da capa" />
                       {c.cover_url && <img src={c.cover_url} alt="" className="h-16 rounded-lg object-cover" />}
+                      <button
+                        type="button"
+                        disabled={uploading}
+                        onClick={() => pickFile('image/*', (file) => uploadLpCaseCover(file, i))}
+                        className="text-[11px] font-sans px-3 py-1.5 rounded-full bg-black text-white disabled:opacity-50 w-fit"
+                      >
+                        {uploading ? 'Enviando...' : c.cover_url ? 'Substituir capa' : 'Enviar capa'}
+                      </button>
                     </div>
                   ))}
                   <button onClick={() => updateLpField('cases_items', [...editingLp.cases_items, { slug: '', title: '', category: '', cover_url: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar case</button>
@@ -2574,16 +2646,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     { key: 'method_badge', label: 'Método — Badge' },
                     { key: 'method_title', label: 'Método — Título' },
                     { key: 'method_subtitle', label: 'Método — Subtítulo' },
-                    { key: 'method_phases', label: 'Método — Fases' },
+                    { key: 'method_phases', label: 'Método — Fases (geral)' },
+                    { key: 'method_phase_id', label: 'Método — Numeral da fase' },
+                    { key: 'method_phase_label', label: 'Método — Label da fase' },
+                    { key: 'method_phase_title', label: 'Método — Título da fase' },
+                    { key: 'method_phase_desc', label: 'Método — Descrição da fase' },
                     { key: 'method_cta_text', label: 'Método — CTA' },
                     { key: 'benefits_badge', label: 'Benefícios — Badge' },
                     { key: 'benefits_title', label: 'Benefícios — Título' },
                     { key: 'benefits_subtitle', label: 'Benefícios — Subtítulo' },
-                    { key: 'benefits_items', label: 'Benefícios — Itens' },
+                    { key: 'benefits_items', label: 'Benefícios — Itens (geral)' },
+                    { key: 'benefits_item_title', label: 'Benefícios — Título do item' },
+                    { key: 'benefits_item_desc', label: 'Benefícios — Descrição do item' },
                     { key: 'benefits_cta_text', label: 'Benefícios — CTA' },
                     { key: 'cases_badge', label: 'Cases — Badge' },
                     { key: 'cases_title', label: 'Cases — Título' },
                     { key: 'cases_subtitle', label: 'Cases — Subtítulo' },
+                    { key: 'cases_item_title', label: 'Cases — Título do card' },
+                    { key: 'cases_item_category', label: 'Cases — Categoria do card' },
                     { key: 'cases_cta_text', label: 'Cases — CTA' },
                     { key: 'partners_badge', label: 'Parceiros — Badge' },
                     { key: 'partners_title', label: 'Parceiros — Título' },

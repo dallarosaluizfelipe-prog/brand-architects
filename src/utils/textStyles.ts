@@ -4,6 +4,7 @@ export interface TextStyle {
   color?: string;
   weight?: number;
   letterSpacing?: number; // em
+  lineHeight?: number; // unitless multiplier
   fontSize?: number; // rem
 }
 
@@ -29,6 +30,7 @@ export function getFieldStyle(
   if (s.color) out.color = s.color;
   if (typeof s.weight === 'number') out.fontWeight = s.weight;
   if (typeof s.letterSpacing === 'number') out.letterSpacing = `${s.letterSpacing}em`;
+  if (typeof s.lineHeight === 'number') out.lineHeight = s.lineHeight;
   if (typeof s.fontSize === 'number') out.fontSize = `${s.fontSize}rem`;
   return out;
 }
@@ -44,6 +46,7 @@ export function setFieldStyle(
   if (!next.color) delete next.color;
   if (next.weight == null || Number.isNaN(next.weight)) delete next.weight;
   if (next.letterSpacing == null || Number.isNaN(next.letterSpacing)) delete next.letterSpacing;
+  if (next.lineHeight == null || Number.isNaN(next.lineHeight)) delete next.lineHeight;
   if (next.fontSize == null || Number.isNaN(next.fontSize)) delete next.fontSize;
   const out = { ...(styles ?? {}) };
   if (Object.keys(next).length === 0) {
@@ -59,5 +62,5 @@ export function hasFieldStyle(
   field: string,
 ): boolean {
   const s = styles?.[field];
-  return !!s && (!!s.color || s.weight != null || s.letterSpacing != null || s.fontSize != null);
+  return !!s && (!!s.color || s.weight != null || s.letterSpacing != null || s.lineHeight != null || s.fontSize != null);
 }
