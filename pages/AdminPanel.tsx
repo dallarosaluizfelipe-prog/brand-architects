@@ -839,6 +839,47 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setEditingLp({ ...editingLp, [field]: value });
   };
 
+  const uploadLpMedia = async (file: File, field: keyof SiteLp) => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      setEditingLp((prev) => (prev ? ({ ...prev, [field]: url } as SiteLp) : prev));
+      showMessage('Arquivo enviado!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
+  const uploadLpCaseCover = async (file: File, index: number) => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      setEditingLp((prev) => {
+        if (!prev) return prev;
+        const items = [...prev.cases_items];
+        items[index] = { ...items[index], cover_url: url };
+        return { ...prev, cases_items: items };
+      });
+      showMessage('Imagem enviada!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
+  const pickFile = (accept: string, onPick: (file: File) => void) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = accept;
+    input.onchange = (ev) => {
+      const file = (ev.target as HTMLInputElement).files?.[0];
+      if (file) onPick(file);
+    };
+    input.click();
+  };
+
+
   const copyLpUrl = (slug: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/lp/${slug}`);
     showMessage('Link copiado!');
