@@ -884,3 +884,8 @@ Landing page de conversão para Google Ads. Componentes internos: Eyebrow, Cta (
 Eventos dataLayer: `dalla_cta_click`, `dalla_form_start`, `dalla_lead_form_submit`, `dalla_scroll_depth`.
 Formulário qualificador (nome, empresa, WhatsApp, e-mail, site/instagram, atuação, necessidade, investimento, prazo)
 enviado para a function `send-contact`. Rotas registradas em App.tsx; Navbar/Footer/WhatsApp global ocultos nessa rota.
+
+### LP — parâmetros completos no admin (2026-08-29)
+- `TextStyle.lineHeight` (unitless) suportado em `getFieldStyle`/`setFieldStyle` e no popover "Aa".
+- `AdminPanel`: `uploadLpMedia`, `uploadLpCaseCover`, `renderLpMedia(field, label, 'image'|'video')`.
+- Novas chaves de estilo da LP: `method_phase_id|label|title|desc`, `benefits_item_title|desc`, `cases_item_title|category`.
