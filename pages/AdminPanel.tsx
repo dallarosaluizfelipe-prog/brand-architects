@@ -879,6 +879,49 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     input.click();
   };
 
+  const renderLpMedia = (field: keyof SiteLp, label: string, kind: 'image' | 'video') => {
+    if (!editingLp) return null;
+    const value = (editingLp as any)[field] as string;
+    const accept = kind === 'image' ? 'image/*' : 'video/*';
+    return (
+      <div className="border border-neutral-200 rounded-xl p-4 space-y-3">
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-sans">{label}</label>
+        <input
+          value={value || ''}
+          onChange={(e) => updateLpField(field, e.target.value)}
+          className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm font-sans"
+          placeholder={kind === 'image' ? 'URL da imagem ou envie um arquivo' : 'URL do vídeo ou envie um arquivo'}
+        />
+        {value && (
+          kind === 'image' ? (
+            <img src={value} alt={label} className="w-full max-h-40 object-contain rounded-lg bg-neutral-50" />
+          ) : (
+            <video src={value} muted playsInline controls className="w-full max-h-40 rounded-lg bg-black object-contain" />
+          )
+        )}
+        <div className="flex gap-2">
+          <button
+            type="button"
+            disabled={uploading}
+            onClick={() => pickFile(accept, (file) => uploadLpMedia(file, field))}
+            className="text-[11px] font-sans px-3 py-1.5 rounded-full bg-black text-white disabled:opacity-50"
+          >
+            {uploading ? 'Enviando...' : value ? 'Substituir' : 'Enviar arquivo'}
+          </button>
+          {value && (
+            <button
+              type="button"
+              onClick={() => updateLpField(field, '')}
+              className="text-[11px] font-sans px-3 py-1.5 rounded-full border border-neutral-200 text-neutral-500 hover:text-red-500"
+            >
+              Remover
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
 
   const copyLpUrl = (slug: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/lp/${slug}`);
