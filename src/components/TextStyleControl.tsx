@@ -142,6 +142,26 @@ const TextStyleControl: React.FC<Props> = ({ field, styles, onChange, label }) =
             />
           </div>
 
+          {/* Line height */}
+          <div>
+            <label className="block text-[10px] font-sans text-neutral-500 mb-1">
+              Espaçamento entre linhas (entrelinha)
+            </label>
+            <input
+              type="number"
+              step={0.05}
+              min={0}
+              value={current.lineHeight ?? ''}
+              onChange={(e) =>
+                apply({
+                  lineHeight: e.target.value === '' ? undefined : Number(e.target.value),
+                })
+              }
+              placeholder="ex: 1.4"
+              className="w-full border border-neutral-200 rounded-lg px-2 py-1.5 text-xs font-sans"
+            />
+          </div>
+
           {/* Font size */}
           <div>
             <label className="block text-[10px] font-sans text-neutral-500 mb-1">
