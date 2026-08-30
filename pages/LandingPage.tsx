@@ -160,6 +160,7 @@ const LandingPage: React.FC = () => {
                 <Link
                   to={lp.about_cta_url}
                   className="inline-block bg-black text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:scale-105 font-sans mt-4"
+                  style={getFieldStyle(lp.text_styles, 'about_cta_text')}
                 >
                   {lp.about_cta_text}
                 </Link>
@@ -230,18 +231,22 @@ const LandingPage: React.FC = () => {
                 <div className="bg-[#efeff0] rounded-3xl p-8 md:p-16 transition-all duration-500 min-h-[280px]">
                   <div className="grid md:grid-cols-[120px_1fr] gap-6 md:gap-12 items-start">
                     <div>
-                      <span className="text-4xl md:text-6xl font-display tracking-tight leading-none block">
+                      <span className="text-4xl md:text-6xl font-display tracking-tight leading-none block"
+                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_id') }}>
                         {phases[activePhase]?.id}
                       </span>
-                      <span className="text-[10px] uppercase tracking-[0.35em] text-neutral-400 font-bold font-sans mt-2 block">
+                      <span className="text-[10px] uppercase tracking-[0.35em] text-neutral-400 font-bold font-sans mt-2 block"
+                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_label') }}>
                         {phases[activePhase]?.label}
                       </span>
                     </div>
                     <div>
-                      <h3 className="text-2xl sm:text-3xl md:text-5xl mb-4 md:mb-6 leading-[0.9] tracking-tighter font-display">
+                      <h3 className="text-2xl sm:text-3xl md:text-5xl mb-4 md:mb-6 leading-[0.9] tracking-tighter font-display"
+                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_title') }}>
                         {phases[activePhase]?.title}
                       </h3>
-                      <p className="text-base md:text-xl text-neutral-500 font-light font-sans leading-relaxed max-w-2xl">
+                      <p className="text-base md:text-xl text-neutral-500 font-light font-sans leading-relaxed max-w-2xl"
+                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_desc') }}>
                         {phases[activePhase]?.desc}
                       </p>
                     </div>
@@ -273,6 +278,7 @@ const LandingPage: React.FC = () => {
                     <Link
                       to={lp.method_cta_url}
                       className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
+                      style={getFieldStyle(lp.text_styles, 'method_cta_text')}
                     >
                       {lp.method_cta_text}
                     </Link>
@@ -312,8 +318,10 @@ const LandingPage: React.FC = () => {
                 {lp.benefits_items.map((item, idx) => (
                   <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 hover:bg-white/10 transition-all">
                     <span className="material-symbols-outlined text-3xl mb-4 opacity-60">{item.icon}</span>
-                    <h3 className="text-lg md:text-xl font-sans font-black mb-2">{item.title}</h3>
-                    <p className="text-white/50 font-sans font-light text-sm leading-relaxed">{item.desc}</p>
+                    <h3 className="text-lg md:text-xl font-sans font-black mb-2"
+                        style={{ ...getFieldStyle(lp.text_styles, 'benefits_items'), ...getFieldStyle(lp.text_styles, 'benefits_item_title') }}>{item.title}</h3>
+                    <p className="text-white/50 font-sans font-light text-sm leading-relaxed"
+                       style={{ ...getFieldStyle(lp.text_styles, 'benefits_items'), ...getFieldStyle(lp.text_styles, 'benefits_item_desc') }}>{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -323,6 +331,7 @@ const LandingPage: React.FC = () => {
                   <Link
                     to={lp.benefits_cta_url}
                     className="inline-block border border-white/40 text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-white hover:text-black font-sans"
+                    style={getFieldStyle(lp.text_styles, 'benefits_cta_text')}
                   >
                     {lp.benefits_cta_text}
                   </Link>
@@ -363,8 +372,10 @@ const LandingPage: React.FC = () => {
                     <div className="rounded-3xl overflow-hidden aspect-[4/3] mb-6 shadow-lg">
                       <img alt={`${c.title} — Identidade Visual`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src={c.cover_url} loading="lazy" />
                     </div>
-                    <h3 className="text-2xl md:text-4xl mb-2 font-display">{c.title}</h3>
-                    <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans">{c.category}</p>
+                    <h3 className="text-2xl md:text-4xl mb-2 font-display"
+                        style={getFieldStyle(lp.text_styles, 'cases_item_title')}>{c.title}</h3>
+                    <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans"
+                       style={getFieldStyle(lp.text_styles, 'cases_item_category')}>{c.category}</p>
                   </Link>
                 ))}
               </div>
@@ -374,6 +385,7 @@ const LandingPage: React.FC = () => {
                   <Link
                     to={lp.cases_cta_url}
                     className="inline-block border border-black px-10 md:px-16 py-4 md:py-6 rounded-full font-bold uppercase tracking-[0.18em] hover:bg-black hover:text-white transition-all font-sans text-xs md:text-sm"
+                    style={getFieldStyle(lp.text_styles, 'cases_cta_text')}
                   >
                     {lp.cases_cta_text}
                   </Link>
@@ -400,7 +412,8 @@ const LandingPage: React.FC = () => {
                 >
                   {lp.partners_title}
                 </h2>
-                <p className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-xl mx-auto">
+                <p className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-xl mx-auto"
+                   style={getFieldStyle(lp.text_styles, 'partners_subtitle')}>
                   {lp.partners_subtitle}
                 </p>
               </div>
@@ -416,6 +429,7 @@ const LandingPage: React.FC = () => {
                   <Link
                     to={lp.partners_cta_url}
                     className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
+                    style={getFieldStyle(lp.text_styles, 'partners_cta_text')}
                   >
                     {lp.partners_cta_text}
                   </Link>
