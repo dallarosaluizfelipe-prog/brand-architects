@@ -868,16 +868,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setUploading(false);
   };
 
-  const pickFile = (accept: string, onPick: (file: File) => void) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = accept;
-    input.onchange = (ev) => {
-      const file = (ev.target as HTMLInputElement).files?.[0];
-      if (file) onPick(file);
-    };
-    input.click();
-  };
 
   const renderLpMedia = (field: keyof SiteLp, label: string, kind: 'image' | 'video') => {
     if (!editingLp) return null;
