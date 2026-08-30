@@ -2498,10 +2498,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     <input value={editingLp.hero_cta_text} onChange={(e) => updateLpField('hero_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
                     <input value={editingLp.hero_cta_url} onChange={(e) => updateLpField('hero_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA (ex: /contato)" />
                   </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <input value={editingLp.hero_video_desktop} onChange={(e) => updateLpField('hero_video_desktop', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Vídeo Desktop" />
-                    <input value={editingLp.hero_video_mobile} onChange={(e) => updateLpField('hero_video_mobile', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Vídeo Mobile" />
-                    <input value={editingLp.hero_poster} onChange={(e) => updateLpField('hero_poster', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL Poster/Capa" />
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {renderLpMedia('hero_video_desktop', 'Vídeo Hero — Desktop', 'video')}
+                    {renderLpMedia('hero_video_mobile', 'Vídeo Hero — Mobile', 'video')}
+                    {renderLpMedia('hero_poster', 'Poster / Capa do Hero', 'image')}
                   </div>
                 </div>
 
@@ -2521,25 +2521,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     <input value={editingLp.about_cta_text} onChange={(e) => updateLpField('about_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
                     <input value={editingLp.about_cta_url} onChange={(e) => updateLpField('about_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
                   </div>
-                  <input value={editingLp.about_video_url} onChange={(e) => updateLpField('about_video_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do Vídeo" />
+                  {renderLpMedia('about_video_url', 'Vídeo da seção Sobre', 'video')}
                 </div>
 
                 {/* Vídeo Institucional */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Vídeo Institucional</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      value={editingLp.institutional_video_url}
-                      onChange={(e) => updateLpField('institutional_video_url', e.target.value)}
-                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                      placeholder="URL vídeo institucional Desktop"
-                    />
-                    <input
-                      value={editingLp.institutional_video_mobile_url}
-                      onChange={(e) => updateLpField('institutional_video_mobile_url', e.target.value)}
-                      className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans"
-                      placeholder="URL vídeo institucional Mobile"
-                    />
+                    {renderLpMedia('institutional_video_url', 'Vídeo institucional — Desktop', 'video')}
+                    {renderLpMedia('institutional_video_mobile_url', 'Vídeo institucional — Mobile', 'video')}
                   </div>
                 </div>
 
