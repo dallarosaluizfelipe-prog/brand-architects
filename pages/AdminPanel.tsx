@@ -2605,6 +2605,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       <input value={c.category} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], category: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Categoria" />
                       <input value={c.cover_url} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], cover_url: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="URL da capa" />
                       {c.cover_url && <img src={c.cover_url} alt="" className="h-16 rounded-lg object-cover" />}
+                      <button
+                        type="button"
+                        disabled={uploading}
+                        onClick={() => pickFile('image/*', (file) => uploadLpCaseCover(file, i))}
+                        className="text-[11px] font-sans px-3 py-1.5 rounded-full bg-black text-white disabled:opacity-50 w-fit"
+                      >
+                        {uploading ? 'Enviando...' : c.cover_url ? 'Substituir capa' : 'Enviar capa'}
+                      </button>
                     </div>
                   ))}
                   <button onClick={() => updateLpField('cases_items', [...editingLp.cases_items, { slug: '', title: '', category: '', cover_url: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar case</button>
@@ -2648,16 +2656,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     { key: 'method_badge', label: 'Método — Badge' },
                     { key: 'method_title', label: 'Método — Título' },
                     { key: 'method_subtitle', label: 'Método — Subtítulo' },
-                    { key: 'method_phases', label: 'Método — Fases' },
+                    { key: 'method_phases', label: 'Método — Fases (geral)' },
+                    { key: 'method_phase_id', label: 'Método — Numeral da fase' },
+                    { key: 'method_phase_label', label: 'Método — Label da fase' },
+                    { key: 'method_phase_title', label: 'Método — Título da fase' },
+                    { key: 'method_phase_desc', label: 'Método — Descrição da fase' },
                     { key: 'method_cta_text', label: 'Método — CTA' },
                     { key: 'benefits_badge', label: 'Benefícios — Badge' },
                     { key: 'benefits_title', label: 'Benefícios — Título' },
                     { key: 'benefits_subtitle', label: 'Benefícios — Subtítulo' },
-                    { key: 'benefits_items', label: 'Benefícios — Itens' },
+                    { key: 'benefits_items', label: 'Benefícios — Itens (geral)' },
+                    { key: 'benefits_item_title', label: 'Benefícios — Título do item' },
+                    { key: 'benefits_item_desc', label: 'Benefícios — Descrição do item' },
                     { key: 'benefits_cta_text', label: 'Benefícios — CTA' },
                     { key: 'cases_badge', label: 'Cases — Badge' },
                     { key: 'cases_title', label: 'Cases — Título' },
                     { key: 'cases_subtitle', label: 'Cases — Subtítulo' },
+                    { key: 'cases_item_title', label: 'Cases — Título do card' },
+                    { key: 'cases_item_category', label: 'Cases — Categoria do card' },
                     { key: 'cases_cta_text', label: 'Cases — CTA' },
                     { key: 'partners_badge', label: 'Parceiros — Badge' },
                     { key: 'partners_title', label: 'Parceiros — Título' },
