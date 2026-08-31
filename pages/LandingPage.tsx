@@ -202,6 +202,35 @@ const LandingPage: React.FC = () => {
           </section>
         )}
 
+        {/* ── PARCEIROS (mesmo layout da Home) ── */}
+        {lp.partners_show && partners.length > 0 && (
+          <section className="py-20 md:py-40 px-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8 md:gap-10">
+                <h2
+                  className="text-5xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl"
+                  style={getFieldStyle(lp.text_styles, 'partners_title')}
+                >
+                  {lp.partners_title}
+                </h2>
+                <div
+                  className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg"
+                  style={getFieldStyle(lp.text_styles, 'partners_subtitle')}
+                >
+                  {lp.partners_subtitle}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">
+                {partners.map((p) => (
+                  <a key={p.logo_url} href={p.link_url} target="_blank" rel="noreferrer" className="flex justify-center">
+                    <img src={p.logo_url} alt={p.name} loading="lazy" className="h-28 md:h-32 object-contain" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ── QUEM SOMOS ── */}
         <section className="py-20 md:py-32 px-6 bg-[#efeff0] rounded-[2.5rem] md:rounded-[5rem]">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-center">
