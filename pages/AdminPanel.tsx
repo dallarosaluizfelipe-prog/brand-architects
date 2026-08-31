@@ -869,6 +869,39 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   };
 
 
+  /** Wraps an LP text input with an inline typography control (size, weight, spacing, color). */
+  const lpStyled = (styleKey: string, label: string, node: React.ReactNode) => (
+    <div className="flex items-start gap-2">
+      <div className="flex-1 min-w-0">{node}</div>
+      <div className="pt-2 shrink-0">
+        <TextStyleControl
+          field={styleKey}
+          styles={editingLp?.text_styles}
+          onChange={(next) => updateLpField('text_styles', next)}
+          label={label}
+        />
+      </div>
+    </div>
+  );
+
+  /** Row of typography controls for repeated blocks (phases, items, cards). */
+  const lpStyleRow = (fields: { key: string; label: string }[]) => (
+    <div className="flex flex-wrap items-center gap-2 bg-neutral-50 rounded-xl px-3 py-2">
+      <span className="text-[10px] font-sans uppercase tracking-wider text-neutral-400">Tipografia:</span>
+      {fields.map((f) => (
+        <div key={f.key} className="flex items-center gap-1">
+          <span className="text-[10px] font-sans text-neutral-500">{f.label}</span>
+          <TextStyleControl
+            field={f.key}
+            styles={editingLp?.text_styles}
+            onChange={(next) => updateLpField('text_styles', next)}
+            label={f.label}
+          />
+        </div>
+      ))}
+    </div>
+  );
+
   const renderLpMedia = (field: keyof SiteLp, label: string, kind: 'image' | 'video') => {
     if (!editingLp) return null;
     const value = (editingLp as any)[field] as string;
@@ -2481,11 +2514,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 {/* Hero */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Hero</h3>
-                  <input value={editingLp.hero_badge} onChange={(e) => updateLpField('hero_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge (ex: Identidade visual estratégica)" />
-                  <textarea value={editingLp.hero_title} onChange={(e) => updateLpField('hero_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={3} placeholder="Título principal do Hero" />
-                  <textarea value={editingLp.hero_subtitle} onChange={(e) => updateLpField('hero_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo do Hero" />
+                  {lpStyled('hero_badge', 'Hero — Badge', <input value={editingLp.hero_badge} onChange={(e) => updateLpField('hero_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge (ex: Identidade visual estratégica)" />)}
+                  {lpStyled('hero_title', 'Hero — Título', <textarea value={editingLp.hero_title} onChange={(e) => updateLpField('hero_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={3} placeholder="Título principal do Hero" />)}
+                  {lpStyled('hero_subtitle', 'Hero — Subtítulo', <textarea value={editingLp.hero_subtitle} onChange={(e) => updateLpField('hero_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo do Hero" />)}
                   <div className="grid grid-cols-2 gap-4">
-                    <input value={editingLp.hero_cta_text} onChange={(e) => updateLpField('hero_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    {lpStyled('hero_cta_text', 'Hero — CTA', <input value={editingLp.hero_cta_text} onChange={(e) => updateLpField('hero_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
                     <input value={editingLp.hero_cta_url} onChange={(e) => updateLpField('hero_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA (ex: /contato)" />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -2498,17 +2531,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 {/* About */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Sobre Nós</h3>
-                  <input value={editingLp.about_badge} onChange={(e) => updateLpField('about_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />
-                  <input value={editingLp.about_title} onChange={(e) => updateLpField('about_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
+                  {lpStyled('about_badge', 'Sobre — Badge', <input value={editingLp.about_badge} onChange={(e) => updateLpField('about_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
+                  {lpStyled('about_title', 'Sobre — Título', <input value={editingLp.about_title} onChange={(e) => updateLpField('about_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
                   {editingLp.about_paragraphs.map((p, i) => (
                     <div key={i} className="flex gap-2">
                       <textarea value={p} onChange={(e) => { const arr = [...editingLp.about_paragraphs]; arr[i] = e.target.value; updateLpField('about_paragraphs', arr); }} className="flex-grow border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder={`Parágrafo ${i + 1}`} />
                       <button onClick={() => { const arr = editingLp.about_paragraphs.filter((_, idx) => idx !== i); updateLpField('about_paragraphs', arr); }} className="text-red-400 hover:text-red-600 text-sm px-2">✕</button>
                     </div>
                   ))}
+                  {lpStyleRow([{ key: 'about_paragraphs', label: 'Parágrafos' }])}
                   <button onClick={() => updateLpField('about_paragraphs', [...editingLp.about_paragraphs, ''])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar parágrafo</button>
                   <div className="grid grid-cols-2 gap-4">
-                    <input value={editingLp.about_cta_text} onChange={(e) => updateLpField('about_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    {lpStyled('about_cta_text', 'Sobre — CTA', <input value={editingLp.about_cta_text} onChange={(e) => updateLpField('about_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
                     <input value={editingLp.about_cta_url} onChange={(e) => updateLpField('about_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
                   </div>
                   {renderLpMedia('about_video_url', 'Vídeo da seção Sobre', 'video')}
@@ -2526,9 +2560,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 {/* Método */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Método</h3>
-                  <input value={editingLp.method_badge} onChange={(e) => updateLpField('method_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge (ex: Dalla Design Brand)" />
-                  <input value={editingLp.method_title} onChange={(e) => updateLpField('method_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
-                  <textarea value={editingLp.method_subtitle} onChange={(e) => updateLpField('method_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />
+                  {lpStyled('method_badge', 'Método — Badge', <input value={editingLp.method_badge} onChange={(e) => updateLpField('method_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge (ex: Dalla Design Brand)" />)}
+                  {lpStyled('method_title', 'Método — Título', <input value={editingLp.method_title} onChange={(e) => updateLpField('method_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
+                  {lpStyled('method_subtitle', 'Método — Subtítulo', <textarea value={editingLp.method_subtitle} onChange={(e) => updateLpField('method_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
                   {editingLp.method_phases.map((phase, i) => (
                     <div key={i} className="bg-neutral-50 rounded-xl p-4 space-y-2">
                       <div className="flex justify-between items-center">
@@ -2543,9 +2577,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       <textarea value={phase.desc} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], desc: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" rows={2} placeholder="Descrição" />
                     </div>
                   ))}
+                  {lpStyleRow([
+                    { key: 'method_phase_id', label: 'Numeral' },
+                    { key: 'method_phase_label', label: 'Label' },
+                    { key: 'method_phase_title', label: 'Título' },
+                    { key: 'method_phase_desc', label: 'Descrição' },
+                  ])}
                   <button onClick={() => updateLpField('method_phases', [...editingLp.method_phases, { id: '', label: '', title: '', desc: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar fase</button>
                   <div className="grid grid-cols-2 gap-4">
-                    <input value={editingLp.method_cta_text} onChange={(e) => updateLpField('method_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    {lpStyled('method_cta_text', 'Método — CTA', <input value={editingLp.method_cta_text} onChange={(e) => updateLpField('method_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
                     <input value={editingLp.method_cta_url} onChange={(e) => updateLpField('method_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
                   </div>
                 </div>
@@ -2553,9 +2593,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 {/* Benefícios */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Benefícios</h3>
-                  <input value={editingLp.benefits_badge} onChange={(e) => updateLpField('benefits_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />
-                  <input value={editingLp.benefits_title} onChange={(e) => updateLpField('benefits_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
-                  <textarea value={editingLp.benefits_subtitle} onChange={(e) => updateLpField('benefits_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />
+                  {lpStyled('benefits_badge', 'Benefícios — Badge', <input value={editingLp.benefits_badge} onChange={(e) => updateLpField('benefits_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
+                  {lpStyled('benefits_title', 'Benefícios — Título', <input value={editingLp.benefits_title} onChange={(e) => updateLpField('benefits_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
+                  {lpStyled('benefits_subtitle', 'Benefícios — Subtítulo', <textarea value={editingLp.benefits_subtitle} onChange={(e) => updateLpField('benefits_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
                   {editingLp.benefits_items.map((item, i) => (
                     <div key={i} className="bg-neutral-50 rounded-xl p-4 space-y-2">
                       <div className="flex justify-between items-center">
@@ -2569,9 +2609,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       <textarea value={item.desc} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], desc: e.target.value }; updateLpField('benefits_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" rows={2} placeholder="Descrição" />
                     </div>
                   ))}
+                  {lpStyleRow([
+                    { key: 'benefits_item_title', label: 'Título do item' },
+                    { key: 'benefits_item_desc', label: 'Descrição do item' },
+                  ])}
                   <button onClick={() => updateLpField('benefits_items', [...editingLp.benefits_items, { icon: '', title: '', desc: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar benefício</button>
                   <div className="grid grid-cols-2 gap-4">
-                    <input value={editingLp.benefits_cta_text} onChange={(e) => updateLpField('benefits_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    {lpStyled('benefits_cta_text', 'Benefícios — CTA', <input value={editingLp.benefits_cta_text} onChange={(e) => updateLpField('benefits_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
                     <input value={editingLp.benefits_cta_url} onChange={(e) => updateLpField('benefits_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
                   </div>
                 </div>
@@ -2579,9 +2623,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 {/* Cases */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Cases</h3>
-                  <input value={editingLp.cases_badge} onChange={(e) => updateLpField('cases_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />
-                  <input value={editingLp.cases_title} onChange={(e) => updateLpField('cases_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
-                  <textarea value={editingLp.cases_subtitle} onChange={(e) => updateLpField('cases_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />
+                  {lpStyled('cases_badge', 'Cases — Badge', <input value={editingLp.cases_badge} onChange={(e) => updateLpField('cases_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
+                  {lpStyled('cases_title', 'Cases — Título', <input value={editingLp.cases_title} onChange={(e) => updateLpField('cases_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
+                  {lpStyled('cases_subtitle', 'Cases — Subtítulo', <textarea value={editingLp.cases_subtitle} onChange={(e) => updateLpField('cases_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
                   {editingLp.cases_items.map((c, i) => (
                     <div key={i} className="bg-neutral-50 rounded-xl p-4 space-y-2">
                       <div className="flex justify-between items-center">
@@ -2605,9 +2649,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       </button>
                     </div>
                   ))}
+                  {lpStyleRow([
+                    { key: 'cases_item_title', label: 'Título do card' },
+                    { key: 'cases_item_category', label: 'Categoria do card' },
+                  ])}
                   <button onClick={() => updateLpField('cases_items', [...editingLp.cases_items, { slug: '', title: '', category: '', cover_url: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar case</button>
                   <div className="grid grid-cols-2 gap-4">
-                    <input value={editingLp.cases_cta_text} onChange={(e) => updateLpField('cases_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    {lpStyled('cases_cta_text', 'Cases — CTA', <input value={editingLp.cases_cta_text} onChange={(e) => updateLpField('cases_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
                     <input value={editingLp.cases_cta_url} onChange={(e) => updateLpField('cases_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
                   </div>
                 </div>
@@ -2615,11 +2663,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                 {/* Parceiros */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Parceiros</h3>
-                  <input value={editingLp.partners_badge} onChange={(e) => updateLpField('partners_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />
-                  <input value={editingLp.partners_title} onChange={(e) => updateLpField('partners_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />
-                  <textarea value={editingLp.partners_subtitle} onChange={(e) => updateLpField('partners_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />
+                  {lpStyled('partners_badge', 'Parceiros — Badge', <input value={editingLp.partners_badge} onChange={(e) => updateLpField('partners_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
+                  {lpStyled('partners_title', 'Parceiros — Título', <input value={editingLp.partners_title} onChange={(e) => updateLpField('partners_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
+                  {lpStyled('partners_subtitle', 'Parceiros — Subtítulo', <textarea value={editingLp.partners_subtitle} onChange={(e) => updateLpField('partners_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
                   <div className="grid grid-cols-2 gap-4">
-                    <input value={editingLp.partners_cta_text} onChange={(e) => updateLpField('partners_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />
+                    {lpStyled('partners_cta_text', 'Parceiros — CTA', <input value={editingLp.partners_cta_text} onChange={(e) => updateLpField('partners_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
                     <input value={editingLp.partners_cta_url} onChange={(e) => updateLpField('partners_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
                   </div>
                 </div>
