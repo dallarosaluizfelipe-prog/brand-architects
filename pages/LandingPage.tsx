@@ -47,6 +47,22 @@ const LandingPage: React.FC = () => {
   const institutionalMobileVideo = lp?.institutional_video_mobile_url || institutionalDesktopVideo;
   const hasInstitutionalVideo = Boolean(institutionalDesktopVideo || institutionalMobileVideo);
 
+  const heroSlides = useMemo(() => {
+    const fromCases = (lp?.cases_items ?? []).map((c) => c.cover_url).filter(Boolean);
+    if (fromCases.length > 0) return fromCases;
+    return lp?.hero_poster ? [lp.hero_poster] : [];
+  }, [lp?.cases_items, lp?.hero_poster]);
+
+  const [heroSlide, setHeroSlide] = useState(0);
+
+  useEffect(() => {
+    if (heroSlides.length < 2) return;
+    const id = setInterval(() => {
+      setHeroSlide((p) => (p + 1) % heroSlides.length);
+    }, HERO_SLIDE_DURATION);
+    return () => clearInterval(id);
+  }, [heroSlides.length]);
+
   const handlePhaseClick = useCallback((idx: number) => {
     setActivePhase(idx);
     setProgress(0);
