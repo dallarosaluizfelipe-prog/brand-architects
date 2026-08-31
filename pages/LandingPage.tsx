@@ -81,35 +81,80 @@ const LandingPage: React.FC = () => {
       <div className="animate-in fade-in duration-700">
 
         {/* ── HERO ── */}
-        <section className="relative min-h-[100svh] md:min-h-screen overflow-hidden bg-white rounded-b-[2.5rem] md:rounded-b-[6rem]">
-          <div className="relative z-10 flex flex-col items-center justify-between min-h-[100svh] md:min-h-screen text-center px-6 pt-28 md:pt-32 pb-28 md:pb-32">
-            <div />
-            <div className="flex flex-col items-center">
+        <section className="relative overflow-hidden bg-white rounded-b-[2.5rem] md:rounded-b-[6rem]">
+          <div className="max-w-6xl mx-auto px-6 pt-28 md:pt-40 pb-16 md:pb-32 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+            {/* Texto — esquerda */}
+            <div className="text-left">
               <span
-                className="uppercase tracking-[0.45em] text-black/40 mb-4 block font-sans text-[11px] md:text-sm"
+                className="tracking-[0.45em] text-black/40 mb-4 block font-sans text-[11px] md:text-sm"
                 style={getFieldStyle(lp.text_styles, 'hero_badge')}
               >
                 {lp.hero_badge}
               </span>
-              <h1 className="text-black text-4xl sm:text-5xl md:text-8xl leading-[0.9] tracking-tight max-w-5xl font-display mb-6 md:mb-8"
+              <h1 className="text-black text-4xl sm:text-5xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6 md:mb-8"
                   style={{ whiteSpace: 'pre-line', ...getFieldStyle(lp.text_styles, 'hero_title') }}>
                 {lp.hero_title}
               </h1>
-              <p className="text-black/50 font-sans font-light text-base md:text-lg max-w-2xl mb-10 leading-relaxed"
+              <p className="text-black/50 font-sans font-light text-base md:text-lg max-w-xl mb-10 leading-relaxed"
                  style={{ whiteSpace: 'pre-line', ...getFieldStyle(lp.text_styles, 'hero_subtitle') }}>
                 {lp.hero_subtitle}
               </p>
               <Link
                 to={lp.hero_cta_url}
-                className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
+                className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
                 style={getFieldStyle(lp.text_styles, 'hero_cta_text')}
               >
                 {lp.hero_cta_text}
               </Link>
             </div>
-            <div />
+
+            {/* Carrossel — direita */}
+            {heroSlides.length > 0 && (
+              <div className="relative w-full aspect-[4/5] md:aspect-[4/5] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden bg-neutral-100 shadow-lg">
+                {heroSlides.map((src, idx) => (
+                  <img
+                    key={src + idx}
+                    src={src}
+                    alt={`${lp.title} — imagem ${idx + 1}`}
+                    loading={idx === 0 ? 'eager' : 'lazy'}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                      idx === heroSlide ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                ))}
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
+                  {heroSlides.map((_, idx) => (
+                    <button
+                      key={idx}
+                      aria-label={`Ir para imagem ${idx + 1}`}
+                      onClick={() => setHeroSlide(idx)}
+                      className={`h-1.5 rounded-full transition-all ${
+                        idx === heroSlide ? 'w-6 bg-white' : 'w-1.5 bg-white/50'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
+
+        {/* ── BIG NUMBERS ── */}
+        <section className="px-6 py-14 md:py-20">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 text-center">
+            {BIG_NUMBERS.map((n) => (
+              <div key={n.label} className="flex flex-col items-center">
+                <span className="font-display text-5xl md:text-7xl leading-none tracking-tight text-black">
+                  {n.value}
+                </span>
+                <span className="mt-3 font-sans font-light text-sm md:text-base text-neutral-500 max-w-[16rem]">
+                  {n.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
 
         {/* ── VÍDEO INSTITUCIONAL ── */}
         {hasInstitutionalVideo && (
