@@ -463,49 +463,8 @@ const LandingPage: React.FC = () => {
           </section>
         )}
 
-        {/* ── PARCEIROS ── */}
-        {lp.partners_show && partners.length > 0 && (
-          <section className="py-20 md:py-32 px-6">
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-12 md:mb-20">
-                <span
-                  className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm font-bold"
-                  style={getFieldStyle(lp.text_styles, 'partners_badge')}
-                >
-                  {lp.partners_badge}
-                </span>
-                <h2
-                  className="text-3xl sm:text-4xl md:text-7xl leading-[0.9] tracking-tight font-display mb-6"
-                  style={getFieldStyle(lp.text_styles, 'partners_title')}
-                >
-                  {lp.partners_title}
-                </h2>
-                <p className="text-neutral-500 font-sans font-light text-base md:text-xl max-w-xl mx-auto"
-                   style={getFieldStyle(lp.text_styles, 'partners_subtitle')}>
-                  {lp.partners_subtitle}
-                </p>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center md:opacity-30 md:grayscale hover:opacity-100 transition-all duration-1000">
-                {partners.map((p) => (
-                  <a key={p.logo_url} href={p.link_url} target="_blank" rel="noreferrer" className="flex justify-center">
-                    <img src={p.logo_url} alt={p.name} loading="lazy" className="h-16 md:h-32 object-contain" />
-                  </a>
-                ))}
-              </div>
-              {lp.partners_cta_text && (
-                <div className="text-center mt-12">
-                  <Link
-                    to={lp.partners_cta_url}
-                    className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
-                    style={getFieldStyle(lp.text_styles, 'partners_cta_text')}
-                  >
-                    {lp.partners_cta_text}
-                  </Link>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
+
+
 
         {/* ── FORMULÁRIO DE CONTATO ── */}
         <ContactSection />
