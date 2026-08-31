@@ -8,7 +8,6 @@ import { getWhatsAppUrl } from '@/src/utils/contact';
 import ThermometersTab from '../components/admin/ThermometersTab';
 import TextStyleControl from '../src/components/TextStyleControl';
 import EntityStylesPanel, { StyleField } from '../src/components/EntityStylesPanel';
-import TextStyleControl from '../src/components/TextStyleControl';
 import type { TextStylesMap } from '../src/utils/textStyles';
 
 interface AdminPanelProps {
