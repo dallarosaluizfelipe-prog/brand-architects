@@ -9,6 +9,13 @@ import { getFieldStyle } from '@/src/utils/textStyles';
 
 const PHASE_DURATION = 4000;
 const TICK = 50;
+const HERO_SLIDE_DURATION = 3500;
+
+const BIG_NUMBERS = [
+  { value: '+50', label: 'Marcas no mercado' },
+  { value: '+5', label: 'Anos com identidade visual' },
+  { value: '+4', label: 'Premiações internacionais' },
+];
 
 const LandingPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
