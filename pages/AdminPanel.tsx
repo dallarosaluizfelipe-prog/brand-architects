@@ -2513,7 +2513,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
                 {/* Hero */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Hero</h3>
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">1 · Hero (texto à esquerda + carrossel)</h3>
                   {lpStyled('hero_badge', 'Hero — Badge', <input value={editingLp.hero_badge} onChange={(e) => updateLpField('hero_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge (ex: Identidade visual estratégica)" />)}
                   {lpStyled('hero_title', 'Hero — Título', <textarea value={editingLp.hero_title} onChange={(e) => updateLpField('hero_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={3} placeholder="Título principal do Hero" />)}
                   {lpStyled('hero_subtitle', 'Hero — Subtítulo', <textarea value={editingLp.hero_subtitle} onChange={(e) => updateLpField('hero_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo do Hero" />)}
@@ -2526,11 +2526,39 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     {renderLpMedia('hero_video_mobile', 'Vídeo Hero — Mobile', 'video')}
                     {renderLpMedia('hero_poster', 'Poster / Capa do Hero', 'image')}
                   </div>
+                  <p className="text-[11px] font-sans text-neutral-400">O carrossel do Hero usa as capas dos cases cadastrados abaixo. O poster é usado como imagem única quando não há cases. Os vídeos do Hero não são exibidos neste layout.</p>
+                </div>
+
+                {/* Big Numbers */}
+                <div className="space-y-2">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">2 · Big Numbers</h3>
+                  <p className="text-[11px] font-sans text-neutral-400">Seção fixa da página: +50 marcas no mercado · +5 anos com identidade visual · +4 premiações internacionais.</p>
+                </div>
+
+                {/* Vídeo Institucional */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">3 · Vídeo (exibido sem título na página)</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {renderLpMedia('institutional_video_url', 'Vídeo institucional — Desktop', 'video')}
+                    {renderLpMedia('institutional_video_mobile_url', 'Vídeo institucional — Mobile', 'video')}
+                  </div>
+                </div>
+
+                {/* Parceiros */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">4 · Parceiros</h3>
+                  {lpStyled('partners_badge', 'Parceiros — Badge', <input value={editingLp.partners_badge} onChange={(e) => updateLpField('partners_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
+                  {lpStyled('partners_title', 'Parceiros — Título', <input value={editingLp.partners_title} onChange={(e) => updateLpField('partners_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
+                  {lpStyled('partners_subtitle', 'Parceiros — Subtítulo', <textarea value={editingLp.partners_subtitle} onChange={(e) => updateLpField('partners_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
+                  <div className="grid grid-cols-2 gap-4">
+                    {lpStyled('partners_cta_text', 'Parceiros — CTA', <input value={editingLp.partners_cta_text} onChange={(e) => updateLpField('partners_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
+                    <input value={editingLp.partners_cta_url} onChange={(e) => updateLpField('partners_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
+                  </div>
                 </div>
 
                 {/* About */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Sobre Nós</h3>
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">5 · Sobre Nós</h3>
                   {lpStyled('about_badge', 'Sobre — Badge', <input value={editingLp.about_badge} onChange={(e) => updateLpField('about_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
                   {lpStyled('about_title', 'Sobre — Título', <input value={editingLp.about_title} onChange={(e) => updateLpField('about_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
                   {editingLp.about_paragraphs.map((p, i) => (
@@ -2548,18 +2576,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   {renderLpMedia('about_video_url', 'Vídeo da seção Sobre', 'video')}
                 </div>
 
-                {/* Vídeo Institucional */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Vídeo Institucional</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {renderLpMedia('institutional_video_url', 'Vídeo institucional — Desktop', 'video')}
-                    {renderLpMedia('institutional_video_mobile_url', 'Vídeo institucional — Mobile', 'video')}
-                  </div>
-                </div>
-
                 {/* Método */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Método</h3>
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">6 · Método</h3>
                   {lpStyled('method_badge', 'Método — Badge', <input value={editingLp.method_badge} onChange={(e) => updateLpField('method_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge (ex: Dalla Design Brand)" />)}
                   {lpStyled('method_title', 'Método — Título', <input value={editingLp.method_title} onChange={(e) => updateLpField('method_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
                   {lpStyled('method_subtitle', 'Método — Subtítulo', <textarea value={editingLp.method_subtitle} onChange={(e) => updateLpField('method_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
@@ -2592,7 +2611,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
                 {/* Benefícios */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Benefícios</h3>
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">7 · Benefícios</h3>
                   {lpStyled('benefits_badge', 'Benefícios — Badge', <input value={editingLp.benefits_badge} onChange={(e) => updateLpField('benefits_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
                   {lpStyled('benefits_title', 'Benefícios — Título', <input value={editingLp.benefits_title} onChange={(e) => updateLpField('benefits_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
                   {lpStyled('benefits_subtitle', 'Benefícios — Subtítulo', <textarea value={editingLp.benefits_subtitle} onChange={(e) => updateLpField('benefits_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
@@ -2622,7 +2641,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
 
                 {/* Cases */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Cases</h3>
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">8 · Cases (também alimentam o carrossel do Hero)</h3>
                   {lpStyled('cases_badge', 'Cases — Badge', <input value={editingLp.cases_badge} onChange={(e) => updateLpField('cases_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
                   {lpStyled('cases_title', 'Cases — Título', <input value={editingLp.cases_title} onChange={(e) => updateLpField('cases_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
                   {lpStyled('cases_subtitle', 'Cases — Subtítulo', <textarea value={editingLp.cases_subtitle} onChange={(e) => updateLpField('cases_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
@@ -2657,18 +2676,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   <div className="grid grid-cols-2 gap-4">
                     {lpStyled('cases_cta_text', 'Cases — CTA', <input value={editingLp.cases_cta_text} onChange={(e) => updateLpField('cases_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
                     <input value={editingLp.cases_cta_url} onChange={(e) => updateLpField('cases_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
-                  </div>
-                </div>
-
-                {/* Parceiros */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">Parceiros</h3>
-                  {lpStyled('partners_badge', 'Parceiros — Badge', <input value={editingLp.partners_badge} onChange={(e) => updateLpField('partners_badge', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Badge" />)}
-                  {lpStyled('partners_title', 'Parceiros — Título', <input value={editingLp.partners_title} onChange={(e) => updateLpField('partners_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
-                  {lpStyled('partners_subtitle', 'Parceiros — Subtítulo', <textarea value={editingLp.partners_subtitle} onChange={(e) => updateLpField('partners_subtitle', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder="Subtítulo" />)}
-                  <div className="grid grid-cols-2 gap-4">
-                    {lpStyled('partners_cta_text', 'Parceiros — CTA', <input value={editingLp.partners_cta_text} onChange={(e) => updateLpField('partners_cta_text', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Texto do CTA" />)}
-                    <input value={editingLp.partners_cta_url} onChange={(e) => updateLpField('partners_cta_url', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="URL do CTA" />
                   </div>
                 </div>
 
