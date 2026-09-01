@@ -273,6 +273,7 @@ export type Database = {
           hero_badge: string
           hero_cta_text: string
           hero_cta_url: string
+          hero_images: Json
           hero_poster: string
           hero_subtitle: string
           hero_title: string
@@ -292,6 +293,7 @@ export type Database = {
           method_phases: Json
           method_subtitle: string
           method_title: string
+          numbers_items: Json
           partners_badge: string
           partners_cta_text: string
           partners_cta_url: string
@@ -328,6 +330,7 @@ export type Database = {
           hero_badge?: string
           hero_cta_text?: string
           hero_cta_url?: string
+          hero_images?: Json
           hero_poster?: string
           hero_subtitle?: string
           hero_title?: string
@@ -347,6 +350,7 @@ export type Database = {
           method_phases?: Json
           method_subtitle?: string
           method_title?: string
+          numbers_items?: Json
           partners_badge?: string
           partners_cta_text?: string
           partners_cta_url?: string
@@ -383,6 +387,7 @@ export type Database = {
           hero_badge?: string
           hero_cta_text?: string
           hero_cta_url?: string
+          hero_images?: Json
           hero_poster?: string
           hero_subtitle?: string
           hero_title?: string
@@ -402,6 +407,7 @@ export type Database = {
           method_phases?: Json
           method_subtitle?: string
           method_title?: string
+          numbers_items?: Json
           partners_badge?: string
           partners_cta_text?: string
           partners_cta_url?: string
