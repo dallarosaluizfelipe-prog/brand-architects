@@ -2679,6 +2679,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   </div>
                 </div>
 
+                {/* Contato */}
+                <div className="space-y-2">
+                  <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">9 · Formulário de contato</h3>
+                  <p className="text-[11px] font-sans text-neutral-400">Seção final fixa da página, editável em Páginas › Contato.</p>
+                </div>
+
+
                 {/* SEO */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">SEO</h3>
