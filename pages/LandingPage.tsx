@@ -48,10 +48,15 @@ const LandingPage: React.FC = () => {
   const hasInstitutionalVideo = Boolean(institutionalDesktopVideo || institutionalMobileVideo);
 
   const heroSlides = useMemo(() => {
+    const custom = (lp?.hero_images ?? []).filter(Boolean);
+    if (custom.length > 0) return custom;
     const fromCases = (lp?.cases_items ?? []).map((c) => c.cover_url).filter(Boolean);
     if (fromCases.length > 0) return fromCases;
     return lp?.hero_poster ? [lp.hero_poster] : [];
-  }, [lp?.cases_items, lp?.hero_poster]);
+  }, [lp?.hero_images, lp?.cases_items, lp?.hero_poster]);
+
+  const bigNumbers = (lp?.numbers_items ?? []).filter((n) => n.value || n.label);
+  const numbers = bigNumbers.length > 0 ? bigNumbers : BIG_NUMBERS;
 
   const [heroSlide, setHeroSlide] = useState(0);
 
@@ -163,21 +168,24 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* ── BIG NUMBERS ── */}
+        {numbers.length > 0 && (
         <section className="px-6 py-14 md:py-20">
           <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 text-center">
-            {BIG_NUMBERS.map((n) => (
-              <div key={n.label} className="flex flex-col items-center">
-                <span className="font-display text-5xl md:text-7xl leading-none tracking-tight text-black">
+            {numbers.map((n, i) => (
+              <div key={`${n.label}-${i}`} className="flex flex-col items-center">
+                <span className="font-display text-5xl md:text-7xl leading-none tracking-tight text-black"
+                      style={getFieldStyle(lp.text_styles, 'numbers_value')}>
                   {n.value}
                 </span>
-                <span className="mt-3 font-sans font-light text-sm md:text-base text-neutral-500 max-w-[16rem]">
+                <span className="mt-3 font-sans font-light text-sm md:text-base text-neutral-500 max-w-[16rem]"
+                      style={getFieldStyle(lp.text_styles, 'numbers_label')}>
                   {n.label}
                 </span>
               </div>
             ))}
           </div>
         </section>
-
+        )}
 
         {/* ── VÍDEO INSTITUCIONAL ── */}
         {hasInstitutionalVideo && (
