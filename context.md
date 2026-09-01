@@ -444,3 +444,6 @@ Feito:
 - Admin › LPs: uploads reais (enviar/substituir/remover + preview) para vídeo Hero desktop/mobile, poster, vídeo Sobre, vídeos institucionais desktop/mobile e capas dos cases.
 - `EntityStylesPanel` da LP ampliado: fases do método (numeral, label, título, descrição), itens de benefícios (título/descrição), cards de cases (título/categoria) e todos os CTAs.
 - `pages/LandingPage.tsx`: aplica os estilos configurados em todos esses elementos.
+
+## 2026-08-31 11:31 UTC — Admin LPs: tipografia inline
+Cada campo de texto da LP (badges, títulos, subtítulos, CTAs) agora tem controle "Aa" ao lado (cor, peso, tamanho em rem, entrelinha e espaçamento entre letras). Blocos repetidos (fases do método, benefícios, cards de cases, parágrafos do sobre) ganharam linha de controles de tipografia. Helpers `lpStyled` e `lpStyleRow` em pages/AdminPanel.tsx.
