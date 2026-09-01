@@ -889,3 +889,6 @@ enviado para a function `send-contact`. Rotas registradas em App.tsx; Navbar/Foo
 - `TextStyle.lineHeight` (unitless) suportado em `getFieldStyle`/`setFieldStyle` e no popover "Aa".
 - `AdminPanel`: `uploadLpMedia`, `uploadLpCaseCover`, `renderLpMedia(field, label, 'image'|'video')`.
 - Novas chaves de estilo da LP: `method_phase_id|label|title|desc`, `benefits_item_title|desc`, `cases_item_title|category`.
+
+### LP — numbers_items / hero_images
+Campos JSONB em site_lps editáveis no AdminPanel (seções 1 e 2 do editor de LPs) e renderizados em pages/LandingPage.tsx com estilos `numbers_value` e `numbers_label`.

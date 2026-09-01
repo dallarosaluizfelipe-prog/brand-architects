@@ -447,3 +447,8 @@ Feito:
 
 ## 2026-08-31 11:31 UTC — Admin LPs: tipografia inline
 Cada campo de texto da LP (badges, títulos, subtítulos, CTAs) agora tem controle "Aa" ao lado (cor, peso, tamanho em rem, entrelinha e espaçamento entre letras). Blocos repetidos (fases do método, benefícios, cards de cases, parágrafos do sobre) ganharam linha de controles de tipografia. Helpers `lpStyled` e `lpStyleRow` em pages/AdminPanel.tsx.
+
+## 2026-09-01 18:24 UTC — LP: Big Numbers e imagens do Hero editáveis
+- Novas colunas `numbers_items` e `hero_images` em `site_lps`.
+- Admin › LPs: editor dos Big Numbers (valor + legenda, com controle de tipografia) e upload/substituição das imagens do carrossel da primeira dobra.
+- `LandingPage.tsx` usa `hero_images` (fallback: capas dos cases → poster) e `numbers_items` (fallback: valores padrão).
