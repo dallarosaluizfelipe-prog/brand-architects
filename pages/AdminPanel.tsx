@@ -2595,6 +2595,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     { key: 'numbers_label', label: 'Legenda' },
                   ])}
                   <button onClick={() => updateLpField('numbers_items', [...(editingLp.numbers_items || []), { value: '', label: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar número</button>
+                </div>
+
+
 
 
                 {/* Vídeo Institucional */}
