@@ -2551,14 +2551,51 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                     {renderLpMedia('hero_video_mobile', 'Vídeo Hero — Mobile', 'video')}
                     {renderLpMedia('hero_poster', 'Poster / Capa do Hero', 'image')}
                   </div>
-                  <p className="text-[11px] font-sans text-neutral-400">O carrossel do Hero usa as capas dos cases cadastrados abaixo. O poster é usado como imagem única quando não há cases. Os vídeos do Hero não são exibidos neste layout.</p>
+
+                  {/* Imagens do carrossel */}
+                  <div className="border border-neutral-200 rounded-xl p-4 space-y-3">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-sans">Imagens do carrossel (primeira dobra)</label>
+                    <p className="text-[11px] font-sans text-neutral-400">Se nenhuma imagem for adicionada aqui, o carrossel usa as capas dos cases e, por último, o poster.</p>
+                    {(editingLp.hero_images || []).map((img, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        {img && <img src={img} alt="" className="h-14 w-14 rounded-lg object-cover shrink-0" />}
+                        <input
+                          value={img}
+                          onChange={(e) => { const arr = [...(editingLp.hero_images || [])]; arr[i] = e.target.value; updateLpField('hero_images', arr); }}
+                          className="flex-1 border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans"
+                          placeholder="URL da imagem"
+                        />
+                        <button type="button" disabled={uploading} onClick={() => pickFile('image/*', (file) => uploadLpHeroImage(file, i))} className="text-[11px] font-sans px-3 py-1.5 rounded-full bg-black text-white disabled:opacity-50 shrink-0">Substituir</button>
+                        <button type="button" onClick={() => { const arr = (editingLp.hero_images || []).filter((_, idx) => idx !== i); updateLpField('hero_images', arr); }} className="text-red-400 hover:text-red-600 text-sm px-2">✕</button>
+                      </div>
+                    ))}
+                    <button type="button" disabled={uploading} onClick={() => pickFile('image/*', (file) => uploadLpHeroImage(file, null))} className="text-sm font-sans text-neutral-500 hover:text-black disabled:opacity-50">
+                      {uploading ? 'Enviando...' : '+ Adicionar imagem'}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Big Numbers */}
-                <div className="space-y-2">
+                <div className="space-y-4">
                   <h3 className="text-sm font-sans font-bold uppercase tracking-wider text-neutral-400 border-b pb-2">2 · Big Numbers</h3>
-                  <p className="text-[11px] font-sans text-neutral-400">Seção fixa da página: +50 marcas no mercado · +5 anos com identidade visual · +4 premiações internacionais.</p>
-                </div>
+                  {(editingLp.numbers_items || []).map((n, i) => (
+                    <div key={i} className="bg-neutral-50 rounded-xl p-4 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">Número {i + 1}</span>
+                        <button onClick={() => { const arr = (editingLp.numbers_items || []).filter((_, idx) => idx !== i); updateLpField('numbers_items', arr); }} className="text-red-400 hover:text-red-600 text-sm">✕</button>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        <input value={n.value} onChange={(e) => { const arr = [...(editingLp.numbers_items || [])]; arr[i] = { ...arr[i], value: e.target.value }; updateLpField('numbers_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Ex: +50" />
+                        <input value={n.label} onChange={(e) => { const arr = [...(editingLp.numbers_items || [])]; arr[i] = { ...arr[i], label: e.target.value }; updateLpField('numbers_items', arr); }} className="col-span-2 border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Ex: Marcas no mercado" />
+                      </div>
+                    </div>
+                  ))}
+                  {lpStyleRow([
+                    { key: 'numbers_value', label: 'Número' },
+                    { key: 'numbers_label', label: 'Legenda' },
+                  ])}
+                  <button onClick={() => updateLpField('numbers_items', [...(editingLp.numbers_items || []), { value: '', label: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar número</button>
+
 
                 {/* Vídeo Institucional */}
                 <div className="space-y-4">
