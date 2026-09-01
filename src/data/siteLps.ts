@@ -21,6 +21,11 @@ export interface LpCaseItem {
   cover_url: string;
 }
 
+export interface LpNumberItem {
+  value: string;
+  label: string;
+}
+
 export interface SiteLp {
   id?: string;
   slug: string;
@@ -36,6 +41,9 @@ export interface SiteLp {
   hero_video_desktop: string;
   hero_video_mobile: string;
   hero_poster: string;
+  hero_images: string[];
+
+  numbers_items: LpNumberItem[];
 
   about_badge: string;
   about_title: string;
@@ -99,6 +107,8 @@ const normalizeLp = (item: any): SiteLp => ({
   hero_video_desktop: item.hero_video_desktop ?? '',
   hero_video_mobile: item.hero_video_mobile ?? '',
   hero_poster: item.hero_poster ?? '',
+  hero_images: Array.isArray(item.hero_images) ? item.hero_images : [],
+  numbers_items: Array.isArray(item.numbers_items) ? item.numbers_items : [],
 
   about_badge: item.about_badge ?? '',
   about_title: item.about_title ?? '',

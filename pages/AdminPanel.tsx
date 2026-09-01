@@ -702,6 +702,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     hero_video_desktop: item.hero_video_desktop ?? '',
     hero_video_mobile: item.hero_video_mobile ?? '',
     hero_poster: item.hero_poster ?? '',
+    hero_images: Array.isArray(item.hero_images) ? item.hero_images : [],
+    numbers_items: Array.isArray(item.numbers_items) ? item.numbers_items : [],
     about_badge: item.about_badge ?? '',
     about_title: item.about_title ?? '',
     about_paragraphs: Array.isArray(item.about_paragraphs) ? item.about_paragraphs : [],
@@ -796,6 +798,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     hero_video_desktop: '',
     hero_video_mobile: '',
     hero_poster: '',
+    hero_images: [],
+    numbers_items: [
+      { value: '+50', label: 'Marcas no mercado' },
+      { value: '+5', label: 'Anos com identidade visual' },
+      { value: '+4', label: 'Premiações internacionais' },
+    ],
     about_badge: 'Sobre nós',
     about_title: '',
     about_paragraphs: [],
@@ -868,6 +876,23 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
     setUploading(false);
   };
 
+
+  const uploadLpHeroImage = async (file: File, index: number | null) => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      setEditingLp((prev) => {
+        if (!prev) return prev;
+        const imgs = [...(prev.hero_images || [])];
+        if (index === null) imgs.push(url); else imgs[index] = url;
+        return { ...prev, hero_images: imgs };
+      });
+      showMessage('Imagem enviada!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
 
   /** Wraps an LP text input with an inline typography control (size, weight, spacing, color). */
   const lpStyled = (styleKey: string, label: string, node: React.ReactNode) => (
