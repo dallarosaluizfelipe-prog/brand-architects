@@ -2585,15 +2585,22 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                         <button onClick={() => { const arr = (editingLp.numbers_items || []).filter((_, idx) => idx !== i); updateLpField('numbers_items', arr); }} className="text-red-400 hover:text-red-600 text-sm">✕</button>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
-                        <input value={n.value} onChange={(e) => { const arr = [...(editingLp.numbers_items || [])]; arr[i] = { ...arr[i], value: e.target.value }; updateLpField('numbers_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Ex: +50" />
-                        <input value={n.label} onChange={(e) => { const arr = [...(editingLp.numbers_items || [])]; arr[i] = { ...arr[i], label: e.target.value }; updateLpField('numbers_items', arr); }} className="col-span-2 border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Ex: Marcas no mercado" />
+                        {lpStyled(`numbers_value_${i}`, `Número ${i + 1}`, (
+                          <input value={n.value} onChange={(e) => { const arr = [...(editingLp.numbers_items || [])]; arr[i] = { ...arr[i], value: e.target.value }; updateLpField('numbers_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Ex: +50" />
+                        ))}
+                        <div className="col-span-2">
+                          {lpStyled(`numbers_label_${i}`, `Legenda ${i + 1}`, (
+                            <input value={n.label} onChange={(e) => { const arr = [...(editingLp.numbers_items || [])]; arr[i] = { ...arr[i], label: e.target.value }; updateLpField('numbers_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Ex: Marcas no mercado" />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ))}
                   {lpStyleRow([
-                    { key: 'numbers_value', label: 'Número' },
-                    { key: 'numbers_label', label: 'Legenda' },
+                    { key: 'numbers_value', label: 'Número (global)' },
+                    { key: 'numbers_label', label: 'Legenda (global)' },
                   ])}
+
                   <button onClick={() => updateLpField('numbers_items', [...(editingLp.numbers_items || []), { value: '', label: '' }])} className="text-sm font-sans text-neutral-500 hover:text-black">+ Adicionar número</button>
                 </div>
 

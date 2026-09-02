@@ -174,13 +174,14 @@ const LandingPage: React.FC = () => {
             {numbers.map((n, i) => (
               <div key={`${n.label}-${i}`} className="flex flex-col items-center">
                 <span className="font-display text-5xl md:text-7xl leading-none tracking-tight text-black"
-                      style={getFieldStyle(lp.text_styles, 'numbers_value')}>
+                      style={{ ...getFieldStyle(lp.text_styles, 'numbers_value'), ...getFieldStyle(lp.text_styles, `numbers_value_${i}`) }}>
                   {n.value}
                 </span>
                 <span className="mt-3 font-sans font-light text-sm md:text-base text-neutral-500 max-w-[16rem]"
-                      style={getFieldStyle(lp.text_styles, 'numbers_label')}>
+                      style={{ ...getFieldStyle(lp.text_styles, 'numbers_label'), ...getFieldStyle(lp.text_styles, `numbers_label_${i}`) }}>
                   {n.label}
                 </span>
+
               </div>
             ))}
           </div>
