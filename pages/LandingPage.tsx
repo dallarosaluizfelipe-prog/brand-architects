@@ -453,7 +453,7 @@ const LandingPage: React.FC = () => {
                 {lp.benefits_items.map((item, idx) => (
                   <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 hover:bg-white/10 transition-all">
                     <span className="material-symbols-outlined text-3xl mb-4 opacity-60">{item.icon}</span>
-                    <h3 className="text-lg md:text-xl font-sans font-black mb-2"
+                    <h3 className="text-lg md:text-xl font-sans font-normal mb-2"
                         style={{ ...getFieldStyle(lp.text_styles, 'benefits_items'), ...getFieldStyle(lp.text_styles, 'benefits_item_title') }}>{item.title}</h3>
                     <p className="text-white/50 font-sans font-light text-sm leading-relaxed"
                        style={{ ...getFieldStyle(lp.text_styles, 'benefits_items'), ...getFieldStyle(lp.text_styles, 'benefits_item_desc') }}>{item.desc}</p>
