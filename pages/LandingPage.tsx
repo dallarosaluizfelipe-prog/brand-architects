@@ -4,6 +4,8 @@ import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { getLpBySlug, SiteLp, LpPhase } from '@/src/data/siteLps';
 import { useLocale } from '@/src/contexts/LocaleContext';
+import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+
 import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
 import { getFieldStyle } from '@/src/utils/textStyles';
 
