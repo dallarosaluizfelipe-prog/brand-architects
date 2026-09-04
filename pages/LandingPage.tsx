@@ -259,7 +259,7 @@ const LandingPage: React.FC = () => {
         )}
 
         {/* ── QUEM SOMOS ── */}
-        <section className="py-20 md:py-32 px-6 bg-[#d7d8e3] rounded-[2.5rem] md:rounded-[5rem]">
+        <section className="py-20 md:py-32 px-6 bg-neutral-50 rounded-[2.5rem] md:rounded-[5rem]">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             <div>
               <span
