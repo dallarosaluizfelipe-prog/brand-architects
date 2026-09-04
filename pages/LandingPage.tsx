@@ -430,7 +430,7 @@ const LandingPage: React.FC = () => {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16 md:mb-20">
                 <span
-                  className="uppercase tracking-[0.45em] text-white/40 mb-6 block font-sans text-[11px] md:text-sm font-bold"
+                  className="uppercase tracking-[0.45em] text-white/40 mb-6 block font-sans text-[11px] md:text-sm font-normal"
                   style={getFieldStyle(lp.text_styles, 'benefits_badge')}
                 >
                   {lp.benefits_badge}
