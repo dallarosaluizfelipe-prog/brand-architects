@@ -43,6 +43,22 @@ const LandingPage: React.FC = () => {
   }, [lp?.partners_show]);
 
   const phases: LpPhase[] = lp?.method_phases ?? [];
+
+  const methodImagesTexts = useSiteTexts({
+    method_phase1_image: '',
+    method_phase2_image: '',
+    method_phase3_image: '',
+    method_phase4_image: '',
+    method_phase5_image: '',
+  }, locale);
+  const methodPhaseImages = [
+    methodImagesTexts.method_phase1_image,
+    methodImagesTexts.method_phase2_image,
+    methodImagesTexts.method_phase3_image,
+    methodImagesTexts.method_phase4_image,
+    methodImagesTexts.method_phase5_image,
+  ];
+
   const institutionalDesktopVideo = lp?.institutional_video_url ?? '';
   const institutionalMobileVideo = lp?.institutional_video_mobile_url || institutionalDesktopVideo;
   const hasInstitutionalVideo = Boolean(institutionalDesktopVideo || institutionalMobileVideo);
