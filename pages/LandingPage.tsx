@@ -4,6 +4,8 @@ import ContactSection from '../components/ContactSection';
 import { Seo } from '../components/Seo';
 import { getLpBySlug, SiteLp, LpPhase } from '@/src/data/siteLps';
 import { useLocale } from '@/src/contexts/LocaleContext';
+import { useSiteTexts } from '@/src/hooks/useSiteTexts';
+
 import { getSitePartners, SitePartner } from '@/src/data/sitePartners';
 import { getFieldStyle } from '@/src/utils/textStyles';
 
@@ -43,6 +45,22 @@ const LandingPage: React.FC = () => {
   }, [lp?.partners_show]);
 
   const phases: LpPhase[] = lp?.method_phases ?? [];
+
+  const methodImagesTexts = useSiteTexts({
+    method_phase1_image: '',
+    method_phase2_image: '',
+    method_phase3_image: '',
+    method_phase4_image: '',
+    method_phase5_image: '',
+  }, locale);
+  const methodPhaseImages = [
+    methodImagesTexts.method_phase1_image,
+    methodImagesTexts.method_phase2_image,
+    methodImagesTexts.method_phase3_image,
+    methodImagesTexts.method_phase4_image,
+    methodImagesTexts.method_phase5_image,
+  ];
+
   const institutionalDesktopVideo = lp?.institutional_video_url ?? '';
   const institutionalMobileVideo = lp?.institutional_video_mobile_url || institutionalDesktopVideo;
   const hasInstitutionalVideo = Boolean(institutionalDesktopVideo || institutionalMobileVideo);
@@ -335,7 +353,18 @@ const LandingPage: React.FC = () => {
 
                 {/* Active phase content */}
                 <div className="bg-[#efeff0] rounded-3xl p-8 md:p-16 transition-all duration-500 min-h-[280px]">
-                  <div className="grid md:grid-cols-[120px_1fr] gap-6 md:gap-12 items-start">
+                  <div className="grid md:grid-cols-[140px_120px_1fr] gap-6 md:gap-12 items-start">
+                    <div className="w-24 md:w-full aspect-square rounded-2xl overflow-hidden bg-white/70 flex items-center justify-center">
+                      {methodPhaseImages[activePhase] ? (
+                        <img
+                          src={methodPhaseImages[activePhase]}
+                          alt={phases[activePhase]?.title || 'Etapa do método'}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : null}
+                    </div>
+
                     <div>
                       <span className="text-4xl md:text-6xl font-display tracking-tight leading-none block"
                         style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_id') }}>
