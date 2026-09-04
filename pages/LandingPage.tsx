@@ -156,7 +156,7 @@ const LandingPage: React.FC = () => {
 
             {/* Carrossel — direita */}
             {heroSlides.length > 0 && (
-              <div className="relative w-full aspect-[4/5] md:aspect-[4/5] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden bg-neutral-100 shadow-lg">
+              <div className="relative w-full aspect-[4/5] md:aspect-[4/5] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden bg-[#d7d8e3] shadow-lg">
                 {heroSlides.map((src, idx) => (
                   <img
                     key={src + idx}
@@ -259,7 +259,7 @@ const LandingPage: React.FC = () => {
         )}
 
         {/* ── QUEM SOMOS ── */}
-        <section className="py-20 md:py-32 px-6 bg-[#efeff0] rounded-[2.5rem] md:rounded-[5rem]">
+        <section className="py-20 md:py-32 px-6 bg-[#d7d8e3] rounded-[2.5rem] md:rounded-[5rem]">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             <div>
               <span
@@ -331,13 +331,13 @@ const LandingPage: React.FC = () => {
               <div className="relative">
                 {/* Progress bar */}
                 <div className="hidden md:flex justify-between items-center mb-16 relative">
-                  <div className="absolute left-0 right-0 top-1/2 h-px bg-neutral-200" />
+                  <div className="absolute left-0 right-0 top-1/2 h-px bg-[#d7d8e3]" />
                   {phases.map((phase, idx) => (
                     <button
                       key={idx}
                       onClick={() => handlePhaseClick(idx)}
                       className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold font-sans transition-all duration-500 overflow-hidden ${
-                        idx === activePhase ? 'bg-black text-white scale-110' : 'bg-neutral-200 text-neutral-500'
+                        idx === activePhase ? 'bg-black text-white scale-110' : 'bg-[#d7d8e3] text-neutral-500'
                       }`}
                     >
                       {idx === activePhase && (
@@ -352,7 +352,7 @@ const LandingPage: React.FC = () => {
                 </div>
 
                 {/* Active phase content */}
-                <div className="bg-[#efeff0] rounded-3xl p-8 md:p-16 transition-all duration-500 min-h-[280px]">
+                <div className="bg-[#d7d8e3] rounded-3xl p-8 md:p-16 transition-all duration-500 min-h-[280px]">
                   <div className="grid md:grid-cols-[140px_120px_1fr] gap-6 md:gap-12 items-start">
                     <div className="w-24 md:w-full aspect-square rounded-2xl overflow-hidden bg-white/70 flex items-center justify-center">
                       {methodPhaseImages[activePhase] ? (
@@ -394,7 +394,7 @@ const LandingPage: React.FC = () => {
                         key={idx}
                         onClick={() => handlePhaseClick(idx)}
                         className={`relative w-2.5 h-2.5 rounded-full transition-all overflow-hidden ${
-                          idx === activePhase ? 'bg-black scale-125' : 'bg-neutral-300'
+                          idx === activePhase ? 'bg-black scale-125' : 'bg-[#d7d8e3]'
                         }`}
                       >
                         {idx === activePhase && (
