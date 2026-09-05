@@ -6,6 +6,7 @@ export interface LpPhase {
   label: string;
   title: string;
   desc: string;
+  image?: string;
 }
 
 export interface LpBenefitItem {

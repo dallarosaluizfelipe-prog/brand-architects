@@ -877,6 +877,23 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
   };
 
 
+  const uploadLpPhaseImage = async (file: File, index: number) => {
+    setUploading(true);
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      setEditingLp((prev) => {
+        if (!prev) return prev;
+        const phases = [...prev.method_phases];
+        phases[index] = { ...phases[index], image: url };
+        return { ...prev, method_phases: phases };
+      });
+      showMessage('Imagem enviada!');
+    } catch (err: any) {
+      showMessage('Erro ao enviar: ' + err.message);
+    }
+    setUploading(false);
+  };
+
   const uploadLpHeroImage = async (file: File, index: number | null) => {
     setUploading(true);
     try {
@@ -2635,7 +2652,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                   {lpStyled('about_title', 'Sobre — Título', <input value={editingLp.about_title} onChange={(e) => updateLpField('about_title', e.target.value)} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" placeholder="Título" />)}
                   {editingLp.about_paragraphs.map((p, i) => (
                     <div key={i} className="flex gap-2">
-                      <textarea value={p} onChange={(e) => { const arr = [...editingLp.about_paragraphs]; arr[i] = e.target.value; updateLpField('about_paragraphs', arr); }} className="flex-grow border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder={`Parágrafo ${i + 1}`} />
+                      <div className="flex-grow">
+                        {lpStyled(`about_paragraph_${i}`, `Parágrafo ${i + 1}`, <textarea value={p} onChange={(e) => { const arr = [...editingLp.about_paragraphs]; arr[i] = e.target.value; updateLpField('about_paragraphs', arr); }} className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm font-sans" rows={2} placeholder={`Parágrafo ${i + 1}`} />)}
+                      </div>
                       <button onClick={() => { const arr = editingLp.about_paragraphs.filter((_, idx) => idx !== i); updateLpField('about_paragraphs', arr); }} className="text-red-400 hover:text-red-600 text-sm px-2">✕</button>
                     </div>
                   ))}
@@ -2661,11 +2680,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                         <button onClick={() => { const arr = editingLp.method_phases.filter((_, idx) => idx !== i); updateLpField('method_phases', arr); }} className="text-red-400 hover:text-red-600 text-sm">✕</button>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
-                        <input value={phase.id} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], id: e.target.value }; updateLpField('method_phases', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="ID (ex: I)" />
-                        <input value={phase.label} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], label: e.target.value }; updateLpField('method_phases', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Label (ex: LANDSCAPE)" />
+                        {lpStyled(`method_phase_id_${i}`, `Numeral ${i + 1}`, <input value={phase.id} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], id: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="ID (ex: I)" />)}
+                        {lpStyled(`method_phase_label_${i}`, `Label ${i + 1}`, <input value={phase.label} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], label: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Label (ex: LANDSCAPE)" />)}
                       </div>
-                      <input value={phase.title} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />
-                      <textarea value={phase.desc} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], desc: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" rows={2} placeholder="Descrição" />
+                      {lpStyled(`method_phase_title_${i}`, `Título da fase ${i + 1}`, <input value={phase.title} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />)}
+                      {lpStyled(`method_phase_desc_${i}`, `Descrição da fase ${i + 1}`, <textarea value={phase.desc} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], desc: e.target.value }; updateLpField('method_phases', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" rows={2} placeholder="Descrição" />)}
+                      <div className="flex items-center gap-3 pt-1">
+                        {(phase.image || '') && <img src={phase.image} alt="" className="h-14 w-14 rounded-lg object-cover shrink-0" />}
+                        <input value={phase.image || ''} onChange={(e) => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], image: e.target.value }; updateLpField('method_phases', arr); }} className="flex-1 border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Imagem da fase (vazio = usa a imagem da página Metodologia)" />
+                        <button type="button" disabled={uploading} onClick={() => pickFile('image/*', (file) => uploadLpPhaseImage(file, i))} className="text-[11px] font-sans px-3 py-1.5 rounded-full bg-black text-white disabled:opacity-50 shrink-0">{phase.image ? 'Substituir' : 'Enviar'}</button>
+                        {phase.image && <button type="button" onClick={() => { const arr = [...editingLp.method_phases]; arr[i] = { ...arr[i], image: '' }; updateLpField('method_phases', arr); }} className="text-red-400 hover:text-red-600 text-sm px-2">✕</button>}
+                      </div>
                     </div>
                   ))}
                   {lpStyleRow([
@@ -2695,9 +2720,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <input value={item.icon} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], icon: e.target.value }; updateLpField('benefits_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Ícone (Material Symbol)" />
-                        <input value={item.title} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('benefits_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />
+                        {lpStyled(`benefits_item_title_${i}`, `Título do item ${i + 1}`, <input value={item.title} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('benefits_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />)}
                       </div>
-                      <textarea value={item.desc} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], desc: e.target.value }; updateLpField('benefits_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" rows={2} placeholder="Descrição" />
+                      {lpStyled(`benefits_item_desc_${i}`, `Descrição do item ${i + 1}`, <textarea value={item.desc} onChange={(e) => { const arr = [...editingLp.benefits_items]; arr[i] = { ...arr[i], desc: e.target.value }; updateLpField('benefits_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" rows={2} placeholder="Descrição" />)}
                     </div>
                   ))}
                   {lpStyleRow([
@@ -2725,9 +2750,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ pin, onLogout }) => {
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <input value={c.slug} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], slug: e.target.value }; updateLpField('cases_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Slug do case (ex: yerbal)" />
-                        <input value={c.title} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('cases_items', arr); }} className="border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />
+                        {lpStyled(`cases_item_title_${i}`, `Título do card ${i + 1}`, <input value={c.title} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], title: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Título" />)}
                       </div>
-                      <input value={c.category} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], category: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Categoria" />
+                      {lpStyled(`cases_item_category_${i}`, `Categoria do card ${i + 1}`, <input value={c.category} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], category: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="Categoria" />)}
                       <input value={c.cover_url} onChange={(e) => { const arr = [...editingLp.cases_items]; arr[i] = { ...arr[i], cover_url: e.target.value }; updateLpField('cases_items', arr); }} className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-sans" placeholder="URL da capa" />
                       {c.cover_url && <img src={c.cover_url} alt="" className="h-16 rounded-lg object-cover" />}
                       <button
