@@ -233,6 +233,14 @@ const LandingPage: React.FC = () => {
         {lp.partners_show && partners.length > 0 && (
           <section className="py-20 md:py-40 px-6">
             <div className="max-w-7xl mx-auto">
+              {lp.partners_badge && (
+                <span
+                  className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm"
+                  style={getFieldStyle(lp.text_styles, 'partners_badge')}
+                >
+                  {lp.partners_badge}
+                </span>
+              )}
               <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8 md:gap-10">
                 <h2
                   className="text-5xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl"
@@ -276,7 +284,7 @@ const LandingPage: React.FC = () => {
               </h2>
               {lp.about_paragraphs.map((p, i) => (
                 <p key={i} className="text-neutral-500 font-sans font-light text-base md:text-lg leading-relaxed mb-4"
-                   style={{ whiteSpace: 'pre-line', ...getFieldStyle(lp.text_styles, 'about_paragraphs') }}>
+                   style={{ whiteSpace: 'pre-line', ...getFieldStyle(lp.text_styles, 'about_paragraphs'), ...getFieldStyle(lp.text_styles, `about_paragraph_${i}`) }}>
                   {p}
                 </p>
               ))}
@@ -355,9 +363,9 @@ const LandingPage: React.FC = () => {
                 <div className="bg-[#d7d8e3] rounded-3xl p-8 md:p-16 transition-all duration-500 min-h-[280px]">
                   <div className="grid md:grid-cols-[140px_120px_1fr] gap-6 md:gap-12 items-start">
                     <div className="w-24 md:w-full aspect-square rounded-2xl overflow-hidden bg-white/70 flex items-center justify-center">
-                      {methodPhaseImages[activePhase] ? (
+                      {(phases[activePhase]?.image || methodPhaseImages[activePhase]) ? (
                         <img
-                          src={methodPhaseImages[activePhase]}
+                          src={phases[activePhase]?.image || methodPhaseImages[activePhase]}
                           alt={phases[activePhase]?.title || 'Etapa do método'}
                           className="w-full h-full object-cover"
                           loading="lazy"
@@ -367,21 +375,21 @@ const LandingPage: React.FC = () => {
 
                     <div>
                       <span className="text-4xl md:text-6xl font-display tracking-tight leading-none block"
-                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_id') }}>
+                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_id'), ...getFieldStyle(lp.text_styles, `method_phase_id_${activePhase}`) }}>
                         {phases[activePhase]?.id}
                       </span>
                       <span className="text-[10px] uppercase tracking-[0.35em] text-neutral-400 font-bold font-sans mt-2 block"
-                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_label') }}>
+                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_label'), ...getFieldStyle(lp.text_styles, `method_phase_label_${activePhase}`) }}>
                         {phases[activePhase]?.label}
                       </span>
                     </div>
                     <div>
                       <h3 className="text-2xl sm:text-3xl md:text-5xl mb-4 md:mb-6 leading-[0.9] tracking-tighter font-display"
-                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_title') }}>
+                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_title'), ...getFieldStyle(lp.text_styles, `method_phase_title_${activePhase}`) }}>
                         {phases[activePhase]?.title}
                       </h3>
                       <p className="text-base md:text-xl text-neutral-500 font-light font-sans leading-relaxed max-w-2xl"
-                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_desc') }}>
+                        style={{ ...getFieldStyle(lp.text_styles, 'method_phases'), ...getFieldStyle(lp.text_styles, 'method_phase_desc'), ...getFieldStyle(lp.text_styles, `method_phase_desc_${activePhase}`) }}>
                         {phases[activePhase]?.desc}
                       </p>
                     </div>
@@ -454,9 +462,9 @@ const LandingPage: React.FC = () => {
                   <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 hover:bg-white/10 transition-all">
                     <span className="material-symbols-outlined text-3xl mb-4 opacity-60">{item.icon}</span>
                     <h3 className="text-lg md:text-xl font-sans font-normal mb-2"
-                        style={{ ...getFieldStyle(lp.text_styles, 'benefits_items'), ...getFieldStyle(lp.text_styles, 'benefits_item_title') }}>{item.title}</h3>
+                        style={{ ...getFieldStyle(lp.text_styles, 'benefits_items'), ...getFieldStyle(lp.text_styles, 'benefits_item_title'), ...getFieldStyle(lp.text_styles, `benefits_item_title_${idx}`) }}>{item.title}</h3>
                     <p className="text-white/50 font-sans font-light text-sm leading-relaxed"
-                       style={{ ...getFieldStyle(lp.text_styles, 'benefits_items'), ...getFieldStyle(lp.text_styles, 'benefits_item_desc') }}>{item.desc}</p>
+                       style={{ ...getFieldStyle(lp.text_styles, 'benefits_items'), ...getFieldStyle(lp.text_styles, 'benefits_item_desc'), ...getFieldStyle(lp.text_styles, `benefits_item_desc_${idx}`) }}>{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -508,9 +516,9 @@ const LandingPage: React.FC = () => {
                       <img alt={`${c.title} — Identidade Visual`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src={c.cover_url} loading="lazy" />
                     </div>
                     <h3 className="text-2xl md:text-4xl mb-2 font-display"
-                        style={getFieldStyle(lp.text_styles, 'cases_item_title')}>{c.title}</h3>
+                        style={{ ...getFieldStyle(lp.text_styles, 'cases_item_title'), ...getFieldStyle(lp.text_styles, `cases_item_title_${idx}`) }}>{c.title}</h3>
                     <p className="text-neutral-400 text-[10px] uppercase tracking-[0.3em] font-bold font-sans"
-                       style={getFieldStyle(lp.text_styles, 'cases_item_category')}>{c.category}</p>
+                       style={{ ...getFieldStyle(lp.text_styles, 'cases_item_category'), ...getFieldStyle(lp.text_styles, `cases_item_category_${idx}`) }}>{c.category}</p>
                   </Link>
                 ))}
               </div>
