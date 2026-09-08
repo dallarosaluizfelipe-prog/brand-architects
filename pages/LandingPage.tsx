@@ -147,7 +147,7 @@ const LandingPage: React.FC = () => {
               </p>
               <Link
                 to={lp.hero_cta_url}
-                className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
+                className="inline-flex items-center justify-center min-w-[240px] bg-black text-white border border-black px-10 py-4 rounded-full text-xs font-bold tracking-[0.18em] transition-all hover:opacity-80 font-sans"
                 style={getFieldStyle(lp.text_styles, 'hero_cta_text')}
               >
                 {lp.hero_cta_text}
@@ -229,42 +229,6 @@ const LandingPage: React.FC = () => {
           </section>
         )}
 
-        {/* ── PARCEIROS (mesmo layout da Home) ── */}
-        {lp.partners_show && partners.length > 0 && (
-          <section className="py-20 md:py-40 px-6">
-            <div className="max-w-7xl mx-auto">
-              {lp.partners_badge && (
-                <span
-                  className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm"
-                  style={getFieldStyle(lp.text_styles, 'partners_badge')}
-                >
-                  {lp.partners_badge}
-                </span>
-              )}
-              <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8 md:gap-10">
-                <h2
-                  className="text-5xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl"
-                  style={getFieldStyle(lp.text_styles, 'partners_title')}
-                >
-                  {lp.partners_title}
-                </h2>
-                <div
-                  className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg"
-                  style={getFieldStyle(lp.text_styles, 'partners_subtitle')}
-                >
-                  {lp.partners_subtitle}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">
-                {partners.map((p) => (
-                  <a key={p.logo_url} href={p.link_url} target="_blank" rel="noreferrer" className="flex justify-center">
-                    <img src={p.logo_url} alt={p.name} loading="lazy" className="h-28 md:h-32 object-contain" />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* ── QUEM SOMOS ── */}
         <section className="py-20 md:py-32 px-6 bg-neutral-50 rounded-[2.5rem] md:rounded-[5rem]">
@@ -291,7 +255,7 @@ const LandingPage: React.FC = () => {
               {lp.about_cta_text && (
                 <Link
                   to={lp.about_cta_url}
-                  className="inline-block bg-black text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:scale-105 font-sans mt-4"
+                  className="inline-flex items-center justify-center min-w-[240px] bg-black text-white border border-black px-10 py-4 rounded-full text-xs font-bold tracking-[0.18em] transition-all hover:opacity-80 font-sans mt-4"
                   style={getFieldStyle(lp.text_styles, 'about_cta_text')}
                 >
                   {lp.about_cta_text}
@@ -420,7 +384,7 @@ const LandingPage: React.FC = () => {
                   <div className="text-center mt-10">
                     <Link
                       to={lp.method_cta_url}
-                      className="inline-block border border-black/40 text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-black hover:text-white font-sans"
+                      className="inline-flex items-center justify-center min-w-[240px] bg-black text-white border border-black px-10 py-4 rounded-full text-xs font-bold tracking-[0.18em] transition-all hover:opacity-80 font-sans"
                       style={getFieldStyle(lp.text_styles, 'method_cta_text')}
                     >
                       {lp.method_cta_text}
@@ -473,7 +437,7 @@ const LandingPage: React.FC = () => {
                 <div className="text-center mt-12 md:mt-16">
                   <Link
                     to={lp.benefits_cta_url}
-                    className="inline-block border border-white/40 text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.18em] transition-all hover:bg-white hover:text-black font-sans"
+                    className="inline-flex items-center justify-center min-w-[240px] bg-white text-black border border-white px-10 py-4 rounded-full text-xs font-bold tracking-[0.18em] transition-all hover:opacity-80 font-sans"
                     style={getFieldStyle(lp.text_styles, 'benefits_cta_text')}
                   >
                     {lp.benefits_cta_text}
@@ -527,7 +491,7 @@ const LandingPage: React.FC = () => {
                 <div className="text-center mt-12 md:mt-16">
                   <Link
                     to={lp.cases_cta_url}
-                    className="inline-block border border-black px-10 md:px-16 py-4 md:py-6 rounded-full font-bold uppercase tracking-[0.18em] hover:bg-black hover:text-white transition-all font-sans text-xs md:text-sm"
+                    className="inline-flex items-center justify-center min-w-[240px] bg-black text-white border border-black px-10 py-4 rounded-full text-xs font-bold tracking-[0.18em] transition-all hover:opacity-80 font-sans"
                     style={getFieldStyle(lp.text_styles, 'cases_cta_text')}
                   >
                     {lp.cases_cta_text}
@@ -540,6 +504,43 @@ const LandingPage: React.FC = () => {
 
 
 
+
+        {/* ── PARCEIROS (mesmo layout da Home) ── */}
+        {lp.partners_show && partners.length > 0 && (
+          <section className="py-20 md:py-40 px-6">
+            <div className="max-w-7xl mx-auto">
+              {lp.partners_badge && (
+                <span
+                  className="uppercase tracking-[0.45em] text-neutral-400 mb-6 block font-sans text-[11px] md:text-sm"
+                  style={getFieldStyle(lp.text_styles, 'partners_badge')}
+                >
+                  {lp.partners_badge}
+                </span>
+              )}
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8 md:gap-10">
+                <h2
+                  className="text-5xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter max-w-2xl"
+                  style={getFieldStyle(lp.text_styles, 'partners_title')}
+                >
+                  {lp.partners_title}
+                </h2>
+                <div
+                  className="text-neutral-400 max-w-xs md:text-right font-light text-base md:text-lg"
+                  style={getFieldStyle(lp.text_styles, 'partners_subtitle')}
+                >
+                  {lp.partners_subtitle}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-16 items-center transition-all duration-1000 md:opacity-30 md:grayscale hover:opacity-100">
+                {partners.map((p) => (
+                  <a key={p.logo_url} href={p.link_url} target="_blank" rel="noreferrer" className="flex justify-center">
+                    <img src={p.logo_url} alt={p.name} loading="lazy" className="h-28 md:h-32 object-contain" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── FORMULÁRIO DE CONTATO ── */}
         <ContactSection />
