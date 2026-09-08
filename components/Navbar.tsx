@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
   const { pathname } = useLocation();
   const { locale } = useLocale();
   const t = useSiteTexts({
-    social_instagram: 'https://www.instagram.com/estudiodalla/',
+    social_instagram: 'https://www.instagram.com/lipe_studiodalla/',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
   }, locale);
 

@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
     footer_contacts: `CURITIBA / PARANA / BR<br />TEL <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="hover:opacity-60 transition-opacity">${CONTACT_PHONE_DISPLAY}</a>`,
     footer_copyright: '© 2026 Studio Dalla. All rights reserved.',
     footer_logo_url: '/lovable-uploads/dalla-logo-footer.png',
-    social_instagram: 'https://www.instagram.com/estudiodalla/',
+    social_instagram: 'https://www.instagram.com/lipe_studiodalla/',
     social_linkedin: '',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
   }, locale);
