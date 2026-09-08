@@ -18,7 +18,7 @@ const Contact: React.FC = () => {
     contact_seo_description: 'Fale com o Estudio Dalla. Estamos prontos para transformar sua marca de luxo com design estrategico.',
     contact_seo_keywords: 'contato agencia branding, contato branding SP',
     contact_og_image: '',
-    social_instagram: 'https://www.instagram.com/estudiodalla/',
+    social_instagram: 'https://www.instagram.com/lipe_studiodalla/',
     social_linkedin: '',
     social_behance: 'https://www.behance.net/luizfedalla-r/projects',
   }, locale);
